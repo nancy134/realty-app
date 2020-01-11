@@ -1,0 +1,16 @@
+.card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
+}
+.card-image {
+    width: 100px;
+}
+.leftcol {
+   overflow:hidden;
+}
+
+.rightcol {
+   overflow-y: scroll;
+   height: 90vh;
+}
+
