@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import { 
+    Container,
     Nav,
     Navbar
 } from 'react-bootstrap';
@@ -8,7 +9,7 @@ import Routes from './Routes';
 
 function App() {
   return (
-    <div>
+<Container fluid className="d-flex flex-column vh-100 vw-100">
       <Navbar>
         <Navbar.Brand href="#home">
           <img
@@ -30,7 +31,7 @@ function App() {
         </Navbar.Collapse>
       </Navbar>
       <Routes></Routes>
-    </div>
+    </Container>
   );
 }
 

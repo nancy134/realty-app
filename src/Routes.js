@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import Home from './containers/Home';
-import Listing from './containers/Listing';
+import ListingPage from './containers/ListingPage';
 
 export default () =>
   <Switch>
@@ -9,5 +9,5 @@ export default () =>
       <Redirect to="/home"/>
     )}/>
     <Route path="/home" exact component={Home} />
-    <Route path="/listing" exact component={Listing} />
+    <Route path="/listing" exact component={ListingPage} />
   </Switch>;

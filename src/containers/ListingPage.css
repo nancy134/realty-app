@@ -5,12 +5,15 @@
 .card-image {
     width: 100px;
 }
+
 .leftcol {
    overflow:hidden;
 }
 
 .rightcol {
    overflow-y: scroll;
-   height: 85vh;
+   height: 83vh;
 }
-
+.filter {
+    width: 500px !important
+}
