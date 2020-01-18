@@ -7,10 +7,19 @@ import {
 } from 'react-bootstrap';
 
 class Listings extends React.Component {
+   
+    constructor(props) {
+        super(props);
+        this.showDetailChange = this.showDetailChange.bind(this);
+    }
+
+    showDetailChange(){
+        this.props.onShowDetailChange(true);
+    }
     render() {
         return ( 
             <ListGroup>
-                <ListGroup.Item disabled>
+                <ListGroup.Item action onClick={this.showDetailChange}>
                     <Row>
                         <Col>
                             <Image src="/image1.jpg" className="border-0" thumbnail/>

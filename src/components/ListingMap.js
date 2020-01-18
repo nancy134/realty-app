@@ -11,8 +11,14 @@ class ListingMap extends React.Component {
                 {latitude: 42.377510, longitude: -71.225547},
                 {latitude: 42.371878, longitude: -71.237794}
             ]
-        }   
+        } 
+        this.handleChange = this.handleChange.bind(this);  
     }
+
+    handleChange(e) {
+        this.props.onShowDetailChange(e.target.value);
+    }
+
     displayMarkers = () => {
         return this.state.stores.map((store, index) => {
             return <Marker key={index} id={index} position={{
@@ -24,15 +30,20 @@ class ListingMap extends React.Component {
     }
 
     render(){
-        return (
-            <Map
-                google={this.props.google}
-                zoom={13}
-                initialCenter={{ lat: 42.372376, lng: -71.236423}}
-            >
-                {this.displayMarkers()}
-            </Map>
-        );
+        const showDetail = this.props.showDetail;
+        if (!showDetail) {
+            return (
+                <Map
+                    google={this.props.google}
+                    zoom={13}
+                    initialCenter={{ lat: 42.372376, lng: -71.236423}}
+                >
+                    {this.displayMarkers()}
+                </Map>
+            );
+        } else {
+             return null;
+        }
     } 
 }
 
