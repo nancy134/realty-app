@@ -10,31 +10,39 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
     faTimes,
     faEdit,
-    faExpand
+    faExpand,
+    faAngleDown,
+    faAngleUp
 } from '@fortawesome/free-solid-svg-icons';
-import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 
-function CustomToggle({ children, eventKey }) {
-  const decoratedOnClick = useAccordionToggle(eventKey, () =>
-    console.log('totally custom!'),
- );
-
-  return (
-    <Button
-      variant="link"
-      onClick={decoratedOnClick}
-    >
-      {children}
-    </Button>
-  );
-}
 class ListingDetail extends React.Component {
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
-        this.state = {text: "More"};
-        
+        this.handleAccordionChange = this.handleAccordionChange.bind(this);        
+        this.state = {
+            text1: "More",
+            text2: "More"
+        }
     }
+
+    handleAccordionChange(e){
+        console.log("handleAccordionChange e.target.value:"+e.target.value);
+        if (e.target.value === "1") {
+            if (this.state.text1 === "More"){
+                this.setState({text1: "Less"});
+            } else {
+                this.setState({text1: "More"});
+            }
+        } else {
+            if (this.state.text2 === "More") {
+                this.setState({text2: "Less"});
+            } else {
+                this.setState({text2: "More"});
+            }
+        }
+    }
+
     handleChange() {
         this.props.onShowDetailChange(false);
     }
@@ -43,15 +51,15 @@ class ListingDetail extends React.Component {
         if (showDetail){
             return (
             <div>
-                <Row className="align-items-center bg-dark">
-	            <Col md={6}className="text-white"><h4>240-246 Moody St</h4></Col>
+                <Row className="align-items-center bg-info">
+	            <Col md={6}className="text-white"><h4>240-246 Moody St (Waltham, MA)</h4></Col>
                     <Col md={6} className="text-right">
-                        <Button variant="dark"><FontAwesomeIcon icon={faExpand} /> Expand</Button>
-                        <Button variant="dark"><FontAwesomeIcon icon={faEdit} /> Edit</Button>
-                        <Button variant="dark" onClick={this.handleChange}><FontAwesomeIcon icon={faTimes}/> Close</Button>i
+                        <Button variant="info"><FontAwesomeIcon icon={faExpand} /> Expand</Button>
+                        <Button variant="info"><FontAwesomeIcon icon={faEdit} /> Edit</Button>
+                        <Button variant="info" onClick={this.handleChange}><FontAwesomeIcon icon={faTimes}/> Close</Button>
                     </Col>
                 </Row>
-                <Row className="mt-2">
+                <Row className="mt-2 border-bottom border-warning">
                     <Col>
                     <h2>Overview</h2>
                     </Col>
@@ -73,15 +81,15 @@ Street Retail in Ridge Plaza on heavily traveled High Ridge Road. The Plaza cont
                     </Col>
 
                 </Row>
-                <Row className="mt-3">
-                    <Col><h2>Available</h2></Col>
+                <Row className="mt-3 border-bottom border-warning">
+                    <Col><h2>Available Space</h2></Col>
                 </Row>
-                <Row className="shadow">
-                    <Col md={2}>Unit</Col>
-                    <Col md={2}>Size</Col>
-                    <Col md={2}>Price</Col>
-                    <Col md={2}>Type</Col>
-                    <Col md={2}>Use</Col>
+                <Row className="bg-light shadow">
+                    <Col md={2} className="font-weight-bold">Unit</Col>
+                    <Col md={2} className="font-weight-bold">Size</Col>
+                    <Col md={2} className="font-weight-bold">Price</Col>
+                    <Col md={2} className="font-weight-bold">Type</Col>
+                    <Col md={2} className="font-weight-bold">Use</Col>
                 </Row>
                 <Accordion>
                     <Row className="border-bottom align-items-center">
@@ -91,13 +99,15 @@ Street Retail in Ridge Plaza on heavily traveled High Ridge Road. The Plaza cont
                        <Col md={2}>NNN</Col>
                        <Col md={2}>Office</Col> 
                        <Col md={2}>
-                       <CustomToggle eventKey="0">Click me!</CustomToggle>
+                           <Accordion.Toggle value="1" className="text-danger" as={Button} onClick={this.handleAccordionChange} variant="link" eventKey="0">
+                               {this.state.text1} <FontAwesomeIcon icon={this.state.text1 === "More" ? faAngleDown : faAngleUp} />
+                           </Accordion.Toggle>
                        </Col>
                     </Row>
                     <Accordion.Collapse eventKey="0">
                         <div>
                          <p>For lease is approximately 3,032 square feet of retail space in Ridge Plaza on High Ridge Road. This end cap location has large frontage and is currently a real estate office configured with perimeter offices and a large bullpen area, but can be easily redesigned into an open layout. There are 2 baths located within the space. The Plaza contains multiple retailers and abundant parking is available. As a main artery from the Merritt Parkway to the downtown business district, High Ridge Road is one of the most heavily traveled roads in Stamford with a traffic count of 26,900 cars per day. Ridge Plaza is conveniently located less than 1 mile from the Merritt Parkway Yet easily accessible from downtown Stamford. Prominent pylon signage is available.</p>
-                    <Row>
+                    <Row className="border-bottom">
                        <Col><Image src="./image1.jpg" thumbnail /></Col>
                        <Col><Image src="./image2.jpg" thumbnail /></Col>
                        <Col><Image src="./image3.jpg" thumbnail /></Col>
@@ -113,8 +123,8 @@ Street Retail in Ridge Plaza on heavily traveled High Ridge Road. The Plaza cont
                         <Col md={2}>Modified Gross</Col>
                         <Col md={2}>Office</Col>
                         <Col md={2}>
-                           <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                                More
+                           <Accordion.Toggle className="text-danger" value="2" as={Button} onClick={this.handleAccordionChange} variant="link" eventKey="0">
+                               {this.state.text2} <FontAwesomeIcon icon={this.state.text2 === "More" ? faAngleDown : faAngleUp} />
                            </Accordion.Toggle>
                         </Col>
                     </Row>
@@ -124,30 +134,30 @@ Street Retail in Ridge Plaza on heavily traveled High Ridge Road. The Plaza cont
                 </Accordion>
                 <Row className="mt-3">
                     <Col>
-                        <h2>General</h2>
+                        <h2 className="border-bottom border-warning">General</h2>
                         <Row>
                             <Col>Total Building Size</Col>
-                            <Col>45,000 sf</Col>
+                            <Col className="font-weight-bold">45,000 sf</Col>
                         </Row>
                         <Row>
                             <Col>Lot Size</Col>
-                            <Col>1.27 Acre</Col>
+                            <Col className="font-weight-bold">1.27 Acre</Col>
                         </Row>
                         <Row>
                             <Col>Total Available Space</Col>
-                            <Col>5,200 sf</Col>
+                            <Col className="font-weight-bold">5,200 sf</Col>
                         </Row>
                         <Row>
                             <Col>Zone</Col>
-                            <Col>CB</Col>
+                            <Col className="font-weight-bold">CB</Col>
                         </Row>
                         <Row>
                             <Col>Parking</Col>
-                            <Col>3 / 1000</Col>
+                            <Col className="font-weight-bold">3 / 1000</Col>
                         </Row>
                         <Row>
                             <Col>Nets</Col>
-                            <Col>$8.25 / sq ft</Col>
+                            <Col className="font-weight-bold">$8.25 / sq ft</Col>
                         </Row>
                         <Row>
                             <Col>Taxes</Col>
@@ -155,7 +165,7 @@ Street Retail in Ridge Plaza on heavily traveled High Ridge Road. The Plaza cont
                         </Row>
                     </Col>
                     <Col>
-                        <h2>Amenities</h2>
+                        <h2 className="border-bottom border-warning">Amenities</h2>
                         <Row><Col>Fitness Center</Col></Row>
                         <Row><Col>Air Conditioning</Col></Row>
                     </Col>
@@ -163,7 +173,7 @@ Street Retail in Ridge Plaza on heavily traveled High Ridge Road. The Plaza cont
                 </Row>
                 <Row className="mt-3">
                     <Col>
-                        <h2>Brokers</h2>
+                        <h2 className="border-bottom border-warning">Brokers</h2>
                     </Col>
                 </Row>
                 <Row>

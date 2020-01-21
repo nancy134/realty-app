@@ -70,7 +70,7 @@ class ListingToolbar extends React.Component {
                         </Dropdown>
                     </Col>
                     <Col>
-                        <Button variant="info">Search</Button>
+                        <Button variant="light">Search</Button>
                     </Col>
 
                 </Form.Row>

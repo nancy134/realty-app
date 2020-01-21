@@ -27,8 +27,8 @@ export class ListingPage extends Component {
         const showDetail = this.state.showDetail;
         return (
             <div >       
-                <Row className="bg-secondary">
-                    <ListingToolbar />
+                <Row className="bg-success">
+                    <ListingToolbar/>
                 </Row>
                 <Row>
                     <Col className={this.state.showDetail? "rightcol" : "leftcol"}>
