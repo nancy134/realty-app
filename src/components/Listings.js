@@ -45,7 +45,7 @@ class Listings extends React.Component {
                         <Col>
                             <Card className="border-0">
                                 <Card.Body >
-                                    <Card.Title>440 Totten Pond Rd</Card.Title>
+                                    <Card.Title className="listing-title text-danger">440 Totten Pond Rd</Card.Title>
                                     <Card.Subtitle>Waltham, MA</Card.Subtitle>
                                     <Card.Text>Built in 1969 /
                                        1,147sf Office Space /
@@ -64,7 +64,7 @@ class Listings extends React.Component {
                         <Col>
                             <Card className="border-0">
                                 <Card.Body >
-                                    <Card.Title>384 Main St</Card.Title>
+                                    <Card.Title className="listing-title text-danger">384 Main St</Card.Title>
                                     <Card.Subtitle>Waltham, MA</Card.Subtitle>
                                     <Card.Text>Built in 1948 /
                                        1,200sf Office Space /
@@ -83,7 +83,7 @@ class Listings extends React.Component {
                         <Col>
                             <Card className="border-0">
                                 <Card.Body >
-                                    <Card.Title>24 Crescent St</Card.Title>
+                                    <Card.Title className="listing-title text-danger">24 Crescent St</Card.Title>
                                     <Card.Subtitle>Waltham, MA</Card.Subtitle>
                                     <Card.Text>Built in 1962 /
                                        650 - 3,948sf Spaces /
