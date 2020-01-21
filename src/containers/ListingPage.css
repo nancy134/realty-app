@@ -25,3 +25,7 @@
 .broker-image {
     width: 60px;
 }
+
+.listing-title {
+    cursor: pointer;
+}

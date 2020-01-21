@@ -19,7 +19,7 @@ class Listings extends React.Component {
     render() {
         return ( 
             <ListGroup>
-                <ListGroup.Item action onClick={this.showDetailChange}>
+                <ListGroup.Item>
                     <Row>
                         <Col>
                             <Image src="/image1.jpg" className="border-0" thumbnail/>
@@ -27,7 +27,7 @@ class Listings extends React.Component {
                         <Col>
                             <Card className="border-0">
                                 <Card.Body >
-                                    <Card.Title>240-256 Moody St</Card.Title>
+                                    <Card.Title className="listing-title text-danger" onClick={this.showDetailChange}>240-256 Moody St</Card.Title>
                                     <Card.Subtitle>Waltham, MA</Card.Subtitle>
                                     <Card.Text>Built in 1920 /
                                        1,152sf Retail Space /
