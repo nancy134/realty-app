@@ -17,3 +17,11 @@
 .filter {
     width: 500px !important
 }
+.align-items-center {
+   display: flex;
+   align-items: center;
+}
+
+.broker-image {
+    width: 60px;
+}

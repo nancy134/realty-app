@@ -31,7 +31,7 @@ export class ListingPage extends Component {
                     <ListingToolbar />
                 </Row>
                 <Row>
-                    <Col>
+                    <Col className={this.state.showDetail? "rightcol" : "leftcol"}>
                         <ListingDetail showDetail={showDetail} onShowDetailChange={this.handleShowDetailChange}/>
                         <ListingMap showDetail={showDetail} />
                     </Col>
