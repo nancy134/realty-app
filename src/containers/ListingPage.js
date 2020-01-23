@@ -14,7 +14,7 @@ export class ListingPage extends Component {
         super(props);
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.state = {
-            showDetail: false 
+            showDetail: true 
         };
     }
     handleShowDetailChange(showDetail){

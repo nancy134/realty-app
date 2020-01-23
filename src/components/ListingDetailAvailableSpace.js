@@ -4,13 +4,60 @@ import {
     Col,
     Accordion,
     Image,
-    Button
+    Button,
+    Modal
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
     faAngleDown,
-    faAngleUp
+    faAngleUp,
+    faPlus,
+    faPencilAlt,
+    faTrash
 } from '@fortawesome/free-solid-svg-icons';
+import ListingEditAvailableSpace from './ListingEditAvailableSpace';
+
+function ListingEditModal(props) {
+    return (
+        <Modal
+            {...props}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                   Overview
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body >
+                <ListingEditAvailableSpace />
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={props.onHide}>Close</Button>
+            </Modal.Footer>
+        </Modal>
+    );
+}
+
+function AddButton() {
+    const [modalShow, setModalShow] = React.useState(false);
+
+    return (
+        <span>
+            <span
+                onClick={() => setModalShow(true)}
+                className="edit-button align-top text-danger"
+            >
+                <FontAwesomeIcon size="xs" icon={faPlus} />
+            </span>
+            <ListingEditModal
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+            />
+        </span>
+  );
+}
 
 class ListingDetailAvailableSpace extends React.Component {
     constructor(props){
@@ -42,27 +89,45 @@ class ListingDetailAvailableSpace extends React.Component {
         return (
             <div>
                 <Row className="mt-3 border-bottom border-warning">
-                    <Col><h2>Available Space</h2></Col>
+                    <Col><h2>Available Space <AddButton /></h2></Col>
                 </Row>
                 <Row className="bg-light shadow">
                     <Col md={2} className="font-weight-bold">Unit</Col>
-                    <Col md={2} className="font-weight-bold">Size</Col>
+                    <Col md={2}  className="font-weight-bold">Size</Col>
                     <Col md={2} className="font-weight-bold">Price</Col>
-                    <Col md={2} className="font-weight-bold">Type</Col>
-                    <Col md={2} className="font-weight-bold">Use</Col>
+                    <Col md={3}>
+                        <Row>
+                            <Col className="font-weight-bold">Type</Col>
+                             <Col className="font-weight-bold">Use</Col>
+                        </Row>
+                    </Col>
+                    <Col md={3}></Col>
                 </Row>
                 <Accordion>
                     <Row className="border-bottom align-items-center">
                        <Col md={2}>Suite 1A</Col>
                        <Col md={2}>3,080 sq ft</Col>
                        <Col md={2}>$45/sq ft</Col>
-                       <Col md={2}>NNN</Col>
-                       <Col md={2}>Office</Col> 
-                       <Col md={2}>
-                           <Accordion.Toggle value="1" className="text-danger" as={Button} onClick={this.handleAccordionChange} variant="link" eventKey="0">
+                       <Col md={3}>
+                           <Row>
+                               <Col >NNN</Col>
+                               <Col >Office</Col>
+                           </Row>
+                       </Col> 
+                       <Col md={3}>
+                           <Row>
+                               <Col><FontAwesomeIcon className="text-danger" size="xs" icon={faPencilAlt} /></Col>
+                               <Col><FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} /></Col>
+
+
+                               <Col >
+                                   <Accordion.Toggle value="1" className="text-danger" as={Button} onClick={this.handleAccordionChange} variant="link" eventKey="0">
                                {this.state.text1} <FontAwesomeIcon icon={this.state.text1 === "More" ? faAngleDown : faAngleUp} />
-                           </Accordion.Toggle>
-                       </Col>
+                                   </Accordion.Toggle>
+                               </Col>
+
+                           </Row>
+                        </Col>  
                     </Row>
                     <Accordion.Collapse eventKey="0">
                         <div>
@@ -80,12 +145,24 @@ class ListingDetailAvailableSpace extends React.Component {
                         <Col md={2}>Suite 2F</Col>
                         <Col md={2}>700 sq ft</Col>
                         <Col md={2}>$20/sq ft</Col>
-                        <Col md={2}>Modified Gross</Col>
-                        <Col md={2}>Office</Col>
-                        <Col md={2}>
-                           <Accordion.Toggle className="text-danger" value="2" as={Button} onClick={this.handleAccordionChange} variant="link" eventKey="0">
-                               {this.state.text2} <FontAwesomeIcon icon={this.state.text2 === "More" ? faAngleDown : faAngleUp} />
-                           </Accordion.Toggle>
+                        <Col md={3}>
+                            <Row>
+                                <Col >Modified Gross</Col>
+                                <Col >Office</Col>
+                            </Row>
+                        </Col>
+                        <Col md={3}>
+                           <Row>
+                               <Col ><FontAwesomeIcon className="text-danger" size="xs" icon={faPencilAlt} /></Col>
+                               <Col ><FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} /></Col>
+
+                               <Col >
+                                   <Accordion.Toggle className="text-danger" value="2" as={Button} onClick={this.handleAccordionChange} variant="link" eventKey="0">
+                                   {this.state.text2} <FontAwesomeIcon icon={this.state.text2 === "More" ? faAngleDown : faAngleUp} />
+                                   </Accordion.Toggle>
+                                </Col>
+
+                            </Row>
                         </Col>
                     </Row>
                     <Accordion.Collapse eventKey="0">
