@@ -62,11 +62,12 @@ class ListingDetailOverview extends React.Component {
        console.log("handleEdit");
     }
     render() {
+        const viewType = this.props.viewType;
         return (
             <div>
                 <Row className="mt-2 border-bottom border-warning">
                     <Col>
-	                <h2>Overview <EditButton /></h2>
+	                <h2>Overview {viewType === "owner" ? <EditButton /> : null}</h2>
                     </Col>
                     <Col>
                         <div className="text-right">

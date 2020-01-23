@@ -13,6 +13,7 @@ import ListingDetailBrokers from './ListingDetailBrokers';
 class ListingDetail extends React.Component {
     constructor(props) {
         super(props);
+        console.log("ListingDetail index: "+this.props.index);
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
     }
 
@@ -21,22 +22,30 @@ class ListingDetail extends React.Component {
     }
     render(){
         const showDetail = this.props.showDetail;
+        var viewType;
+        if (this.props.index === "1") {
+            viewType = "owner";
+        } else if (this.props.index === "2") {
+            viewType = "default";
+        } else {
+            viewType = "new";
+        }   
         if (showDetail){
             return (
             <div>
-                <ListingDetailHeader onShowDetailChange={this.handleShowDetailChange}/>
-                <ListingDetailOverview />
-                <ListingDetailAvailableSpace />
+                <ListingDetailHeader viewType={viewType} onShowDetailChange={this.handleShowDetailChange}/>
+                <ListingDetailOverview viewType={viewType} />
+                <ListingDetailAvailableSpace viewType={viewType} />
                 <Row className="mt-3">
                     <Col>
-                        <ListingDetailGeneral />
+                        <ListingDetailGeneral viewTpe={viewType} />
                     </Col>
                     <Col>
-                        <ListingDetailAmenities />
+                        <ListingDetailAmenities viewType={viewType} />
                     </Col>
                     
                 </Row>
-                <ListingDetailBrokers />
+                <ListingDetailBrokers viewType={viewType} />
 
             </div> 
             );

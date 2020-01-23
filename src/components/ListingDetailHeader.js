@@ -27,7 +27,7 @@ function MyVerticallyCenteredModal(props) {
           Modal heading
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body style={{'max-height': 'calc(100vh - 210px)', 'overflow-y': 'auto'}}>
+      <Modal.Body >
           <ListingEdit />
       </Modal.Body>
       <Modal.Footer>
@@ -57,6 +57,9 @@ function EditButton() {
 class ListingDetailHeader extends React.Component {
     constructor(props){
         super(props);
+        this.state = {
+            viewType: this.props.viewType
+        }
         this.handleClose = this.handleClose.bind(this);
     }
     handleClose(){
@@ -64,12 +67,16 @@ class ListingDetailHeader extends React.Component {
     }
 
     render() {
+        const viewType = this.state.viewType;
         return(
             <Row className="align-items-center bg-info">
 	        <Col md={6}className="text-white"><h4>240-246 Moody St (Waltham, MA)</h4></Col>
                 <Col md={6} className="text-right">
                     <Button variant="info"><FontAwesomeIcon icon={faExpand} /> Expand</Button>
-                    <EditButton />
+                    { viewType === "owner"
+                        ? <EditButton />
+                        : null
+                    }
                     <Button variant="info" onClick={this.handleClose}><FontAwesomeIcon icon={faTimes}/> Close</Button>
                 </Col>
             </Row>

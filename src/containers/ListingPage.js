@@ -17,14 +17,16 @@ export class ListingPage extends Component {
             showDetail: true 
         };
     }
-    handleShowDetailChange(showDetail){
-        console.log("handleShowDetailChange");
+    handleShowDetailChange(showDetail, index){
+        console.log("handleShowDetailChange index: "+index);
         this.setState({
-            showDetail: showDetail
+            showDetail: showDetail,
+            index: index
         });
     } 
     render() {
         const showDetail = this.state.showDetail;
+        const index = this.state.index;
         return (
             <div >       
                 <Row className="bg-success">
@@ -32,7 +34,7 @@ export class ListingPage extends Component {
                 </Row>
                 <Row>
                     <Col className={this.state.showDetail? "rightcol" : "leftcol"}>
-                        <ListingDetail showDetail={showDetail} onShowDetailChange={this.handleShowDetailChange}/>
+                        <ListingDetail index={index} showDetail={showDetail} onShowDetailChange={this.handleShowDetailChange}/>
                         <ListingMap showDetail={showDetail} />
                     </Col>
 	            <Col className="rightcol" >

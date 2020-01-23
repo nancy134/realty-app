@@ -42,7 +42,6 @@ function ListingEditModal(props) {
 
 function AddButton() {
     const [modalShow, setModalShow] = React.useState(false);
-
     return (
         <span>
             <span
@@ -58,7 +57,6 @@ function AddButton() {
         </span>
   );
 }
-
 class ListingDetailAvailableSpace extends React.Component {
     constructor(props){
         super(props);
@@ -86,10 +84,11 @@ class ListingDetailAvailableSpace extends React.Component {
         }
     }
     render(){
+        const viewType = this.props.viewType;
         return (
             <div>
                 <Row className="mt-3 border-bottom border-warning">
-                    <Col><h2>Available Space <AddButton /></h2></Col>
+                    <Col><h2>Available Space {viewType === "owner" ? <AddButton /> : null}</h2></Col>
                 </Row>
                 <Row className="bg-light shadow">
                     <Col md={2} className="font-weight-bold">Unit</Col>
@@ -116,9 +115,12 @@ class ListingDetailAvailableSpace extends React.Component {
                        </Col> 
                        <Col md={3}>
                            <Row>
+                               { viewType === "owner" ?
                                <Col><FontAwesomeIcon className="text-danger" size="xs" icon={faPencilAlt} /></Col>
+                               : null }
+                               { viewType === "owner" ?
                                <Col><FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} /></Col>
-
+                                : null }
 
                                <Col >
                                    <Accordion.Toggle value="1" className="text-danger" as={Button} onClick={this.handleAccordionChange} variant="link" eventKey="0">
@@ -133,9 +135,9 @@ class ListingDetailAvailableSpace extends React.Component {
                         <div>
                          <p>For lease is approximately 3,032 square feet of retail space in Ridge Plaza on High Ridge Road. This end cap location has large frontage and is currently a real estate office configured with perimeter offices and a large bullpen area, but can be easily redesigned into an open layout. There are 2 baths located within the space. The Plaza contains multiple retailers and abundant parking is available. As a main artery from the Merritt Parkway to the downtown business district, High Ridge Road is one of the most heavily traveled roads in Stamford with a traffic count of 26,900 cars per day. Ridge Plaza is conveniently located less than 1 mile from the Merritt Parkway Yet easily accessible from downtown Stamford. Prominent pylon signage is available.</p>
                     <Row className="border-bottom">
-                       <Col><Image src="./image1.jpg" thumbnail /></Col>
-                       <Col><Image src="./image2.jpg" thumbnail /></Col>
-                       <Col><Image src="./image3.jpg" thumbnail /></Col>
+                       <Col><Image src="/image1.jpg" thumbnail /></Col>
+                       <Col><Image src="/image2.jpg" thumbnail /></Col>
+                       <Col><Image src="/image3.jpg" thumbnail /></Col>
                     </Row>
                     </div>
                     </Accordion.Collapse>
@@ -153,8 +155,12 @@ class ListingDetailAvailableSpace extends React.Component {
                         </Col>
                         <Col md={3}>
                            <Row>
+                               { viewType === "owner" ?
                                <Col ><FontAwesomeIcon className="text-danger" size="xs" icon={faPencilAlt} /></Col>
+                                : null }
+                               { viewType === "owner" ?
                                <Col ><FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} /></Col>
+                                : null }
 
                                <Col >
                                    <Accordion.Toggle className="text-danger" value="2" as={Button} onClick={this.handleAccordionChange} variant="link" eventKey="0">

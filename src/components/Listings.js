@@ -13,9 +13,11 @@ class Listings extends React.Component {
         this.showDetailChange = this.showDetailChange.bind(this);
     }
 
-    showDetailChange(){
-        this.props.onShowDetailChange(true);
+    showDetailChange(e){
+        console.log("e.target.dataset.index: "+e.target.dataset.index);
+        this.props.onShowDetailChange(true, e.target.dataset.index);
     }
+ 
     render() {
         return ( 
             <ListGroup>
@@ -27,7 +29,7 @@ class Listings extends React.Component {
                         <Col>
                             <Card className="border-0">
                                 <Card.Body >
-                                    <Card.Title className="listing-title text-danger" onClick={this.showDetailChange}>240-256 Moody St</Card.Title>
+                                    <Card.Title className="listing-title text-danger" data-index="1" onClick={this.showDetailChange}>240-256 Moody St</Card.Title>
                                     <Card.Subtitle>Waltham, MA</Card.Subtitle>
                                     <Card.Text>Built in 1920 /
                                        1,152sf Retail Space /
@@ -45,7 +47,7 @@ class Listings extends React.Component {
                         <Col>
                             <Card className="border-0">
                                 <Card.Body >
-                                    <Card.Title className="listing-title text-danger">440 Totten Pond Rd</Card.Title>
+                                    <Card.Title className="listing-title text-danger" data-index="2" onClick={this.showDetailChange}>440 Totten Pond Rd</Card.Title>
                                     <Card.Subtitle>Waltham, MA</Card.Subtitle>
                                     <Card.Text>Built in 1969 /
                                        1,147sf Office Space /
