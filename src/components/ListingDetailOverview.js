@@ -13,6 +13,7 @@ import {
 import ListingEditOverview from './ListingEditOverview';
 
 function ListingEditModal(props) {
+    var content = props.content;
     return (
         <Modal
             {...props}
@@ -26,7 +27,7 @@ function ListingEditModal(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body >
-                <ListingEditOverview />
+                <ListingEditOverview content={content}/>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide}>Close</Button>
@@ -34,7 +35,7 @@ function ListingEditModal(props) {
         </Modal>
     );
 }
-function EditButton() {
+function EditButton(props) {
     const [modalShow, setModalShow] = React.useState(false);
 
     return (
@@ -46,6 +47,7 @@ function EditButton() {
                 <FontAwesomeIcon size="xs" icon={faPencilAlt} />
             </span>
             <ListingEditModal
+                content = {props.content}
                 show={modalShow}
                 onHide={() => setModalShow(false)}
             />
@@ -61,13 +63,23 @@ class ListingDetailOverview extends React.Component {
     handleEdit(){
        console.log("handleEdit");
     }
+
     render() {
+        var shortDescription = "Street Retail and Office Space for Lease on High Ridge Road in Stamford, CT";
+        var longDescription = "Street Retail in Ridge Plaza on heavily traveled High Ridge Road. The Plaza contains multiple retailers and has ample parking on site. Pylon signage is available.";
+        var image = "/image1.jpg";
+        if (this.props.content === "new"){
+            shortDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vitae.";
+            longDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae aliquet purus. In sollicitudin lobortis sollicitudin. Morbi sagittis ornare lorem, sed volutpat dolor. Vestibulum ac erat et ante cursus bibendum at in urna. Duis quis ex sapien. Sed massa mauris, consectetur eget nisl vel, tincidunt varius dolor. Cras porttitor tortor mauris, ut congue odio fringilla id. Aenean pretium a ante ut fermentum. Donec fringilla quam et felis tempor varius.";
+            image = "/default.jpg"; 
+        }
         const viewType = this.props.viewType;
+        const content = this.props.content;
         return (
             <div>
                 <Row className="mt-2 border-bottom border-warning">
                     <Col>
-	                <h2>Overview {viewType === "owner" ? <EditButton /> : null}</h2>
+	                <h2>Overview {viewType === "owner" ? <EditButton content={content} /> : null}</h2>
                     </Col>
                     <Col>
                         <div className="text-right">
@@ -77,13 +89,11 @@ class ListingDetailOverview extends React.Component {
                 </Row>
                 <Row>
                     <Col md={6}>
-                    <p>
-                    Street Retail and Office Space for Lease on High Ridge Road in Stamford, CT</p>
-<p>
-Street Retail in Ridge Plaza on heavily traveled High Ridge Road. The Plaza contains multiple retailers and has ample parking on site. Pylon signage is available.</p>
+                        <p>{shortDescription}</p>
+                        <p>{longDescription}</p>
                     </Col>
                     <Col md={6}>
-                        <Image src="/image1.jpg" className="border-0" thumbnail />
+                        <Image src={image} className="border-0" thumbnail />
                     </Col>
 
                 </Row>

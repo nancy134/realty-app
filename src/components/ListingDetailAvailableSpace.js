@@ -27,14 +27,15 @@ function ListingEditModal(props) {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                   Overview
+                  Available Space Edit 
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body >
-                <ListingEditAvailableSpace />
+            <Modal.Body style={{'max-height': 'calc(100vh - 210px)', 'overflow-y': 'auto'}}>
+                <ListingEditAvailableSpace content={props.content}/>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide}>Close</Button>
+                <Button onClick={props.onHide}>Save</Button>
             </Modal.Footer>
         </Modal>
     );
@@ -53,9 +54,28 @@ function AddButton() {
             <ListingEditModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
+                content="new"
             />
         </span>
   );
+}
+function EditButton() {
+    const [modalEditShow, setModalEditShow] = React.useState(false);
+    return (
+        <span>
+          <span
+              onClick={() => setModalEditShow(true)}
+              className="edit-button alight-top text-danger"
+          >
+              <FontAwesomeIcon icon={faPencilAlt} />
+          </span>
+          <ListingEditModal
+              show={modalEditShow}
+              onHide={() => setModalEditShow(false)}
+              content="existing"
+          />
+        </span>
+    );
 }
 class ListingDetailAvailableSpace extends React.Component {
     constructor(props){
@@ -85,6 +105,7 @@ class ListingDetailAvailableSpace extends React.Component {
     }
     render(){
         const viewType = this.props.viewType;
+        const content = this.props.content;
         return (
             <div>
                 <Row className="mt-3 border-bottom border-warning">
@@ -102,6 +123,7 @@ class ListingDetailAvailableSpace extends React.Component {
                     </Col>
                     <Col md={3}></Col>
                 </Row>
+                { content !== "new" ?
                 <Accordion>
                     <Row className="border-bottom align-items-center">
                        <Col md={2}>Suite 1A</Col>
@@ -116,7 +138,7 @@ class ListingDetailAvailableSpace extends React.Component {
                        <Col md={3}>
                            <Row>
                                { viewType === "owner" ?
-                               <Col><FontAwesomeIcon className="text-danger" size="xs" icon={faPencilAlt} /></Col>
+                               <Col><EditButton /></Col>
                                : null }
                                { viewType === "owner" ?
                                <Col><FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} /></Col>
@@ -142,6 +164,8 @@ class ListingDetailAvailableSpace extends React.Component {
                     </div>
                     </Accordion.Collapse>
                 </Accordion>
+                : null }
+                { content !== "new" ?
                 <Accordion>
                     <Row className="border-bottom align-items-center">
                         <Col md={2}>Suite 2F</Col>
@@ -175,6 +199,7 @@ class ListingDetailAvailableSpace extends React.Component {
                         <p>For lease is approximately 3,032 square feet of retail space in Ridge Plaza on High Ridge Road. This end cap location has large frontage and is currently a real estate office configured with perimeter offices and a large bullpen area, but can be easily redesigned into an open layout. There are 2 baths located within the space. The Plaza contains multiple retailers and abundant parking is available. As a main artery from the Merritt Parkway to the downtown business district, High Ridge Road is one of the most heavily traveled roads in Stamford with a traffic count of 26,900 cars per day. Ridge Plaza is conveniently located less than 1 mile from the Merritt Parkway Yet easily accessible from downtown Stamford. Prominent pylon signage is available.</p>
                     </Accordion.Collapse>
                 </Accordion>
+                : null }
             </div>
 
         );

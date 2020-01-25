@@ -21,7 +21,8 @@ class ListingDetail extends React.Component {
         this.props.onShowDetailChange(false);
     }
     render(){
-        const showDetail = this.props.showDetail;
+        var showDetail = this.props.showDetail;
+        const content = this.props.content;
         var viewType;
         if (this.props.index === "1") {
             viewType = "owner";
@@ -29,23 +30,26 @@ class ListingDetail extends React.Component {
             viewType = "default";
         } else {
             viewType = "new";
+        }
+        if (content === "new"){
+            showDetail = true;
         }   
         if (showDetail){
             return (
             <div>
-                <ListingDetailHeader viewType={viewType} onShowDetailChange={this.handleShowDetailChange}/>
-                <ListingDetailOverview viewType={viewType} />
-                <ListingDetailAvailableSpace viewType={viewType} />
+                <ListingDetailHeader content={content} viewType={viewType} onShowDetailChange={this.handleShowDetailChange}/>
+                <ListingDetailOverview content={content} viewType={viewType} />
+                <ListingDetailAvailableSpace content={content} viewType={viewType} />
                 <Row className="mt-3">
                     <Col>
-                        <ListingDetailGeneral viewTpe={viewType} />
+                        <ListingDetailGeneral content={content} viewType={viewType} />
                     </Col>
                     <Col>
-                        <ListingDetailAmenities viewType={viewType} />
+                        <ListingDetailAmenities content={content} viewType={viewType} />
                     </Col>
                     
                 </Row>
-                <ListingDetailBrokers viewType={viewType} />
+                <ListingDetailBrokers content={content} viewType={viewType} />
 
             </div> 
             );

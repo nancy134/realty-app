@@ -24,9 +24,6 @@ function App() {
           <Nav.Item>
             <Nav.Link eventKey="link-1">Login</Nav.Link>
           </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="link-2">Add a Listing</Nav.Link>
-          </Nav.Item>
 
         </Navbar.Collapse>
       </Navbar>

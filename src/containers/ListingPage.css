@@ -38,3 +38,7 @@
    font-size: 80%;
    cursor: pointer;
 }
+
+.toolbar-form {
+    width: 100%;
+}

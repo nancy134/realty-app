@@ -52,36 +52,46 @@ function EditButton() {
 class ListingDetailGeneral extends React.Component {
     render() {
         const viewType = this.props.viewType;
+        var totalBuildingSize = "45,000 sf";
+        var lotSize = "1.27 Acre";
+        var totalAvailableSpace = "5,200 sf";
+        var zone = "CB";
+        var parking = "3 / 1000";
+        var nets = "$8.25 / sq ft";
+        if (this.props.content === "new"){
+            totalBuildingSize = "---";
+            lotSize = "---"
+            totalAvailableSpace = "---";
+            zone = "---";
+            parking = "---";
+            nets = "---"
+        } 
         return (
             <div>
                 <h2 className="border-bottom border-warning">General {viewType === "owner" ? <EditButton /> : null}</h2>
                 <Row>
                     <Col>Total Building Size</Col>
-                    <Col className="font-weight-bold">45,000 sf</Col>
+                    <Col className="font-weight-bold">{totalBuildingSize}</Col>
                 </Row>
                 <Row>
                     <Col>Lot Size</Col>
-                    <Col className="font-weight-bold">1.27 Acre</Col>
+                    <Col className="font-weight-bold">{lotSize}</Col>
                 </Row>
                 <Row>
                     <Col>Total Available Space</Col>
-                    <Col className="font-weight-bold">5,200 sf</Col>
+                    <Col className="font-weight-bold">{totalAvailableSpace}</Col>
                 </Row>
                 <Row>
                     <Col>Zone</Col>
-                    <Col className="font-weight-bold">CB</Col>
+                    <Col className="font-weight-bold">{zone}</Col>
                 </Row>
                 <Row>
                     <Col>Parking</Col>
-                    <Col className="font-weight-bold">3 / 1000</Col>
+                    <Col className="font-weight-bold">{parking}</Col>
                 </Row>
                 <Row>
                     <Col>Nets</Col>
-                    <Col className="font-weight-bold">$8.25 / sq ft</Col>
-                </Row>
-                <Row>
-                    <Col>Taxes</Col>
-                    <Col></Col>
+                    <Col className="font-weight-bold">{nets}</Col>
                 </Row>
              </div>
         );

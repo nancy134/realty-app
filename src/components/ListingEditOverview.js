@@ -6,29 +6,35 @@ import {
 } from 'react-bootstrap';
 import ImageUploader from 'react-images-upload';
 
-class ListingEdit extends React.Component {
+class ListingEditOverview extends React.Component {
     constructor(props){
         super(props);
         this.state = { pictures: [] };
         this.onDrop = this.onDrop.bind(this);
     }
     onDrop(pictureFiles, pictureDataURLs) {
-        console.log("pictureFiles: "+pictureFiles);
-        console.log("pictureDataURLs: "+pictureDataURLs);
         this.setState({
             pictures: this.state.pictures.concat(pictureFiles)
         });
     }
     render(){
+        var shortDescription = "Street Retail and Office Space for Lease on High Ridge Road in Stamford, CT";
+        var longDescription = "Street Retail in Ridge Plaza on heavily traveled High Ridge Road. The Plaza contains multiple retailers and has ample parking on site. Pylon signage is available.";
+        var defaultImage = ["https://sabre.phowma.com/image1.jpg"];
+        if (this.props.content === "new"){
+            shortDescription = "";
+            longDescription = "";
+            defaultImage = [];
+        } 
         return (
             <div>
             <Row className="mt-2">
                 <Col>
                     <Form>
                         <Form.Label>Short Description</Form.Label>
-                        <Form.Control value="Street Retail and Office Space for Lease on High Ridge Road in Stamford, CT" /> 
+                        <Form.Control value={shortDescription} /> 
                         <Form.Label>Long Description</Form.Label>
-                        <Form.Control value="Street Retail in Ridge Plaza on heavily traveled High Ridge Road. The Plaza contains multiple retailers and has ample parking on site. Pylon signage is available." as="textarea" />
+                        <Form.Control value={longDescription} rows="5" as="textarea" />
                     </Form>
                 </Col>
                 <Col>
@@ -40,7 +46,7 @@ class ListingEdit extends React.Component {
                         imgExtension={['.jpg','.gif','.png','.gif']}
                         maxFileSize={5242880}
                         withPreview={true}
-                        defaultImages={['https://sabre.phowma.com/image1.jpg']}
+                        defaultImages={defaultImage}
                     />
                 </Col>
             </Row>
@@ -50,4 +56,4 @@ class ListingEdit extends React.Component {
     }
 }
 
-export default ListingEdit;
+export default ListingEditOverview;

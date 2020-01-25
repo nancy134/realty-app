@@ -12,29 +12,42 @@ import ListingDetail from '../components/ListingDetail';
 export class ListingPage extends Component {
     constructor(props){
         super(props);
+        console.log("this.props.location.pathname: "+this.props.location.pathname);
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
+        this.handleAddListing = this.handleAddListing.bind(this);
         this.state = {
-            showDetail: true 
+            showDetail: false,
+            content: "existing"
         };
     }
     handleShowDetailChange(showDetail, index){
         console.log("handleShowDetailChange index: "+index);
         this.setState({
             showDetail: showDetail,
-            index: index
+            index: index,
+            content: "existing"
         });
-    } 
+    }
+    handleAddListing(){
+        this.setState({
+            content: "new",
+            index: "1",
+            showDetail: true
+        });
+    }
     render() {
-        const showDetail = this.state.showDetail;
-        const index = this.state.index;
+        var showDetail = this.state.showDetail;
+        var index = this.state.index;
+        var content = this.state.content;
+
         return (
             <div >       
                 <Row className="bg-success">
-                    <ListingToolbar/>
+                    <ListingToolbar onAddListing={this.handleAddListing}/>
                 </Row>
                 <Row>
-                    <Col className={this.state.showDetail? "rightcol" : "leftcol"}>
-                        <ListingDetail index={index} showDetail={showDetail} onShowDetailChange={this.handleShowDetailChange}/>
+                    <Col className={showDetail? "rightcol" : "leftcol"}>
+                        <ListingDetail content={content} index={index} showDetail={showDetail} onShowDetailChange={this.handleShowDetailChange}/>
                         <ListingMap showDetail={showDetail} />
                     </Col>
 	            <Col className="rightcol" >

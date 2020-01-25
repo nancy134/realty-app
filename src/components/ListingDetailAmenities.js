@@ -54,11 +54,16 @@ function EditButton() {
 class ListingDetailAmenities extends React.Component {
     render() {
         const viewType = this.props.viewType
+        const content = this.props.content
         return (
             <div>
                 <h2 className="border-bottom border-warning">Amenities {viewType === "owner" ? <EditButton /> : null}</h2>
+                {content !== "new" ?
                 <Row><Col>Fitness Center</Col></Row>
+                : null}
+                {content !== "new" ?
                 <Row><Col>Air Conditioning</Col></Row>
+                : <Row><Col>---</Col></Row> }
             </div>
         );
     }

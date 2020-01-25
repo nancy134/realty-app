@@ -52,14 +52,23 @@ const CustomMenu = React.forwardRef(
 );
 
 class ListingToolbar extends React.Component {
+    constructor(props){
+        super(props);
+        this.onAddListing = this.onAddListing.bind(this);
+    }
+
+    onAddListing(e){
+        this.props.onAddListing();
+    }
+
     render(){
         return (
-            <Form className="m-2">
+            <Form className="toolbar-form m-2">
                 <Form.Row>
-                    <Col xs={6}>
+                    <Col xs={3}>
                         <Form.Control placeholder="Waltham, MA" />
                     </Col>
-                    <Col>
+                    <Col xs={1}>
                         <Dropdown>
                             <Dropdown.Toggle variant="secondary" id="dropdown-basic">
                                 Filters
@@ -68,9 +77,14 @@ class ListingToolbar extends React.Component {
                             <Dropdown.Menu as={CustomMenu} className="filter">
                             </Dropdown.Menu>
                         </Dropdown>
-                    </Col>
-                    <Col>
+                    </Col >
+                    <Col xs={1} >
                         <Button variant="light">Search</Button>
+                    </Col>
+                    <Col xs={5}>
+                    </Col>
+                    <Col xs={2} className="text-right">
+                        <Button onClick={this.onAddListing} variant="light">Add a Listing</Button>
                     </Col>
 
                 </Form.Row>

@@ -55,15 +55,16 @@ function EditButton() {
 class ListingDetailBrokers extends React.Component {
     render() {
         const viewType = this.props.viewType;
+        const content = this.props.content;
         return (
             <div>
                 <Row className="mt-3">
-                    <Col>
+                    <Col >
                         <h2 className="border-bottom border-warning">Brokers {viewType === "owner" ? <EditButton /> : null}</h2>
                     </Col>
                 </Row>
                 <Row>
-                    <Col>
+                    <Col md={4}>
                         <Row>
                             <Col md={4}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
                             <Col md={8}>
@@ -74,18 +75,7 @@ class ListingDetailBrokers extends React.Component {
                             </Col>
                         </Row>
                     </Col>
-                    <Col>
-                        <Row>
-                            <Col md={4}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
-                            <Col md={8}>
-                                <Row>Paul Piedra</Row>
-                                <Row>Sabre Realty Group</Row>
-                                <Row>(203) 388-8030</Row>
-                                <Row><Button className="p-0" variant="link">Contact</Button></Row>
-                            </Col>
-                        </Row>
-
-                    </Col>
+                    { content !== "new" ?
                     <Col>
                         <Row>
                             <Col md={4}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
@@ -98,6 +88,21 @@ class ListingDetailBrokers extends React.Component {
                         </Row>
 
                     </Col>
+                    : null}
+                    { content !== "new" ?
+                    <Col>
+                        <Row>
+                            <Col md={4}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
+                            <Col md={8}>
+                                <Row>Paul Piedra</Row>
+                                <Row>Sabre Realty Group</Row>
+                                <Row>(203) 388-8030</Row>
+                                <Row><Button className="p-0" variant="link">Contact</Button></Row>
+                            </Col>
+                        </Row>
+
+                    </Col>
+                    : null}
                 </Row>
              </div>
         );
