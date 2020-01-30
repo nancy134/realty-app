@@ -61,13 +61,12 @@ class ListingDetailOverview extends React.Component {
         this.handleEdit = this.handleEdit.bind(this);
     }
     handleEdit(){
-       console.log("handleEdit");
     }
 
     render() {
-        var shortDescription = "Street Retail and Office Space for Lease on High Ridge Road in Stamford, CT";
-        var longDescription = "Street Retail in Ridge Plaza on heavily traveled High Ridge Road. The Plaza contains multiple retailers and has ample parking on site. Pylon signage is available.";
-        var image = "/image1.jpg";
+        var shortDescription = this.props.listing.shortDescription; 
+        var longDescription = "";
+        var image = this.props.listing.images[0].url;
         if (this.props.content === "new"){
             shortDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vitae.";
             longDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae aliquet purus. In sollicitudin lobortis sollicitudin. Morbi sagittis ornare lorem, sed volutpat dolor. Vestibulum ac erat et ante cursus bibendum at in urna. Duis quis ex sapien. Sed massa mauris, consectetur eget nisl vel, tincidunt varius dolor. Cras porttitor tortor mauris, ut congue odio fringilla id. Aenean pretium a ante ut fermentum. Donec fringilla quam et felis tempor varius.";

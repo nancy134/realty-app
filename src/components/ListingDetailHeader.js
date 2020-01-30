@@ -58,7 +58,8 @@ class ListingDetailHeader extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            viewType: this.props.viewType
+            viewType: this.props.viewType,
+            listing: this.props.listing
         }
         this.handleClose = this.handleClose.bind(this);
     }
@@ -69,16 +70,16 @@ class ListingDetailHeader extends React.Component {
     render() {
         const viewType = this.state.viewType;
         const content = this.props.content;
-        var address = "240-246 Moody St (Waltham, MA)";
+        var title = this.props.listing.address + " (" + this.props.listing.city + ", "+this.props.listing.state + ")";
         if (this.props.content === "new") {
-            address = "<Address> (<City>, <State>)";
+            title = "<Address> (<City>, <State>)";
         }
 
         var closeButton = "Close";
         if (content === "new") closeButton = "Cancel";
         return(
             <Row className="align-items-center bg-info">
-	        <Col md={6}className="text-white"><h4>{address} {viewType === "owner" ? <EditButton content={content}/> : null}</h4></Col>
+	        <Col md={6}className="text-white"><h4>{title} {viewType === "owner" ? <EditButton content={content}/> : null}</h4></Col>
                 <Col md={6} className="text-right">
                     {content === "new" ?
                     <Button variant="info">Save Draft</Button>

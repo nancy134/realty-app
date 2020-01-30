@@ -83,12 +83,11 @@ class ListingDetailAvailableSpace extends React.Component {
         this.handleAccordionChange = this.handleAccordionChange.bind(this);
         this.state = {
             text1: "More",
-            text2: "More"
+            text2: "More",
         }
     }
 
     handleAccordionChange(e){
-        console.log("handleAccordionChange e.target.value:"+e.target.value);
         if (e.target.value === "1") {
             if (this.state.text1 === "More"){
                 this.setState({text1: "Less"});
@@ -105,7 +104,11 @@ class ListingDetailAvailableSpace extends React.Component {
     }
     render(){
         const viewType = this.props.viewType;
-        const content = this.props.content;
+        var listing = this.props.listing;
+        if (this.props.content === "new"){
+            listing.spaces = [];
+        }
+       
         return (
             <div>
                 <Row className="mt-3 border-bottom border-warning">
@@ -123,16 +126,17 @@ class ListingDetailAvailableSpace extends React.Component {
                     </Col>
                     <Col md={3}></Col>
                 </Row>
-                { content !== "new" ?
+                {listing.spaces.map(space =>
+                (
                 <Accordion>
                     <Row className="border-bottom align-items-center">
-                       <Col md={2}>Suite 1A</Col>
-                       <Col md={2}>3,080 sq ft</Col>
-                       <Col md={2}>$45/sq ft</Col>
+                       <Col md={2}>{space.unit}</Col>
+                       <Col md={2}>{space.size} sq ft</Col>
+                       <Col md={2}>${space.price}/sq ft</Col>
                        <Col md={3}>
                            <Row>
-                               <Col >NNN</Col>
-                               <Col >Office</Col>
+                               <Col >{space.type}</Col>
+                               <Col >{space.use}</Col>
                            </Row>
                        </Col> 
                        <Col md={3}>
@@ -164,42 +168,7 @@ class ListingDetailAvailableSpace extends React.Component {
                     </div>
                     </Accordion.Collapse>
                 </Accordion>
-                : null }
-                { content !== "new" ?
-                <Accordion>
-                    <Row className="border-bottom align-items-center">
-                        <Col md={2}>Suite 2F</Col>
-                        <Col md={2}>700 sq ft</Col>
-                        <Col md={2}>$20/sq ft</Col>
-                        <Col md={3}>
-                            <Row>
-                                <Col >Modified Gross</Col>
-                                <Col >Office</Col>
-                            </Row>
-                        </Col>
-                        <Col md={3}>
-                           <Row>
-                               { viewType === "owner" ?
-                               <Col ><FontAwesomeIcon className="text-danger" size="xs" icon={faPencilAlt} /></Col>
-                                : null }
-                               { viewType === "owner" ?
-                               <Col ><FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} /></Col>
-                                : null }
-
-                               <Col >
-                                   <Accordion.Toggle className="text-danger" value="2" as={Button} onClick={this.handleAccordionChange} variant="link" eventKey="0">
-                                   {this.state.text2} <FontAwesomeIcon icon={this.state.text2 === "More" ? faAngleDown : faAngleUp} />
-                                   </Accordion.Toggle>
-                                </Col>
-
-                            </Row>
-                        </Col>
-                    </Row>
-                    <Accordion.Collapse eventKey="0">
-                        <p>For lease is approximately 3,032 square feet of retail space in Ridge Plaza on High Ridge Road. This end cap location has large frontage and is currently a real estate office configured with perimeter offices and a large bullpen area, but can be easily redesigned into an open layout. There are 2 baths located within the space. The Plaza contains multiple retailers and abundant parking is available. As a main artery from the Merritt Parkway to the downtown business district, High Ridge Road is one of the most heavily traveled roads in Stamford with a traffic count of 26,900 cars per day. Ridge Plaza is conveniently located less than 1 mile from the Merritt Parkway Yet easily accessible from downtown Stamford. Prominent pylon signage is available.</p>
-                    </Accordion.Collapse>
-                </Accordion>
-                : null }
+                ))}
             </div>
 
         );

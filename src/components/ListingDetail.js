@@ -12,17 +12,29 @@ import ListingDetailBrokers from './ListingDetailBrokers';
 
 class ListingDetail extends React.Component {
     constructor(props) {
-        super(props);
-        console.log("ListingDetail index: "+this.props.index);
+   super(props);
+        this.state = {listing: null};
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
     }
 
     handleShowDetailChange() {
         this.props.onShowDetailChange(false);
     }
+    componentDidMount(){
+        fetch('https://listing-api.phowma.com/listing/'+this.props.index)
+        .then(res => res.json())
+        .then((data) => {
+          this.setState({ listing: data })
+        })
+        .catch(console.log)
+
+    }
+    componentWillUnmount(){
+    }
     render(){
         var showDetail = this.props.showDetail;
         const content = this.props.content;
+        const listing = this.state.listing;
         var viewType;
         if (this.props.index === "1") {
             viewType = "owner";
@@ -34,22 +46,22 @@ class ListingDetail extends React.Component {
         if (content === "new"){
             showDetail = true;
         }   
-        if (showDetail){
+        if (showDetail && listing){
             return (
             <div>
-                <ListingDetailHeader content={content} viewType={viewType} onShowDetailChange={this.handleShowDetailChange}/>
-                <ListingDetailOverview content={content} viewType={viewType} />
-                <ListingDetailAvailableSpace content={content} viewType={viewType} />
+                <ListingDetailHeader listing={listing} content={content} viewType={viewType} onShowDetailChange={this.handleShowDetailChange}/>
+                <ListingDetailOverview listing={listing} content={content} viewType={viewType} />
+                <ListingDetailAvailableSpace listing={listing} content={content} viewType={viewType} />
                 <Row className="mt-3">
                     <Col>
-                        <ListingDetailGeneral content={content} viewType={viewType} />
+                        <ListingDetailGeneral listing={listing} content={content} viewType={viewType} />
                     </Col>
                     <Col>
-                        <ListingDetailAmenities content={content} viewType={viewType} />
+                        <ListingDetailAmenities listing={listing} content={content} viewType={viewType} />
                     </Col>
                     
                 </Row>
-                <ListingDetailBrokers content={content} viewType={viewType} />
+                <ListingDetailBrokers listing={listing} content={content} viewType={viewType} />
 
             </div> 
             );

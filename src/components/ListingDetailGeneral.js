@@ -52,12 +52,25 @@ function EditButton() {
 class ListingDetailGeneral extends React.Component {
     render() {
         const viewType = this.props.viewType;
-        var totalBuildingSize = "45,000 sf";
-        var lotSize = "1.27 Acre";
-        var totalAvailableSpace = "5,200 sf";
-        var zone = "CB";
-        var parking = "3 / 1000";
-        var nets = "$8.25 / sq ft";
+        var totalBuildingSize = this.props.listing.totalBuildingSize;
+
+        var lotSize = null;
+        if (this.props.listing.lotSize){
+            lotSize = this.props.listing.lotSize+" Acre";
+        }
+        var totalAvailableSpace = null;
+        if (this.props.listing.totalAvailableSpace){
+            totalAvailableSpace = "5,200 sf";
+        }
+        var zone = this.props.listing.zone;
+        var parking = null;
+        if (this.props.listing.parking){
+            parking = this.props.listing.parking+" spaces";
+        }
+        var nets = null;
+        if (this.props.listing.nets){
+            nets = "$"+this.props.listing.nets+" / sq ft";
+        }
         if (this.props.content === "new"){
             totalBuildingSize = "---";
             lotSize = "---"
@@ -69,30 +82,42 @@ class ListingDetailGeneral extends React.Component {
         return (
             <div>
                 <h2 className="border-bottom border-warning">General {viewType === "owner" ? <EditButton /> : null}</h2>
+                {totalBuildingSize &&
                 <Row>
                     <Col>Total Building Size</Col>
                     <Col className="font-weight-bold">{totalBuildingSize}</Col>
                 </Row>
+                }
+                {lotSize &&
                 <Row>
                     <Col>Lot Size</Col>
                     <Col className="font-weight-bold">{lotSize}</Col>
                 </Row>
+                }
+                {totalAvailableSpace &&
                 <Row>
                     <Col>Total Available Space</Col>
                     <Col className="font-weight-bold">{totalAvailableSpace}</Col>
                 </Row>
+                }
+                {zone &&
                 <Row>
                     <Col>Zone</Col>
                     <Col className="font-weight-bold">{zone}</Col>
                 </Row>
+                }
+                {parking &&
                 <Row>
                     <Col>Parking</Col>
                     <Col className="font-weight-bold">{parking}</Col>
                 </Row>
+                }
+                {nets &&
                 <Row>
                     <Col>Nets</Col>
                     <Col className="font-weight-bold">{nets}</Col>
                 </Row>
+                }
              </div>
         );
     }
