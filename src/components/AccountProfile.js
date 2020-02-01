@@ -71,7 +71,7 @@ render(){
                                    <Form.Control type="text" />
                                </Col>
                            </Form.Group>
-                           <Form.Group as={Row} controlId="state">
+                           <Form.Group as={Row} >
                                <Form.Label column sm="2">State</Form.Label>
                                <Col sm="4">
                                    <Form.Control as="select" >
@@ -85,7 +85,7 @@ render(){
                                    <Form.Control type="text" />
                                </Col>
                            </Form.Group>
-                           <Form.Group as={Row} controlId="phone1">
+                           <Form.Group as={Row} >
                                <Form.Label column sm="2">Phone</Form.Label>
                                <Col sm="3">
                                    <Form.Control as="select" defaultValue="office" >
@@ -101,7 +101,7 @@ render(){
                                    <Form.Check label="Primary" type="radio" />
                                </Col>
                            </Form.Group>
-                          <Form.Group as={Row} controlId="phone2">
+                          <Form.Group as={Row} >
                                <Form.Label column sm="2">Phone</Form.Label>
                                <Col sm="3">
                                    <Form.Control as="select" defaultValue="mobile" >
@@ -117,7 +117,7 @@ render(){
                                    <Form.Check label="Primary" type="radio" />
                                </Col>
                            </Form.Group>
-                          <Form.Group as={Row} controlId="phone3">
+                          <Form.Group as={Row} >
                                <Form.Label column sm="2">Phone</Form.Label>
                                <Col sm="3">
                                    <Form.Control as="select" defaultValue="other" >
@@ -148,6 +148,9 @@ render(){
                        <Form.Control as="textarea" rows="6" />
                    </Col>
                </Row>
+               <div className="text-right">
+               <Button variant="success">Update</Button>
+               </div>
            </Jumbotron>
        </Container>
     </React.Fragment>

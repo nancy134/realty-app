@@ -8,12 +8,27 @@ import AccountProfile from '../components/AccountProfile';
 export class AccountPage extends Component {
     constructor(props){
         super(props);
+        this.handleSwitchTab = this.handleSwitchTab.bind(this);
+        this.state = {
+            tab: "profile"
+        };
     }
+
+    handleSwitchTab(key){
+        console.log("key: "+key);
+        this.setState({
+            tab: key
+        });
+    }
+
     render(){
+        var tab = this.state.tab;
         return(
         <React.Fragment>
-            <AccountToolbar />
+            <AccountToolbar onSwitchTab={this.handleSwitchTab}/>
+            {tab === "profile" ? (
             <AccountProfile />
+            ): null}
         </React.Fragment>
         );
     }
