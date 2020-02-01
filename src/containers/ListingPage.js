@@ -17,6 +17,7 @@ export class ListingPage extends Component {
         this.state = {
             showDetail: false,
             content: "existing",
+            editMode: false,
             listings: []
         };
     }
@@ -48,6 +49,7 @@ export class ListingPage extends Component {
         var index = this.state.index;
         var content = this.state.content;
         var data = this.state.data;
+        var editMode = this.state.editMode;
         return (
             <React.Fragment>
                 <Row className="bg-success">
@@ -63,7 +65,7 @@ export class ListingPage extends Component {
                     </Col>
                     <Col className="rightcol" >
                         <ListingPagination />
-                        <Listings onShowDetailChange={this.handleShowDetailChange} />
+                        <Listings editMode={editMode} onShowDetailChange={this.handleShowDetailChange} />
                     </Col>
                 </Row>
                 <Row className="bg-secondary">footer</Row>

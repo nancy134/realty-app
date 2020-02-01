@@ -6,6 +6,7 @@ import {
     Navbar
 } from 'react-bootstrap';
 import Routes from './Routes';
+import AccountButton from './components/AccountButton';
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Nav.Item>
-            <Nav.Link eventKey="link-1">Login</Nav.Link>
+            <Nav.Link eventKey="link-1"><AccountButton /></Nav.Link>
           </Nav.Item>
 
         </Navbar.Collapse>

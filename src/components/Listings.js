@@ -11,10 +11,19 @@ class Listings extends React.Component {
     constructor(props) {
         super(props);
         this.showDetailChange = this.showDetailChange.bind(this);
-        this.state = {listings: []};
+        this.state = {
+            listings: [],
+            editMode: this.props.editMode
+        };
     }
     componentDidMount() {
-        fetch('https://listing-api.phowma.com/listings?perPage=4&page=1')
+        var url = "";
+        if (this.state.editMode === true ){
+           url = 'https://listing-api.phowma.com/listings?perPage=4&page=1&owner=loggedIn';
+        } else {
+           url = 'https://listing-api.phowma.com/listings?perPage=4&page=1'; 
+        }
+        fetch(url)
         .then(res => res.json())
         .then((data) => {
           this.setState({ listings: data.listings.rows })
