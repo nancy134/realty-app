@@ -4,6 +4,7 @@ import {
 } from 'react-bootstrap';
 import AccountToolbar from '../components/AccountToolbar';
 import AccountProfile from '../components/AccountProfile';
+import AccountBilling from '../components/AccountBilling';
 
 export class AccountPage extends Component {
     constructor(props){
@@ -28,6 +29,9 @@ export class AccountPage extends Component {
             <AccountToolbar onSwitchTab={this.handleSwitchTab}/>
             {tab === "profile" ? (
             <AccountProfile />
+            ): null}
+            {tab === "billing" ? (
+            <AccountBilling /> 
             ): null}
         </React.Fragment>
         );
