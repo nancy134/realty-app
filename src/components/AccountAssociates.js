@@ -17,7 +17,12 @@ render(){
         <Container>
             <Row className="pt-5">
             </Row>
-                <Jumbotron>
+                <Jumbotron className="pt-3">
+                <Row>
+                    <Col>
+                    <h1 className="text-center">Account Asssociates</h1>
+                    </Col>
+                </Row> 
                 <Row>
                     <Col md={4}>
                         <Row>
