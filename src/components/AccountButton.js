@@ -8,10 +8,41 @@ import {
     DropdownButton
 } from 'react-bootstrap';
 
-function ListingEditModal(props) {
+function RegisterModal(props){
     const standardProps = Object.assign({}, props);
     delete standardProps.onFinish;
+    return(
+        <Modal
+            {...standardProps}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    Register
+                </Modal.Title> 
+            </Modal.Header>
+            <Modal.Body>
+                <Form.Label>Email</Form.Label>
+                <Form.Control />
+                <Form.Label>Password</Form.Label>
+                <Form.Control />
+                <Form.Label>Confirm Password</Form.Label>
+                <Form.Control />
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={props.onCancel}>Cancel</Button>
+                <Button onClick={props.onFinish}>Register</Button>
+            </Modal.Footer>
+        </Modal>
+    );
+}
 
+function LoginModal(props) {
+    const standardProps = Object.assign({}, props);
+    delete standardProps.onFinish;
+    delete standardProps.onRegister;
     return (
         <Modal
             {...standardProps}
@@ -30,7 +61,7 @@ function ListingEditModal(props) {
                 <Form.Label>Password</Form.Label>
                 <Form.Control />
                 <Button variant="link">Forgot password?</Button>
-                <Button variant="link">Don't hava an account? Create one here</Button>
+                <Button onClick={props.onRegister} variant="link">Don't hava an account? Create one here</Button>
                
             </Modal.Body>
             <Modal.Footer>
@@ -46,7 +77,8 @@ export class AccountButton extends Component{
         super(props);
         this.state = {
             authenticated: false,
-            modalShow: false
+            modalShowLogin: false,
+            modalShowRegister: false,
         }
     }
     onCancel(){
@@ -55,6 +87,9 @@ export class AccountButton extends Component{
     onLogin(){
         console.log("onLogin()");
         this.setState({authenticated: true});
+    }
+    onRegister(){
+        console.log("onRegister()");
     }
     onMyAccount(){
         console.log("Go to my account");
@@ -75,14 +110,18 @@ export class AccountButton extends Component{
                 )
                 :( 
                 <span>
-                    <Button onClick={() => this.setState({modalShow: true})} variant="success">Login</Button>
+                    <Button onClick={() => this.setState({modalShowLogin: true})} variant="success">Login</Button>
                 </span> 
                 )}
             </span>
-            <ListingEditModal
-                show={this.state.modalShow}
-                onCancel={() => {this.onCancel();this.setState({modalShow:false})}}
-                onFinish ={() => {this.onLogin();this.setState({modalShow:false})}}
+            <LoginModal
+                show={this.state.modalShowLogin}
+                onCancel={() => {this.onCancel();this.setState({modalShowLogin:false})}}
+                onFinish ={() => {this.onLogin();this.setState({modalShowLogin:false})}}
+                onRegister={() => {this.onRegister();this.setState({modalShowLogin:false,modalShowRegister:true})}}
+            />
+            <RegisterModal
+                show={this.state.modalShowRegister}
             />
         </span>
         );
