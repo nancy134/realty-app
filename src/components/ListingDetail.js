@@ -21,7 +21,7 @@ class ListingDetail extends React.Component {
         this.props.onShowDetailChange(false);
     }
     componentDidMount(){
-        fetch('https://listing-api.phowma.com/listing/'+this.props.index)
+        fetch(process.env.REACT_APP_LISTING_SERVICE+'listing/'+this.props.index)
         .then(res => res.json())
         .then((data) => {
           this.setState({ listing: data })

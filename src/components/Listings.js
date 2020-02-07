@@ -19,9 +19,9 @@ class Listings extends React.Component {
     componentDidMount() {
         var url = "";
         if (this.state.editMode === true ){
-           url = 'https://listing-api.phowma.com/listings?perPage=4&page=1&owner=loggedIn';
+           url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=4&page=1&owner=loggedIn';
         } else {
-           url = 'https://listing-api.phowma.com/listings?perPage=4&page=1'; 
+           url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=4&page=1'; 
         }
         fetch(url)
         .then(res => res.json())
