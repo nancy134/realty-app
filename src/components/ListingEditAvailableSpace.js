@@ -20,23 +20,27 @@ class ListingEditAvailableSpace extends React.Component {
         });
     }
     render(){
-        var unit = "Suite 1A";
-        var size = "3,080 sq ft";
-        var price = "$45/sq ft";
-        var type = "NNN";
-        var use = "Office"; 
-        var description = "For lease is approximately 3,032 square feet of retail space in Ridge Plaza on High Ridge Road. This end cap location has large frontage and is currently a real estate office configured with perimeter offices and a large bullpen area, but can be easily redesigned into an open layout. There are 2 baths located within the space. The Plaza contains multiple retailers and abundant parking is available. As a main artery from the Merritt Parkway to the downtown business district, High Ridge Road is one of the most heavily traveled roads in Stamford with a traffic count of 26,900 cars per day. Ridge Plaza is conveniently located less than 1 mile from the Merritt Parkway Yet easily accessible from downtown Stamford. Prominent pylon signage is available.";
+        var unit = "";
+        var size = "";
+        var price = "";
+        var type = "";
+        var use = ""; 
+        var description = "";
 
         var image1 = process.env.REACT_APP_WEB_SERVER+'image1.jpg';
         var image2 = process.env.REACT_APP_WEB_SERVER+'image2.jpg';
         var image3 = process.env.REACT_APP_WEB_SERVER+'image3.jpg';
-        var images = [image1,image2,image3];
-        if (this.props.content === "new"){
-            unit = "";
-            size = "";
-            price = "";
-            description = "";
-            images = [];
+        var images = [];
+
+        const space = this.props.space;
+        if (space){
+            unit = space.unit;
+            size = space.size;
+            price = space.price;
+            description = space.description;
+            use = space.use;
+            type = space.type;
+            images = [image1, image2, image3];
         }
         return (
             <Form>
@@ -73,7 +77,7 @@ class ListingEditAvailableSpace extends React.Component {
                         <Form.Label>Type</Form.Label>
                         <Form.Control as="select" value={type}>
                             <option>Full Gross</option>
-                            <option>Mod Gross</option>
+                            <option>Modified Gross</option>
                             <option>NNN</option>
                         </Form.Control> 
                     </Form.Group>
@@ -84,6 +88,7 @@ class ListingEditAvailableSpace extends React.Component {
                             <option>Flex</option>
                             <option>Retail</option>
                             <option>Warehouse</option>
+                            <option>Restaurant</option>
                         </Form.Control>
                     </Form.Group>
                 </Form.Row>

@@ -13,13 +13,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import ListingEditHeader from './ListingEditHeader';
 
-function MyVerticallyCenteredModal(props) {
+function EditModal(props) {
   return (
     <Modal
       {...props}
-      //size="lg"
       aria-labelledby="contained-modal-title-vcenter"
-      //centered
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
@@ -27,7 +25,7 @@ function MyVerticallyCenteredModal(props) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body >
-          <ListingEditHeader content={props.content}/>
+          <ListingEditHeader listing={props.listing}/>
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide}>Close</Button>
@@ -45,9 +43,9 @@ function EditButton(props) {
       <FontAwesomeIcon className="text-danger" icon={faPencilAlt} /> 
       </Button>
 
-      <MyVerticallyCenteredModal
+      <EditModal
         show={modalShow}
-        content={props.content}
+        listing={props.listing}
         onHide={() => setModalShow(false)}
       />
       </span>
@@ -57,10 +55,6 @@ function EditButton(props) {
 class ListingDetailHeader extends React.Component {
     constructor(props){
         super(props);
-        this.state = {
-            viewType: this.props.viewType,
-            listing: this.props.listing
-        }
         this.handleClose = this.handleClose.bind(this);
     }
     handleClose(){
@@ -68,26 +62,26 @@ class ListingDetailHeader extends React.Component {
     }
 
     render() {
-        const viewType = this.state.viewType;
-        const content = this.props.content;
-        var title = this.props.listing.address + " (" + this.props.listing.city + ", "+this.props.listing.state + ")";
-        if (this.props.content === "new") {
-            title = "<Address> (<City>, <State>)";
+        const editMode = this.props.editMode;
+        const listing = this.props.listing;
+        var title = "<Address> (<City>, <State>)";
+        if (listing){
+            title = listing.address + " (" + listing.city + ", "+listing.state + ")";
         }
 
         var closeButton = "Close";
-        if (content === "new") closeButton = "Cancel";
+        if (editMode === "new") closeButton = "Cancel";
         return(
             <Row className="align-items-center bg-info">
-	        <Col md={6}className="text-white"><h4>{title} {viewType === "owner" ? <EditButton content={content}/> : null}</h4></Col>
+	        <Col md={6}className="text-white"><h4>{title} {editMode === "edit" ? <EditButton listing={listing}/> : null}</h4></Col>
                 <Col md={6} className="text-right">
-                    {content === "new" ?
+                    {editMode === "new" ?
                     <Button variant="info">Save Draft</Button>
                     : null}
-                    { content === "new" ?
+                    { editMode === "new" ?
                     <Button variant="info">Publish</Button>
                     : null}
-                    { content !== "new" ? 
+                    { editMode !== "new" ? 
                     <Button variant="info"><FontAwesomeIcon icon={faExpand} /> Expand</Button>
                     : null}
                     <Button variant="info" onClick={this.handleClose}><FontAwesomeIcon icon={faTimes}/> {closeButton}</Button>

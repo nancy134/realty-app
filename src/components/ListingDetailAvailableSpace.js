@@ -31,7 +31,7 @@ function ListingEditModal(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body style={{'max-height': 'calc(100vh - 210px)', 'overflow-y': 'auto'}}>
-                <ListingEditAvailableSpace content={props.content}/>
+                <ListingEditAvailableSpace space={props.space}/>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide}>Close</Button>
@@ -41,7 +41,7 @@ function ListingEditModal(props) {
     );
 }
 
-function AddButton() {
+function AddButton(props) {
     const [modalShow, setModalShow] = React.useState(false);
     return (
         <span>
@@ -54,12 +54,12 @@ function AddButton() {
             <ListingEditModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
-                content="new"
+                listing={props.listing} 
             />
         </span>
   );
 }
-function EditButton() {
+function EditButton(props) {
     const [modalEditShow, setModalEditShow] = React.useState(false);
     return (
         <span>
@@ -72,7 +72,7 @@ function EditButton() {
           <ListingEditModal
               show={modalEditShow}
               onHide={() => setModalEditShow(false)}
-              content="existing"
+              space={props.space} 
           />
         </span>
     );
@@ -103,16 +103,13 @@ class ListingDetailAvailableSpace extends React.Component {
         }
     }
     render(){
-        const viewType = this.props.viewType;
         var listing = this.props.listing;
-        if (this.props.content === "new"){
-            listing.spaces = [];
-        }
+        var editMode = this.props.editMode;
        
         return (
             <div>
                 <Row className="mt-3 border-bottom border-warning">
-                    <Col><h2>Available Space {viewType === "owner" ? <AddButton /> : null}</h2></Col>
+                    <Col><h2>Available Space {editMode === "edit" ? <AddButton listing={listing} /> : null}</h2></Col>
                 </Row>
                 <Row className="bg-light shadow">
                     <Col md={2} className="font-weight-bold">Unit</Col>
@@ -126,10 +123,11 @@ class ListingDetailAvailableSpace extends React.Component {
                     </Col>
                     <Col md={3}></Col>
                 </Row>
-                {listing.spaces.map(space =>
+                {!listing ? <div></div> : 
+                listing.spaces.map(space =>
                 (
-                <Accordion>
-                    <Row className="border-bottom align-items-center">
+                <Accordion > 
+                    <Row className="border-bottom align-items-center" >
                        <Col md={2}>{space.unit}</Col>
                        <Col md={2}>{space.size} sq ft</Col>
                        <Col md={2}>${space.price}/sq ft</Col>
@@ -141,10 +139,10 @@ class ListingDetailAvailableSpace extends React.Component {
                        </Col> 
                        <Col md={3}>
                            <Row>
-                               { viewType === "owner" ?
-                               <Col><EditButton /></Col>
+                               { editMode === "edit" ?
+                               <Col><EditButton space={space}/></Col>
                                : null }
-                               { viewType === "owner" ?
+                               { editMode === "edit" ?
                                <Col><FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} /></Col>
                                 : null }
 
@@ -159,7 +157,7 @@ class ListingDetailAvailableSpace extends React.Component {
                     </Row>
                     <Accordion.Collapse eventKey="0">
                         <div>
-                         <p>For lease is approximately 3,032 square feet of retail space in Ridge Plaza on High Ridge Road. This end cap location has large frontage and is currently a real estate office configured with perimeter offices and a large bullpen area, but can be easily redesigned into an open layout. There are 2 baths located within the space. The Plaza contains multiple retailers and abundant parking is available. As a main artery from the Merritt Parkway to the downtown business district, High Ridge Road is one of the most heavily traveled roads in Stamford with a traffic count of 26,900 cars per day. Ridge Plaza is conveniently located less than 1 mile from the Merritt Parkway Yet easily accessible from downtown Stamford. Prominent pylon signage is available.</p>
+                         <p>{space.description}</p>
                     <Row className="border-bottom">
                        <Col><Image src="/image1.jpg" thumbnail /></Col>
                        <Col><Image src="/image2.jpg" thumbnail /></Col>

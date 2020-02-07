@@ -6,14 +6,18 @@ import {
 } from 'react-bootstrap';
 
 class ListingEdit extends React.Component {
+    constructor(props){
+        super(props);
+    }
     render(){
-        var address="240-246 Moody St";
-        var city="Waltham";
-        var state="MA";
-        if (this.props.content === "new"){
-            address="";
-            city="";
-            state="";
+        var address="";
+        var city="";
+        var state="";
+
+        if (this.props.listing){
+            address=this.props.listing.address;
+            city=this.props.listing.city;
+            state=this.props.listing.state;
         }
         return (
             <Row className="mt-2">

@@ -3,7 +3,9 @@ import {
     Form,
     Row,Col,
     Button,
-    Dropdown
+    Dropdown,
+    ToggleButtonGroup,
+    ToggleButton
 } from 'react-bootstrap';
 
 const CustomMenu = React.forwardRef(
@@ -81,7 +83,13 @@ class ListingToolbar extends React.Component {
                     <Col xs={1} >
                         <Button variant="light">Search</Button>
                     </Col>
-                    <Col xs={5}>
+                    <Col xs={2} >
+                        <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
+                            <ToggleButton value={1}>All Listings</ToggleButton>
+                            <ToggleButton value={2}>My Listings</ToggleButton>
+                        </ToggleButtonGroup>
+                    </Col>
+                    <Col xs={3}>
                     </Col>
                     <Col xs={2} className="text-right">
                         <Button onClick={this.onAddListing} variant="light">Add a Listing</Button>

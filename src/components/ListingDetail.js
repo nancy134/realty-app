@@ -13,7 +13,12 @@ import ListingDetailBrokers from './ListingDetailBrokers';
 class ListingDetail extends React.Component {
     constructor(props) {
    super(props);
-        this.state = {listing: null};
+        this.state = {
+            listing: null,
+            editMode: this.props.editMode,
+            showDetail: this.props.showDetail,
+            index: this.props.index
+        };
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
     }
 
@@ -21,47 +26,42 @@ class ListingDetail extends React.Component {
         this.props.onShowDetailChange(false);
     }
     componentDidMount(){
-        fetch(process.env.REACT_APP_LISTING_SERVICE+'listing/'+this.props.index)
-        .then(res => res.json())
-        .then((data) => {
-          this.setState({ listing: data })
-        })
-        .catch(console.log)
+        if (this.state.index){
+            fetch(process.env.REACT_APP_LISTING_SERVICE+'listing/'+this.props.index)
+            .then(res => res.json())
+            .then((data) => {
+                this.setState({ listing: data })
+            })
+            .catch(console.log)
+        }
 
     }
     componentWillUnmount(){
     }
     render(){
-        var showDetail = this.props.showDetail;
-        const content = this.props.content;
+        const showDetail = this.props.showDetail;
+        var editMode = this.state.editMode;
         const listing = this.state.listing;
-        var viewType;
-        if (this.props.index === "1") {
-            viewType = "owner";
-        } else if (this.props.index === "2") {
-            viewType = "default";
-        } else {
-            viewType = "new";
+        console.log("ListingDetail listing: "+JSON.stringify(listing));
+        if (this.props.index === "1" || this.props.index === "2") { // Change to compare owner to logged in ower
+            editMode = "edit";
         }
-        if (content === "new"){
-            showDetail = true;
-        }   
-        if (showDetail && listing){
+        if (showDetail){
             return (
             <div>
-                <ListingDetailHeader listing={listing} content={content} viewType={viewType} onShowDetailChange={this.handleShowDetailChange}/>
-                <ListingDetailOverview listing={listing} content={content} viewType={viewType} />
-                <ListingDetailAvailableSpace listing={listing} content={content} viewType={viewType} />
+                <ListingDetailHeader listing={listing} editMode={editMode} onShowDetailChange={this.handleShowDetailChange}/>
+                <ListingDetailOverview listing={listing} editMode={editMode} />
+                <ListingDetailAvailableSpace listing={listing} editMode={editMode} />
                 <Row className="mt-3">
                     <Col>
-                        <ListingDetailGeneral listing={listing} content={content} viewType={viewType} />
+                        <ListingDetailGeneral listing={listing} editMode={editMode} />
                     </Col>
                     <Col>
-                        <ListingDetailAmenities listing={listing} content={content} viewType={viewType} />
+                        <ListingDetailAmenities listing={listing} editMode={editMode} />
                     </Col>
                     
                 </Row>
-                <ListingDetailBrokers listing={listing} content={content} viewType={viewType} />
+                <ListingDetailBrokers listing={listing} editMode={editMode} />
 
             </div> 
             );

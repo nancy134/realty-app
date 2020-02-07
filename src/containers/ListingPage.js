@@ -16,23 +16,24 @@ export class ListingPage extends Component {
         this.handleAddListing = this.handleAddListing.bind(this);
         this.state = {
             showDetail: false,
-            content: "existing",
-            editMode: false,
-            listings: []
+            editMode: "view",
+            listingMode: "all",
         };
     }
     handleShowDetailChange(showDetail, index){
         this.setState({
             showDetail: showDetail,
+            editMode: "view",
             index: index,
-            content: "existing"
+            listingMode: "all"
         });
 
     }
     handleAddListing(){
         this.setState({
-            content: "new",
-            index: "1",
+            index: null,
+            editMode: "edit",
+            listingMode: "all",
             showDetail: true
         });
     }
@@ -47,9 +48,8 @@ export class ListingPage extends Component {
     render() {
         var showDetail = this.state.showDetail;
         var index = this.state.index;
-        var content = this.state.content;
-        var data = this.state.data;
         var editMode = this.state.editMode;
+        var listingMode = this.state.listingMode;
         return (
             <React.Fragment>
                 <Row className="bg-success">
@@ -58,14 +58,14 @@ export class ListingPage extends Component {
                 <Row>
                     <Col className={showDetail? "rightcol" : "leftcol"}>
                         {showDetail ? (
-                            <ListingDetail content={content} index={index} showDetail={showDetail} data={data} onShowDetailChange={this.handleShowDetailChange}/>
+                            <ListingDetail editMode={editMode} index={index} showDetail={showDetail} onShowDetailChange={this.handleShowDetailChange}/>
                         ) : (
                             <ListingMap showDetail={showDetail} />
                         )}
                     </Col>
                     <Col className="rightcol" >
                         <ListingPagination />
-                        <Listings editMode={editMode} onShowDetailChange={this.handleShowDetailChange} />
+                        <Listings listingMode={listingMode} onShowDetailChange={this.handleShowDetailChange} />
                     </Col>
                 </Row>
                 <Row className="bg-secondary">footer</Row>

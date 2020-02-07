@@ -14,6 +14,7 @@ import ListingEditOverview from './ListingEditOverview';
 
 function ListingEditModal(props) {
     var content = props.content;
+    var listing = props.listing;
     return (
         <Modal
             {...props}
@@ -27,7 +28,7 @@ function ListingEditModal(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body >
-                <ListingEditOverview content={content}/>
+                <ListingEditOverview listing={listing} content={content}/>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide}>Close</Button>
@@ -48,6 +49,7 @@ function EditButton(props) {
             </span>
             <ListingEditModal
                 content = {props.content}
+                listing = {props.listing}
                 show={modalShow}
                 onHide={() => setModalShow(false)}
             />
@@ -64,21 +66,24 @@ class ListingDetailOverview extends React.Component {
     }
 
     render() {
-        var shortDescription = this.props.listing.shortDescription; 
-        var longDescription = "";
-        var image = this.props.listing.images[0].url;
-        if (this.props.content === "new"){
-            shortDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vitae.";
-            longDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae aliquet purus. In sollicitudin lobortis sollicitudin. Morbi sagittis ornare lorem, sed volutpat dolor. Vestibulum ac erat et ante cursus bibendum at in urna. Duis quis ex sapien. Sed massa mauris, consectetur eget nisl vel, tincidunt varius dolor. Cras porttitor tortor mauris, ut congue odio fringilla id. Aenean pretium a ante ut fermentum. Donec fringilla quam et felis tempor varius.";
-            image = "/default.jpg"; 
+        var shortDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vitae.";
+        var longDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae aliquet purus. In sollicitudin lobortis sollicitudin. Morbi sagittis ornare lorem, sed volutpat dolor. Vestibulum ac erat et ante cursus bibendum at in urna. Duis quis ex sapien. Sed massa mauris, consectetur eget nisl vel, tincidunt varius dolor. Cras porttitor tortor mauris, ut congue odio fringilla id. Aenean pretium a ante ut fermentum. Donec fringilla quam et felis tempor varius.";
+        var image = "/default.jpg"; 
+
+        if (this.props.listing){
+            shortDescription = this.props.listing.shortDescription;
+            longDescription = this.props.listing.longDescription;
+            if (this.props.listing.images.length > 0){
+                image = this.props.listing.images[0].url;
+            }
         }
-        const viewType = this.props.viewType;
-        const content = this.props.content;
+        const listing = this.props.listing;
+        const editMode = this.props.editMode;
         return (
             <div>
                 <Row className="mt-2 border-bottom border-warning">
                     <Col>
-	                <h2>Overview {viewType === "owner" ? <EditButton content={content} /> : null}</h2>
+	                <h2>Overview {editMode === "edit" ? <EditButton listing={listing} /> : null}</h2>
                     </Col>
                     <Col>
                         <div className="text-right">

@@ -13,12 +13,12 @@ class Listings extends React.Component {
         this.showDetailChange = this.showDetailChange.bind(this);
         this.state = {
             listings: [],
-            editMode: this.props.editMode
+            listingMode: this.props.listingMode
         };
     }
     componentDidMount() {
         var url = "";
-        if (this.state.editMode === true ){
+        if (this.state.listingMode === "my" ){
            url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=4&page=1&owner=loggedIn';
         } else {
            url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=4&page=1'; 

@@ -51,37 +51,39 @@ function EditButton() {
 }
 class ListingDetailGeneral extends React.Component {
     render() {
-        const viewType = this.props.viewType;
-        var totalBuildingSize = this.props.listing.totalBuildingSize;
 
-        var lotSize = null;
-        if (this.props.listing.lotSize){
-            lotSize = this.props.listing.lotSize+" Acre";
-        }
-        var totalAvailableSpace = null;
-        if (this.props.listing.totalAvailableSpace){
-            totalAvailableSpace = "5,200 sf";
-        }
-        var zone = this.props.listing.zone;
-        var parking = null;
-        if (this.props.listing.parking){
-            parking = this.props.listing.parking+" spaces";
-        }
-        var nets = null;
-        if (this.props.listing.nets){
-            nets = "$"+this.props.listing.nets+" / sq ft";
-        }
-        if (this.props.content === "new"){
-            totalBuildingSize = "---";
-            lotSize = "---"
-            totalAvailableSpace = "---";
-            zone = "---";
-            parking = "---";
-            nets = "---"
+        var totalBuildingSize = "---";
+        var lotSize = "---"
+        var totalAvailableSpace = "---";
+        var zone = "---";
+        var parking = "---";
+        var nets = "---"
+
+        const editMode = this.props.editMode;
+        const listing = this.props.listing;
+
+        if (listing){
+            totalBuildingSize = listing.totalBuildingSize;
+
+            if (listing.lotSize){
+                lotSize = listing.lotSize+" Acre";
+            }
+            if (listing.totalAvailableSpace){
+                totalAvailableSpace = "5,200 sf";
+            }
+            zone = listing.zone;
+
+            if (listing.parking){
+                parking = listing.parking+" spaces";
+            }
+
+            if (listing.nets){
+                nets = "$"+listing.nets+" / sq ft";
+            }
         } 
         return (
             <div>
-                <h2 className="border-bottom border-warning">General {viewType === "owner" ? <EditButton /> : null}</h2>
+                <h2 className="border-bottom border-warning">General {editMode === "edit" ? <EditButton /> : null}</h2>
                 {totalBuildingSize &&
                 <Row>
                     <Col>Total Building Size</Col>

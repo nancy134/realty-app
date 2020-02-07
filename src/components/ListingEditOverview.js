@@ -18,15 +18,16 @@ class ListingEditOverview extends React.Component {
         });
     }
     render(){
-        var shortDescription = "Street Retail and Office Space for Lease on High Ridge Road in Stamford, CT";
-        var longDescription = "Street Retail in Ridge Plaza on heavily traveled High Ridge Road. The Plaza contains multiple retailers and has ample parking on site. Pylon signage is available.";
-        var image1 = process.env.REACT_APP_WEB_SERVER+"image1.jpg";
-        var defaultImage = [image1];
-        if (this.props.content === "new"){
-            shortDescription = "";
-            longDescription = "";
-            defaultImage = [];
-        } 
+        var shortDescription = "";
+        var longDescription = "";
+        var defaultImage = [];
+        if (this.props.listing){
+            shortDescription = this.props.listing.shortDescription;
+            longDescription = this.props.listing.longDescription;
+            for (var i=0; i<this.props.listing.images.length; i++){
+                defaultImage.push(this.props.listing.images[i].url);
+            }
+        }
         return (
             <div>
             <Row className="mt-2">
