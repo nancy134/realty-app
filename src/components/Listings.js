@@ -19,9 +19,9 @@ class Listings extends React.Component {
     componentDidMount() {
         var url = "";
         if (this.state.listingMode === "my" ){
-           url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=4&page=1&owner=loggedIn';
+           url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=5&page=1&owner=loggedIn';
         } else {
-           url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=4&page=1'; 
+           url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=5&page=1'; 
         }
         fetch(url)
         .then(res => res.json())
@@ -47,7 +47,11 @@ class Listings extends React.Component {
                 <ListGroup.Item key={listing.id}>
                     <Row>
                         <Col>
+                            { listing.images.length > 0 ?
                             <Image src={listing.images[0].url} className="border-0" thumbnail/>
+                            :
+                            <Image src="/default.jpg" className="border-0" thumbnail />
+                            }
                         </Col>
                         <Col>
                             <Card className="border-0">
@@ -55,8 +59,12 @@ class Listings extends React.Component {
                                     <Card.Title className="listing-title text-danger"  data-index={listing.id} onClick={this.showDetailChange}>{listing.address}</Card.Title>
                                     <Card.Subtitle>{listing.city}, {listing.state}</Card.Subtitle>
                                     <div>Built in {listing.yearBuilt}</div>
+                                    { listing.spaces.length > 0 ?
                                     <div>{listing.spaces[0].size} sf Space</div>
+                                    : null}
+                                    { listing.spaces.length > 0 ?
                                     <div>${listing.spaces[0].price} sf/yr</div>
+                                    : null }
                                 </Card.Body>
                             </Card>
                         </Col>

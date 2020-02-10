@@ -83,7 +83,7 @@ class ListingDetailGeneral extends React.Component {
         } 
         return (
             <div>
-                <h2 className="border-bottom border-warning">General {editMode === "edit" ? <EditButton /> : null}</h2>
+                <h2 className="border-bottom border-warning">Building Detail {editMode === "edit" ? <EditButton /> : null}</h2>
                 {totalBuildingSize &&
                 <Row>
                     <Col>Total Building Size</Col>

@@ -26,6 +26,10 @@ class ListingEditAvailableSpace extends React.Component {
         var type = "";
         var use = ""; 
         var description = "";
+        var driveInDoors = 0;
+        var divisible = "No";
+        var loadingDocks = 0;
+        var leaseTerm = "";
 
         var image1 = process.env.REACT_APP_WEB_SERVER+'image1.jpg';
         var image2 = process.env.REACT_APP_WEB_SERVER+'image2.jpg';
@@ -40,6 +44,10 @@ class ListingEditAvailableSpace extends React.Component {
             description = space.description;
             use = space.use;
             type = space.type;
+            driveInDoors = space.driveInDoors;
+            divisible = space.divisible;
+            loadingDocks = space.loadingDocks;
+            leaseTerm = space.leaseTerm;
             images = [image1, image2, image3];
         }
         return (
@@ -109,6 +117,36 @@ class ListingEditAvailableSpace extends React.Component {
                             defaultImages={images}
                         />
                     </Form.Group>
+                </Form.Row>
+                <Form.Row>
+                    <Form.Group as={Col}>
+                        <Form.Label>Drive in Doors</Form.Label>
+                        <Form.Control value={driveInDoors}></Form.Control>
+                    </Form.Group>
+                    <Form.Group as={Col}>
+                        <Form.Label>Floor</Form.Label>
+                        <Form.Control value={driveInDoors}></Form.Control>
+                    </Form.Group>
+                    <Form.Group as={Col}>
+                        <Form.Label>Divisible</Form.Label>
+                        <Form.Control as="select" value={divisible}>
+                            <option>No</option>
+                            <option>Yes</option>
+                        </Form.Control>
+                    </Form.Group>
+                </Form.Row>
+                <Form.Row>
+                    <Form.Group as={Col}>
+                        <Form.Label>Loading Docks</Form.Label>
+                        <Form.Control value={loadingDocks}></Form.Control>
+                    </Form.Group>
+                    <Form.Group as={Col}>
+                        <Form.Label>Lease Term</Form.Label>
+                        <Form.Control value={leaseTerm}></Form.Control>
+                    </Form.Group>
+                    <Form.Group as={Col}>
+                    </Form.Group>
+
                 </Form.Row>
             </Form>
         );

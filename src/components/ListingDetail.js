@@ -9,6 +9,11 @@ import ListingDetailAvailableSpace from './ListingDetailAvailableSpace';
 import ListingDetailGeneral from './ListingDetailGeneral';
 import ListingDetailAmenities from './ListingDetailAmenities';
 import ListingDetailBrokers from './ListingDetailBrokers';
+import ListingDetailBuildingIncome from './ListingDetailBuildingIncome';
+import ListingDetailUnits from './ListingDetailUnits';
+import ListingDetailTenants from './ListingDetailTenants';
+import ListingDetailPortfolio from './ListingDetailPortfolio';
+import ListingDetailAttachments from './ListingDetailAttachments';
 
 class ListingDetail extends React.Component {
     constructor(props) {
@@ -52,15 +57,13 @@ class ListingDetail extends React.Component {
                 <ListingDetailHeader listing={listing} editMode={editMode} onShowDetailChange={this.handleShowDetailChange}/>
                 <ListingDetailOverview listing={listing} editMode={editMode} />
                 <ListingDetailAvailableSpace listing={listing} editMode={editMode} />
-                <Row className="mt-3">
-                    <Col>
-                        <ListingDetailGeneral listing={listing} editMode={editMode} />
-                    </Col>
-                    <Col>
-                        <ListingDetailAmenities listing={listing} editMode={editMode} />
-                    </Col>
-                    
-                </Row>
+                <ListingDetailUnits listing={listing} editMode={editMode} />
+                <ListingDetailTenants listing={listing} editMode={editMode} />
+                <ListingDetailPortfolio listing={listing} editoMode={editMode} />
+                <ListingDetailAttachments listing={listing} editMode={editMode} />
+                <ListingDetailGeneral listing={listing} editMode={editMode} />
+                <ListingDetailAmenities listing={listing} editMode={editMode} />
+                <ListingDetailBuildingIncome listing={listing} editMode={editMode} />
                 <ListingDetailBrokers listing={listing} editMode={editMode} />
 
             </div> 
