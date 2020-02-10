@@ -56,10 +56,18 @@ class ListingDetail extends React.Component {
             <div>
                 <ListingDetailHeader listing={listing} editMode={editMode} onShowDetailChange={this.handleShowDetailChange}/>
                 <ListingDetailOverview listing={listing} editMode={editMode} />
+                { listing && listing.spaces.length > 0 ?
                 <ListingDetailAvailableSpace listing={listing} editMode={editMode} />
+                : null }
+                { listing && listing.units.length > 0 ?
                 <ListingDetailUnits listing={listing} editMode={editMode} />
+                : null }
+                { listing && listing.tenants.length > 0 ?
                 <ListingDetailTenants listing={listing} editMode={editMode} />
+                : null }
+                { listing && listing.portfolio.length > 0 ?
                 <ListingDetailPortfolio listing={listing} editoMode={editMode} />
+                : null }
                 <ListingDetailAttachments listing={listing} editMode={editMode} />
                 <ListingDetailGeneral listing={listing} editMode={editMode} />
                 <ListingDetailAmenities listing={listing} editMode={editMode} />

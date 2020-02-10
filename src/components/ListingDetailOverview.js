@@ -69,6 +69,7 @@ class ListingDetailOverview extends React.Component {
         var shortDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vitae.";
         var longDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae aliquet purus. In sollicitudin lobortis sollicitudin. Morbi sagittis ornare lorem, sed volutpat dolor. Vestibulum ac erat et ante cursus bibendum at in urna. Duis quis ex sapien. Sed massa mauris, consectetur eget nisl vel, tincidunt varius dolor. Cras porttitor tortor mauris, ut congue odio fringilla id. Aenean pretium a ante ut fermentum. Donec fringilla quam et felis tempor varius.";
         var image = "/default.jpg"; 
+        var listingType = "For Lease";
 
         if (this.props.listing){
             shortDescription = this.props.listing.shortDescription;
@@ -76,6 +77,7 @@ class ListingDetailOverview extends React.Component {
             if (this.props.listing.images.length > 0){
                 image = this.props.listing.images[0].url;
             }
+            listingType = this.props.listing.listingType;
         }
         const listing = this.props.listing;
         const editMode = this.props.editMode;
@@ -87,7 +89,7 @@ class ListingDetailOverview extends React.Component {
                     </Col>
                     <Col>
                         <div className="text-right">
-                            <h4>For Lease</h4>
+                            <h4>{listingType}</h4>
                          </div>
                     </Col>
                 </Row>
