@@ -6,9 +6,6 @@ import {
 } from 'react-bootstrap';
 
 class ListingDetailPortfolio extends React.Component {
-    constructor(props){
-        super(props);
-    }
 
     render(){
         return(

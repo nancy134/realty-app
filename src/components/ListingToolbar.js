@@ -56,6 +56,7 @@ const CustomMenu = React.forwardRef(
 class ListingToolbar extends React.Component {
     constructor(props){
         super(props);
+        console.log("ListingToolbar:loggedIn: "+this.props.loggedIn);
         this.onAddListing = this.onAddListing.bind(this);
     }
 
@@ -84,10 +85,12 @@ class ListingToolbar extends React.Component {
                         <Button variant="light">Search</Button>
                     </Col>
                     <Col xs={2} >
+                       { this.props.loggedIn ?
                         <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
                             <ToggleButton value={1}>All Listings</ToggleButton>
                             <ToggleButton value={2}>My Listings</ToggleButton>
                         </ToggleButtonGroup>
+                        : null }
                     </Col>
                     <Col xs={3}>
                     </Col>

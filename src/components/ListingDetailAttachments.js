@@ -6,9 +6,6 @@ import {
 } from 'react-bootstrap';
 
 class ListingDetailAttachments extends React.Component {
-    constructor(props){
-        super(props);
-    }
 
     render(){
         return(

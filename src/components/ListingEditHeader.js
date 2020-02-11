@@ -6,9 +6,6 @@ import {
 } from 'react-bootstrap';
 
 class ListingEdit extends React.Component {
-    constructor(props){
-        super(props);
-    }
     render(){
         var address="";
         var city="";

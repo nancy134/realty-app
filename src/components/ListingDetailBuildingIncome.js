@@ -5,9 +5,6 @@ import {
 } from 'react-bootstrap';
 
 class ListingDetailBuildingIncome extends React.Component {
-    constructor(props){
-        super(props);
-    }
 
     render(){
         return(

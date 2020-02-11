@@ -12,6 +12,7 @@ import ListingDetail from '../components/ListingDetail';
 export class ListingPage extends Component {
     constructor(props){
         super(props);
+        console.log("ListingPage loggedIn: "+this.props.loggedIn);
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleAddListing = this.handleAddListing.bind(this);
         this.state = {
@@ -50,10 +51,11 @@ export class ListingPage extends Component {
         var index = this.state.index;
         var editMode = this.state.editMode;
         var listingMode = this.state.listingMode;
+        var loggedIn = this.props.loggedIn;
         return (
             <React.Fragment>
                 <Row className="bg-success">
-                    <ListingToolbar onAddListing={this.handleAddListing}/>
+                    <ListingToolbar loggedIn={loggedIn} onAddListing={this.handleAddListing}/>
                 </Row>
                 <Row>
                     <Col className={showDetail? "rightcol" : "leftcol"}>

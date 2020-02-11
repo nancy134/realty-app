@@ -7,6 +7,10 @@ import {
     Dropdown,
     DropdownButton
 } from 'react-bootstrap';
+import { isAuthenticated } from '../helpers/authentication';
+import { getUserName } from '../helpers/authentication';
+import { deleteUser } from '../helpers/authentication';
+import { loginResponse } from '../helpers/authentication';
 
 function RegisterModal(props){
     const standardProps = Object.assign({}, props);
@@ -81,12 +85,19 @@ export class AccountButton extends Component{
             modalShowRegister: false,
         }
     }
+    componentDidMount(){
+        if (isAuthenticated()){
+            this.setState({authenticated: true});
+        }
+    }
     onCancel(){
         console.log("onCancel()");
     }
     onLogin(){
         console.log("onLogin()");
+        loginResponse();
         this.setState({authenticated: true});
+        this.props.onLogin();
     }
     onRegister(){
         console.log("onRegister()");
@@ -96,16 +107,22 @@ export class AccountButton extends Component{
         var url = window.location.protocol + "//" + window.location.hostname + "/account";
         window.location.href = url;
     }
+    onLogout(){
+       deleteUser();
+       this.setState({authenticated: false});
+       this.props.onLogout();
+    }
     render(){
+        const userName = getUserName();
         return(
         <span>
             <span className="align-top text-danger">
             {this.state.authenticated ? 
                 ( 
-                <DropdownButton id="dropdown-item-button" title="Paul Piedra">
+                <DropdownButton id="dropdown-item-button" title={userName}>
                     <Dropdown.Item as="button" onClick={() => {this.onMyAccount()}}>My Account</Dropdown.Item>
                     <Dropdown.Item as="button">My Listings</Dropdown.Item>
-                    <Dropdown.Item as="button">Logout</Dropdown.Item>
+                    <Dropdown.Item as="button" onClick={() => {this.onLogout()}}>Logout</Dropdown.Item>
                 </DropdownButton> 
                 )
                 :( 
