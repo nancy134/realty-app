@@ -4,6 +4,8 @@ import {
     Col,
     Button,
     Modal,
+    ToggleButtonGroup,
+    ToggleButton
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -56,32 +58,51 @@ class ListingDetailHeader extends React.Component {
     constructor(props){
         super(props);
         this.handleClose = this.handleClose.bind(this);
+        this.handleEditToggle = this.handleEditToggle.bind(this);
+        this.state = {
+            editMode: this.props.editMode,
+            owner: this.props.owner
+        };
     }
     handleClose(){
         this.props.onShowDetailChange(false);
     }
-
+    handleEditToggle(value){
+        console.log("handleEditToggle value: "+value);
+        this.setState({editMode: value});
+        this.props.onEditToggle(value);
+    }
     render() {
-        const editMode = this.props.editMode;
+        const editMode = this.state.editMode;
         const listing = this.props.listing;
-        var title = "<Address> (<City>, <State>)";
+        const owner = this.props.owner;
+        const edit = "edit";
+        const view = "view";
+        var title = "<Address> (<State>)";
         if (listing){
-            title = listing.address + " (" + listing.city + ", "+listing.state + ")";
+            title = listing.address + " (" + listing.city + ")";
         }
 
         var closeButton = "Close";
-        if (editMode === "new") closeButton = "Cancel";
+        console.log("owner: "+owner);
+
+        if (!listing) closeButton = "Cancel";
         return(
             <Row className="align-items-center bg-info">
-	        <Col md={6}className="text-white"><h4>{title} {editMode === "edit" ? <EditButton listing={listing}/> : null}</h4></Col>
+	        <Col md={6}className="text-white">
+                    <div>{title} {editMode === "edit" ? <EditButton listing={listing}/> : null}</div>
+                </Col>
                 <Col md={6} className="text-right">
-                    {editMode === "new" ?
-                    <Button variant="info">Save Draft</Button>
+                    { owner === "true" ?
+                    <ToggleButtonGroup type="radio" name="options" defaultValue={view} onChange={this.handleEditToggle}>
+                        <ToggleButton variant="info" value={edit}>Edit</ToggleButton>
+                        <ToggleButton variant="info" value={view}>View</ToggleButton>
+                    </ToggleButtonGroup>
+                    : null }
+                    { !listing ?
+                    <Button variant="info">Save</Button>
                     : null}
-                    { editMode === "new" ?
-                    <Button variant="info">Publish</Button>
-                    : null}
-                    { editMode !== "new" ? 
+                    { listing ? 
                     <Button variant="info"><FontAwesomeIcon icon={faExpand} /> Expand</Button>
                     : null}
                     <Button variant="info" onClick={this.handleClose}><FontAwesomeIcon icon={faTimes}/> {closeButton}</Button>

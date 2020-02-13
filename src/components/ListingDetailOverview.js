@@ -81,6 +81,7 @@ class ListingDetailOverview extends React.Component {
         }
         const listing = this.props.listing;
         const editMode = this.props.editMode;
+        console.log("ListingDetailOverview editMode: "+editMode);
         return (
             <div>
                 <Row className="mt-2 border-bottom border-warning">

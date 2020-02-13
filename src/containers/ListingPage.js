@@ -12,7 +12,6 @@ import ListingDetail from '../components/ListingDetail';
 export class ListingPage extends Component {
     constructor(props){
         super(props);
-        console.log("ListingPage loggedIn: "+this.props.loggedIn);
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleAddListing = this.handleAddListing.bind(this);
         this.state = {
@@ -58,14 +57,14 @@ export class ListingPage extends Component {
                     <ListingToolbar loggedIn={loggedIn} onAddListing={this.handleAddListing}/>
                 </Row>
                 <Row>
-                    <Col className={showDetail? "rightcol" : "leftcol"}>
+                    <Col xs={7} className={showDetail? "rightcol" : "leftcol"}>
                         {showDetail ? (
                             <ListingDetail editMode={editMode} index={index} showDetail={showDetail} onShowDetailChange={this.handleShowDetailChange}/>
                         ) : (
                             <ListingMap showDetail={showDetail} />
                         )}
                     </Col>
-                    <Col className="rightcol" >
+                    <Col xs={5} className="rightcol" >
                         <ListingPagination />
                         <Listings listingMode={listingMode} onShowDetailChange={this.handleShowDetailChange} />
                     </Col>
