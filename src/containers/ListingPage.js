@@ -8,24 +8,26 @@ import Listings from '../components/Listings';
 import ListingToolbar from '../components/ListingToolbar';
 import ListingPagination from '../components/ListingPagination';
 import ListingDetail from '../components/ListingDetail';
+import { isAuthenticated } from '../helpers/authentication';
 
 export class ListingPage extends Component {
     constructor(props){
         super(props);
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleAddListing = this.handleAddListing.bind(this);
+        this.handleListingToggle = this.handleListingToggle.bind(this);
         this.state = {
             showDetail: false,
             editMode: "view",
-            listingMode: "all",
+            listingMode: "allListings",
+            loggedIn: false
         };
     }
     handleShowDetailChange(showDetail, index){
         this.setState({
             showDetail: showDetail,
             editMode: "view",
-            index: index,
-            listingMode: "all"
+            index: index
         });
 
     }
@@ -33,12 +35,27 @@ export class ListingPage extends Component {
         this.setState({
             index: null,
             editMode: "edit",
-            listingMode: "all",
             showDetail: true
         });
     }
+    handleListingToggle(value){
+        this.setState({
+            listingMode: value
+        });
+    }
     componentDidMount(){
-
+       if (isAuthenticated()){
+           this.setState({
+               loggedIn: true
+           });
+       }  
+    }
+    componentDidUpdate(prevProps){
+        if (prevProps.loggedIn !== this.props.loggedIn){
+            this.setState({
+                loggedIn: this.props.loggedIn
+            });
+        }
     }
     componentWillUnmount(){
     }
@@ -50,11 +67,11 @@ export class ListingPage extends Component {
         var index = this.state.index;
         var editMode = this.state.editMode;
         var listingMode = this.state.listingMode;
-        var loggedIn = this.props.loggedIn;
+        var loggedIn = this.state.loggedIn;
         return (
             <React.Fragment>
                 <Row className="bg-success">
-                    <ListingToolbar loggedIn={loggedIn} onAddListing={this.handleAddListing}/>
+                    <ListingToolbar loggedIn={loggedIn} onAddListing={this.handleAddListing} onListingToggle={this.handleListingToggle}/>
                 </Row>
                 <Row>
                     <Col xs={7} className={showDetail? "rightcol" : "leftcol"}>

@@ -5,6 +5,7 @@ import {
     Card,
     Image
 } from 'react-bootstrap';
+import {getUserEmail} from '../helpers/authentication';
 
 class Listings extends React.Component {
    
@@ -17,11 +18,29 @@ class Listings extends React.Component {
         };
     }
     componentDidMount() {
+        this.fetchListings();
+    }
+    componentWillUnmount() {
+    }
+    shouldComponentUpdate(){
+        return true;
+    }
+    componentDidUpdate(prevProps){
+        console.log("prevProps.listingMode: "+prevProps.listingMode);
+        console.log("props.listingMode: "+this.props.listingMode);
+        if (prevProps.listingMode !== this.props.listingMode){
+            this.setState({listingMode: this.props.listingMode});
+            this.fetchListings();
+        } 
+    }
+
+    fetchListings(){
         var url = "";
-        if (this.state.listingMode === "my" ){
-           url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=5&page=1&owner=loggedIn';
+        console.log("fetchListings: listingMode: "+this.state.listingMode);
+        if (this.props.listingMode === "myListings" ){
+           url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=5&page=1&owner='+getUserEmail();
         } else {
-           url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=5&page=1'; 
+           url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=5&page=1';
         }
         fetch(url)
         .then(res => res.json())
@@ -29,12 +48,9 @@ class Listings extends React.Component {
           this.setState({ listings: data.listings.rows })
         })
         .catch(console.log)
+
     }
-    componentWillUnmount() {
-    }
-    shouldComponentUpdate(){
-        return true;
-    }
+
     showDetailChange(e){
         this.props.onShowDetailChange(true, e.target.dataset.index);
     }

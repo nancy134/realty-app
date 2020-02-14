@@ -56,15 +56,23 @@ const CustomMenu = React.forwardRef(
 class ListingToolbar extends React.Component {
     constructor(props){
         super(props);
-        console.log("ListingToolbar:loggedIn: "+this.props.loggedIn);
         this.onAddListing = this.onAddListing.bind(this);
+        this.handleListingToggle = this.handleListingToggle.bind(this);
     }
 
     onAddListing(e){
         this.props.onAddListing();
     }
 
+    handleListingToggle(value){
+        console.log("handleListingToggle value: "+value);
+        this.props.onListingToggle(value);
+    }
+
     render(){
+        var myListings = "myListings";
+        var allListings = "allListings";
+
         return (
             <Form className="toolbar-form m-2">
                 <Form.Row>
@@ -86,9 +94,9 @@ class ListingToolbar extends React.Component {
                     </Col>
                     <Col xs={2} >
                        { this.props.loggedIn ?
-                        <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
-                            <ToggleButton value={1}>All Listings</ToggleButton>
-                            <ToggleButton value={2}>My Listings</ToggleButton>
+                        <ToggleButtonGroup type="radio" name="options" defaultValue={allListings} onChange={this.handleListingToggle}>
+                            <ToggleButton value={allListings}>All Listings</ToggleButton>
+                            <ToggleButton value={myListings}>My Listings</ToggleButton>
                         </ToggleButtonGroup>
                         : null }
                     </Col>
