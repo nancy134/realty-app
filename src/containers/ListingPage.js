@@ -44,18 +44,31 @@ export class ListingPage extends Component {
         });
     }
     componentDidMount(){
+       console.log("CDM");
        if (isAuthenticated()){
+           console.log("isAuthenticated");
            this.setState({
                loggedIn: true
            });
        }  
     }
-    componentDidUpdate(prevProps){
-        if (prevProps.loggedIn !== this.props.loggedIn){
+    componentWillReceiveProps(nextProps){
+        console.log("CWRP: nextProps.loggedIn: "+nextProps.loggedIn);
+        if (nextProps.loggedIn !== this.state.loggedIn){
             this.setState({
-                loggedIn: this.props.loggedIn
+                loggedIn: nextProps.loggedIn
             });
         }
+    }
+    componentDidUpdate(prevProps){
+        console.log("CDU prevProps.loggedIn: "+prevProps.loggedIn);
+        console.log("CDU this.props.loggedIn: "+this.props.loggedIn);
+        console.log("CDU this.state.loggedIn: "+this.state.loggedIn);
+        //if (prevProps.loggedIn !== this.state.loggedIn){
+        //    this.setState({
+        //        loggedIn: this.props.loggedIn
+        //    });
+       // }
     }
     componentWillUnmount(){
     }
@@ -68,6 +81,7 @@ export class ListingPage extends Component {
         var editMode = this.state.editMode;
         var listingMode = this.state.listingMode;
         var loggedIn = this.state.loggedIn;
+        console.log("render loggedIn: "+loggedIn);
         return (
             <React.Fragment>
                 <Row className="bg-success">

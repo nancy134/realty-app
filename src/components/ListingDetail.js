@@ -77,7 +77,7 @@ class ListingDetail extends React.Component {
                 <ListingDetailTenants listing={listing} editMode={editMode} />
                 : null }
                 {(editMode === "edit") || (listing && listing.portfolio.length) > 0 ?
-                <ListingDetailPortfolio listing={listing} editoMode={editMode} />
+                <ListingDetailPortfolio listing={listing} editMode={editMode} />
                 : null }
                 {(editMode === "edit") ?
                 <ListingDetailAttachments listing={listing} editMode={editMode} />

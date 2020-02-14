@@ -26,8 +26,6 @@ class Listings extends React.Component {
         return true;
     }
     componentDidUpdate(prevProps){
-        console.log("prevProps.listingMode: "+prevProps.listingMode);
-        console.log("props.listingMode: "+this.props.listingMode);
         if (prevProps.listingMode !== this.props.listingMode){
             this.setState({listingMode: this.props.listingMode});
             this.fetchListings();
@@ -36,7 +34,6 @@ class Listings extends React.Component {
 
     fetchListings(){
         var url = "";
-        console.log("fetchListings: listingMode: "+this.state.listingMode);
         if (this.props.listingMode === "myListings" ){
            url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=5&page=1&owner='+getUserEmail();
         } else {
