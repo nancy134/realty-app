@@ -15,6 +15,7 @@ export class ListingPage extends Component {
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleAddListing = this.handleAddListing.bind(this);
         this.handleListingToggle = this.handleListingToggle.bind(this);
+        this.handleEditToggle = this.handleEditToggle.bind(this);
         this.state = {
             showDetail: false,
             editMode: "view",
@@ -28,6 +29,11 @@ export class ListingPage extends Component {
             index: index
         });
 
+    }
+    handleEditToggle(value){
+        this.setState({
+            editMode: value
+        });
     }
     handleAddListing(){
         this.setState({
@@ -63,7 +69,7 @@ export class ListingPage extends Component {
                 <Row>
                     <Col xs={7} className={showDetail? "rightcol" : "leftcol"}>
                         {showDetail ? (
-                            <ListingDetail editMode={editMode} index={index} showDetail={showDetail} onShowDetailChange={this.handleShowDetailChange}/>
+                            <ListingDetail editMode={editMode} index={index} showDetail={showDetail} onShowDetailChange={this.handleShowDetailChange} onEditToggle={this.handleEditToggle}/>
                         ) : (
                             <ListingMap showDetail={showDetail} />
                         )}

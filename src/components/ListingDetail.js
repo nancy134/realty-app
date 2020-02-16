@@ -19,10 +19,7 @@ class ListingDetail extends React.Component {
    super(props);
         this.state = {
             listing: null,
-            editMode: "view",
-            owner: false,
-            showDetail: this.props.showDetail,
-            index: this.props.index
+            owner: false
         };
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
@@ -33,10 +30,10 @@ class ListingDetail extends React.Component {
     }
     handleEditToggle(value) {
         console.log("ListingDetail handleEditToggle value: "+value);
-        this.setState({editMode: value});
+        this.props.onEditToggle(value);
     }
     componentDidMount(){
-        if (this.state.index){
+        if (this.props.index){
             fetch(process.env.REACT_APP_LISTING_SERVICE+'listing/'+this.props.index)
             .then(res => res.json())
             .then((data) => {
@@ -58,8 +55,7 @@ class ListingDetail extends React.Component {
     }
     render(){
         const showDetail = this.props.showDetail;
-        var editMode = this.state.editMode;
-        console.log("ListingDetail editMode: "+editMode);
+        var editMode = this.props.editMode;
         const listing = this.state.listing;
         const owner = this.state.owner;
         if (showDetail){
