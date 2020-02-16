@@ -94,7 +94,7 @@ class ListingDetailGeneral extends React.Component {
 
         const editMode = this.props.editMode;
         const listing = this.props.listing;
-
+        if (listing && isEmpty(listing)) return null;
         if (listing){
             propertyType = listing.propertType;
             totalBuildingSize = listing.totalBuildingSize;
@@ -127,7 +127,7 @@ class ListingDetailGeneral extends React.Component {
             if (listing.nets){
                 nets = "$"+listing.nets+" / sq ft";
             }
-        } 
+        }
         return (
             <React.Fragment>
                 <h2 className="border-bottom border-warning">Building Detail {editMode === "edit" ? <EditButton /> : null}</h2>
