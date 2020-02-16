@@ -82,7 +82,7 @@ class ListingDetailBuildingIncome extends React.Component {
         var security = "---";
         var hoaFees = "---";
 
-        const editMode = this.props.EditMode;
+        const editMode = this.props.editMode;
         const listing = this.props.listing;
         if (listing && isEmpty(listing)) return null;
         if (listing){
