@@ -7,6 +7,7 @@ import {
 } from 'react-bootstrap';
 import Routes from './Routes';
 import AccountButton from './components/AccountButton';
+import { isAuthenticated } from './helpers/authentication';
 
 class App extends React.Component {
   constructor(props){
@@ -16,6 +17,13 @@ class App extends React.Component {
       };
       this.handleLogin = this.handleLogin.bind(this);
       this.handleLogout = this.handleLogout.bind(this);
+  }
+  componentDidMount(){
+      if (isAuthenticated()){
+          this.setState({
+              loggedIn: true
+          });
+      }
   }
   handleLogin(){
       console.log("App:handleLogin()");

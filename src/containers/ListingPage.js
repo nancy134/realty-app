@@ -8,7 +8,6 @@ import Listings from '../components/Listings';
 import ListingToolbar from '../components/ListingToolbar';
 import ListingPagination from '../components/ListingPagination';
 import ListingDetail from '../components/ListingDetail';
-import { isAuthenticated } from '../helpers/authentication';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -19,8 +18,7 @@ export class ListingPage extends Component {
         this.state = {
             showDetail: false,
             editMode: "view",
-            listingMode: "allListings",
-            loggedIn: false
+            listingMode: "allListings"
         };
     }
     handleShowDetailChange(showDetail, index){
@@ -44,31 +42,6 @@ export class ListingPage extends Component {
         });
     }
     componentDidMount(){
-       console.log("CDM");
-       if (isAuthenticated()){
-           console.log("isAuthenticated");
-           this.setState({
-               loggedIn: true
-           });
-       }  
-    }
-    componentWillReceiveProps(nextProps){
-        console.log("CWRP: nextProps.loggedIn: "+nextProps.loggedIn);
-        if (nextProps.loggedIn !== this.state.loggedIn){
-            this.setState({
-                loggedIn: nextProps.loggedIn
-            });
-        }
-    }
-    componentDidUpdate(prevProps){
-        console.log("CDU prevProps.loggedIn: "+prevProps.loggedIn);
-        console.log("CDU this.props.loggedIn: "+this.props.loggedIn);
-        console.log("CDU this.state.loggedIn: "+this.state.loggedIn);
-        //if (prevProps.loggedIn !== this.state.loggedIn){
-        //    this.setState({
-        //        loggedIn: this.props.loggedIn
-        //    });
-       // }
     }
     componentWillUnmount(){
     }
@@ -80,7 +53,7 @@ export class ListingPage extends Component {
         var index = this.state.index;
         var editMode = this.state.editMode;
         var listingMode = this.state.listingMode;
-        var loggedIn = this.state.loggedIn;
+        var loggedIn = this.props.loggedIn;
         console.log("render loggedIn: "+loggedIn);
         return (
             <React.Fragment>
