@@ -59,21 +59,16 @@ class ListingDetailHeader extends React.Component {
         super(props);
         this.handleClose = this.handleClose.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
-        this.state = {
-            editMode: this.props.editMode,
-            owner: this.props.owner
-        };
     }
     handleClose(){
         this.props.onShowDetailChange(false);
     }
     handleEditToggle(value){
         console.log("handleEditToggle value: "+value);
-        this.setState({editMode: value});
         this.props.onEditToggle(value);
     }
     render() {
-        const editMode = this.state.editMode;
+        const editMode = this.props.editMode;
         const listing = this.props.listing;
         const owner = this.props.owner;
         const edit = "edit";
