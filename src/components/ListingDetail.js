@@ -18,19 +18,25 @@ class ListingDetail extends React.Component {
     constructor(props) {
    super(props);
         this.state = {
-            listing: null,
-            owner: false
+            listing: null
         };
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
+        this.handleListingUpdate = this.handleListingUpdate(this);
     }
 
     handleShowDetailChange() {
         this.props.onShowDetailChange(false);
     }
     handleEditToggle(value) {
-        console.log("ListingDetail handleEditToggle value: "+value);
         this.props.onEditToggle(value);
+    }
+    handleListingUpdate(listing){
+        if (this.state.listing){ // Update
+            console.log("Update listing");
+        } else { // Create
+            console.log("Create listing");
+        }
     }
     componentDidMount(){
         if (this.props.index){
@@ -40,12 +46,12 @@ class ListingDetail extends React.Component {
                 var owner = false;
                 console.log("data.owner: "+data.owner);
                 if (data && isOwner(data.owner)){
-                    owner = "true";
+                    owner = true;
                 } 
                 this.setState({ 
-                    listing: data,
-                    owner: owner
+                    listing: data
                 });
+                this.props.onOwnerChange(owner);
             })
             .catch(console.log)
         }
@@ -57,11 +63,11 @@ class ListingDetail extends React.Component {
         const showDetail = this.props.showDetail;
         var editMode = this.props.editMode;
         const listing = this.state.listing;
-        const owner = this.state.owner;
+        const owner = this.props.owner;
         if (showDetail){
             return (
             <div>
-                <ListingDetailHeader listing={listing} owner={owner} editMode={editMode} onShowDetailChange={this.handleShowDetailChange} onEditToggle={this.handleEditToggle}/>
+                <ListingDetailHeader listing={listing} owner={owner} editMode={editMode} onShowDetailChange={this.handleShowDetailChange} onEditToggle={this.handleEditToggle} onListingUpdate={this.handleListingUpdate} />
                 <ListingDetailOverview listing={listing} editMode={editMode} />
                 { (editMode === "edit") || (listing && listing.spaces.length) > 0 ?
                 <ListingDetailAvailableSpace listing={listing} editMode={editMode} />

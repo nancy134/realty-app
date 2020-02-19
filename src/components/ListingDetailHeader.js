@@ -16,9 +16,11 @@ import {
 import ListingEditHeader from './ListingEditHeader';
 
 function EditModal(props) {
+  const standardProps = Object.assign({}, props);
+  delete standardProps.onSave;
   return (
     <Modal
-      {...props}
+      {...standardProps}
       aria-labelledby="contained-modal-title-vcenter"
     >
       <Modal.Header closeButton>
@@ -31,6 +33,7 @@ function EditModal(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide}>Close</Button>
+        <Button onClick={props.onSave}>Save</Button>
       </Modal.Footer>
     </Modal>
   );
@@ -49,6 +52,7 @@ function EditButton(props) {
         show={modalShow}
         listing={props.listing}
         onHide={() => setModalShow(false)}
+        onSave={() => props.onSave()}
       />
       </span>
   );
@@ -58,13 +62,16 @@ class ListingDetailHeader extends React.Component {
     constructor(props){
         super(props);
         this.handleClose = this.handleClose.bind(this);
+        this.handleSave = this.handleSave.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
     }
     handleClose(){
         this.props.onShowDetailChange(false);
     }
+    handleSave(){
+        console.log("handleSave");
+    }
     handleEditToggle(value){
-        console.log("handleEditToggle value: "+value);
         this.props.onEditToggle(value);
     }
     render() {
@@ -79,17 +86,17 @@ class ListingDetailHeader extends React.Component {
         }
 
         var closeButton = "Close";
-        console.log("owner: "+owner);
-
         if (!listing) closeButton = "Cancel";
+        var toggleDefault = view;
+        if (editMode === "edit" && !listing) toggleDefault = edit;
         return(
             <Row className="align-items-center bg-info">
 	        <Col md={6}className="text-white">
-                    <div>{title} {editMode === "edit" ? <EditButton listing={listing}/> : null}</div>
+                    <div>{title} {editMode === "edit" ? <EditButton listing={listing} onSave={this.handleSave}/> : null}</div>
                 </Col>
                 <Col md={6} className="text-right">
-                    { owner === "true" ?
-                    <ToggleButtonGroup type="radio" name="options" defaultValue={view} onChange={this.handleEditToggle}>
+                    { owner ?
+                    <ToggleButtonGroup type="radio" name="options" defaultValue={toggleDefault} onChange={this.handleEditToggle}>
                         <ToggleButton variant="info" value={edit}>Edit</ToggleButton>
                         <ToggleButton variant="info" value={view}>View</ToggleButton>
                     </ToggleButtonGroup>

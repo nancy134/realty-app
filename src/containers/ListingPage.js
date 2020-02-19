@@ -16,10 +16,12 @@ export class ListingPage extends Component {
         this.handleAddListing = this.handleAddListing.bind(this);
         this.handleListingToggle = this.handleListingToggle.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
+        this.handleOwnerChange = this.handleOwnerChange.bind(this);
         this.state = {
             showDetail: false,
             editMode: "view",
-            listingMode: "allListings"
+            listingMode: "allListings",
+            owner: false,
         };
     }
     handleShowDetailChange(showDetail, index){
@@ -39,12 +41,18 @@ export class ListingPage extends Component {
         this.setState({
             index: null,
             editMode: "edit",
-            showDetail: true
+            showDetail: true,
+            owner: true
         });
     }
     handleListingToggle(value){
         this.setState({
             listingMode: value
+        });
+    }
+    handleOwnerChange(value){
+        this.setState({
+            owner: value
         });
     }
     componentDidMount(){
@@ -60,7 +68,7 @@ export class ListingPage extends Component {
         var editMode = this.state.editMode;
         var listingMode = this.state.listingMode;
         var loggedIn = this.props.loggedIn;
-        console.log("render loggedIn: "+loggedIn);
+        var owner = this.state.owner;
         return (
             <React.Fragment>
                 <Row className="bg-success">
@@ -69,7 +77,7 @@ export class ListingPage extends Component {
                 <Row>
                     <Col xs={7} className={showDetail? "rightcol" : "leftcol"}>
                         {showDetail ? (
-                            <ListingDetail editMode={editMode} index={index} showDetail={showDetail} onShowDetailChange={this.handleShowDetailChange} onEditToggle={this.handleEditToggle}/>
+                            <ListingDetail editMode={editMode} index={index} showDetail={showDetail} owner={owner} onShowDetailChange={this.handleShowDetailChange} onEditToggle={this.handleEditToggle} onOwnerChange={this.handleOwnerChange}/>
                         ) : (
                             <ListingMap showDetail={showDetail} />
                         )}

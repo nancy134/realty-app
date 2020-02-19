@@ -35,9 +35,9 @@ class Listings extends React.Component {
     fetchListings(){
         var url = "";
         if (this.props.listingMode === "myListings" ){
-           url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=5&page=1&owner='+getUserEmail();
+           url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=15&page=1&owner='+getUserEmail();
         } else {
-           url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=5&page=1';
+           url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=15&page=1';
         }
         fetch(url)
         .then(res => res.json())
