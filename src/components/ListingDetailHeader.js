@@ -3,7 +3,6 @@ import {
     Row,
     Col,
     Button,
-    Modal,
     ToggleButtonGroup,
     ToggleButton
 } from 'react-bootstrap';
@@ -15,30 +14,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import ListingEditHeader from './ListingEditHeader';
 
-function EditModal(props) {
-  const standardProps = Object.assign({}, props);
-  delete standardProps.onSave;
-  return (
-    <Modal
-      {...standardProps}
-      aria-labelledby="contained-modal-title-vcenter"
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Address Edit 
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body >
-          <ListingEditHeader listing={props.listing}/>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={props.onHide}>Close</Button>
-        <Button onClick={props.onSave}>Save</Button>
-      </Modal.Footer>
-    </Modal>
-  );
-}
-
 function EditButton(props) {
   const [modalShow, setModalShow] = React.useState(false);
 
@@ -48,11 +23,11 @@ function EditButton(props) {
       <FontAwesomeIcon className="text-danger" icon={faPencilAlt} /> 
       </Button>
 
-      <EditModal
+      <ListingEditHeader
         show={modalShow}
         listing={props.listing}
         onHide={() => setModalShow(false)}
-        onSave={() => props.onSave()}
+        onSave={listing => props.onSave(listing)}
       />
       </span>
   );
@@ -68,8 +43,12 @@ class ListingDetailHeader extends React.Component {
     handleClose(){
         this.props.onShowDetailChange(false);
     }
-    handleSave(){
-        console.log("handleSave");
+    handleSave(listing){
+        console.log("listing.address: "+listing.address);
+        console.log("listing.city: "+listing.city);
+        console.log("listing.state: "+listing.state);
+        console.log("listing.displayAddress: "+listing.displayAddress);
+        this.props.onListingUpdate(listing);
     }
     handleEditToggle(value){
         this.props.onEditToggle(value);

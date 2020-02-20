@@ -22,7 +22,7 @@ class ListingDetail extends React.Component {
         };
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
-        this.handleListingUpdate = this.handleListingUpdate(this);
+        this.handleListingUpdate = this.handleListingUpdate.bind(this);
     }
 
     handleShowDetailChange() {
