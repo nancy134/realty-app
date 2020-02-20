@@ -60,6 +60,7 @@ class ListingEditHeader extends React.Component {
         if (this.state.displayAddress) listing.displayAddress = this.state.displayAddress;
         console.log("listing: "+JSON.stringify(listing));
         this.props.onSave(listing);
+        this.props.onHide();
     }
     render(){
         return (

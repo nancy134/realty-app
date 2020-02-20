@@ -12,7 +12,7 @@ import ListingDetailUnits from './ListingDetailUnits';
 import ListingDetailTenants from './ListingDetailTenants';
 import ListingDetailPortfolio from './ListingDetailPortfolio';
 import ListingDetailAttachments from './ListingDetailAttachments';
-import { isOwner } from '../helpers/authentication';
+import listings from '../services/listings';
 
 class ListingDetail extends React.Component {
     constructor(props) {
@@ -35,25 +35,20 @@ class ListingDetail extends React.Component {
         if (this.state.listing){ // Update
             console.log("Update listing");
         } else { // Create
-            console.log("Create listing");
+            listings.create(listing, (listing) => {
+                this.setState({
+                    listing: listing
+                });
+            });
         }
     }
     componentDidMount(){
         if (this.props.index){
-            fetch(process.env.REACT_APP_LISTING_SERVICE+'listing/'+this.props.index)
-            .then(res => res.json())
-            .then((data) => {
-                var owner = false;
-                console.log("data.owner: "+data.owner);
-                if (data && isOwner(data.owner)){
-                    owner = true;
-                } 
-                this.setState({ 
-                    listing: data
+            listings.get(this.props.index, (listing) => {
+                this.setState({
+                    listing: listing
                 });
-                this.props.onOwnerChange(owner);
-            })
-            .catch(console.log)
+            });
         }
 
     }

@@ -6,6 +6,7 @@ import {
     Image
 } from 'react-bootstrap';
 import {getUserEmail} from '../helpers/authentication';
+import listings from '../services/listings';
 
 class Listings extends React.Component {
    
@@ -33,18 +34,17 @@ class Listings extends React.Component {
     }
 
     fetchListings(){
-        var url = "";
+        var query = "";
         if (this.props.listingMode === "myListings" ){
-           url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=15&page=1&owner='+getUserEmail();
+           query = 'perPage=15&page=1&owner='+getUserEmail();
         } else {
-           url = process.env.REACT_APP_LISTING_SERVICE+'listings?perPage=15&page=1';
+           query = 'perPage=15&page=1';
         }
-        fetch(url)
-        .then(res => res.json())
-        .then((data) => {
-          this.setState({ listings: data.listings.rows })
-        })
-        .catch(console.log)
+        listings.getAll(query, (listings) => {
+           this.setState({
+               listings: listings.listings.rows
+           });
+        }); 
 
     }
 
