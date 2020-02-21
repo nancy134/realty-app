@@ -63,6 +63,14 @@ class ListingEditHeader extends React.Component {
         this.props.onHide();
     }
     render(){
+        var states = null;
+        if (this.props.states){
+            console.log("this.props.states.length: "+this.props.states.length);
+            states = this.props.states.map((item,key) =>
+                 
+                <option>{item}</option>
+            );
+        }
         return (
         
         <Modal
@@ -77,17 +85,21 @@ class ListingEditHeader extends React.Component {
                     <Col>
                         <Form>
                             <Form.Row>
-                                <Col md={6}>
+                                <Col md={12}>
                                     <Form.Label>Address</Form.Label>
                                     <Form.Control value={this.state.address} onChange={this.onAddressChange}/>
                                 </Col>
-                                <Col md={4}>
+                            </Form.Row>
+                            <Form.Row>
+                                <Col md={6}>
                                     <Form.Label>City</Form.Label>
                                     <Form.Control value={this.state.city} onChange={this.onCityChange}/>
                                 </Col>
-                                <Col md={2}>
+                                <Col md={6}>
                                     <Form.Label>State</Form.Label>
-                                    <Form.Control value={this.state.state} onChange={this.onStateChange}/>
+                                    <Form.Control as="select" value={this.state.state} onChange={this.onStateChange} >
+                                    {states}
+                                    </Form.Control>
                                 </Col>
                             </Form.Row>
                             <Form.Row>

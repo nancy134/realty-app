@@ -13,6 +13,7 @@ import ListingDetailTenants from './ListingDetailTenants';
 import ListingDetailPortfolio from './ListingDetailPortfolio';
 import ListingDetailAttachments from './ListingDetailAttachments';
 import listings from '../services/listings';
+import { isOwner } from '../helpers/authentication';
 
 class ListingDetail extends React.Component {
     constructor(props) {
@@ -37,18 +38,32 @@ class ListingDetail extends React.Component {
         } else { // Create
             listings.create(listing, (listing) => {
                 this.setState({
-                    listing: listing
+                    listing: listing.listing,
+                    states: listing.states
                 });
             });
         }
     }
     componentDidMount(){
         if (this.props.index){
-            listings.get(this.props.index, (listing) => {
+            listings.get(this.props.index, (data) => {
+                if (isOwner(data.listing.owner)){
+                    this.props.onOwnerChange(true);
+                } else {
+                    this.props.onOwnerChange(false);
+                }
                 this.setState({
-                    listing: listing
+                    listing: data.listing,
+                    states: data.states
                 });
             });
+        } else {
+            listings.getEnums((data) => {
+                this.setState({
+                    states: data.states
+                });
+            });
+            // Enumerated types
         }
 
     }
@@ -58,11 +73,15 @@ class ListingDetail extends React.Component {
         const showDetail = this.props.showDetail;
         var editMode = this.props.editMode;
         const listing = this.state.listing;
+        const states = this.state.states;
+        if (states){
+           console.log("states.length: "+states.length);
+        }
         const owner = this.props.owner;
         if (showDetail){
             return (
             <div>
-                <ListingDetailHeader listing={listing} owner={owner} editMode={editMode} onShowDetailChange={this.handleShowDetailChange} onEditToggle={this.handleEditToggle} onListingUpdate={this.handleListingUpdate} />
+                <ListingDetailHeader listing={listing} states={states} owner={owner} editMode={editMode} onShowDetailChange={this.handleShowDetailChange} onEditToggle={this.handleEditToggle} onListingUpdate={this.handleListingUpdate} />
                 <ListingDetailOverview listing={listing} editMode={editMode} />
                 { (editMode === "edit") || (listing && listing.spaces.length) > 0 ?
                 <ListingDetailAvailableSpace listing={listing} editMode={editMode} />

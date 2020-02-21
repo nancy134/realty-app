@@ -26,6 +26,7 @@ function EditButton(props) {
       <ListingEditHeader
         show={modalShow}
         listing={props.listing}
+        states={props.states}
         onHide={() => setModalShow(false)}
         onSave={listing => props.onSave(listing)}
       />
@@ -44,10 +45,6 @@ class ListingDetailHeader extends React.Component {
         this.props.onShowDetailChange(false);
     }
     handleSave(listing){
-        console.log("listing.address: "+listing.address);
-        console.log("listing.city: "+listing.city);
-        console.log("listing.state: "+listing.state);
-        console.log("listing.displayAddress: "+listing.displayAddress);
         this.props.onListingUpdate(listing);
     }
     handleEditToggle(value){
@@ -56,6 +53,7 @@ class ListingDetailHeader extends React.Component {
     render() {
         const editMode = this.props.editMode;
         const listing = this.props.listing;
+        const states = this.props.states;
         const owner = this.props.owner;
         const edit = "edit";
         const view = "view";
@@ -68,10 +66,11 @@ class ListingDetailHeader extends React.Component {
         if (!listing) closeButton = "Cancel";
         var toggleDefault = view;
         if (editMode === "edit" && !listing) toggleDefault = edit;
+        console.log("owner: "+owner);
         return(
             <Row className="align-items-center bg-info">
 	        <Col md={6}className="text-white">
-                    <div>{title} {editMode === "edit" ? <EditButton listing={listing} onSave={this.handleSave}/> : null}</div>
+                    <div>{title} {editMode === "edit" ? <EditButton listing={listing} states={states} onSave={this.handleSave}/> : null}</div>
                 </Col>
                 <Col md={6} className="text-right">
                     { owner ?
