@@ -14,6 +14,7 @@ import ListingDetailPortfolio from './ListingDetailPortfolio';
 import ListingDetailAttachments from './ListingDetailAttachments';
 import listings from '../services/listings';
 import { isOwner } from '../helpers/authentication';
+import { getUserEmail } from '../helpers/authentication';
 
 class ListingDetail extends React.Component {
     constructor(props) {
@@ -35,11 +36,18 @@ class ListingDetail extends React.Component {
     handleListingUpdate(listing){
         if (this.state.listing){ // Update
             console.log("Update listing");
-        } else { // Create
-            listings.create(listing, (listing) => {
+            listings.update(listing, (data) => {
                 this.setState({
-                    listing: listing.listing,
-                    states: listing.states
+                    listing: data.listing,
+                    states: data.states
+                });
+            });
+        } else { // Create
+            listing.owner = getUserEmail();
+            listings.create(listing, (data) => {
+                this.setState({
+                    listing: data.listing,
+                    states: data.states
                 });
             });
         }
@@ -63,7 +71,6 @@ class ListingDetail extends React.Component {
                     states: data.states
                 });
             });
-            // Enumerated types
         }
 
     }

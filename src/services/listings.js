@@ -54,7 +54,7 @@ function parseJSON(response){
    return response.json();
 }
 
-const listings = {get, getAll,create, getEnums};
+const listings = {get, getAll,create, update, getEnums};
 export default listings;
 
 
