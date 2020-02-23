@@ -90,6 +90,7 @@ class ListingEditOverview extends React.Component {
         return (
         <Modal
           show={this.props.show}
+          onHide={this.props.onHide}
           size="lg"
           aria-labelledby="contained-modal-title-vcenter"
         >

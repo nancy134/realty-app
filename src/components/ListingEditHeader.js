@@ -74,6 +74,7 @@ class ListingEditHeader extends React.Component {
         
         <Modal
             show={this.props.show}
+            onHide={this.props.onHide}
             aria-labelledby="contained-modal-title-vcenter"
         >
             <Modal.Header closeButton>
