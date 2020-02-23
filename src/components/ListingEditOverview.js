@@ -6,7 +6,7 @@ import {
     Modal,
     Button
 } from 'react-bootstrap';
-import ImageUploader from 'react-images-upload';
+import Upload from './Upload';
 
 class ListingEditOverview extends React.Component {
     constructor(props){
@@ -116,17 +116,7 @@ class ListingEditOverview extends React.Component {
                     </Form>
                 </Col>
                 <Col>
-                <p>Images</p>
-                    <ImageUploader
-                        withIcon={true}
-                        buttonText='Choose images'
-                        onChange={this.onDrop}
-                        imgExtension={['.jpg','.gif','.png']}
-                        maxFileSize={5242880}
-                        withPreview={true}
-                        defaultImages={defaultImage}
-                        label="Max file size: 5mb, accepted: jpg, gif, png"
-                    />
+                    <Upload />
                 </Col>
             </Row>
             </Modal.Body>
