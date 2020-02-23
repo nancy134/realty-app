@@ -17,16 +17,18 @@ class ListingEditHeader extends React.Component {
         this.handleSave = this.handleSave.bind(this);
         if (this.props.listing){
             this.state = {
-                address: this.props.listing.address,
-                city: this.props.listing.city,
-                state: this.props.listing.state,
-                displayAddress: this.props.listing.displayAddress
+                id: this.props.listing.id,
+                address: this.props.listing.address ? this.props.listing.address : "",
+                city: this.props.listing.city ? this.props.listing.city : "",
+                state: this.props.listing.state ? this.props.listing.state : "Alabama",
+                displayAddress: this.props.listing.displayAddress ? this.props.listing.displayAddress : ""
             };
         } else {
             this.state = {
+                id: null,
                 address: "",
                 city: "",
-                state: "",
+                state: "Alabama",
                 displayAddress: ""
             };
         }
@@ -52,23 +54,20 @@ class ListingEditHeader extends React.Component {
         });
     }
     handleSave(){
-        console.log("ListingEditHeader: handleSave())");
         var listing = {};
+        listing.id = this.state.id;
         if (this.state.address) listing.address = this.state.address;
         if (this.state.city) listing.city = this.state.city;
         if (this.state.state) listing.state = this.state.state;
         if (this.state.displayAddress) listing.displayAddress = this.state.displayAddress;
-        console.log("listing: "+JSON.stringify(listing));
         this.props.onSave(listing);
         this.props.onHide();
     }
     render(){
         var states = null;
         if (this.props.states){
-            console.log("this.props.states.length: "+this.props.states.length);
             states = this.props.states.map((item,key) =>
-                 
-                <option>{item}</option>
+                <option key={key}>{item}</option>
             );
         }
         return (

@@ -2,9 +2,7 @@ import React from 'react';
 import {
     Row,
     Col,
-    Image,
-    Modal,
-    Button
+    Image
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -12,30 +10,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import ListingEditOverview from './ListingEditOverview';
 
-function ListingEditModal(props) {
-    var content = props.content;
-    var listing = props.listing;
-    return (
-        <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                   Overview 
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body >
-                <ListingEditOverview listing={listing} content={content}/>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={props.onHide}>Close</Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
 function EditButton(props) {
     const [modalShow, setModalShow] = React.useState(false);
 
@@ -47,11 +21,12 @@ function EditButton(props) {
             >
                 <FontAwesomeIcon size="xs" icon={faPencilAlt} />
             </span>
-            <ListingEditModal
-                content = {props.content}
+            <ListingEditOverview
                 listing = {props.listing}
+                listingTypes = {props.listingTypes}
                 show={modalShow}
                 onHide={() => setModalShow(false)}
+                onSave={listing => props.onSave(listing)}
             />
         </span>
   );
@@ -61,8 +36,13 @@ class ListingDetailOverview extends React.Component {
     constructor(props) {
         super(props);
         this.handleEdit = this.handleEdit.bind(this);
+        this.handleSave = this.handleSave.bind(this);
     }
     handleEdit(){
+    }
+    handleSave(listing){
+        console.log("listing: "+listing);
+        this.props.onListingUpdate(listing);
     }
 
     render() {
@@ -81,12 +61,12 @@ class ListingDetailOverview extends React.Component {
         }
         const listing = this.props.listing;
         const editMode = this.props.editMode;
-        console.log("ListingDetailOverview editMode: "+editMode);
+        const listingTypes = this.props.listingTypes;
         return (
             <div>
                 <Row className="mt-2 border-bottom border-warning">
                     <Col>
-	                <h2>Overview {editMode === "edit" ? <EditButton listing={listing} /> : null}</h2>
+	                <h2>Overview {editMode === "edit" ? <EditButton listing={listing} listingTypes={listingTypes} onSave={this.handleSave}/> : null}</h2>
                     </Col>
                     <Col>
                         <div className="text-right">

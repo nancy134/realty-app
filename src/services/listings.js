@@ -30,7 +30,7 @@ export function create(listing,cb){
 }
 
 export function update(data,cb){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"listing";
+    var url = process.env.REACT_APP_LISTING_SERVICE+"listing/"+data.id;
     fetch(url, {
         method: 'put',
         headers: {'Content-Type': 'application/json'},

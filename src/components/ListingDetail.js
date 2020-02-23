@@ -35,11 +35,12 @@ class ListingDetail extends React.Component {
     }
     handleListingUpdate(listing){
         if (this.state.listing){ // Update
-            console.log("Update listing");
             listings.update(listing, (data) => {
                 this.setState({
                     listing: data.listing,
-                    states: data.states
+                    states: data.states,
+                    listingTypes: data.listingTypes,
+                    propertyTypes: data.propertyTypes
                 });
             });
         } else { // Create
@@ -47,7 +48,9 @@ class ListingDetail extends React.Component {
             listings.create(listing, (data) => {
                 this.setState({
                     listing: data.listing,
-                    states: data.states
+                    states: data.states,
+                    listingTypes: data.listingTypes,
+                    propertyTypes: data.propertyTypes
                 });
             });
         }
@@ -62,13 +65,17 @@ class ListingDetail extends React.Component {
                 }
                 this.setState({
                     listing: data.listing,
-                    states: data.states
+                    states: data.states,
+                    listingTypes: data.listingTypes,
+                    propertyTypes: data.propertyTypes
                 });
             });
         } else {
             listings.getEnums((data) => {
                 this.setState({
-                    states: data.states
+                    states: data.states,
+                    listingTypes: data.listingTypes,
+                    propertyTypes: data.propertyTypes
                 });
             });
         }
@@ -81,15 +88,16 @@ class ListingDetail extends React.Component {
         var editMode = this.props.editMode;
         const listing = this.state.listing;
         const states = this.state.states;
+        //const propertyTypes = this.state.propertyTypes;
+        const listingTypes = this.state.listingTypes;
         if (states){
-           console.log("states.length: "+states.length);
         }
         const owner = this.props.owner;
         if (showDetail){
             return (
             <div>
                 <ListingDetailHeader listing={listing} states={states} owner={owner} editMode={editMode} onShowDetailChange={this.handleShowDetailChange} onEditToggle={this.handleEditToggle} onListingUpdate={this.handleListingUpdate} />
-                <ListingDetailOverview listing={listing} editMode={editMode} />
+                <ListingDetailOverview listing={listing} listingTypes={listingTypes} editMode={editMode} onListingUpdate={this.handleListingUpdate} />
                 { (editMode === "edit") || (listing && listing.spaces.length) > 0 ?
                 <ListingDetailAvailableSpace listing={listing} editMode={editMode} />
                 : null }
