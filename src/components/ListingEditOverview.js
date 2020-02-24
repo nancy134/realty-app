@@ -11,8 +11,6 @@ import Upload from './Upload';
 class ListingEditOverview extends React.Component {
     constructor(props){
         super(props);
-        this.state = { pictures: [] };
-        this.onDrop = this.onDrop.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.onListingTypeChange = this.onListingTypeChange.bind(this);
         this.onListingPriceChange = this.onListingPriceChange.bind(this);
@@ -24,7 +22,8 @@ class ListingEditOverview extends React.Component {
                 listingType: this.props.listing.listingType ? this.props.listing.listingType : "For Lease",
                 listingPrice: this.props.listing.listingPrice ? this.props.listing.listingPrice : "",
                 shortDescription: this.props.listing.shortDescription ? this.props.listing.shortDescription : "",
-                longDescription: this.props.listing.longDescription ? this.props.listing.longDescription : ""
+                longDescription: this.props.listing.longDescription ? this.props.listing.longDescription : "",
+                images: this.props.listing.images ? this.props.listing.images : []
             };
         } else {
            this.state = {
@@ -32,7 +31,8 @@ class ListingEditOverview extends React.Component {
                 listingType: "For Lease",
                 listingPrices: "",
                 shortDescription: "",
-                longDescription: ""
+                longDescription: "",
+                images: []
            };
         }
     }
@@ -67,13 +67,6 @@ class ListingEditOverview extends React.Component {
         this.props.onSave(listing);
         this.props.onHide();
     }
-    onDrop(pictureFiles, pictureDataURLs) {
-        console.log("onDrop");
-        console.log("pictureFiles: "+pictureFiles);
-        this.setState({
-            pictures: this.state.pictures.concat(pictureFiles)
-        });
-    }
     render(){
         var listingTypes = null;
         if (this.props.listingTypes){
@@ -81,10 +74,10 @@ class ListingEditOverview extends React.Component {
                 <option key={key}>{item}</option>
             );
         }
-        var defaultImage = [];
+        var images = [];
         if (this.props.listing){
             for (var i=0; i<this.props.listing.images.length; i++){
-                defaultImage.push(this.props.listing.images[i].url);
+                images.push(this.props.listing.images[i].url);
             }
         }
         return (
@@ -116,7 +109,7 @@ class ListingEditOverview extends React.Component {
                     </Form>
                 </Col>
                 <Col>
-                    <Upload />
+                    <Upload images={images}/>
                 </Col>
             </Row>
             </Modal.Body>

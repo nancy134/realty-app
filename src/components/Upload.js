@@ -2,6 +2,10 @@ import React, { Component } from 'react'
 import './Upload.css'
 import Dropzone from './Dropzone'
 import Progress from './Progress'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faCheck
+} from '@fortawesome/free-solid-svg-icons';
 
 class Upload extends Component {
     constructor(props) {
@@ -10,7 +14,8 @@ class Upload extends Component {
             files: [],
             uploading: false,
             uploadProgress: {},
-            successfullUploaded: false
+            successfullUploaded: false,
+            images: this.props.images
         };
 
         this.onFilesAdded = this.onFilesAdded.bind(this);
@@ -43,6 +48,30 @@ sendRequest(file){
     return new Promise((resolve, reject) => {
         const req = new XMLHttpRequest();
 
+        req.upload.addEventListener("progress", event => {
+            if (event.lengthComputable) {
+                const copy = { ...this.state.uploadProgress };
+                copy[file.name] = {
+                    state: "pending",
+                    percentage: (event.loaded / event.total) * 100
+                };
+                this.setState({ uploadProgress: copy });
+            }
+        });
+   
+        req.upload.addEventListener("load", event => {
+            const copy = { ...this.state.uploadProgress };
+            copy[file.name] = { state: "done", percentage: 100 };
+            this.setState({ uploadProgress: copy });
+            resolve(req.response);
+        });
+   
+        req.upload.addEventListener("error", event => {
+            const copy = { ...this.state.uploadProgress };
+            copy[file.name] = { state: "error", percentage: 0 };
+            this.setState({ uploadProgress: copy });
+            reject(req.response);
+        });
         const formData = new FormData();
         formData.append("image", file, file.name);
         formData.append("listing_id",1);
@@ -57,15 +86,15 @@ renderProgress(file) {
         return (
         <div className="ProgressWrapper">
             <Progress progress={uploadProgress ? uploadProgress.percentage : 0} />
-            <img
-                className="CheckIcon"
-                alt="done"
-                src="baseline-check_circle_outline-24px.svg"
+            <FontAwesomeIcon 
                 style={{
                     opacity:
                         uploadProgress && uploadProgress.state === "done" ? 0.5 : 0
                 }}
+
+                icon={faCheck} 
             />
+
         </div>
         );
     }

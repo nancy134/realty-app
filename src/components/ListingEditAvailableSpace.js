@@ -4,7 +4,7 @@ import {
     Form,
     InputGroup
 } from 'react-bootstrap';
-import ImageUploader from 'react-images-upload';
+import Upload from './Upload';
 
 class ListingEditAvailableSpace extends React.Component {
     constructor(props){
@@ -108,14 +108,7 @@ class ListingEditAvailableSpace extends React.Component {
                 </Form.Row>
                 <Form.Row>
                     <Form.Group as={Col}>
-                        <ImageUploader
-                            withIcon={true}
-                            buttonText='Choose images'
-                            onChange={this.onDrop}
-                            imgExtension={['.jpg', '.gif', '.png', '.gif']}
-                            withPreview={true}
-                            defaultImages={images}
-                        />
+                        <Upload images={images}/>
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
