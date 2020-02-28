@@ -6,7 +6,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faCheck
 } from '@fortawesome/free-solid-svg-icons';
-
+import {
+    Image
+} from 'react-bootstrap';
 class Upload extends Component {
     constructor(props) {
         super(props);
@@ -15,10 +17,11 @@ class Upload extends Component {
             uploading: false,
             uploadProgress: {},
             successfullUploaded: false,
-            images: this.props.images
+            images: [] 
         };
 
         this.onFilesAdded = this.onFilesAdded.bind(this);
+        this.onImagesAdded = this.onImagesAdded.bind(this);
         this.uploadFiles = this.uploadFiles.bind(this);
         this.sendRequest = this.sendRequest.bind(this);
         this.renderActions = this.renderActions.bind(this);
@@ -26,6 +29,16 @@ class Upload extends Component {
     onFilesAdded(files) {
         this.setState(prevState => ({
             files: prevState.files.concat(files)
+        }));
+    }
+    onImagesAdded(files){
+        console.log("onImagesAdded");
+        var images = [];
+        files.forEach(file => {
+            images.push(URL.createObjectURL(file));
+        });
+        this.setState(prevState => ({
+            images: prevState.images.concat(images)
         }));
     }
     async uploadFiles() {
@@ -122,29 +135,34 @@ renderActions() {
         );
     }
 }
-render() {
+    componentDidMount(){
+        this.props.shareMethods(this.doAlert.bind(this));
+    }
+    doAlert(){
+        console.log("doAlert()");
+        this.uploadFiles();
+    }
+render(){
+        if (this.state.images){
+            var images = this.state.images.map((item,key) =>
+                <Image key={key} src={item} className="edit-image" />
+            );
+        }
     return (
     <div className="Upload">
         <div className="Content">
             <div>
                 <Dropzone
                     onFilesAdded={this.onFilesAdded}
+                    onImagesAdded={this.onImagesAdded}
                     disabled={this.state.uploading || this.state.successfullUploaded}
                 />
             </div>
             <div className="Files">
-                {this.state.files.map(file => {
-                    return (
-                        <div key={file.name} className="Row">
-                            <span className="Filename">{file.name}</span>
-                            {this.renderProgress(file)}
-                        </div>
-                    );
-                })}
+            {images}
             </div>
         </div>
         <div className="Actions">
-        {this.renderActions()}
         </div>
     </div>
     );

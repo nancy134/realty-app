@@ -4,7 +4,8 @@ import {
     Col,
     Form,
     Modal,
-    Button
+    Button,
+    Image
 } from 'react-bootstrap';
 import Upload from './Upload';
 
@@ -65,7 +66,11 @@ class ListingEditOverview extends React.Component {
         if (this.state.shortDescription) listing.shortDescription = this.state.shortDescription;
         if (this.state.longDescription) listing.longDescription = this.state.longDescription;
         this.props.onSave(listing);
+        this.childDoAlert();
         this.props.onHide();
+    }
+    acceptMethods(childDoAlert){
+        this.childDoAlert = childDoAlert;
     }
     render(){
         var listingTypes = null;
@@ -79,6 +84,12 @@ class ListingEditOverview extends React.Component {
             for (var i=0; i<this.props.listing.images.length; i++){
                 images.push(this.props.listing.images[i].url);
             }
+        }
+        var imgs = [];
+        if (this.props.listing.images){
+            imgs = this.props.listing.images.map((item,key) =>
+                <Image src={item.url} className="edit-image p-2"/>
+            );
         }
         return (
         <Modal
@@ -109,9 +120,15 @@ class ListingEditOverview extends React.Component {
                     </Form>
                 </Col>
                 <Col>
-                    <Upload images={images}/>
+                    <Row>
+                    <Upload images={images} shareMethods={this.acceptMethods.bind(this)}/>
+                    </Row>
+                    <Row>
+                        {imgs}
+                    </Row>
                 </Col>
             </Row>
+         
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={this.props.onHide}>Cancel</Button>

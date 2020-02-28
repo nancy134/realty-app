@@ -32,6 +32,7 @@ class Dropzone extends Component {
         if (this.props.onFilesAdded) {
             const array = this.fileListToArray(files);
             this.props.onFilesAdded(array);
+            this.props.onImagesAdded(array);
         }
     }
     fileListToArray(list) {
@@ -60,6 +61,7 @@ class Dropzone extends Component {
         if (this.props.onFilesAdded) {
             const array = this.fileListToArray(files);
             this.props.onFilesAdded(array);
+            this.props.onImagesAdded(array);
         }
         this.setState({ highlight: false });
     }

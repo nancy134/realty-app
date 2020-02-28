@@ -42,3 +42,27 @@
 .toolbar-form {
     width: 100%;
 }
+.image-gallery-content:not(.fullscreen) .image-gallery-image {
+  width: 100%;
+  height: 300px;
+  padding-top: 0; /* Make the image wrapping div take a ratio of 3:4 */
+  padding-bottom: 20px;
+  position: relative;
+  img {
+    position: absolute;
+    top: 0;
+    object-fit: cover;
+    object-position: center center;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.image-gallery-play-button {
+  padding: 0;
+}
+
+.edit-image{
+  height: 60px;
+  width: auto;
+}
