@@ -32,7 +32,6 @@ class Upload extends Component {
         }));
     }
     onImagesAdded(files){
-        console.log("onImagesAdded");
         var images = [];
         files.forEach(file => {
             images.push(URL.createObjectURL(file));
@@ -78,7 +77,7 @@ class Upload extends Component {
                 const copy = { ...this.state.uploadProgress };
                 copy[file.name] = { state: "done", percentage: 100 };
                 this.setState({ uploadProgress: copy });
-                resolve(req.response);
+                //resolve(req.response);
             });
    
             req.upload.addEventListener("error", event => {
@@ -91,6 +90,14 @@ class Upload extends Component {
             formData.append("image", file, file.name);
             formData.append("listing_id",this.props.listing.id);
             req.open("POST", "https://listing-api.phowma.com/upload");
+            req.onreadystatechange = function(){
+                if (req.readyState === 4){
+                    if (req.status === 200)
+                        resolve(req.responseText);
+                    else
+                        reject(req.responsetext);
+                }
+            };
             req.send(formData);
         });
     }
@@ -139,7 +146,6 @@ class Upload extends Component {
         this.props.shareMethods(this.doAlert.bind(this));
     }
     doAlert(){
-        console.log("doAlert()");
         this.uploadFiles();
     }
     render(){

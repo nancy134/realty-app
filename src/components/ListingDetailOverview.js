@@ -48,7 +48,6 @@ class ListingDetailOverview extends React.Component {
     handleEdit(){
     }
     handleSave(listing){
-        console.log("listing: "+listing);
         this.props.onListingUpdate(listing);
     }
     renderLeftNav(onClick, disabled){
