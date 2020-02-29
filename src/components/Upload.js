@@ -51,90 +51,90 @@ class Upload extends Component {
             await Promise.all(promises);
 
             this.setState({ successfullUploaded: true, uploading: false });
+            this.props.onImageUploadFinished();
         } catch (e) {
         // Not Production ready! Do some error handling here instead...
-        this.setState({ successfullUploaded: true, uploading: false });
+            this.setState({ successfullUploaded: true, uploading: false });
+            this.props.onImageUploadFinished();
+        }
     }
-}
 
-sendRequest(file){
-    return new Promise((resolve, reject) => {
-        const req = new XMLHttpRequest();
+    sendRequest(file){
+        return new Promise((resolve, reject) => {
+            const req = new XMLHttpRequest();
 
-        req.upload.addEventListener("progress", event => {
-            if (event.lengthComputable) {
+            req.upload.addEventListener("progress", event => {
+                if (event.lengthComputable) {
+                    const copy = { ...this.state.uploadProgress };
+                    copy[file.name] = {
+                        state: "pending",
+                        percentage: (event.loaded / event.total) * 100
+                    };
+                    this.setState({ uploadProgress: copy });
+                }
+            });
+   
+            req.upload.addEventListener("load", event => {
                 const copy = { ...this.state.uploadProgress };
-                copy[file.name] = {
-                    state: "pending",
-                    percentage: (event.loaded / event.total) * 100
-                };
+                copy[file.name] = { state: "done", percentage: 100 };
                 this.setState({ uploadProgress: copy });
-            }
-        });
+                resolve(req.response);
+            });
    
-        req.upload.addEventListener("load", event => {
-            const copy = { ...this.state.uploadProgress };
-            copy[file.name] = { state: "done", percentage: 100 };
-            this.setState({ uploadProgress: copy });
-            resolve(req.response);
+            req.upload.addEventListener("error", event => {
+                const copy = { ...this.state.uploadProgress };
+                copy[file.name] = { state: "error", percentage: 0 };
+                this.setState({ uploadProgress: copy });
+                reject(req.response);
+            });
+            const formData = new FormData();
+            formData.append("image", file, file.name);
+            formData.append("listing_id",this.props.listing.id);
+            req.open("POST", "https://listing-api.phowma.com/upload");
+            req.send(formData);
         });
-   
-        req.upload.addEventListener("error", event => {
-            const copy = { ...this.state.uploadProgress };
-            copy[file.name] = { state: "error", percentage: 0 };
-            this.setState({ uploadProgress: copy });
-            reject(req.response);
-        });
-        const formData = new FormData();
-        formData.append("image", file, file.name);
-        formData.append("listing_id",1);
-        console.log("formData: "+formData);
-        req.open("POST", "https://listing-api.phowma.com/upload");
-        req.send(formData);
-    });
-}
-renderProgress(file) {
-    const uploadProgress = this.state.uploadProgress[file.name];
-    if (this.state.uploading || this.state.successfullUploaded) {
-        return (
-        <div className="ProgressWrapper">
-            <Progress progress={uploadProgress ? uploadProgress.percentage : 0} />
-            <FontAwesomeIcon 
-                style={{
-                    opacity:
-                        uploadProgress && uploadProgress.state === "done" ? 0.5 : 0
-                }}
-
-                icon={faCheck} 
-            />
-
-        </div>
-        );
     }
-}
+    renderProgress(file) {
+        const uploadProgress = this.state.uploadProgress[file.name];
+        if (this.state.uploading || this.state.successfullUploaded) {
+            return (
+                <div className="ProgressWrapper">
+                    <Progress progress={uploadProgress ? uploadProgress.percentage : 0} />
+                    <FontAwesomeIcon 
+                        style={{
+                            opacity:
+                            uploadProgress && uploadProgress.state === "done" ? 0.5 : 0
+                        }}
+                        icon={faCheck} 
+                    />
 
-renderActions() {
-    if (this.state.successfullUploaded) {
-        return (
-        <button
-            onClick={() =>
-              this.setState({ files: [], successfullUploaded: false })
-            }
-        >
-        Clear
-        </button>
-        );
-    } else {
-        return (
-        <button
-            disabled={this.state.files.length < 0 || this.state.uploading}
-            onClick={this.uploadFiles}
-        >
-        Upload
-        </button>
-        );
+                </div>
+            );
+        }
     }
-}
+
+    renderActions() {
+        if (this.state.successfullUploaded) {
+            return (
+            <button
+                onClick={() =>
+                    this.setState({ files: [], successfullUploaded: false })
+                }  
+            >
+            Clear
+            </button>
+            );
+        } else {
+            return (
+            <button
+                disabled={this.state.files.length < 0 || this.state.uploading}
+                onClick={this.uploadFiles}
+            >
+            Upload
+            </button>
+            );
+        }
+    }
     componentDidMount(){
         this.props.shareMethods(this.doAlert.bind(this));
     }
@@ -142,12 +142,16 @@ renderActions() {
         console.log("doAlert()");
         this.uploadFiles();
     }
-render(){
-        if (this.state.images){
-            var images = this.state.images.map((item,key) =>
-                <Image key={key} src={item} className="edit-image" />
+    render(){
+        if (this.state.files){
+            var images = this.state.files.map((item,key) =>
+                <div>
+                <Image key={key} src={URL.createObjectURL(item)} className="edit-image" />
+                {this.renderProgress(item)}
+                </div>
             );
         }
+
     return (
     <div className="Upload">
         <div className="Content">

@@ -25,6 +25,7 @@ class ListingDetail extends React.Component {
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
         this.handleListingUpdate = this.handleListingUpdate.bind(this);
+        this.getListing = this.getListing.bind(this);
     }
 
     handleShowDetailChange() {
@@ -48,6 +49,31 @@ class ListingDetail extends React.Component {
             listings.create(listing, (data) => {
                 this.setState({
                     listing: data.listing,
+                    states: data.states,
+                    listingTypes: data.listingTypes,
+                    propertyTypes: data.propertyTypes
+                });
+            });
+        }
+    }
+    getListing(){
+        if (this.props.index){
+            listings.get(this.props.index, (data) => {
+                if (isOwner(data.listing.owner)){
+                    this.props.onOwnerChange(true);
+                } else {
+                    this.props.onOwnerChange(false);
+                }
+                this.setState({
+                    listing: data.listing,
+                    states: data.states,
+                    listingTypes: data.listingTypes,
+                    propertyTypes: data.propertyTypes
+                });
+            });
+        } else {
+            listings.getEnums((data) => {
+                this.setState({
                     states: data.states,
                     listingTypes: data.listingTypes,
                     propertyTypes: data.propertyTypes
@@ -97,7 +123,7 @@ class ListingDetail extends React.Component {
             return (
             <div>
                 <ListingDetailHeader listing={listing} states={states} owner={owner} editMode={editMode} onShowDetailChange={this.handleShowDetailChange} onEditToggle={this.handleEditToggle} onListingUpdate={this.handleListingUpdate} />
-                <ListingDetailOverview listing={listing} listingTypes={listingTypes} editMode={editMode} onListingUpdate={this.handleListingUpdate} />
+                <ListingDetailOverview listing={listing} listingTypes={listingTypes} editMode={editMode} onListingUpdate={this.handleListingUpdate} getListing={this.getListing}/>
                 { (editMode === "edit") || (listing && listing.spaces.length) > 0 ?
                 <ListingDetailAvailableSpace listing={listing} editMode={editMode} />
                 : null }

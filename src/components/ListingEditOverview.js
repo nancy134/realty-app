@@ -16,6 +16,7 @@ class ListingEditOverview extends React.Component {
         this.onListingTypeChange = this.onListingTypeChange.bind(this);
         this.onListingPriceChange = this.onListingPriceChange.bind(this);
         this.onShortDescriptionChange = this.onShortDescriptionChange.bind(this);
+        this.onImageUploadFinished = this.onImageUploadFinished.bind(this);
         this.onLongDescriptionChange = this.onLongDescriptionChange.bind(this);
         if (this.props.listing){
             this.state = {
@@ -60,14 +61,23 @@ class ListingEditOverview extends React.Component {
 
     handleSave(){
         var listing = {};
-        listing.id = this.state.id;
+        if (this.props.listing){
+
+            listing.id = this.props.listing.id;
+        } else {
+            listing.id = this.state.id;
+        }
+          
         if (this.state.listingType) listing.listingType = this.state.listingType;
         if (this.state.listingPrice) listing.listingPrice = this.state.listingPrice;
         if (this.state.shortDescription) listing.shortDescription = this.state.shortDescription;
         if (this.state.longDescription) listing.longDescription = this.state.longDescription;
         this.props.onSave(listing);
         this.childDoAlert();
+    }
+    onImageUploadFinished(){
         this.props.onHide();
+        this.props.getListing();
     }
     acceptMethods(childDoAlert){
         this.childDoAlert = childDoAlert;
@@ -86,7 +96,7 @@ class ListingEditOverview extends React.Component {
             }
         }
         var imgs = [];
-        if (this.props.listing.images){
+        if (this.props.listing && this.props.listing.images){
             imgs = this.props.listing.images.map((item,key) =>
                 <Image src={item.url} className="edit-image p-2"/>
             );
@@ -121,7 +131,7 @@ class ListingEditOverview extends React.Component {
                 </Col>
                 <Col>
                     <Row>
-                    <Upload images={images} shareMethods={this.acceptMethods.bind(this)}/>
+                    <Upload images={images} shareMethods={this.acceptMethods.bind(this)} listing={this.props.listing} onImageUploadFinished={this.onImageUploadFinished}/>
                     </Row>
                     <Row>
                         {imgs}

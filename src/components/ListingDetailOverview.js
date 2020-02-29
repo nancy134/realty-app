@@ -27,6 +27,7 @@ function EditButton(props) {
             <ListingEditOverview
                 listing = {props.listing}
                 listingTypes = {props.listingTypes}
+                getListing={props.getListing}
                 show={modalShow}
                 onHide={() => setModalShow(false)}
                 onSave={listing => props.onSave(listing)}
@@ -42,6 +43,7 @@ class ListingDetailOverview extends React.Component {
         this.handleSave = this.handleSave.bind(this);
         this.renderLeftNav = this.renderLeftNav.bind(this);
         this.renderRightNav = this.renderRightNav.bind(this);
+        this.getListing = this.getListing.bind(this);
     }
     handleEdit(){
     }
@@ -78,10 +80,15 @@ class ListingDetailOverview extends React.Component {
     acceptMethods(childDoAlert){
         this.ChildDoAlert = childDoAlert;
     }
+    getListing(){
+        this.props.getListing();
+    }
     render() {
         var shortDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vitae.";
         var longDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae aliquet purus. In sollicitudin lobortis sollicitudin. Morbi sagittis ornare lorem, sed volutpat dolor. Vestibulum ac erat et ante cursus bibendum at in urna. Duis quis ex sapien. Sed massa mauris, consectetur eget nisl vel, tincidunt varius dolor. Cras porttitor tortor mauris, ut congue odio fringilla id. Aenean pretium a ante ut fermentum. Donec fringilla quam et felis tempor varius.";
-        //var image = "./default.jpg"
+        var defaultImage = {
+            original: "/default.jpg"
+        };
         var listingType = "For Lease";
         var galleryImages = [];
         if (this.props.listing){
@@ -97,6 +104,9 @@ class ListingDetailOverview extends React.Component {
             }
             listingType = this.props.listing.listingType;
         }
+        if (galleryImages.length === 0){
+            galleryImages.push(defaultImage);
+        }
 
         const listing = this.props.listing;
         const editMode = this.props.editMode;
@@ -105,7 +115,7 @@ class ListingDetailOverview extends React.Component {
             <div>
                 <Row className="mt-2 border-bottom border-warning">
                     <Col>
-	                <h2>Overview {editMode === "edit" ? <EditButton listing={listing} listingTypes={listingTypes} onSave={this.handleSave}/> : null}</h2>
+	                <h2>Overview {editMode === "edit" ? <EditButton listing={listing} listingTypes={listingTypes} onSave={this.handleSave} getListing={this.props.getListing}/> : null}</h2>
                     </Col>
                     <Col>
                         <div className="text-right">
