@@ -4,8 +4,7 @@ import {
     Col,
     Accordion,
     Image,
-    Button,
-    Modal
+    Button
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -17,30 +16,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import ListingEditAvailableSpace from './ListingEditAvailableSpace';
 
-function ListingEditModal(props) {
-    return (
-        <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                  Available Space Edit 
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body style={{'max-height': 'calc(100vh - 210px)', 'overflow-y': 'auto'}}>
-                <ListingEditAvailableSpace space={props.space}/>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={props.onHide}>Close</Button>
-                <Button onClick={props.onHide}>Save</Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
-
 function AddButton(props) {
     const [modalShow, setModalShow] = React.useState(false);
     return (
@@ -51,10 +26,14 @@ function AddButton(props) {
             >
                 <FontAwesomeIcon size="xs" icon={faPlus} />
             </span>
-            <ListingEditModal
+            <ListingEditAvailableSpace
+                listing={props.listing}
+                space={props.space}
+                spaceTypes={props.spaceTypes}
+                spaceUses={props.spaceUses}
                 show={modalShow}
                 onHide={() => setModalShow(false)}
-                listing={props.listing} 
+                onSave={listing => props.onSave(listing)}
             />
         </span>
   );
@@ -69,10 +48,14 @@ function EditButton(props) {
           >
               <FontAwesomeIcon icon={faPencilAlt} />
           </span>
-          <ListingEditModal
+          <ListingEditAvailableSpace
+              listing={props.listing}
+              space={props.space}
+              spaceTypes={props.spaceTypes}
+              spaceUses={props.spaceUses}
               show={modalEditShow}
               onHide={() => setModalEditShow(false)}
-              space={props.space} 
+              onSave={listing => props.onSave(listing)}
           />
         </span>
     );
@@ -81,6 +64,8 @@ class ListingDetailAvailableSpace extends React.Component {
     constructor(props){
         super(props);
         this.handleAccordionChange = this.handleAccordionChange.bind(this);
+        this.handleSave = this.handleSave.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         this.state = {
             text1: "More",
             text2: "More",
@@ -102,14 +87,20 @@ class ListingDetailAvailableSpace extends React.Component {
             }
         }
     }
+    handleSave(space){
+        this.props.onSpaceUpdate(space);
+    }
+    handleClose(){
+        this.props.onShowDetailChange(false);
+    }
     render(){
         var listing = this.props.listing;
         var editMode = this.props.editMode;
-       
+        var newSpace = {}; 
         return (
             <div>
                 <Row className="mt-3 border-bottom border-warning">
-                    <Col><h2>Available Space {editMode === "edit" ? <AddButton listing={listing} /> : null}</h2></Col>
+                    <Col><h2>Available Space {editMode === "edit" ? <AddButton listing={listing} space={newSpace} onSave={this.handleSave} /> : null}</h2></Col>
                 </Row>
                 <Row className="bg-light shadow">
                     <Col md={2} className="font-weight-bold">Unit</Col>
@@ -126,7 +117,7 @@ class ListingDetailAvailableSpace extends React.Component {
                 {!listing ? <div></div> : 
                 listing.spaces.map(space =>
                 (
-                <Accordion > 
+                <Accordion key={space.unit}> 
                     <Row className="border-bottom align-items-center" >
                        <Col md={2}>{space.unit}</Col>
                        <Col md={2}>{space.size} sq ft</Col>
@@ -140,7 +131,7 @@ class ListingDetailAvailableSpace extends React.Component {
                        <Col md={3}>
                            <Row>
                                { editMode === "edit" ?
-                               <Col><EditButton space={space}/></Col>
+                               <Col><EditButton listing={listing} space={space} onSave={this.handleSave}/></Col>
                                : null }
                                { editMode === "edit" ?
                                <Col><FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} /></Col>
