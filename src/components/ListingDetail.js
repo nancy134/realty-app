@@ -14,6 +14,7 @@ import ListingDetailPortfolio from './ListingDetailPortfolio';
 import ListingDetailAttachments from './ListingDetailAttachments';
 import listings from '../services/listings';
 import spaces from '../services/spaces';
+import units from '../services/units';
 import { isOwner } from '../helpers/authentication';
 import { getUserEmail } from '../helpers/authentication';
 
@@ -59,8 +60,6 @@ class ListingDetail extends React.Component {
         }
     }
     handleSpaceUpdate(space){
-        console.log("handleSpaceUpdate(space)");
-        console.log("space: "+JSON.stringify(space));
         if (space.id){
             spaces.update(space, (data) => {
                 this.getListing();
@@ -70,6 +69,18 @@ class ListingDetail extends React.Component {
                 this.getListing();
             });
         }
+    }
+    handleUnitUpdate(unit){
+        console.log("handleUnitUpdate():unit: "+JSON.stringify(unit));
+         if (unit.id){
+             units.update(unit, (data) => {
+                 this.getListing();
+             });
+         } else {
+             units.create(unit, (data) => {
+                 this.getListing();
+             });
+         }
     }
     getListing(){
         if (this.props.index){
@@ -140,10 +151,10 @@ class ListingDetail extends React.Component {
                 <ListingDetailHeader listing={listing} states={states} owner={owner} editMode={editMode} onShowDetailChange={this.handleShowDetailChange} onEditToggle={this.handleEditToggle} onListingUpdate={this.handleListingUpdate} />
                 <ListingDetailOverview listing={listing} listingTypes={listingTypes} editMode={editMode} onListingUpdate={this.handleListingUpdate} getListing={this.getListing}/>
                 { (editMode === "edit") || (listing && listing.spaces.length) > 0 ?
-                <ListingDetailAvailableSpace listing={listing} editMode={editMode} onSpaceUpdate={this.handleSpaceUpdate} getLiting={this.getListing}/>
+                <ListingDetailAvailableSpace listing={listing} editMode={editMode} onSpaceUpdate={this.handleSpaceUpdate} getListing={this.getListing}/>
                 : null }
                 {(editMode === "edit") || (listing && (listing.units.length > 0)) ?
-                <ListingDetailUnits listing={listing} editMode={editMode} />
+                <ListingDetailUnits listing={listing} editMode={editMode} onUnitUpdate={this.handleUnitUpdate} getListing={this.getListing}/>
                 : null }
                 {(editMode === "edit") || (listing && listing.tenants.length) > 0 ?
                 <ListingDetailTenants listing={listing} editMode={editMode} />
