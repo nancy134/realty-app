@@ -16,6 +16,7 @@ import listings from '../services/listings';
 import spaces from '../services/spaces';
 import units from '../services/units';
 import tenants from '../services/tenants';
+import portfolios from '../services/portfolios';
 import { isOwner } from '../helpers/authentication';
 import { getUserEmail } from '../helpers/authentication';
 
@@ -83,7 +84,6 @@ class ListingDetail extends React.Component {
          }
     }
     handleTenantUpdate(tenant){
-        console.log("handleTenantUpdate: "+JSON.stringify(tenant));
         if (tenant.id){
             tenants.update(tenant, (data) => {
                 this.getListing();
@@ -94,6 +94,17 @@ class ListingDetail extends React.Component {
             });
         }
     }
+    handlePortfolioUpdate(portfolio){
+        if (portfolio.id){
+            portfolios.update(portfolio, (data) => {
+                this.getListing();
+            });
+        } else {
+            portfolios.create(portfolio, (data) => {
+                this.getListing();
+            });
+        }
+    } 
     getListing(){
         if (this.props.index){
             listings.get(this.props.index, (data) => {
@@ -171,8 +182,8 @@ class ListingDetail extends React.Component {
                 {(editMode === "edit") || (listing && listing.tenants.length) > 0 ?
                 <ListingDetailTenants listing={listing} editMode={editMode} onTenantUpdate={this.handleTenantUpdate} getListing={this.getListing}/>
                 : null }
-                {(editMode === "edit") || (listing && listing.portfolio.length) > 0 ?
-                <ListingDetailPortfolio listing={listing} editMode={editMode} />
+                {(editMode === "edit") || (listing && listing.portfolios.length) > 0 ?
+                <ListingDetailPortfolio listing={listing} editMode={editMode} onPortfolioUpdate={this.handlePortfolioUpdate} getListing={this.getListing} />
                 : null }
                 {(editMode === "edit") ?
                 <ListingDetailAttachments listing={listing} editMode={editMode} />
