@@ -15,6 +15,7 @@ import ListingDetailAttachments from './ListingDetailAttachments';
 import listings from '../services/listings';
 import spaces from '../services/spaces';
 import units from '../services/units';
+import tenants from '../services/tenants';
 import { isOwner } from '../helpers/authentication';
 import { getUserEmail } from '../helpers/authentication';
 
@@ -71,7 +72,6 @@ class ListingDetail extends React.Component {
         }
     }
     handleUnitUpdate(unit){
-        console.log("handleUnitUpdate():unit: "+JSON.stringify(unit));
          if (unit.id){
              units.update(unit, (data) => {
                  this.getListing();
@@ -81,6 +81,18 @@ class ListingDetail extends React.Component {
                  this.getListing();
              });
          }
+    }
+    handleTenantUpdate(tenant){
+        console.log("handleTenantUpdate: "+JSON.stringify(tenant));
+        if (tenant.id){
+            tenants.update(tenant, (data) => {
+                this.getListing();
+            });
+        } else {
+            tenants.create(tenant, (data) => {
+                this.getListing();
+            });
+        }
     }
     getListing(){
         if (this.props.index){
@@ -157,7 +169,7 @@ class ListingDetail extends React.Component {
                 <ListingDetailUnits listing={listing} editMode={editMode} onUnitUpdate={this.handleUnitUpdate} getListing={this.getListing}/>
                 : null }
                 {(editMode === "edit") || (listing && listing.tenants.length) > 0 ?
-                <ListingDetailTenants listing={listing} editMode={editMode} />
+                <ListingDetailTenants listing={listing} editMode={editMode} onTenantUpdate={this.handleTenantUpdate} getListing={this.getListing}/>
                 : null }
                 {(editMode === "edit") || (listing && listing.portfolio.length) > 0 ?
                 <ListingDetailPortfolio listing={listing} editMode={editMode} />

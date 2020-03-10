@@ -98,7 +98,7 @@ class ListingEditOverview extends React.Component {
         var imgs = [];
         if (this.props.listing && this.props.listing.images){
             imgs = this.props.listing.images.map((item,key) =>
-                <Image src={item.url} className="edit-image p-2"/>
+                <Image key={key} src={item.url} className="edit-image p-2"/>
             );
         }
         return (

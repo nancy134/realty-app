@@ -66,7 +66,6 @@ class ListingDetailHeader extends React.Component {
         if (!listing) closeButton = "Cancel";
         var toggleDefault = view;
         if (editMode === "edit" && !listing) toggleDefault = edit;
-        console.log("owner: "+owner);
         return(
             <Row className="align-items-center bg-info">
 	        <Col md={6}className="text-white">

@@ -8,6 +8,7 @@ import {
 
 class ListingEditUnit extends React.Component {
     constructor(props){
+        console.log("ListingEditUnit:constructor");
         super(props);
         this.onDescriptionChange = this.onDescriptionChange.bind(this);
         this.onNumUnitsChange = this.onNumUnitsChange.bind(this);
@@ -31,6 +32,12 @@ class ListingEditUnit extends React.Component {
                 income: ""
             };
         } 
+    }
+    componentDidMount(){
+        console.log("ListingEditUnit:componentDidMount()");
+    }
+    componentWillUnmount(){
+        console.log("Component Will Unmount");
     }
     onDescriptionChange(event){
         this.setState({
@@ -65,6 +72,8 @@ class ListingEditUnit extends React.Component {
         this.props.onHide();
     } 
     render(){
+        console.log("ListingEditUnit:render()");
+        console.log("this.state.description: "+this.state.description);
         return (
         <Modal
             show={this.props.show}

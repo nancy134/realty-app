@@ -26,6 +26,7 @@ function AddButton(props) {
             >
                 <FontAwesomeIcon size="xs" icon={faPlus} />
             </span>
+            {modalShow ?
             <ListingEditAvailableSpace
                 listing={props.listing}
                 space={props.space}
@@ -35,6 +36,7 @@ function AddButton(props) {
                 onHide={() => setModalShow(false)}
                 onSave={listing => props.onSave(listing)}
             />
+            : null }
         </span>
   );
 }
