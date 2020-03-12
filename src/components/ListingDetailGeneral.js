@@ -1,9 +1,7 @@
 import React from 'react';
 import {
     Row,
-    Col,
-    Modal,
-    Button
+    Col
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -11,29 +9,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import ListingEditGeneral from './ListingEditGeneral';
 
-function ListingEditModal(props) {
-    return (
-        <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                   Edit General 
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body >
-                <ListingEditGeneral />
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={props.onHide}>Close</Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
-function EditButton() {
+function EditButton(props) {
     const [modalShow, setModalShow] = React.useState(false);
 
     return (
@@ -44,9 +20,11 @@ function EditButton() {
             >
                 <FontAwesomeIcon size="xs" icon={faPencilAlt} />
             </span>
-            <ListingEditModal
+            <ListingEditGeneral
+                listing={props.listing}
                 show={modalShow}
                 onHide={() => setModalShow(false)}
+                onSave={listing => props.onSave(listing)}
             />
         </span>
   );
@@ -75,6 +53,17 @@ function isEmpty(listing){
 }
 
 class ListingDetailGeneral extends React.Component {
+    constructor(props){
+        super(props);
+        this.handleSave = this.handleSave.bind(this);
+        this.getListing = this.getListing.bind(this);
+    }
+    handleSave(listing){
+        this.props.onListingUpdate(listing);
+    }
+    getListing(){
+        this.props.getListing();
+    } 
     render() {
         var propertyType = "---";
         var totalBuildingSize = "---";
@@ -130,7 +119,7 @@ class ListingDetailGeneral extends React.Component {
         }
         return (
             <React.Fragment>
-                <h2 className="border-bottom border-warning">Building Detail {editMode === "edit" ? <EditButton /> : null}</h2>
+                <h2 className="border-bottom border-warning">Building Detail {editMode === "edit" ? <EditButton listing={listing} onSave={this.handleSave} getListing={this.props.getListing}/> : null}</h2>
                 <Row>
                     <Col>
                         {editMode === "edit" || (editMode === "view" && propertyType) ?
