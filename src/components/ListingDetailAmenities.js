@@ -1,38 +1,14 @@
 import React from 'react';
 import {
-    Row,
-    Col,
-    Modal,
-    Button
+    Row
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faPencilAlt
 } from '@fortawesome/free-solid-svg-icons';
+import ListingEditAmenities from './ListingEditAmenities';
 
-function ListingEditModal(props) {
-    return (
-        <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                   Edit Amenities 
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body >
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={props.onHide}>Close</Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
-
-function EditButton() {
+function EditButton(props) {
     const [modalShow, setModalShow] = React.useState(false);
 
     return (
@@ -43,28 +19,41 @@ function EditButton() {
             >
                 <FontAwesomeIcon size="xs" icon={faPencilAlt} />
             </span>
-            <ListingEditModal
+            <ListingEditAmenities
+                listing={props.listing}
+                allAmenities={props.allAmenities}
                 show={modalShow}
                 onHide={() => setModalShow(false)}
+                onSave={listing => props.onSave(listing)}
             />
         </span>
   );
 }
 
 class ListingDetailAmenities extends React.Component {
+    constructor(props){
+        super(props);
+        this.handleSave = this.handleSave.bind(this);
+        this.getListing = this.getListing.bind(this);
+    }
+    handleSave(listing){
+        this.props.onListingUpdate(listing);
+    }
+    getListing(){
+        this.props.getListing();
+    }
     render() {
-        const viewType = this.props.viewType
-        const content = this.props.content
+        const editMode = this.props.editMode;
+        const listing = this.props.listing;
         return (
-            <div>
-                <h2 className="border-bottom border-warning">Amenities {viewType === "owner" ? <EditButton /> : null}</h2>
-                {content !== "new" ?
-                <Row><Col>Fitness Center</Col></Row>
-                : null}
-                {content !== "new" ?
-                <Row><Col>Air Conditioning</Col></Row>
-                : <Row><Col>---</Col></Row> }
-            </div>
+        <React.Fragment>
+            <h2 className="border-bottom border-warning">Amenities {editMode === "edit" ? <EditButton listing={listing} onSave={this.handleSave} getListing={this.props.getListing} allAmenities={this.props.allAmenities}/> : null}</h2>
+            <Row>
+                {listing ?
+                <div>{listing.amenities}</div>
+                : <div></div> }
+            </Row>
+        </React.Fragment>
         );
     }
 }

@@ -142,7 +142,8 @@ class ListingDetail extends React.Component {
                     listing: data.listing,
                     states: data.states,
                     listingTypes: data.listingTypes,
-                    propertyTypes: data.propertyTypes
+                    propertyTypes: data.propertyTypes,
+                    amenities: data.amenities
                 });
             });
         } else {
@@ -150,7 +151,8 @@ class ListingDetail extends React.Component {
                 this.setState({
                     states: data.states,
                     listingTypes: data.listingTypes,
-                    propertyTypes: data.propertyTypes
+                    propertyTypes: data.propertyTypes,
+                    amenities: data.amenities
                 });
             });
         }
@@ -165,6 +167,7 @@ class ListingDetail extends React.Component {
         const states = this.state.states;
         //const propertyTypes = this.state.propertyTypes;
         const listingTypes = this.state.listingTypes;
+        const allAmenities = this.state.amenities;
         if (states){
         }
         const owner = this.props.owner;
@@ -189,7 +192,7 @@ class ListingDetail extends React.Component {
                 <ListingDetailAttachments listing={listing} editMode={editMode} />
                 : null }
                 <ListingDetailGeneral listing={listing} editMode={editMode} onListingUpdate={this.handleListingUpdate} getListing={this.getListing}/>
-                <ListingDetailAmenities listing={listing} editMode={editMode} />
+                <ListingDetailAmenities listing={listing} editMode={editMode}  allAmenities={allAmenities}/>
                 <ListingDetailBuildingIncome listing={listing} editMode={editMode} />
                 <ListingDetailBrokers listing={listing} editMode={editMode} />
 
