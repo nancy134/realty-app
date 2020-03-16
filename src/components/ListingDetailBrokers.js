@@ -58,9 +58,9 @@ class ListingDetailBrokers extends React.Component {
         const content = this.props.content;
         return (
             <div>
-                <Row className="mt-3">
+                <Row className="mt-3 border-bottom border-warning">
                     <Col >
-                        <h2 className="border-bottom border-warning">Brokers {viewType === "owner" ? <EditButton /> : null}</h2>
+                        <h2>Brokers {viewType === "owner" ? <EditButton /> : null}</h2>
                     </Col>
                 </Row>
                 <Row>

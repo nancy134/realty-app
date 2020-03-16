@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-    Row
+    Row,
+    Col
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -47,12 +48,17 @@ class ListingDetailAmenities extends React.Component {
         const listing = this.props.listing;
         return (
         <React.Fragment>
-            <h2 className="border-bottom border-warning">Amenities {editMode === "edit" ? <EditButton listing={listing} onSave={this.handleSave} getListing={this.props.getListing} allAmenities={this.props.allAmenities}/> : null}</h2>
-            <Row>
-                {listing ?
-                <div>{listing.amenities}</div>
-                : <div></div> }
+            <Row className="mt-3 border-bottom border-warning">
+                <Col><h2>Amenities {editMode === "edit" ? <EditButton listing={listing} onSave={this.handleSave} getListing={this.props.getListing} allAmenities={this.props.allAmenities}/> : null}</h2></Col>
             </Row>
+            <ul>
+            {listing && listing.amenities ?
+             (
+             listing.amenities.map(amenity =>
+                 <li>{amenity}</li>
+             ))
+                : <Row></Row> }
+            </ul>
         </React.Fragment>
         );
     }

@@ -119,7 +119,9 @@ class ListingDetailGeneral extends React.Component {
         }
         return (
             <React.Fragment>
-                <h2 className="border-bottom border-warning">Building Detail {editMode === "edit" ? <EditButton listing={listing} onSave={this.handleSave} getListing={this.props.getListing}/> : null}</h2>
+                <Row className="mt-3 border-bottom border-warning">
+                    <Col><h2>Building Detail {editMode === "edit" ? <EditButton listing={listing} onSave={this.handleSave} getListing={this.props.getListing}/> : null}</h2></Col>
+                </Row>
                 <Row>
                     <Col>
                         {editMode === "edit" || (editMode === "view" && propertyType) ?
