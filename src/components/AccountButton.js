@@ -61,9 +61,11 @@ export class AccountButton extends Component{
     onCancel(){
         console.log("onCancel()");
     }
-    onLogin(){
+    onLogin(email, password){
         var that = this;
         console.log("onLogin()");
+        console.log("email: "+email);
+        console.log("password: "+password);
         var loginResponsePromise = loginResponse();
         loginResponsePromise.then(function(result){
             that.setState({authenticated: true});
@@ -107,7 +109,7 @@ export class AccountButton extends Component{
             <AccountLoginModal
                 show={this.state.modalShowLogin}
                 onCancel={() => {this.onCancel();this.setState({modalShowLogin:false})}}
-                onFinish ={() => {this.onLogin();this.setState({modalShowLogin:false})}}
+                onLogin ={(email, password) => {this.onLogin(email, password);this.setState({modalShowLogin:false})}}
                 onRegister={() => {this.onRegister();this.setState({modalShowLogin:false,modalShowRegister:true})}}
             />
             <RegisterModal

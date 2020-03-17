@@ -10,6 +10,17 @@ class AccountLoginModal extends React.Component {
         super(props);
         this.onEmailChange = this.onEmailChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
+        this.state = {
+            email: "",
+            password: ""
+        };
+    }
+    handleLogin(){
+        console.log("AccountLoginModel:handleLogin");
+        console.log("email: "+this.state.email);
+        console.log("password: "+this.state.password);
+        this.props.onLogin(this.state.email, this.state.password);
     }
     onEmailChange(event){
         this.setState({
@@ -36,16 +47,16 @@ class AccountLoginModal extends React.Component {
             </Modal.Header>
             <Modal.Body>
                 <Form.Label>Email</Form.Label>
-                <Form.Control />
+                <Form.Control onChange={this.onEmailChange}/>
                 <Form.Label>Password</Form.Label>
-                <Form.Control />
+                <Form.Control onChange={this.onPasswordChange}/>
                 <Button variant="link">Forgot password?</Button>
                 <Button onClick={this.props.onRegister} variant="link">Don't hava an account? Create one here</Button>
                
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={this.props.onCancel}>Cancel</Button>
-                <Button onClick={this.props.onFinish}>Login</Button>
+                <Button onClick={this.handleLogin}>Login</Button>
             </Modal.Footer>
         </Modal>
         );
