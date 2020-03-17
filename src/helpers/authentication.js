@@ -34,22 +34,22 @@ export function deleteUser(){
     cookies.remove('jwt');
 }
 
-export function loginResponse(){
+export function loginResponse(email, password){
 
 
     return new Promise(function(resolve, reject){
         var username = "nancy_piedra@hotmail.com";
         var password = "Tweety_123";
         var signinParams = {
-            username: username,
+            username: email,
             password: password
         };
         var signinPromise = auth.signin(signinParams);
         signinPromise.then(function(result){
             console.log("result: "+result);
             const cookies = new Cookies();
-            cookies.set('email','paulp@sabrerealtygroup.com');
-            cookies.set('name', 'Paul Piedra');
+            cookies.set('email',username);
+            cookies.set('name', username);
             cookies.set('jwt','dj39fjtyzRwiD09');
             resolve(result);
         }).catch(function(err){

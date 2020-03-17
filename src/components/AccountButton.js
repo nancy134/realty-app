@@ -66,7 +66,7 @@ export class AccountButton extends Component{
         console.log("onLogin()");
         console.log("email: "+email);
         console.log("password: "+password);
-        var loginResponsePromise = loginResponse();
+        var loginResponsePromise = loginResponse(email, password);
         loginResponsePromise.then(function(result){
             that.setState({authenticated: true});
             that.props.onLogin();
