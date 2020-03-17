@@ -11,6 +11,7 @@ import { isAuthenticated } from '../helpers/authentication';
 import { getUserName } from '../helpers/authentication';
 import { deleteUser } from '../helpers/authentication';
 import { loginResponse } from '../helpers/authentication';
+import AccountLoginModal from './AccountLoginModal';
 
 function RegisterModal(props){
     const standardProps = Object.assign({}, props);
@@ -43,39 +44,6 @@ function RegisterModal(props){
     );
 }
 
-function LoginModal(props) {
-    const standardProps = Object.assign({}, props);
-    delete standardProps.onFinish;
-    delete standardProps.onRegister;
-    return (
-        <Modal
-            {...standardProps}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Login
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form.Label>Email</Form.Label>
-                <Form.Control />
-                <Form.Label>Password</Form.Label>
-                <Form.Control />
-                <Button variant="link">Forgot password?</Button>
-                <Button onClick={props.onRegister} variant="link">Don't hava an account? Create one here</Button>
-               
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={props.onCancel}>Cancel</Button>
-                <Button onClick={props.onFinish}>Login</Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
-
 export class AccountButton extends Component{
     constructor(props){
         super(props);
@@ -94,10 +62,15 @@ export class AccountButton extends Component{
         console.log("onCancel()");
     }
     onLogin(){
+        var that = this;
         console.log("onLogin()");
-        loginResponse();
-        this.setState({authenticated: true});
-        this.props.onLogin();
+        var loginResponsePromise = loginResponse();
+        loginResponsePromise.then(function(result){
+            that.setState({authenticated: true});
+            that.props.onLogin();
+        }).catch(function(err){
+           console.log("err: "+err);
+        });
     }
     onRegister(){
         console.log("onRegister()");
@@ -131,7 +104,7 @@ export class AccountButton extends Component{
                 </span> 
                 )}
             </span>
-            <LoginModal
+            <AccountLoginModal
                 show={this.state.modalShowLogin}
                 onCancel={() => {this.onCancel();this.setState({modalShowLogin:false})}}
                 onFinish ={() => {this.onLogin();this.setState({modalShowLogin:false})}}

@@ -1,4 +1,5 @@
 import Cookies from 'universal-cookie';
+import auth from '../services/auth';
 
 export function isAuthenticated(){
     const cookies = new Cookies();
@@ -34,8 +35,26 @@ export function deleteUser(){
 }
 
 export function loginResponse(){
-    const cookies = new Cookies();
-    cookies.set('email','paulp@sabrerealtygroup.com');
-    cookies.set('name', 'Paul Piedra');
-    cookies.set('jwt','dj39fjtyzRwiD09');
+
+
+    return new Promise(function(resolve, reject){
+        var username = "nancy_piedra@hotmail.com";
+        var password = "Tweety_123";
+        var signinParams = {
+            username: username,
+            password: password
+        };
+        var signinPromise = auth.signin(signinParams);
+        signinPromise.then(function(result){
+            console.log("result: "+result);
+            const cookies = new Cookies();
+            cookies.set('email','paulp@sabrerealtygroup.com');
+            cookies.set('name', 'Paul Piedra');
+            cookies.set('jwt','dj39fjtyzRwiD09');
+            resolve(result);
+        }).catch(function(err){
+            console.log("err: "+err);
+            reject(err);
+        });
+    });
 }
