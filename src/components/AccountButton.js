@@ -1,8 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
 import {
-    Modal,
-    Form,
     Button,
     Dropdown,
     DropdownButton
@@ -12,41 +10,12 @@ import { getUserName } from '../helpers/authentication';
 import { deleteUser } from '../helpers/authentication';
 import { loginResponse } from '../helpers/authentication';
 import AccountLoginModal from './AccountLoginModal';
-
-function RegisterModal(props){
-    const standardProps = Object.assign({}, props);
-    delete standardProps.onFinish;
-    return(
-        <Modal
-            {...standardProps}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Register
-                </Modal.Title> 
-            </Modal.Header>
-            <Modal.Body>
-                <Form.Label>Email</Form.Label>
-                <Form.Control />
-                <Form.Label>Password</Form.Label>
-                <Form.Control />
-                <Form.Label>Confirm Password</Form.Label>
-                <Form.Control />
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={props.onCancel}>Cancel</Button>
-                <Button onClick={props.onFinish}>Register</Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
+import AccountRegisterModal from './AccountRegisterModal';
 
 export class AccountButton extends Component{
     constructor(props){
         super(props);
+        this.onRegister = this.onRegister.bind(this);
         this.state = {
             authenticated: false,
             modalShowLogin: false,
@@ -74,7 +43,10 @@ export class AccountButton extends Component{
            console.log("err: "+err);
         });
     }
-    onRegister(){
+    onRegister(email, password, confirmPassword){
+        console.log("email: "+email);
+        console.log("password: "+password);
+        console.log("confirmPassword: "+confirmPassword);
         console.log("onRegister()");
     }
     onMyAccount(){
@@ -110,10 +82,13 @@ export class AccountButton extends Component{
                 show={this.state.modalShowLogin}
                 onCancel={() => {this.onCancel();this.setState({modalShowLogin:false})}}
                 onLogin ={(email, password) => {this.onLogin(email, password);this.setState({modalShowLogin:false})}}
-                onRegister={() => {this.onRegister();this.setState({modalShowLogin:false,modalShowRegister:true})}}
+                onRegisterStart={() => {this.setState({modalShowLogin:false,modalShowRegister:true})}}
+
             />
-            <RegisterModal
+            <AccountRegisterModal
                 show={this.state.modalShowRegister}
+                onRegister={this.onRegister}
+                onCancel={() => {this.onCancel();this.setState({modalShowRegister:false})}}
             />
         </span>
         );

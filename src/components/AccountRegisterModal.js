@@ -5,22 +5,22 @@ import {
     Button
 } from 'react-bootstrap';
 
-class AccountLoginModal extends React.Component {
+class AccountRegisterModal extends React.Component {
     constructor(props){
         super(props);
         this.onEmailChange = this.onEmailChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
-        this.handleLogin = this.handleLogin.bind(this);
+        this.onConfirmPasswordChange = this.onConfirmPasswordChange.bind(this);
+        this.handleRegister = this.handleRegister.bind(this);
         this.state = {
             email: "",
-            password: ""
+            password: "",
+            confirmPassword: ""
         };
     }
-    handleLogin(){
-        console.log("AccountLoginModel:handleLogin");
-        console.log("email: "+this.state.email);
-        console.log("password: "+this.state.password);
-        this.props.onLogin(this.state.email, this.state.password);
+    handleRegister(){
+        console.log("handleRegister()");
+        this.props.onRegister(this.state.email, this.state.password, this.state.confirmPassword);
     }
     onEmailChange(event){
         this.setState({
@@ -30,6 +30,11 @@ class AccountLoginModal extends React.Component {
     onPasswordChange(event){
         this.setState({
             password: event.target.value
+        });
+    }
+    onConfirmPasswordChange(event){
+        this.setState({
+            confirmPassword: event.target.value
         });
     }
     render(){
@@ -42,25 +47,24 @@ class AccountLoginModal extends React.Component {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Login
-                </Modal.Title>
+                    Register
+                </Modal.Title> 
             </Modal.Header>
             <Modal.Body>
                 <Form.Label>Email</Form.Label>
                 <Form.Control onChange={this.onEmailChange}/>
                 <Form.Label>Password</Form.Label>
                 <Form.Control onChange={this.onPasswordChange}/>
-                <Button variant="link">Forgot password?</Button>
-                <Button onClick={this.props.onRegisterStart} variant="link">Don't hava an account? Create one here</Button>
-               
+                <Form.Label>Confirm Password</Form.Label>
+                <Form.Control onChange={this.onConfirmPasswordChange}/>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={this.props.onCancel}>Cancel</Button>
-                <Button onClick={this.handleLogin}>Login</Button>
+                <Button onClick={this.handleRegister}>Register</Button>
             </Modal.Footer>
         </Modal>
         );
     }
 }
 
-export default AccountLoginModal;
+export default AccountRegisterModal;
