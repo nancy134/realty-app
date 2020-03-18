@@ -13,6 +13,7 @@ export function signin(params){
             resolve(resp);
         }).catch(function(err){
             if (err && err.response && err.response.body){
+                console.log("err.response.body: "+err.response.body);
                 reject(err.response.body);
             } else {
                 reject(err);
@@ -33,7 +34,12 @@ export function signup(params){
         rp(options).then(function(resp){
             resolve(resp);
         }).catch(function(err){
-            reject(err);
+            console.log("err: "+JSON.stringify(err));
+            if (err && err.response && err.response.body){
+                reject(err.response.body);
+            } else {
+                reject(err);
+            }
         });
     });
 }

@@ -60,8 +60,10 @@ export function signupResponse(email, password, confirmPassword){
         };
         var signupPromise = auth.signup(signupParams);
         signupPromise.then(function(result){
+            console.log("result: "+JSON.stringify(result));
             resolve(result);
         }).catch(function(err){
+            console.log("err: "+JSON.stringify(err));
             reject(err);
         });
     });

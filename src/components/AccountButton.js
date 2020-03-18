@@ -29,6 +29,7 @@ export class AccountButton extends Component{
             modalShowRegister: false,
             modalShowConfirm: false,
             loginMessage: null,
+            registerMessage: null
         }
     }
     componentDidMount(){
@@ -61,12 +62,16 @@ export class AccountButton extends Component{
             that.setState({
                 email:email,
                 modalShowRegister:false,
-                modalShowConfirm:true
+                modalShowConfirm:true,
+                registerMessage: null
             });
 
             that.props.onRegister();
         }).catch(function(err){
-            console.log("err: "+err);
+            console.log("err: "+JSON.stringify(err));
+            that.setState({
+                registerMessage: err.message
+            });
         });
     }
     onConfirm(email,code){
@@ -123,6 +128,7 @@ export class AccountButton extends Component{
                 show={this.state.modalShowRegister}
                 onRegister={(email,password) =>{this.onRegister(email,password);}}
                 onCancel={() => {this.onCancel();this.setState({modalShowRegister:false})}}
+                registerMessage={this.state.registerMessage}
             />
             <AccountConfirmModal
                 show={this.state.modalShowConfirm}

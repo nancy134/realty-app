@@ -2,7 +2,8 @@ import React from 'react';
 import {
     Modal,
     Form,
-    Button
+    Button,
+    Alert
 } from 'react-bootstrap';
 
 class AccountRegisterModal extends React.Component {
@@ -46,6 +47,11 @@ class AccountRegisterModal extends React.Component {
                 </Modal.Title> 
             </Modal.Header>
             <Modal.Body>
+                {this.props.registerMessage ?
+                <Alert variant="danger">
+                {this.props.registerMessage}
+                </Alert>
+                : null }
                 <Form.Label>Email</Form.Label>
                 <Form.Control onChange={this.onEmailChange}/>
                 <Form.Label>Password</Form.Label>
