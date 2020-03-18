@@ -8,18 +8,26 @@ import {
 import { isAuthenticated } from '../helpers/authentication';
 import { getUserName } from '../helpers/authentication';
 import { deleteUser } from '../helpers/authentication';
-import { loginResponse } from '../helpers/authentication';
+import { 
+    loginResponse,
+    signupResponse,
+    confirmrResponse
+} from '../helpers/authentication';
 import AccountLoginModal from './AccountLoginModal';
 import AccountRegisterModal from './AccountRegisterModal';
+import AccountConfirmModal from './AccountConfirmModal';
 
 export class AccountButton extends Component{
     constructor(props){
         super(props);
+        this.onLogin = this.onLogin.bind(this);
         this.onRegister = this.onRegister.bind(this);
+        this.onConfirm = this.onConfirm.bind(this);
         this.state = {
             authenticated: false,
             modalShowLogin: false,
             modalShowRegister: false,
+            modalShowConfirm: false
         }
     }
     componentDidMount(){
@@ -44,10 +52,31 @@ export class AccountButton extends Component{
         });
     }
     onRegister(email, password, confirmPassword){
+        console.log("onRegister()");
+        var that = this;
         console.log("email: "+email);
         console.log("password: "+password);
         console.log("confirmPassword: "+confirmPassword);
-        console.log("onRegister()");
+        var signupResponsePromise = signupResponse(email,password,confirmPassword);
+        signupResponsePromise.then(function(result){
+            that.props.onRegister();
+        }).catch(function(err){
+            console.log("err: "+err);
+        });
+    }
+    onConfirm(email,code){
+        console.log("onConfirm()");
+        var that = this;
+        console.log("email: "+email);
+        console.log("code: "+code);
+        /*
+        var confirmResponsePromise = confirmReponse(email, code);
+        confirmResponsePromise.then(function(result){
+            that.props.onConfirm();
+        }).catch(function(err){
+            console.log("err: "+err);
+        });
+        */
     }
     onMyAccount(){
         console.log("Go to my account");
@@ -87,9 +116,15 @@ export class AccountButton extends Component{
             />
             <AccountRegisterModal
                 show={this.state.modalShowRegister}
-                onRegister={this.onRegister}
+                onRegister={(email,password,confirmPassword) =>{this.onRegister(email,password,confirmPassword);this.setState({modalShowRegister:false,modalShowConfirm:true});}}
                 onCancel={() => {this.onCancel();this.setState({modalShowRegister:false})}}
             />
+            <AccountConfirmModal
+                show={this.state.modalShowConfirm}
+                onConfirm={(email,code) =>{this.onCofirm(email,code);this.setState({modalShowConfirm:false});}}
+                onCancel={() => {this.onCancel();this.setState({modalShowConfirm:false})}}
+            />
+
         </span>
         );
     }

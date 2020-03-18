@@ -17,6 +17,7 @@ class App extends React.Component {
       };
       this.handleLogin = this.handleLogin.bind(this);
       this.handleLogout = this.handleLogout.bind(this);
+      this.handleResgister = this.handleRegister.bind(this);
   }
   componentDidMount(){
       if (isAuthenticated()){
@@ -31,6 +32,9 @@ class App extends React.Component {
   }
   handleLogout(){
       this.setState({loggedIn: false});
+  }
+  handleRegister(){
+      console.log("handleRegister");
   }
   render(){
   return (
@@ -47,7 +51,7 @@ class App extends React.Component {
               <Navbar.Toggle />
               <Navbar.Collapse className="justify-content-end">
                  <Nav.Item>
-                      <Nav.Link eventKey="link-1"><AccountButton onLogin={this.handleLogin} onLogout={this.handleLogout}/></Nav.Link>
+                      <Nav.Link eventKey="link-1"><AccountButton onLogin={this.handleLogin} onLogout={this.handleLogout} onRegister={this.handleRegister}/></Nav.Link>
                   </Nav.Item>
 
               </Navbar.Collapse>

@@ -35,11 +35,7 @@ export function deleteUser(){
 }
 
 export function loginResponse(email, password){
-
-
     return new Promise(function(resolve, reject){
-        var username = "nancy_piedra@hotmail.com";
-        var password = "Tweety_123";
         var signinParams = {
             username: email,
             password: password
@@ -48,8 +44,8 @@ export function loginResponse(email, password){
         signinPromise.then(function(result){
             console.log("result: "+result);
             const cookies = new Cookies();
-            cookies.set('email',username);
-            cookies.set('name', username);
+            cookies.set('email',email);
+            cookies.set('name', email);
             cookies.set('jwt','dj39fjtyzRwiD09');
             resolve(result);
         }).catch(function(err){
@@ -58,3 +54,33 @@ export function loginResponse(email, password){
         });
     });
 }
+export function signupResponse(email, password, confirmPassword){
+    return new Promise(function(resolve,reject){
+        var signupParams = {
+            username: email,
+            password: password,
+            confirmPassword: confirmPassword
+        };
+        var signupPromise = auth.signup(signupParams);
+        signupPromise.then(function(result){
+            resolve(result);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
+export function confirmResponse(email, code){
+    return new Promise(function(resolve,reject){
+        var confirmParams = {
+            username: email,
+            code: code
+        };
+        var confirmPromise = auth.confirm(confirmParams);
+        confirmPromise.then(function(result){
+            resolve(result);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+} 

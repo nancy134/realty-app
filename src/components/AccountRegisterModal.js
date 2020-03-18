@@ -20,6 +20,9 @@ class AccountRegisterModal extends React.Component {
     }
     handleRegister(){
         console.log("handleRegister()");
+        console.log("this.state.email: "+this.state.email);
+        console.log("this.state.passwrd: "+this.state.password);
+        console.log("this.state.confirmPassword: "+this.state.confirmPassword);
         this.props.onRegister(this.state.email, this.state.password, this.state.confirmPassword);
     }
     onEmailChange(event){
