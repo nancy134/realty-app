@@ -11,7 +11,7 @@ import { deleteUser } from '../helpers/authentication';
 import { 
     loginResponse,
     signupResponse,
-    confirmrResponse
+    confirmResponse
 } from '../helpers/authentication';
 import AccountLoginModal from './AccountLoginModal';
 import AccountRegisterModal from './AccountRegisterModal';
@@ -59,6 +59,12 @@ export class AccountButton extends Component{
         console.log("confirmPassword: "+confirmPassword);
         var signupResponsePromise = signupResponse(email,password,confirmPassword);
         signupResponsePromise.then(function(result){
+            that.setState({
+                email:email,
+                modalShowRegister:false,
+                modalShowConfirm:true
+            });
+
             that.props.onRegister();
         }).catch(function(err){
             console.log("err: "+err);
@@ -69,14 +75,13 @@ export class AccountButton extends Component{
         var that = this;
         console.log("email: "+email);
         console.log("code: "+code);
-        /*
-        var confirmResponsePromise = confirmReponse(email, code);
+        var confirmResponsePromise = confirmResponse(email, code);
         confirmResponsePromise.then(function(result){
+            that.setState({modalShowConfirm:false})
             that.props.onConfirm();
         }).catch(function(err){
             console.log("err: "+err);
         });
-        */
     }
     onMyAccount(){
         console.log("Go to my account");
@@ -116,12 +121,13 @@ export class AccountButton extends Component{
             />
             <AccountRegisterModal
                 show={this.state.modalShowRegister}
-                onRegister={(email,password,confirmPassword) =>{this.onRegister(email,password,confirmPassword);this.setState({modalShowRegister:false,modalShowConfirm:true});}}
+                onRegister={(email,password,confirmPassword) =>{this.onRegister(email,password,confirmPassword);}}
                 onCancel={() => {this.onCancel();this.setState({modalShowRegister:false})}}
             />
             <AccountConfirmModal
                 show={this.state.modalShowConfirm}
-                onConfirm={(email,code) =>{this.onCofirm(email,code);this.setState({modalShowConfirm:false});}}
+                email={this.state.email}
+                onConfirm={(email,code) =>{this.onConfirm(email,code);this.setState({modalShowConfirm:false});}}
                 onCancel={() => {this.onCancel();this.setState({modalShowConfirm:false})}}
             />
 

@@ -17,7 +17,8 @@ class App extends React.Component {
       };
       this.handleLogin = this.handleLogin.bind(this);
       this.handleLogout = this.handleLogout.bind(this);
-      this.handleResgister = this.handleRegister.bind(this);
+      this.handleRegister = this.handleRegister.bind(this);
+      this.handleConfirm = this.handleConfirm.bind(this);
   }
   componentDidMount(){
       if (isAuthenticated()){
@@ -36,6 +37,9 @@ class App extends React.Component {
   handleRegister(){
       console.log("handleRegister");
   }
+  handleConfirm(){
+      console.log("handleConfirm");
+  }
   render(){
   return (
       <Container fluid className="d-flex flex-column vh-100 vw-100">
@@ -51,7 +55,14 @@ class App extends React.Component {
               <Navbar.Toggle />
               <Navbar.Collapse className="justify-content-end">
                  <Nav.Item>
-                      <Nav.Link eventKey="link-1"><AccountButton onLogin={this.handleLogin} onLogout={this.handleLogout} onRegister={this.handleRegister}/></Nav.Link>
+                      <Nav.Link eventKey="link-1">
+                          <AccountButton 
+                              onLogin={this.handleLogin} 
+                              onLogout={this.handleLogout} 
+                              onRegister={this.handleRegister}
+                              onConfirm={this.handleConfirm}
+                          />
+                      </Nav.Link>
                   </Nav.Item>
 
               </Navbar.Collapse>

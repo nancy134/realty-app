@@ -15,7 +15,10 @@ class AccountConfirmModal extends React.Component {
         };
     }
     handleConfirm(){
-    
+       console.log("handleConfirm()");
+       console.log("email: "+this.props.email);
+       console.log("code: "+this.state.code);
+       this.props.onConfirm(this.props.email,this.state.code);
     }
 
     onCodeChange(event){

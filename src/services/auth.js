@@ -36,7 +36,7 @@ export function signup(params){
 
 export function confirm(params){
     return new Promise(function(resolve, reject){
-        var url = process.evn.REACT_APP_API+"confirm";
+        var url = process.env.REACT_APP_API+"confirmSignUp";
         var options = {
             method: 'POST',
             uri: url,
