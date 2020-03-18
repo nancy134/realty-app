@@ -56,8 +56,7 @@ export class AccountButton extends Component{
         var that = this;
         console.log("email: "+email);
         console.log("password: "+password);
-        console.log("confirmPassword: "+confirmPassword);
-        var signupResponsePromise = signupResponse(email,password,confirmPassword);
+        var signupResponsePromise = signupResponse(email,password);
         signupResponsePromise.then(function(result){
             that.setState({
                 email:email,
@@ -121,7 +120,7 @@ export class AccountButton extends Component{
             />
             <AccountRegisterModal
                 show={this.state.modalShowRegister}
-                onRegister={(email,password,confirmPassword) =>{this.onRegister(email,password,confirmPassword);}}
+                onRegister={(email,password) =>{this.onRegister(email,password);}}
                 onCancel={() => {this.onCancel();this.setState({modalShowRegister:false})}}
             />
             <AccountConfirmModal

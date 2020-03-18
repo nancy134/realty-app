@@ -58,8 +58,7 @@ export function signupResponse(email, password, confirmPassword){
     return new Promise(function(resolve,reject){
         var signupParams = {
             username: email,
-            password: password,
-            confirmPassword: confirmPassword
+            password: password
         };
         var signupPromise = auth.signup(signupParams);
         signupPromise.then(function(result){

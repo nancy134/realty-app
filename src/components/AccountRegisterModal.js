@@ -10,20 +10,17 @@ class AccountRegisterModal extends React.Component {
         super(props);
         this.onEmailChange = this.onEmailChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
-        this.onConfirmPasswordChange = this.onConfirmPasswordChange.bind(this);
         this.handleRegister = this.handleRegister.bind(this);
         this.state = {
             email: "",
-            password: "",
-            confirmPassword: ""
+            password: ""
         };
     }
     handleRegister(){
         console.log("handleRegister()");
         console.log("this.state.email: "+this.state.email);
         console.log("this.state.passwrd: "+this.state.password);
-        console.log("this.state.confirmPassword: "+this.state.confirmPassword);
-        this.props.onRegister(this.state.email, this.state.password, this.state.confirmPassword);
+        this.props.onRegister(this.state.email, this.state.password);
     }
     onEmailChange(event){
         this.setState({
@@ -33,11 +30,6 @@ class AccountRegisterModal extends React.Component {
     onPasswordChange(event){
         this.setState({
             password: event.target.value
-        });
-    }
-    onConfirmPasswordChange(event){
-        this.setState({
-            confirmPassword: event.target.value
         });
     }
     render(){
@@ -58,8 +50,6 @@ class AccountRegisterModal extends React.Component {
                 <Form.Control onChange={this.onEmailChange}/>
                 <Form.Label>Password</Form.Label>
                 <Form.Control onChange={this.onPasswordChange}/>
-                <Form.Label>Confirm Password</Form.Label>
-                <Form.Control onChange={this.onConfirmPasswordChange}/>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={this.props.onCancel}>Cancel</Button>
