@@ -2,7 +2,8 @@ import React from 'react';
 import {
     Modal,
     Form,
-    Button
+    Button,
+    Alert
 } from 'react-bootstrap';
 
 class AccountConfirmModal extends React.Component {
@@ -41,6 +42,10 @@ class AccountConfirmModal extends React.Component {
                 </Modal.Title> 
             </Modal.Header>
             <Modal.Body>
+                <Alert variant="danger">
+                    <p>Check your email for confirmation code.</p>
+                    <p>Email was send to {this.props.email}</p>
+                </Alert>
                 <Form.Label>Code</Form.Label>
                 <Form.Control onChange={this.onCodeChange}/>
             </Modal.Body>

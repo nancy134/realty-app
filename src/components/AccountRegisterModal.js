@@ -49,7 +49,7 @@ class AccountRegisterModal extends React.Component {
                 <Form.Label>Email</Form.Label>
                 <Form.Control onChange={this.onEmailChange}/>
                 <Form.Label>Password</Form.Label>
-                <Form.Control onChange={this.onPasswordChange}/>
+                <Form.Control type="password" onChange={this.onPasswordChange}/>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={this.props.onCancel}>Cancel</Button>

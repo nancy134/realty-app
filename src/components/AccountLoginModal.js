@@ -2,7 +2,8 @@ import React from 'react';
 import {
     Modal,
     Form,
-    Button
+    Button,
+    Alert
 } from 'react-bootstrap';
 
 class AccountLoginModal extends React.Component {
@@ -17,9 +18,6 @@ class AccountLoginModal extends React.Component {
         };
     }
     handleLogin(){
-        console.log("AccountLoginModel:handleLogin");
-        console.log("email: "+this.state.email);
-        console.log("password: "+this.state.password);
         this.props.onLogin(this.state.email, this.state.password);
     }
     onEmailChange(event){
@@ -46,10 +44,15 @@ class AccountLoginModal extends React.Component {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
+                {this.props.loginMessage ?
+                <Alert variant="danger">
+                Your email has been confirmed. Please login
+                </Alert>
+                : null}
                 <Form.Label>Email</Form.Label>
                 <Form.Control onChange={this.onEmailChange}/>
                 <Form.Label>Password</Form.Label>
-                <Form.Control onChange={this.onPasswordChange}/>
+                <Form.Control type="password" onChange={this.onPasswordChange}/>
                 <Button variant="link">Forgot password?</Button>
                 <Button onClick={this.props.onRegisterStart} variant="link">Don't hava an account? Create one here</Button>
                

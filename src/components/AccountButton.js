@@ -70,13 +70,14 @@ export class AccountButton extends Component{
         });
     }
     onConfirm(email,code){
-        console.log("onConfirm()");
         var that = this;
-        console.log("email: "+email);
-        console.log("code: "+code);
         var confirmResponsePromise = confirmResponse(email, code);
         confirmResponsePromise.then(function(result){
-            that.setState({modalShowConfirm:false})
+            that.setState({
+                modalShowConfirm:false,
+                modalShowLogin:true,
+                loginMessage:"Your email has been confirmed. Please login"
+            });
             that.props.onConfirm();
         }).catch(function(err){
             console.log("err: "+err);
@@ -116,6 +117,7 @@ export class AccountButton extends Component{
                 onCancel={() => {this.onCancel();this.setState({modalShowLogin:false})}}
                 onLogin ={(email, password) => {this.onLogin(email, password);this.setState({modalShowLogin:false})}}
                 onRegisterStart={() => {this.setState({modalShowLogin:false,modalShowRegister:true})}}
+                loginMessage={this.state.loginMessage}
 
             />
             <AccountRegisterModal
@@ -126,7 +128,7 @@ export class AccountButton extends Component{
             <AccountConfirmModal
                 show={this.state.modalShowConfirm}
                 email={this.state.email}
-                onConfirm={(email,code) =>{this.onConfirm(email,code);this.setState({modalShowConfirm:false});}}
+                onConfirm={(email,code) =>{this.onConfirm(email,code)}}
                 onCancel={() => {this.onCancel();this.setState({modalShowConfirm:false})}}
             />
 
