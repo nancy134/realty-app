@@ -46,7 +46,7 @@ class AccountLoginModal extends React.Component {
             <Modal.Body>
                 {this.props.loginMessage ?
                 <Alert variant="danger">
-                Your email has been confirmed. Please login
+                {this.props.loginMessage}
                 </Alert>
                 : null}
                 <Form.Label>Email</Form.Label>

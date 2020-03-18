@@ -27,7 +27,8 @@ export class AccountButton extends Component{
             authenticated: false,
             modalShowLogin: false,
             modalShowRegister: false,
-            modalShowConfirm: false
+            modalShowConfirm: false,
+            loginMessage: null,
         }
     }
     componentDidMount(){
@@ -36,26 +37,25 @@ export class AccountButton extends Component{
         }
     }
     onCancel(){
-        console.log("onCancel()");
     }
     onLogin(email, password){
         var that = this;
-        console.log("onLogin()");
-        console.log("email: "+email);
-        console.log("password: "+password);
         var loginResponsePromise = loginResponse(email, password);
         loginResponsePromise.then(function(result){
-            that.setState({authenticated: true});
+            that.setState({
+                authenticated: true,
+                modalShowLogin: false,
+                loginMessage: null
+            });
             that.props.onLogin();
         }).catch(function(err){
-           console.log("err: "+err);
+           that.setState({
+               loginMessage: err.message
+           });
         });
     }
     onRegister(email, password, confirmPassword){
-        console.log("onRegister()");
         var that = this;
-        console.log("email: "+email);
-        console.log("password: "+password);
         var signupResponsePromise = signupResponse(email,password);
         signupResponsePromise.then(function(result){
             that.setState({
@@ -84,7 +84,6 @@ export class AccountButton extends Component{
         });
     }
     onMyAccount(){
-        console.log("Go to my account");
         var url = window.location.protocol + "//" + window.location.hostname + "/account";
         window.location.href = url;
     }
@@ -115,7 +114,7 @@ export class AccountButton extends Component{
             <AccountLoginModal
                 show={this.state.modalShowLogin}
                 onCancel={() => {this.onCancel();this.setState({modalShowLogin:false})}}
-                onLogin ={(email, password) => {this.onLogin(email, password);this.setState({modalShowLogin:false})}}
+                onLogin ={(email, password) => {this.onLogin(email, password)}}
                 onRegisterStart={() => {this.setState({modalShowLogin:false,modalShowRegister:true})}}
                 loginMessage={this.state.loginMessage}
 

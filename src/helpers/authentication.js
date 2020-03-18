@@ -42,14 +42,12 @@ export function loginResponse(email, password){
         };
         var signinPromise = auth.signin(signinParams);
         signinPromise.then(function(result){
-            console.log("result: "+result);
             const cookies = new Cookies();
             cookies.set('email',email);
             cookies.set('name', email);
             cookies.set('jwt','dj39fjtyzRwiD09');
             resolve(result);
         }).catch(function(err){
-            console.log("err: "+err);
             reject(err);
         });
     });

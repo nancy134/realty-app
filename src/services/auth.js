@@ -12,7 +12,11 @@ export function signin(params){
         rp(options).then(function(resp){
             resolve(resp);
         }).catch(function(err){
-            reject(err);
+            if (err && err.response && err.response.body){
+                reject(err.response.body);
+            } else {
+                reject(err);
+            }
         });
     });
 }

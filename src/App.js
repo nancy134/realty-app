@@ -28,17 +28,14 @@ class App extends React.Component {
       }
   }
   handleLogin(){
-      console.log("App:handleLogin()");
       this.setState({loggedIn: true});
   }
   handleLogout(){
       this.setState({loggedIn: false});
   }
   handleRegister(){
-      console.log("handleRegister");
   }
   handleConfirm(){
-      console.log("handleConfirm");
   }
   render(){
   return (
