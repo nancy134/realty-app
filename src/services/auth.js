@@ -56,7 +56,12 @@ export function confirm(params){
         rp(options).then(function(resp){
             resolve(resp);
         }).catch(function(err){
-            reject(err);
+            console.log("err: "+JSON.stringify(err));
+            if (err && err.response && err.response.body){
+                reject(err.response.body);
+            } else {
+                reject(err);
+            }
         });
     });
 }

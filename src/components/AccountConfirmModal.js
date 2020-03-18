@@ -16,9 +16,6 @@ class AccountConfirmModal extends React.Component {
         };
     }
     handleConfirm(){
-       console.log("handleConfirm()");
-       console.log("email: "+this.props.email);
-       console.log("code: "+this.state.code);
        this.props.onConfirm(this.props.email,this.state.code);
     }
 
@@ -29,6 +26,7 @@ class AccountConfirmModal extends React.Component {
     }
 
     render(){
+        console.log("this.props.confirmMessage: "+this.props.confirmMessage);
         return(
         <Modal
             size="lg"
@@ -42,10 +40,15 @@ class AccountConfirmModal extends React.Component {
                 </Modal.Title> 
             </Modal.Header>
             <Modal.Body>
-                <Alert variant="danger">
+                <Alert variant="primary">
                     <p>Check your email for confirmation code.</p>
-                    <p>Email was send to {this.props.email}</p>
+                    <p>Email was sent to {this.props.email}</p>
                 </Alert>
+                {this.props.confirmMessage ?
+                <Alert variant="danger">
+                {this.props.confirmMessage}
+                </Alert>
+                : null }
                 <Form.Label>Code</Form.Label>
                 <Form.Control onChange={this.onCodeChange}/>
             </Modal.Body>
