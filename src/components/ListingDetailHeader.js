@@ -57,10 +57,21 @@ class ListingDetailHeader extends React.Component {
         const owner = this.props.owner;
         const edit = "edit";
         const view = "view";
-        var title = "<Address> (<State>)";
+        var address = "<Address>";
+        var city = "<City>"; 
         if (listing){
-            title = listing.address + " (" + listing.city + ")";
+
+            if (listing.address){
+                address = listing.address;
+            }
+            if (listing.displayAddress){
+                address = listing.displayAddress;
+            }
+            if (listing.city){
+                city = listing.city;
+            }
         }
+        var title = address + " (" + city + ")";
 
         var closeButton = "Close";
         if (!listing) closeButton = "Cancel";

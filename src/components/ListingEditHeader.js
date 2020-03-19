@@ -56,6 +56,11 @@ class ListingEditHeader extends React.Component {
     handleSave(){
         var listing = {};
         listing.id = this.state.id;
+        if (this.props.listing){
+            listing.id = this.props.listing.id;
+        } else {
+            listing.id = this.state.id;
+        }
         if (this.state.address) listing.address = this.state.address;
         if (this.state.city) listing.city = this.state.city;
         if (this.state.state) listing.state = this.state.state;
