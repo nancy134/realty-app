@@ -19,7 +19,6 @@ class ListingEditAmenities extends React.Component {
                 })
             );
         }
-        console.log("checkboxes: "+checkboxes);
         if (this.props.listing){
             this.state = {
                 id: this.props.listing.id,

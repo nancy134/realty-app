@@ -26,7 +26,6 @@ class AccountConfirmModal extends React.Component {
     }
 
     render(){
-        console.log("this.props.confirmMessage: "+this.props.confirmMessage);
         return(
         <Modal
             size="lg"

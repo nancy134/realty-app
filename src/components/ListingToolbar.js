@@ -65,7 +65,6 @@ class ListingToolbar extends React.Component {
     }
 
     handleListingToggle(value){
-        console.log("handleListingToggle value: "+value);
         this.props.onListingToggle(value);
     }
 

@@ -7,7 +7,6 @@ import AccountPage from './containers/AccountPage';
 class Routes extends React.Component {
 
 render(){
-   console.log("Routes loggedIn: "+this.props.loggedIn);
   return(
   <Switch loggedIn={this.props.loggedIn}>
     <Route exact path="/" render={() => (
