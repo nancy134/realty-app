@@ -6,7 +6,6 @@ import {
     Image
 } from 'react-bootstrap';
 import {getUserEmail} from '../helpers/authentication';
-import listings from '../services/listings';
 
 class Listings extends React.Component {
    
@@ -14,48 +13,24 @@ class Listings extends React.Component {
         super(props);
         this.showDetailChange = this.showDetailChange.bind(this);
         this.state = {
-            listings: [],
             listingMode: this.props.listingMode
         };
     }
     componentDidMount() {
-        this.fetchListings();
     }
     componentWillUnmount() {
     }
-    shouldComponentUpdate(){
-        return true;
-    }
-    componentDidUpdate(prevProps){
-        if (prevProps.listingMode !== this.props.listingMode){
-            this.setState({listingMode: this.props.listingMode});
-            this.fetchListings();
-        } 
-    }
 
-    fetchListings(){
-        var query = "";
-        if (this.props.listingMode === "myListings" ){
-           query = 'perPage=15&page=1&owner='+getUserEmail();
-        } else {
-           query = 'perPage=15&page=1';
-        }
-        listings.getAll(query, (listings) => {
-           this.setState({
-               listings: listings.listings.rows
-           });
-        }); 
-
-    }
 
     showDetailChange(e){
         this.props.onShowDetailChange(true, e.target.dataset.index);
     }
  
     render() {
+        if (this.props.listings){
         return ( 
             <ListGroup>
-                {this.state.listings.map(listing => 
+                {this.props.listings.map(listing => 
                 (
                 <ListGroup.Item key={listing.id}>
                     <Row>
@@ -95,6 +70,11 @@ class Listings extends React.Component {
             </ListGroup>
 
        ); 
+       } else {
+       return(
+       <p>No listings</p>
+       );
+       }
     }
 }
 export default Listings;

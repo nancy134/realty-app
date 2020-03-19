@@ -48,6 +48,7 @@ class ListingDetail extends React.Component {
                     listingTypes: data.listingTypes,
                     propertyTypes: data.propertyTypes
                 });
+                this.props.onListUpdate();
             });
         } else { // Create
             listing.owner = getUserEmail();
@@ -58,6 +59,7 @@ class ListingDetail extends React.Component {
                     listingTypes: data.listingTypes,
                     propertyTypes: data.propertyTypes
                 });
+                this.props.onListUpdate();
             });
         }
     }

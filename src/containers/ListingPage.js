@@ -8,6 +8,8 @@ import Listings from '../components/Listings';
 import ListingToolbar from '../components/ListingToolbar';
 import ListingPagination from '../components/ListingPagination';
 import ListingDetail from '../components/ListingDetail';
+import listings from '../services/listings';
+import {getUserEmail} from '../helpers/authentication';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -17,6 +19,7 @@ export class ListingPage extends Component {
         this.handleListingToggle = this.handleListingToggle.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
         this.handleOwnerChange = this.handleOwnerChange.bind(this);
+        this.handleListUpdate = this.handleListUpdate.bind(this);
         this.state = {
             showDetail: false,
             editMode: "view",
@@ -49,13 +52,39 @@ export class ListingPage extends Component {
         this.setState({
             listingMode: value
         });
+        this.fetchListings(value);
     }
     handleOwnerChange(value){
         this.setState({
             owner: value
         });
     }
+    handleListUpdate(){
+        this.fetchListings();
+    }
+    fetchListings(listingMode){
+        var lMode = "allListings";
+        if (listingMode){
+            lMode = listingMode;
+        } else {
+            lMode = this.state.listingMode;
+        }
+        var query = "";
+        if (lMode === "myListings" ){
+           query = 'perPage=15&page=1&owner='+getUserEmail();
+        } else {
+           query = 'perPage=15&page=1';
+        }
+        listings.getAll(query, (listings) => {
+           this.setState({
+               listings: listings.listings.rows
+           });
+        }); 
+
+    }
+
     componentDidMount(){
+        this.fetchListings();
     }
     componentWillUnmount(){
     }
@@ -77,14 +106,14 @@ export class ListingPage extends Component {
                 <Row>
                     <Col xs={7} className={showDetail? "rightcol" : "leftcol"}>
                         {showDetail ? (
-                            <ListingDetail editMode={editMode} index={index} showDetail={showDetail} owner={owner} onShowDetailChange={this.handleShowDetailChange} onEditToggle={this.handleEditToggle} onOwnerChange={this.handleOwnerChange}/>
+                            <ListingDetail editMode={editMode} index={index} showDetail={showDetail} owner={owner} onShowDetailChange={this.handleShowDetailChange} onEditToggle={this.handleEditToggle} onOwnerChange={this.handleOwnerChange} onListUpdate={this.handleListUpdate}/>
                         ) : (
                             <ListingMap showDetail={showDetail} />
                         )}
                     </Col>
                     <Col xs={5} className="rightcol" >
                         <ListingPagination />
-                        <Listings listingMode={listingMode} onShowDetailChange={this.handleShowDetailChange} />
+                        <Listings listingMode={listingMode} onShowDetailChange={this.handleShowDetailChange} listings={this.state.listings}/>
                     </Col>
                 </Row>
                 <Row className="bg-secondary">footer</Row>
