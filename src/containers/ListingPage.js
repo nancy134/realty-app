@@ -20,11 +20,13 @@ export class ListingPage extends Component {
         this.handleEditToggle = this.handleEditToggle.bind(this);
         this.handleOwnerChange = this.handleOwnerChange.bind(this);
         this.handleListUpdate = this.handleListUpdate.bind(this);
+        this.handleNewPage = this.handleNewPage.bind(this);
         this.state = {
             showDetail: false,
             editMode: "view",
             listingMode: "allListings",
             owner: false,
+            page: 1
         };
     }
     handleShowDetailChange(showDetail, index){
@@ -52,17 +54,20 @@ export class ListingPage extends Component {
         this.setState({
             listingMode: value
         });
-        this.fetchListings(value);
+        this.fetchListings(value, 1);
     }
     handleOwnerChange(value){
         this.setState({
             owner: value
         });
     }
-    handleListUpdate(){
-        this.fetchListings();
+    handleNewPage(goToPage){
+        this.fetchListings(this.state.listingMode, goToPage);
     }
-    fetchListings(listingMode){
+    handleListUpdate(){
+        this.fetchListings(this.state.listingMode, this.state.page);
+    }
+    fetchListings(listingMode, page){
         var lMode = "allListings";
         if (listingMode){
             lMode = listingMode;
@@ -71,20 +76,23 @@ export class ListingPage extends Component {
         }
         var query = "";
         if (lMode === "myListings" ){
-           query = 'perPage=15&page=1&owner='+getUserEmail();
+           query = "perPage=4&page="+page+"&owner="+getUserEmail();
         } else {
-           query = 'perPage=15&page=1';
+           query = 'perPage=4&page='+page;
         }
         listings.getAll(query, (listings) => {
            this.setState({
-               listings: listings.listings.rows
+               listings: listings.listings.rows,
+               page: listings.page,
+               perPage: listings.perPage,
+               count: listings.listings.count
            });
         }); 
 
     }
 
     componentDidMount(){
-        this.fetchListings();
+        this.fetchListings(this.state.listingMode, this.state.page);
     }
     componentWillUnmount(){
     }
@@ -112,7 +120,7 @@ export class ListingPage extends Component {
                         )}
                     </Col>
                     <Col xs={5} className="rightcol" >
-                        <ListingPagination />
+                        <ListingPagination page={this.state.page} count={this.state.count} perPage={this.state.perPage} onNewPage={this.handleNewPage}/>
                         <Listings listingMode={listingMode} onShowDetailChange={this.handleShowDetailChange} listings={this.state.listings}/>
                     </Col>
                 </Row>
