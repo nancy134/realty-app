@@ -5,13 +5,13 @@ import ListingDetailHeader from './ListingDetailHeader';
 import ListingDetailOverview from './ListingDetailOverview';
 import ListingDetailAvailableSpace from './ListingDetailAvailableSpace';
 import ListingDetailGeneral from './ListingDetailGeneral';
-import ListingDetailAmenities from './ListingDetailAmenities';
-import ListingDetailBrokers from './ListingDetailBrokers';
-import ListingDetailBuildingIncome from './ListingDetailBuildingIncome';
+//import ListingDetailAmenities from './ListingDetailAmenities';
+//import ListingDetailBrokers from './ListingDetailBrokers';
+//import ListingDetailBuildingIncome from './ListingDetailBuildingIncome';
 import ListingDetailUnits from './ListingDetailUnits';
 import ListingDetailTenants from './ListingDetailTenants';
 import ListingDetailPortfolio from './ListingDetailPortfolio';
-import ListingDetailAttachments from './ListingDetailAttachments';
+//import ListingDetailAttachments from './ListingDetailAttachments';
 import listings from '../services/listings';
 import spaces from '../services/spaces';
 import units from '../services/units';
@@ -169,7 +169,7 @@ class ListingDetail extends React.Component {
         const states = this.state.states;
         //const propertyTypes = this.state.propertyTypes;
         const listingTypes = this.state.listingTypes;
-        const allAmenities = this.state.amenities;
+        //const allAmenities = this.state.amenities;
         if (states){
         }
         const owner = this.props.owner;
@@ -190,17 +190,18 @@ class ListingDetail extends React.Component {
                 {(editMode === "edit") || (listing && listing.portfolios.length) > 0 ?
                 <ListingDetailPortfolio listing={listing} editMode={editMode} onPortfolioUpdate={this.handlePortfolioUpdate} getListing={this.getListing} />
                 : null }
-                {(editMode === "edit") ?
-                <ListingDetailAttachments listing={listing} editMode={editMode} />
-                : null }
                 <ListingDetailGeneral listing={listing} editMode={editMode} onListingUpdate={this.handleListingUpdate} getListing={this.getListing}/>
-                {(editMode === "edit") || (listing && listing.amenities) ?
-                <ListingDetailAmenities listing={listing} editMode={editMode}  allAmenities={allAmenities}/>
-                : null }
-                <ListingDetailBuildingIncome listing={listing} editMode={editMode} />
-                <ListingDetailBrokers listing={listing} editMode={editMode} />
+            </div>
+//                {(editMode === "edit") ?
+//                <ListingDetailAttachments listing={listing} editMode={editMode} />
+//                : null }
 
-            </div> 
+                //{(editMode === "edit") || (listing && listing.amenities) ?
+                //<ListingDetailAmenities listing={listing} editMode={editMode}  allAmenities={allAmenities}/>
+                //: null }
+//                <ListingDetailBuildingIncome listing={listing} editMode={editMode} />
+//                <ListingDetailBrokers listing={listing} editMode={editMode} />
+
             );
         } else {
             return null;
