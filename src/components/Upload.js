@@ -89,7 +89,8 @@ class Upload extends Component {
             const formData = new FormData();
             formData.append("image", file, file.name);
             formData.append("listing_id",this.props.listing.id);
-            req.open("POST", "https://listing-api.phowma.com/upload");
+            var url = process.env.REACT_APP_LISTING_SERVICE+"upload";
+            req.open("POST", url);
             req.onreadystatechange = function(){
                 if (req.readyState === 4){
                     if (req.status === 200)
