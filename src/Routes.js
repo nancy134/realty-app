@@ -3,6 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import Home from './containers/Home';
 import ListingPage from './containers/ListingPage';
 import AccountPage from './containers/AccountPage';
+import InstructionPage from './containers/InstructionPage';
 
 class Routes extends React.Component {
 
@@ -16,6 +17,7 @@ render(){
     <Route path="/listing" render={props => (<ListingPage {...props} loggedIn={this.props.loggedIn}/>)}/>
 
     <Route path="/account" exact component={AccountPage} />
+    <Route path="/instructions" exact component={InstructionPage} />
   </Switch>
   );
 }
