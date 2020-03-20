@@ -76,9 +76,9 @@ export class ListingPage extends Component {
         }
         var query = "";
         if (lMode === "myListings" ){
-           query = "perPage=4&page="+page+"&owner="+getUserEmail();
+           query = "perPage=20&page="+page+"&owner="+getUserEmail();
         } else {
-           query = 'perPage=4&page='+page;
+           query = 'perPage=20&page='+page;
         }
         listings.getAll(query, (listings) => {
            this.setState({
