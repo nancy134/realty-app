@@ -40,7 +40,7 @@ class AccountConfirmModal extends React.Component {
             </Modal.Header>
             <Modal.Body>
                 <Alert variant="primary">
-                    <p>Check your email for confirmation code.</p>
+                    <p>Check your email for verification code.</p>
                     <p>Email was sent to {this.props.email}</p>
                 </Alert>
                 {this.props.confirmMessage ?

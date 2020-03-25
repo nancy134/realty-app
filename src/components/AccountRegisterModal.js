@@ -56,6 +56,13 @@ class AccountRegisterModal extends React.Component {
                 <Form.Control onChange={this.onEmailChange}/>
                 <Form.Label>Password</Form.Label>
                 <Form.Control type="password" onChange={this.onPasswordChange}/>
+                <div>Password must be at least 8 characters and contain at lease one:</div>
+                <ul>
+                    <li>Lowercase letter</li>
+                    <li>Uppercase letter</li>
+                    <li>One number</li>
+                    <li>One special charater: ^  $  *  .  ?  - </li>
+                </ul>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={this.props.onCancel}>Cancel</Button>

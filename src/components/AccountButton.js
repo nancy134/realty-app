@@ -82,7 +82,7 @@ export class AccountButton extends Component{
             that.setState({
                 modalShowConfirm:false,
                 modalShowLogin:true,
-                loginMessage:"Your email has been confirmed. Please login",
+                loginMessage:"Your email has been verified. Please login",
                 confirmMessage: null
             });
             that.props.onConfirm();
@@ -117,7 +117,7 @@ export class AccountButton extends Component{
                 )
                 :( 
                 <span>
-                    <Button onClick={() => this.setState({modalShowLogin: true})} variant="success">Login</Button>
+                    <Button onClick={() => this.setState({modalShowLogin: true})} variant="success">Login / Create Account</Button>
                 </span> 
                 )}
             </span>

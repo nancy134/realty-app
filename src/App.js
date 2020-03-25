@@ -41,7 +41,7 @@ class App extends React.Component {
   return (
       <Container fluid className="d-flex flex-column vh-100 vw-100">
           <Navbar>
-              <Navbar.Brand href="#home">
+              <Navbar.Brand href="./home">
                   <img
                   alt="logo" 
                   src="/metropolitan.png"
