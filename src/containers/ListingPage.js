@@ -10,6 +10,7 @@ import ListingPagination from '../components/ListingPagination';
 import ListingDetail from '../components/ListingDetail';
 import listings from '../services/listings';
 import {getUserEmail} from '../helpers/authentication';
+import { isOwner } from '../helpers/authentication';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -21,21 +22,35 @@ export class ListingPage extends Component {
         this.handleOwnerChange = this.handleOwnerChange.bind(this);
         this.handleListUpdate = this.handleListUpdate.bind(this);
         this.handleNewPage = this.handleNewPage.bind(this);
+        this.handleUpdate = this.handleUpdate.bind(this);
+        this.handleCreate = this.handleCreate.bind(this);
+        this.fetchListing = this.fetchListing.bind(this);
+        this.handleFetchListing = this.handleFetchListing.bind(this);
         this.state = {
             showDetail: false,
             editMode: "view",
             listingMode: "allListings",
             owner: false,
-            page: 1
+            page: 1,
+            listingDetail: null
         };
     }
     handleShowDetailChange(showDetail, index){
-        this.setState({
-            showDetail: showDetail,
-            editMode: "view",
-            index: index
-        });
-
+        var editMode = "view";
+        if (index !== this.state.index){
+            editMode = "view";
+        } else {
+            editMode = this.state.editMode;
+        }
+        if (showDetail){
+            this.fetchListing(index,showDetail,editMode);
+        } else {
+            this.setState({
+                showDetail: showDetail,
+                editMode: editMode,
+                index: index
+            });
+        }
     }
     handleEditToggle(value){
         this.setState({
@@ -43,12 +58,10 @@ export class ListingPage extends Component {
         });
     }
     handleAddListing(){
-        this.setState({
-            index: null,
-            editMode: "edit",
-            showDetail: true,
-            owner: true
-        });
+        var index = 0;
+        var showDetail = true;
+        var editMode = "edit";
+        this.fetchListing(index, showDetail, editMode);
     }
     handleListingToggle(value){
         this.setState({
@@ -66,6 +79,63 @@ export class ListingPage extends Component {
     }
     handleListUpdate(){
         this.fetchListings(this.state.listingMode, this.state.page);
+    }
+    handleUpdate(listing){
+        listings.update(listing, (data) => {
+            this.setState({
+                listingDetail: data
+            });
+            this.handleListUpdate();
+        });
+    }
+    handleCreate(listing){
+        listing.owner = getUserEmail();
+        listings.create(listing, (data) => {
+            this.setState({
+                listingDetail: data,
+            });
+            this.handleListUpdate();
+        });
+    }
+    handleFetchListing(){
+        this.fetchListing(
+            this.state.index, 
+            this.state.showDetail, 
+            this.state.editMode
+        );
+    }
+    fetchListing(index, showDetail, editMode){
+        if (index){
+            listings.get(index, (data) => {
+                var owner = false;
+                if (isOwner(data.listing.owner)){
+                    owner = true;
+                }
+                this.setState({
+                    listingDetail: data,
+                    showDetail: showDetail,
+                    editMode: editMode,
+                    index: index,
+                    owner: owner
+                });
+            });
+        } else {
+            listings.getEnums((data) => {
+                var listingDetail = {
+                    listing: null,
+                    states: data.states,
+                    listingTypes: data.listingTypes,
+                    propertyTypes: data.propertyTypes
+                }
+                this.setState({
+                    listingDetail: listingDetail,
+                    showDetail: showDetail,
+                    editMode: editMode,
+                    index: index,
+                    owner: true
+                });
+            });
+        }
     }
     fetchListings(listingMode, page){
         var lMode = "allListings";
@@ -106,22 +176,49 @@ export class ListingPage extends Component {
         var listingMode = this.state.listingMode;
         var loggedIn = this.props.loggedIn;
         var owner = this.state.owner;
+        var listingDetail = this.state.listingDetail;
         return (
             <React.Fragment>
                 <Row className="bg-success">
-                    <ListingToolbar loggedIn={loggedIn} onAddListing={this.handleAddListing} onListingToggle={this.handleListingToggle}/>
+                    <ListingToolbar 
+                        loggedIn={loggedIn} 
+                        onAddListing={this.handleAddListing} 
+                        onListingToggle={this.handleListingToggle}
+                    />
                 </Row>
                 <Row>
                     <Col xs={7} className={showDetail? "rightcol" : "leftcol"}>
                         {showDetail ? (
-                            <ListingDetail editMode={editMode} index={index} showDetail={showDetail} owner={owner} onShowDetailChange={this.handleShowDetailChange} onEditToggle={this.handleEditToggle} onOwnerChange={this.handleOwnerChange} onListUpdate={this.handleListUpdate}/>
+                            <ListingDetail 
+                                editMode={editMode} 
+                                index={index} 
+                                listingDetail={listingDetail} 
+                                showDetail={showDetail} 
+                                owner={owner} 
+                                onShowDetailChange={this.handleShowDetailChange} 
+                                onEditToggle={this.handleEditToggle} 
+                                onOwnerChange={this.handleOwnerChange} 
+                                onListUpdate={this.handleListUpdate} 
+                                onUpdate={this.handleUpdate}
+                                onCreate={this.handleCreate}
+                                onFetchListing={this.handleFetchListing}
+                            />
                         ) : (
                             <ListingMap showDetail={showDetail} />
                         )}
                     </Col>
                     <Col xs={5} className="rightcol" >
-                        <ListingPagination page={this.state.page} count={this.state.count} perPage={this.state.perPage} onNewPage={this.handleNewPage}/>
-                        <Listings listingMode={listingMode} onShowDetailChange={this.handleShowDetailChange} listings={this.state.listings}/>
+                        <ListingPagination 
+                            page={this.state.page} 
+                            count={this.state.count} 
+                            perPage={this.state.perPage} 
+                            onNewPage={this.handleNewPage}
+                        />
+                        <Listings 
+                            listingMode={listingMode} 
+                            onShowDetailChange={this.handleShowDetailChange} 
+                            listings={this.state.listings}
+                        />
                     </Col>
                 </Row>
                 <Row className="bg-secondary">footer</Row>
