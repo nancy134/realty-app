@@ -3,8 +3,7 @@ import {
     Row,
     Col,
     Button,
-    ToggleButtonGroup,
-    ToggleButton
+    ButtonGroup
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -55,8 +54,6 @@ class ListingDetailHeader extends React.Component {
         const listing = this.props.listing;
         const states = this.props.states;
         const owner = this.props.owner;
-        const edit = "edit";
-        const view = "view";
         var address = "<Address>";
         var city = "<City>"; 
         if (listing){
@@ -75,8 +72,12 @@ class ListingDetailHeader extends React.Component {
 
         var closeButton = "Close";
         if (!listing) closeButton = "Cancel";
-        var toggleDefault = view;
-        if (editMode === "edit" && !listing) toggleDefault = edit;
+
+        var editStatus = "";
+        var viewStatus = "";
+        if (editMode === "edit") editStatus = "active";
+        if (editMode === "view") viewStatus = "active"
+
         return(
             <Row className="align-items-center bg-info">
 	        <Col md={6}className="text-white">
@@ -84,10 +85,24 @@ class ListingDetailHeader extends React.Component {
                 </Col>
                 <Col md={6} className="text-right">
                     { owner ?
-                    <ToggleButtonGroup type="radio" name="options" defaultValue={toggleDefault} onChange={this.handleEditToggle}>
-                        <ToggleButton variant="info" value={edit}>Edit</ToggleButton>
-                        <ToggleButton variant="info" value={view}>View</ToggleButton>
-                    </ToggleButtonGroup>
+                    <ButtonGroup>
+                        <Button 
+                            type="radio" 
+                            value="edit" 
+                            onClick={() => this.handleEditToggle("edit")} 
+                            className={editStatus}
+                            variant="info">
+                            Edit
+                        </Button>
+                        <Button 
+                            type="radio" 
+                            value="view" 
+                            onClick={() => this.handleEditToggle("view")}
+                            className={viewStatus} 
+                            variant="info">
+                            View
+                        </Button>
+                    </ButtonGroup>
                     : null }
                     { !listing ?
                     <Button variant="info">Save</Button>
