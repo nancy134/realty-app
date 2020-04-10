@@ -78,12 +78,22 @@ class ListingDetailHeader extends React.Component {
         if (editMode === "edit") editStatus = "active";
         if (editMode === "view") viewStatus = "active"
 
+        var transitionButton = "";
+        if (listing) {
+            if (listing.publishStatus === "Draft"){
+               transitionButton = "Publish";
+            } else if (listing.publishStatus === "Approved" || listing.publishStatus === "Off Market"){
+                transitionButton = "Put on Market"; 
+            } else if (listing.publishStatus === "On Market"){
+                transitionButton = "Take off Market";
+            }
+        }
         return(
             <Row className="align-items-center bg-info">
-	        <Col md={6}className="text-white">
+	        <Col md={4}className="text-white">
                     <div>{title} {editMode === "edit" ? <EditButton listing={listing} states={states} onSave={this.handleSave}/> : null}</div>
                 </Col>
-                <Col md={6} className="text-right">
+                <Col md={8} className="text-right">
                     { owner ?
                     <ButtonGroup>
                         <Button 
@@ -104,9 +114,7 @@ class ListingDetailHeader extends React.Component {
                         </Button>
                     </ButtonGroup>
                     : null }
-                    { !listing ?
-                    <Button variant="info">Save</Button>
-                    : null}
+                    <Button variant="info">{transitionButton}</Button>
                     { listing ? 
                     <Button variant="info"><FontAwesomeIcon icon={faExpand} /> Expand</Button>
                     : null}

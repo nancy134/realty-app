@@ -49,6 +49,7 @@ class Listings extends React.Component {
                                     { listing.owner === getUserEmail() ?
                                     <div className="text-danger">(My listing)</div>
                                     : null}
+                                    <div>Status: {listing.publishStatus}</div>
                                     <div>Built in {listing.yearBuilt}</div>
                                     { listing.spaces.length > 0 ?
                                     <div>{listing.spaces[0].size} sf Space</div>

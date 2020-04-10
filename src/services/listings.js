@@ -10,7 +10,7 @@ export function getAll(query,cb){
 }
 
 export function get(index, cb){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"listing/"+index;
+    var url = process.env.REACT_APP_LISTING_SERVICE+"listings/"+index;
     return fetch(url, {
     }).then(checkStatus).then(parseJSON).then(cb);
 }
