@@ -21,7 +21,7 @@ export function getEnums(cb){
 }
 
 export function create(listing,cb){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"listing";
+    var url = process.env.REACT_APP_LISTING_SERVICE+"listings";
     fetch(url, {
         method: 'post',
         headers: {'Content-Type':'application/json'},
@@ -35,6 +35,14 @@ export function update(data,cb){
         method: 'put',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
+    }).then(checkStatus).then(parseJSON).then(cb);
+}
+
+export function publish(index, cb){
+    var url = process.env.REACT_APP_LISTING_SERVICE+"listings/"+index+"/directPublications";
+    fetch(url, {
+        method: 'post',
+        headers: {'Content-Type':'application/json'},
     }).then(checkStatus).then(parseJSON).then(cb);
 }
 
@@ -54,7 +62,7 @@ function parseJSON(response){
    return response.json();
 }
 
-const listings = {get, getAll,create, update, getEnums};
+const listings = {get, getAll,create, update, getEnums, publish};
 export default listings;
 
 

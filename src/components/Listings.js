@@ -47,9 +47,10 @@ class Listings extends React.Component {
                                     <Card.Title className="listing-title text-danger"  data-index={listing.id} onClick={this.showDetailChange}>{listing.address}</Card.Title>
                                     <Card.Subtitle>{listing.city}, {listing.state}</Card.Subtitle>
                                     { listing.owner === getUserEmail() ?
-                                    <div className="text-danger">(My listing)</div>
+                                    <div>
+                                    <div className="text-danger">Status: {listing.publishStatus}</div>
+                                    </div>
                                     : null}
-                                    <div>Status: {listing.publishStatus}</div>
                                     <div>Built in {listing.yearBuilt}</div>
                                     { listing.spaces.length > 0 ?
                                     <div>{listing.spaces[0].size} sf Space</div>

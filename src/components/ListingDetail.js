@@ -17,6 +17,7 @@ import units from '../services/units';
 import tenants from '../services/tenants';
 import portfolios from '../services/portfolios';
 import { isOwner } from '../helpers/authentication';
+import listingService from '../services/listings';
 
 class ListingDetail extends React.Component {
     constructor(props) {
@@ -28,6 +29,7 @@ class ListingDetail extends React.Component {
         this.handleEditToggle = this.handleEditToggle.bind(this);
         this.handleListingUpdate = this.handleListingUpdate.bind(this);
         this.handleSpaceUpdate = this.handleSpaceUpdate.bind(this);
+        this.handlePublish = this.handlePublish.bind(this);
     }
 
     handleShowDetailChange() {
@@ -43,6 +45,13 @@ class ListingDetail extends React.Component {
             this.props.onCreate(listing);
         }
     }
+    handlePublish(id){
+        listingService.publish(id, (data) => {
+            console.log("handlePublish: data: "+JSON.stringify(data));
+            this.props.onPublish(data);
+        });
+    }
+
     handleSpaceUpdate(space){
         if (space.id){
             spaces.update(space, (data) => {
@@ -136,6 +145,7 @@ class ListingDetail extends React.Component {
                     onShowDetailChange={this.handleShowDetailChange} 
                     onEditToggle={this.handleEditToggle} 
                     onListingUpdate={this.handleListingUpdate} 
+                    onPublish={this.handlePublish}
                 />
                 <ListingDetailOverview 
                     listing={listing} 

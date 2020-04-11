@@ -66,3 +66,11 @@
   height: 60px;
   width: auto;
 }
+
+.closeButton {
+    min-width: 36px;
+}
+
+.expandButton {
+    min-width: 36px;
+}

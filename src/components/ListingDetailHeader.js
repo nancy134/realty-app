@@ -12,6 +12,7 @@ import {
     faPencilAlt
 } from '@fortawesome/free-solid-svg-icons';
 import ListingEditHeader from './ListingEditHeader';
+import TransitionModal from './TransitionModal';
 
 function EditButton(props) {
   const [modalShow, setModalShow] = React.useState(false);
@@ -32,13 +33,33 @@ function EditButton(props) {
       </span>
   );
 }
+function TransitionButton(props) {
+  const [modalShow, setModalShow] = React.useState(false);
 
+  return (
+      <span>
+      <Button variant="info" onClick={() => setModalShow(true)}>
+      {props.buttonText}
+      </Button>
+
+      <TransitionModal
+        show={modalShow}
+        message={props.message}
+        states={props.states}
+        transition={props.buttonText}
+        onHide={() => setModalShow(false)}
+        onPublish={props.onPublish}
+      />
+      </span>
+  );
+}
 class ListingDetailHeader extends React.Component {
     constructor(props){
         super(props);
         this.handleClose = this.handleClose.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
+        this.handlePublish = this.handlePublish.bind(this);
     }
     handleClose(){
         this.props.onShowDetailChange(false);
@@ -49,11 +70,14 @@ class ListingDetailHeader extends React.Component {
     handleEditToggle(value){
         this.props.onEditToggle(value);
     }
+    handlePublish(){
+        this.props.onPublish(this.props.listing.ListingId);
+    }
     render() {
         const editMode = this.props.editMode;
         const listing = this.props.listing;
         const states = this.props.states;
-        const owner = this.props.owner;
+        var owner = this.props.owner;
         var address = "<Address>";
         var city = "<City>"; 
         if (listing){
@@ -70,22 +94,28 @@ class ListingDetailHeader extends React.Component {
         }
         var title = address + " (" + city + ")";
 
-        var closeButton = "Close";
-        if (!listing) closeButton = "Cancel";
+        //var closeButton = "Close";
+        //if (!listing) closeButton = "Cancel";
 
-        var editStatus = "";
-        var viewStatus = "";
-        if (editMode === "edit") editStatus = "active";
-        if (editMode === "view") viewStatus = "active"
+        var editStatus = "p-0";
+        var viewStatus = "p-0";
+        if (editMode === "edit") editStatus = "active p-0";
+        if (editMode === "view") viewStatus = "active p-0"
 
         var transitionButton = "";
+        var message = "";
         if (listing) {
             if (listing.publishStatus === "Draft"){
                transitionButton = "Publish";
+               message = "Your listing will become available to the public and charges will be applied"; 
             } else if (listing.publishStatus === "Approved" || listing.publishStatus === "Off Market"){
-                transitionButton = "Put on Market"; 
+                transitionButton = "Put on Market";
+                message = "Your listing will become public and charges will be applied";
             } else if (listing.publishStatus === "On Market"){
                 transitionButton = "Take off Market";
+                message = "Your listing will be no longer be seen by the public";
+            } else if (listing.publishStatus === "Under Review"){
+                owner = null;
             }
         }
         return(
@@ -95,7 +125,7 @@ class ListingDetailHeader extends React.Component {
                 </Col>
                 <Col md={8} className="text-right">
                     { owner ?
-                    <ButtonGroup>
+                    <ButtonGroup className="border">
                         <Button 
                             type="radio" 
                             value="edit" 
@@ -114,11 +144,17 @@ class ListingDetailHeader extends React.Component {
                         </Button>
                     </ButtonGroup>
                     : null }
-                    <Button variant="info">{transitionButton}</Button>
+                    { owner ?
+                    <TransitionButton 
+                        message={message} 
+                        buttonText={transitionButton} 
+                        onPublish={this.handlePublish}
+                    />
+                    : null }
                     { listing ? 
-                    <Button variant="info"><FontAwesomeIcon icon={faExpand} /> Expand</Button>
+                    <Button className="expandButton p-0" variant="info"><FontAwesomeIcon icon={faExpand} /></Button>
                     : null}
-                    <Button variant="info" onClick={this.handleClose}><FontAwesomeIcon icon={faTimes}/> {closeButton}</Button>
+                    <Button className="closeButton p-0" variant="info" onClick={this.handleClose}><FontAwesomeIcon icon={faTimes}/></Button>
                 </Col>
             </Row>
         );

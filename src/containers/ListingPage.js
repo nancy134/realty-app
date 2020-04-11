@@ -26,6 +26,7 @@ export class ListingPage extends Component {
         this.handleCreate = this.handleCreate.bind(this);
         this.fetchListing = this.fetchListing.bind(this);
         this.handleFetchListing = this.handleFetchListing.bind(this);
+        this.handlePublish = this.handlePublish.bind(this);
         this.state = {
             showDetail: false,
             editMode: "view",
@@ -97,7 +98,13 @@ export class ListingPage extends Component {
             this.handleListUpdate();
         });
     }
+    handlePublish(data){
+        this.setState({
+            listingDetail: data,
+        });
+    }
     handleFetchListing(){
+        console.log("handleFetchListing: "+this.state.index);
         this.fetchListing(
             this.state.index, 
             this.state.showDetail, 
@@ -202,6 +209,7 @@ export class ListingPage extends Component {
                                 onUpdate={this.handleUpdate}
                                 onCreate={this.handleCreate}
                                 onFetchListing={this.handleFetchListing}
+                                onPublish={this.handlePublish}
                             />
                         ) : (
                             <ListingMap showDetail={showDetail} />
