@@ -49,6 +49,7 @@ function TransitionButton(props) {
         transition={props.buttonText}
         onHide={() => setModalShow(false)}
         onPublish={props.onPublish}
+        onUnpublish={props.onUnpublish}
       />
       </span>
   );
@@ -60,6 +61,7 @@ class ListingDetailHeader extends React.Component {
         this.handleSave = this.handleSave.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
         this.handlePublish = this.handlePublish.bind(this);
+        this.handleUnpublish = this.handleUnpublish.bind(this);
     }
     handleClose(){
         this.props.onShowDetailChange(false);
@@ -72,6 +74,9 @@ class ListingDetailHeader extends React.Component {
     }
     handlePublish(){
         this.props.onPublish(this.props.listing.ListingId);
+    }
+    handleUnpublish(){
+        this.props.onUnpublish(this.props.listing.ListingId);
     }
     render() {
         const editMode = this.props.editMode;
@@ -149,6 +154,7 @@ class ListingDetailHeader extends React.Component {
                         message={message} 
                         buttonText={transitionButton} 
                         onPublish={this.handlePublish}
+                        onUnpublish={this.handleUnpublish}
                     />
                     : null }
                     { listing ? 

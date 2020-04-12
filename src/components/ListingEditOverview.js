@@ -21,6 +21,7 @@ class ListingEditOverview extends React.Component {
         if (this.props.listing){
             this.state = {
                 id: this.props.listing.id,
+                ListingId: this.props.listing.ListingId,
                 listingType: this.props.listing.listingType ? this.props.listing.listingType : "For Lease",
                 listingPrice: this.props.listing.listingPrice ? this.props.listing.listingPrice : "",
                 shortDescription: this.props.listing.shortDescription ? this.props.listing.shortDescription : "",
@@ -30,6 +31,7 @@ class ListingEditOverview extends React.Component {
         } else {
            this.state = {
                 id: null,
+                ListingId: null,
                 listingType: "For Lease",
                 listingPrices: "",
                 shortDescription: "",
@@ -63,9 +65,11 @@ class ListingEditOverview extends React.Component {
         var listing = {};
         if (this.props.listing){
 
-            listing.id = this.props.listing.id;
+            //listing.id = this.props.listing.id;
+            listing.ListingId = this.props.listing.ListingId;
         } else {
-            listing.id = this.state.id;
+            //listing.id = this.state.id;
+            listing.ListingId = this.state.ListingId;
         }
           
         if (this.state.listingType) listing.listingType = this.state.listingType;

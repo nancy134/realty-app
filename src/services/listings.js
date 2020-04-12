@@ -30,7 +30,8 @@ export function create(listing,cb){
 }
 
 export function update(data,cb){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"listing/"+data.id;
+    console.log("data.ListingId: "+data.ListingId);
+    var url = process.env.REACT_APP_LISTING_SERVICE+"listings/"+data.ListingId;
     fetch(url, {
         method: 'put',
         headers: {'Content-Type': 'application/json'},
@@ -42,6 +43,14 @@ export function publish(index, cb){
     var url = process.env.REACT_APP_LISTING_SERVICE+"listings/"+index+"/directPublications";
     fetch(url, {
         method: 'post',
+        headers: {'Content-Type':'application/json'},
+    }).then(checkStatus).then(parseJSON).then(cb);
+}
+
+export function unpublish(index, cb){
+    var url = process.env.REACT_APP_LISTING_SERVICE+"listings/"+index+"/publications";
+    fetch(url, {
+        method: 'delete',
         headers: {'Content-Type':'application/json'},
     }).then(checkStatus).then(parseJSON).then(cb);
 }
@@ -62,7 +71,7 @@ function parseJSON(response){
    return response.json();
 }
 
-const listings = {get, getAll,create, update, getEnums, publish};
+const listings = {get, getAll,create, update, getEnums, publish, unpublish};
 export default listings;
 
 

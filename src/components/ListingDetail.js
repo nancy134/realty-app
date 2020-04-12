@@ -30,6 +30,7 @@ class ListingDetail extends React.Component {
         this.handleListingUpdate = this.handleListingUpdate.bind(this);
         this.handleSpaceUpdate = this.handleSpaceUpdate.bind(this);
         this.handlePublish = this.handlePublish.bind(this);
+        this.handleUnpublish = this.handleUnpublish.bind(this);
     }
 
     handleShowDetailChange() {
@@ -49,6 +50,11 @@ class ListingDetail extends React.Component {
         listingService.publish(id, (data) => {
             console.log("handlePublish: data: "+JSON.stringify(data));
             this.props.onPublish(data);
+        });
+    }
+    handleUnpublish(id){
+        listingService.unpublish(id, (data) => {
+            this.props.onUnpublish(data);
         });
     }
 
@@ -146,6 +152,7 @@ class ListingDetail extends React.Component {
                     onEditToggle={this.handleEditToggle} 
                     onListingUpdate={this.handleListingUpdate} 
                     onPublish={this.handlePublish}
+                    onUnpublish={this.handleUnpublish}
                 />
                 <ListingDetailOverview 
                     listing={listing} 
