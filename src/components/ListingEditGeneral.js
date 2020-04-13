@@ -18,7 +18,7 @@ class ListingEditGeneral extends React.Component {
         this.onFloorsChange = this.onFloorsChange.bind(this);
         this.onTotalNumberOfUnitsChange = this.onTotalNumberOfUnitsChange.bind(this);
         this.onBuildingClassChange = this.onBuildingClassChange.bind(this);
-        this.onCeiingHeightChange = this.onCeilingHeightChange.bind(this);
+        this.onCeilingHeightChange = this.onCeilingHeightChange.bind(this);
         this.onDriveInDoorsChange = this.onDriveInDoorsChange.bind(this);
         this.onLoadingDocksChange = this.onLoadingDocksChange.bind(this);
         this.onYearBuiltChange = this.onYearBuiltChange.bind(this);
@@ -28,6 +28,7 @@ class ListingEditGeneral extends React.Component {
         if (this.props.listing){
             this.state = {
                 id: this.props.listing.id,
+                ListingId: this.props.listing.ListingId,
                 propertyType: this.props.listing.propertyType ? this.props.listing.propertyType : "",
                 totalBuildingSize: this.props.listing.totalBuildingSize ? this.props.listing.totalBuildingSize : "",
                 lotSize : this.props.listing.lotSize ? this.props.listing.lotSize : "",
@@ -48,6 +49,7 @@ class ListingEditGeneral extends React.Component {
         } else {
             this.state = {
                 id: null,
+                ListingId: null,
                 propertyType: "",
                 totalBuildingSize : "",
                 lotSize : "",
@@ -144,9 +146,9 @@ class ListingEditGeneral extends React.Component {
     handleSave(){
         var listing = {};
         if (this.props.listing){
-            listing.id = this.props.listing.id;
+            listing.ListingId = this.props.listing.ListingId;
         } else {
-            listing.id = this.state.id;
+            listing.ListingId = this.state.ListingId;
         }
         if (this.state.propertyType) listing.propertyType = this.state.propertyType;
         if (this.state.totalBuildingSize) listing.totalBuildingSize = this.state.totalBuildingSize;
