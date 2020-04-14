@@ -27,7 +27,7 @@ class Listings extends React.Component {
     }
  
     render() {
-        if (this.props.listings){
+        if (this.props.listings && this.props.listings.length){
         return ( 
             <ListGroup>
                 {this.props.listings.map(listing => 

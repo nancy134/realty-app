@@ -67,6 +67,7 @@ class ListingDetailHeader extends React.Component {
         this.props.onShowDetailChange(false);
     }
     handleSave(listing){
+        console.log("handleSave: listing: "+JSON.stringify(listing));
         this.props.onListingUpdate(listing);
     }
     handleEditToggle(value){

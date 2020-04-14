@@ -104,7 +104,7 @@ class ListingEditAvailableSpace extends React.Component {
     handleSave(){
         var space = {};
         space.id = this.state.id;
-        if (this.props.listing) space.ListingId = this.props.listing.id;
+        if (this.props.listing) space.ListingVersionId = this.props.listing.id;
         if (this.state.unit) space.unit = this.state.unit;
         if (this.state.size) space.size = this.state.size;
         if (this.state.price) space.price = this.state.price;

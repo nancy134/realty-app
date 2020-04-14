@@ -83,8 +83,9 @@ class ListingDetailOverview extends React.Component {
         this.props.getListing();
     }
     render() {
-        var shortDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vitae.";
-        var longDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae aliquet purus. In sollicitudin lobortis sollicitudin. Morbi sagittis ornare lorem, sed volutpat dolor. Vestibulum ac erat et ante cursus bibendum at in urna. Duis quis ex sapien. Sed massa mauris, consectetur eget nisl vel, tincidunt varius dolor. Cras porttitor tortor mauris, ut congue odio fringilla id. Aenean pretium a ante ut fermentum. Donec fringilla quam et felis tempor varius.";
+
+        var shortDescription = "Lorem.";
+        var longDescription = "Lorem ipsum.";
         var defaultImage = {
             original: "/default.jpg"
         };

@@ -40,6 +40,7 @@ class ListingDetail extends React.Component {
         this.props.onEditToggle(value);
     }
     handleListingUpdate(listing){
+        console.log("handleListingUpdate: listing: "+JSON.stringify(listing));
         if (this.props.listingDetail && this.props.listingDetail.listing){
             this.props.onUpdate(listing);
         } else { // Create
@@ -61,11 +62,13 @@ class ListingDetail extends React.Component {
     handleSpaceUpdate(space){
         if (space.id){
             spaces.update(space, (data) => {
-                this.props.onFetchListing();
+                console.log("set ListingVersionIndex: "+JSON.stringify(data));
+                this.props.onFetchListing(data.ListingVersionId);
             });
         } else {
             spaces.create(space, (data) => {
-                this.props.onFetchListing();
+                console.log("set ListingVersionIndex: "+JSON.stringify(data));
+                this.props.onFetchListing(data.ListingVersionId);
             });
         }
     }

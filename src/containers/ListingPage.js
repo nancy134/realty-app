@@ -80,21 +80,28 @@ export class ListingPage extends Component {
         this.fetchListings(this.state.listingMode, goToPage);
     }
     handleListUpdate(){
+        console.log("handleListUpdate");
         this.fetchListings(this.state.listingMode, this.state.page);
     }
     handleUpdate(listing){
+        console.log("handleUpdate: listing: "+JSON.stringify(listing));
         listings.update(listing, (data) => {
+            console.log("data: "+JSON.stringify(data));
             this.setState({
-                listingDetail: data
+                listingDetail: data,
+                index: data.listing.id
             });
             this.handleListUpdate();
         });
     }
     handleCreate(listing){
+        console.log("handleCreate: listing: "+JSON.stringify(listing));
         listing.owner = getUserEmail();
         listings.create(listing, (data) => {
+            console.log("data: "+JSON.stringify(data));
             this.setState({
                 listingDetail: data,
+                index: data.listing.id
             });
             this.handleListUpdate();
         });
@@ -103,16 +110,20 @@ export class ListingPage extends Component {
         this.setState({
             listingDetail: data,
         });
+        this.handleListUpdate();
     }
     handleUnpublish(data){
         this.setState({
             listingDetail: data
         });
+        this.handleListUpdate();
     }
-    handleFetchListing(){
-        console.log("handleFetchListing: "+this.state.index);
+    handleFetchListing(index){
+        var fetchIndex = this.state.index;
+        if (index) fetchIndex = index;
+        console.log("handleFetchListing: fetchIndex"+fetchIndex);
         this.fetchListing(
-            this.state.index, 
+            fetchIndex, 
             this.state.showDetail, 
             this.state.editMode
         );
@@ -151,6 +162,8 @@ export class ListingPage extends Component {
         }
     }
     fetchListings(listingMode, page){
+        console.log("fetchListing: listingMode: "+listingMode);
+        console.log("page: "+page);
         var lMode = "allListings";
         if (listingMode){
             lMode = listingMode;
@@ -164,6 +177,7 @@ export class ListingPage extends Component {
            query = 'perPage=20&page='+page;
         }
         listings.getAll(query, (listings) => {
+           console.log("listings: "+JSON.stringify(listings));
            this.setState({
                listings: listings.listings.rows,
                page: listings.page,
