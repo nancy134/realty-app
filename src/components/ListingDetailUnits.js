@@ -61,7 +61,6 @@ class ListingDetailUnits extends React.Component {
         this.handleSave = this.handleSave.bind(this);
     }
     handleSave(unit){
-        console.log("ListingDetailUnits:handleSave");
         this.props.onUnitUpdate(unit);
     }
     render(){

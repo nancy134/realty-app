@@ -60,7 +60,7 @@ class ListingEditUnit extends React.Component {
     handleSave(){
         var unit = {};
         unit.id = this.state.id;
-        if (this.props.listing) unit.ListingId = this.props.listing.id;
+        if (this.props.listing) unit.ListingVersionId = this.props.listing.id;
         if (this.state.description) unit.description = this.state.description;
         if (this.state.numUnits) unit.numUnits = this.state.numUnits;
         if (this.state.space) unit.space = this.state.space;

@@ -29,6 +29,7 @@ class ListingDetail extends React.Component {
         this.handleEditToggle = this.handleEditToggle.bind(this);
         this.handleListingUpdate = this.handleListingUpdate.bind(this);
         this.handleSpaceUpdate = this.handleSpaceUpdate.bind(this);
+        this.handleUnitUpdate = this.handleUnitUpdate.bind(this);
         this.handlePublish = this.handlePublish.bind(this);
         this.handleUnpublish = this.handleUnpublish.bind(this);
     }
@@ -62,12 +63,10 @@ class ListingDetail extends React.Component {
     handleSpaceUpdate(space){
         if (space.id){
             spaces.update(space, (data) => {
-                console.log("set ListingVersionIndex: "+JSON.stringify(data));
                 this.props.onFetchListing(data.ListingVersionId);
             });
         } else {
             spaces.create(space, (data) => {
-                console.log("set ListingVersionIndex: "+JSON.stringify(data));
                 this.props.onFetchListing(data.ListingVersionId);
             });
         }
@@ -75,11 +74,11 @@ class ListingDetail extends React.Component {
     handleUnitUpdate(unit){
          if (unit.id){
              units.update(unit, (data) => {
-                 this.props.onFetchListing();
+                 this.props.onFetchListing(data.ListingVersionId);
              });
          } else {
              units.create(unit, (data) => {
-                 this.props.onFetchListing();
+                 this.props.onFetchListing(data.ListingVersionId);
              });
          }
     }

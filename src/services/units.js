@@ -10,13 +10,13 @@ export function getAll(query,cb){
 }
 
 export function get(index, cb){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"unit/"+index;
+    var url = process.env.REACT_APP_LISTING_SERVICE+"units/"+index;
     return fetch(url, {
     }).then(checkStatus).then(parseJSON).then(cb);
 }
 
 export function create(unit,cb){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"unit";
+    var url = process.env.REACT_APP_LISTING_SERVICE+"units";
     fetch(url, {
         method: 'post',
         headers: {'Content-Type':'application/json'},
@@ -25,7 +25,7 @@ export function create(unit,cb){
 }
 
 export function update(data,cb){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"unit/"+data.id;
+    var url = process.env.REACT_APP_LISTING_SERVICE+"units/"+data.id;
     fetch(url, {
         method: 'put',
         headers: {'Content-Type': 'application/json'},
