@@ -47,7 +47,7 @@ class ListingEditTenant extends React.Component {
     handleSave(){
         var tenant = {};
         tenant.id = this.state.id;
-        if (this.props.listing) tenant.ListingId = this.props.listing.id;
+        if (this.props.listing) tenant.ListingVersionId = this.props.listing.id;
         if (this.state.tenant) tenant.tenant = this.state.tenant;
         if (this.state.space) tenant.space = this.state.space;
         if (this.state.leaseEnds) tenant.leaseEnds = this.state.leaseEnds;

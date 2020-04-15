@@ -16,7 +16,7 @@ export function get(index, cb){
 }
 
 export function create(tenant,cb){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"tenant";
+    var url = process.env.REACT_APP_LISTING_SERVICE+"tenants";
     fetch(url, {
         method: 'post',
         headers: {'Content-Type':'application/json'},
@@ -25,7 +25,7 @@ export function create(tenant,cb){
 }
 
 export function update(data,cb){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"tenant/"+data.id;
+    var url = process.env.REACT_APP_LISTING_SERVICE+"tenants/"+data.id;
     fetch(url, {
         method: 'put',
         headers: {'Content-Type': 'application/json'},

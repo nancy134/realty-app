@@ -31,6 +31,7 @@ class ListingDetail extends React.Component {
         this.handleSpaceUpdate = this.handleSpaceUpdate.bind(this);
         this.handleUnitUpdate = this.handleUnitUpdate.bind(this);
         this.handlePortfolioUpdate = this.handlePortfolioUpdate.bind(this);
+        this.handleTenantUpdate = this.handleTenantUpdate.bind(this);
         this.handlePublish = this.handlePublish.bind(this);
         this.handleUnpublish = this.handleUnpublish.bind(this);
     }
@@ -84,11 +85,11 @@ class ListingDetail extends React.Component {
     handleTenantUpdate(tenant){
         if (tenant.id){
             tenants.update(tenant, (data) => {
-                this.props.onFetchListing();
+                this.props.onFetchListing(data.ListingVersionId);
             });
         } else {
             tenants.create(tenant, (data) => {
-                this.props.onFetchListing();
+                this.props.onFetchListing(data.ListingVersionId);
             });
         }
     }
