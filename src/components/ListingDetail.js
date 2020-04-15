@@ -30,6 +30,7 @@ class ListingDetail extends React.Component {
         this.handleListingUpdate = this.handleListingUpdate.bind(this);
         this.handleSpaceUpdate = this.handleSpaceUpdate.bind(this);
         this.handleUnitUpdate = this.handleUnitUpdate.bind(this);
+        this.handlePortfolioUpdate = this.handlePortfolioUpdate.bind(this);
         this.handlePublish = this.handlePublish.bind(this);
         this.handleUnpublish = this.handleUnpublish.bind(this);
     }
@@ -41,7 +42,6 @@ class ListingDetail extends React.Component {
         this.props.onEditToggle(value);
     }
     handleListingUpdate(listing){
-        console.log("handleListingUpdate: listing: "+JSON.stringify(listing));
         if (this.props.listingDetail && this.props.listingDetail.listing){
             this.props.onUpdate(listing);
         } else { // Create
@@ -50,7 +50,6 @@ class ListingDetail extends React.Component {
     }
     handlePublish(id){
         listingService.publish(id, (data) => {
-            console.log("handlePublish: data: "+JSON.stringify(data));
             this.props.onPublish(data);
         });
     }
@@ -96,11 +95,11 @@ class ListingDetail extends React.Component {
     handlePortfolioUpdate(portfolio){
         if (portfolio.id){
             portfolios.update(portfolio, (data) => {
-                this.props.onFetchListing();
+                this.props.onFetchListing(data.ListingVersionId);
             });
         } else {
             portfolios.create(portfolio, (data) => {
-                this.props.onFetchListing();
+                this.props.onFetchListing(data.ListingVersionId);
             });
         }
     } 

@@ -55,7 +55,7 @@ class ListingEditPortfolio extends React.Component {
     handleSave(){
         var portfolio = {};
         portfolio.id = this.state.id;
-        if (this.props.portfolio) portfolio.ListingId = this.props.listing.id;
+        if (this.props.portfolio) portfolio.ListingVersionId = this.props.listing.id;
         if (this.state.tenant) portfolio.tenant = this.state.tenant;
         if (this.state.buildingSize) portfolio.buildingSize = this.state.buildingSize;
         if (this.state.lotSize) portfolio.lotSize = this.state.lotSize;

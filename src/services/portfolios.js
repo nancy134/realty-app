@@ -10,13 +10,13 @@ export function getAll(query,cb){
 }
 
 export function get(index, cb){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"portfolio/"+index;
+    var url = process.env.REACT_APP_LISTING_SERVICE+"portfolios/"+index;
     return fetch(url, {
     }).then(checkStatus).then(parseJSON).then(cb);
 }
 
 export function create(portfolio,cb){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"portfolio";
+    var url = process.env.REACT_APP_LISTING_SERVICE+"portfolios";
     fetch(url, {
         method: 'post',
         headers: {'Content-Type':'application/json'},
@@ -25,7 +25,7 @@ export function create(portfolio,cb){
 }
 
 export function update(data,cb){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"portfolio/"+data.id;
+    var url = process.env.REACT_APP_LISTING_SERVICE+"portfolios/"+data.id;
     fetch(url, {
         method: 'put',
         headers: {'Content-Type': 'application/json'},

@@ -77,7 +77,7 @@ class ListingDetailPortfolio extends React.Component {
                 </Col>
             </Row>
             <Row className="bg-light shadow">
-                <Col md={4} className="font-weight-bold">Tenant</Col>
+                <Col md={3} className="font-weight-bold">Tenant</Col>
                 <Col md={2} className="font-weight-bold">Building Size</Col>
                 <Col md={2} className="font-weight-bold">Lot Size</Col>
                 <Col md={2} className="font-weight-bold">Type</Col>
