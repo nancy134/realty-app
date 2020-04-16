@@ -219,6 +219,7 @@ export class ListingPage extends Component {
                                 listingDetail={listingDetail} 
                                 showDetail={showDetail} 
                                 owner={owner} 
+                                listingMode={listingMode}
                                 onShowDetailChange={this.handleShowDetailChange} 
                                 onEditToggle={this.handleEditToggle} 
                                 onOwnerChange={this.handleOwnerChange} 

@@ -12,9 +12,9 @@ class Listings extends React.Component {
     constructor(props) {
         super(props);
         this.showDetailChange = this.showDetailChange.bind(this);
-        this.state = {
-            listingMode: this.props.listingMode
-        };
+        //this.state = {
+        //    listingMode: this.props.listingMode
+        //};
     }
     componentDidMount() {
     }
@@ -27,10 +27,33 @@ class Listings extends React.Component {
     }
  
     render() {
+
+        console.log("this.props.listings: "+JSON.stringify(this.props.listings));
+        console.log("this.props.listingMode: "+this.props.listingMode);
         if (this.props.listings && this.props.listings.length){
+ console.log("this.props.listings.length: "+this.props.listings.length);
+
+        var listings = [];
+        for (var i=0; i<this.props.listings.length; i++){
+            console.log("i: "+i);
+            if (this.props.listingMode === "allListings"){
+                console.log("this.props.listings[i].latestApprovedId; "+this.props.listings[i].latestApprovedId);
+               if (this.props.listings[i].latestApprovedId){
+                   listings.push(this.props.listings[i].latestApprovedVersion);
+               }
+            } else if (this.props.listingMode === "myListings"){
+               if (this.props.listings[i].latestDraftId){
+                   listings.push(this.props.listings[i].latestDraftVersion);
+               } else if  (this.props.listings.listing[i].latestApprovedId){
+                    listings.push(this.props.listings[i].latestApprovedVersion);
+               }
+
+            }
+        }
+        console.log("listings: "+JSON.stringify(listings));
         return ( 
             <ListGroup>
-                {this.props.listings.map(listing => 
+                {listings.map(listing => 
                 (
                 <ListGroup.Item key={listing.id}>
                     <Row>

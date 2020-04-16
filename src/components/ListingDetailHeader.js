@@ -83,6 +83,7 @@ class ListingDetailHeader extends React.Component {
         const editMode = this.props.editMode;
         const listing = this.props.listing;
         const states = this.props.states;
+        const listingMode = this.props.listingMode;
         var owner = this.props.owner;
         var address = "<Address>";
         var city = "<City>"; 
@@ -130,7 +131,7 @@ class ListingDetailHeader extends React.Component {
                     <div>{title} {editMode === "edit" ? <EditButton listing={listing} states={states} onSave={this.handleSave}/> : null}</div>
                 </Col>
                 <Col md={8} className="text-right">
-                    { owner ?
+                    { owner && listingMode === "myListings" ?
                     <ButtonGroup className="border">
                         <Button 
                             type="radio" 

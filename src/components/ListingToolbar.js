@@ -94,7 +94,7 @@ class ListingToolbar extends React.Component {
                     <Col xs={2} >
                        { this.props.loggedIn ?
                         <ToggleButtonGroup type="radio" name="options" defaultValue={allListings} onChange={this.handleListingToggle}>
-                            <ToggleButton value={allListings}>All Listings</ToggleButton>
+                            <ToggleButton value={allListings}>Public Listings</ToggleButton>
                             <ToggleButton value={myListings}>My Listings</ToggleButton>
                         </ToggleButtonGroup>
                         : null }

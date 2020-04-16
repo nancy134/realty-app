@@ -134,7 +134,7 @@ class ListingDetail extends React.Component {
         //const propertyTypes = this.state.propertyTypes;
         const listingTypes = this.state.listingTypes;
         //const allAmenities = this.state.amenities;
-
+        const listingMode = this.props.listingMode;
         var listing = null;
         if (this.props.listingDetail){
            listing = this.props.listingDetail.listing;
@@ -150,7 +150,8 @@ class ListingDetail extends React.Component {
                     listing={listing} 
                     states={states} 
                     owner={owner} 
-                    editMode={editMode} 
+                    editMode={editMode}
+                    listingMode={listingMode} 
                     onShowDetailChange={this.handleShowDetailChange} 
                     onEditToggle={this.handleEditToggle} 
                     onListingUpdate={this.handleListingUpdate} 
