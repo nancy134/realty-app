@@ -144,9 +144,10 @@ class Upload extends Component {
         }
     }
     componentDidMount(){
-        this.props.shareMethods(this.doAlert.bind(this));
+        this.props.shareMethods(this.handleUploadFiles.bind(this));
     }
-    doAlert(){
+    handleUploadFiles(){
+        console.log("handleUploadFiles()");
         this.uploadFiles();
     }
     render(){

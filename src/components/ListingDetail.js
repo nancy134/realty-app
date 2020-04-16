@@ -43,6 +43,7 @@ class ListingDetail extends React.Component {
         this.props.onEditToggle(value);
     }
     handleListingUpdate(listing){
+        console.log("handleListingUpdate()");
         if (this.props.listingDetail && this.props.listingDetail.listing){
             this.props.onUpdate(listing);
         } else { // Create

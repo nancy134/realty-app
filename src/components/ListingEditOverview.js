@@ -62,6 +62,7 @@ class ListingEditOverview extends React.Component {
     }
 
     handleSave(){
+        console.log("handleSave()");
         var listing = {};
         if (this.props.listing){
 
@@ -77,14 +78,16 @@ class ListingEditOverview extends React.Component {
         if (this.state.shortDescription) listing.shortDescription = this.state.shortDescription;
         if (this.state.longDescription) listing.longDescription = this.state.longDescription;
         this.props.onSave(listing);
-        this.childDoAlert();
+        this.uploadFiles();
     }
     onImageUploadFinished(){
+        console.log("onImageUloadFinished()");
         this.props.onHide();
         this.props.getListing();
     }
-    acceptMethods(childDoAlert){
-        this.childDoAlert = childDoAlert;
+    acceptMethods(uploadFiles){
+        console.log("accepthMethods()");
+        this.uploadFiles = uploadFiles;
     }
     render(){
         var listingTypes = null;

@@ -48,6 +48,7 @@ class ListingDetailOverview extends React.Component {
     handleEdit(){
     }
     handleSave(listing){
+        console.log("handleSave");
         this.props.onListingUpdate(listing);
     }
     renderLeftNav(onClick, disabled){
@@ -76,8 +77,9 @@ class ListingDetailOverview extends React.Component {
         </button>
         );
     }
-    acceptMethods(childDoAlert){
-        this.ChildDoAlert = childDoAlert;
+    acceptMethods(uploadFiles){
+        console.log("acceptMethods");
+        this.upLoadFiles = uploadFiles;
     }
     getListing(){
         this.props.getListing();

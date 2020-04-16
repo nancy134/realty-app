@@ -86,7 +86,6 @@ export class ListingPage extends Component {
     handleUpdate(listing){
         console.log("handleUpdate: listing: "+JSON.stringify(listing));
         listings.update(listing, (data) => {
-            console.log("data: "+JSON.stringify(data));
             this.setState({
                 listingDetail: data,
                 index: data.listing.id
@@ -98,7 +97,6 @@ export class ListingPage extends Component {
         console.log("handleCreate: listing: "+JSON.stringify(listing));
         listing.owner = getUserEmail();
         listings.create(listing, (data) => {
-            console.log("data: "+JSON.stringify(data));
             this.setState({
                 listingDetail: data,
                 index: data.listing.id
@@ -121,7 +119,7 @@ export class ListingPage extends Component {
     handleFetchListing(index){
         var fetchIndex = this.state.index;
         if (index) fetchIndex = index;
-        console.log("handleFetchListing: fetchIndex"+fetchIndex);
+        console.log("handleFetchListing: fetchIndex: "+fetchIndex);
         this.fetchListing(
             fetchIndex, 
             this.state.showDetail, 
@@ -177,7 +175,6 @@ export class ListingPage extends Component {
            query = 'perPage=20&page='+page;
         }
         listings.getAll(query, (listings) => {
-           console.log("listings: "+JSON.stringify(listings));
            this.setState({
                listings: listings.listings.rows,
                page: listings.page,
