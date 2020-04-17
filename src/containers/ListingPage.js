@@ -80,11 +80,9 @@ export class ListingPage extends Component {
         this.fetchListings(this.state.listingMode, goToPage);
     }
     handleListUpdate(){
-        console.log("handleListUpdate");
         this.fetchListings(this.state.listingMode, this.state.page);
     }
     handleUpdate(listing){
-        console.log("handleUpdate: listing: "+JSON.stringify(listing));
         listings.update(listing, (data) => {
             this.setState({
                 listingDetail: data,
@@ -94,7 +92,6 @@ export class ListingPage extends Component {
         });
     }
     handleCreate(listing){
-        console.log("handleCreate: listing: "+JSON.stringify(listing));
         listing.owner = getUserEmail();
         listings.create(listing, (data) => {
             this.setState({
@@ -119,7 +116,6 @@ export class ListingPage extends Component {
     handleFetchListing(index){
         var fetchIndex = this.state.index;
         if (index) fetchIndex = index;
-        console.log("handleFetchListing: fetchIndex: "+fetchIndex);
         this.fetchListing(
             fetchIndex, 
             this.state.showDetail, 
@@ -160,8 +156,6 @@ export class ListingPage extends Component {
         }
     }
     fetchListings(listingMode, page){
-        console.log("fetchListing: listingMode: "+listingMode);
-        console.log("page: "+page);
         var lMode = "allListings";
         if (listingMode){
             lMode = listingMode;

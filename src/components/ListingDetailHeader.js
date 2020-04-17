@@ -67,7 +67,6 @@ class ListingDetailHeader extends React.Component {
         this.props.onShowDetailChange(false);
     }
     handleSave(listing){
-        console.log("handleSave: listing: "+JSON.stringify(listing));
         this.props.onListingUpdate(listing);
     }
     handleEditToggle(value){
@@ -83,7 +82,6 @@ class ListingDetailHeader extends React.Component {
         const editMode = this.props.editMode;
         const listing = this.props.listing;
         const states = this.props.states;
-        const listingMode = this.props.listingMode;
         var owner = this.props.owner;
         var address = "<Address>";
         var city = "<City>"; 
@@ -125,13 +123,14 @@ class ListingDetailHeader extends React.Component {
                 owner = null;
             }
         }
+
         return(
             <Row className="align-items-center bg-info">
 	        <Col md={4}className="text-white">
                     <div>{title} {editMode === "edit" ? <EditButton listing={listing} states={states} onSave={this.handleSave}/> : null}</div>
                 </Col>
                 <Col md={8} className="text-right">
-                    { owner && listingMode === "myListings" ?
+                    {(owner)  ?
                     <ButtonGroup className="border">
                         <Button 
                             type="radio" 
