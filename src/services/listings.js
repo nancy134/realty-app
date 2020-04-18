@@ -55,6 +55,12 @@ export function unpublish(index, cb){
     }).then(checkStatus).then(parseJSON).then(cb);
 }
 
+export function getSpaceTypes(cb){
+    var url = process.env.REACT_APP_LISTING_SERVICE+"spaceUse";
+    fetch(url, {
+    }).then(checkStatus).then(parseJSON).then(cb);
+}
+
 function checkStatus(response){
     if (response.status >= 200 && response.status < 300){
         return response;
@@ -71,7 +77,7 @@ function parseJSON(response){
    return response.json();
 }
 
-const listings = {get, getAll,create, update, getEnums, publish, unpublish};
+const listings = {get, getAll,create, update, getEnums, publish, unpublish, getSpaceTypes};
 export default listings;
 
 

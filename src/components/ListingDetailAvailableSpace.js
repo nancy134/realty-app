@@ -98,11 +98,21 @@ class ListingDetailAvailableSpace extends React.Component {
     render(){
         var listing = this.props.listing;
         var editMode = this.props.editMode;
+        var spaceUses = this.props.spaceUses;
+        var spaceTypes = this.props.spaceTypes;
         var newSpace = {}; 
         return (
             <div>
                 <Row className="mt-3 border-bottom border-warning">
-                    <Col><h2>Available Space {editMode === "edit" ? <AddButton listing={listing} space={newSpace} onSave={this.handleSave} /> : null}</h2></Col>
+                    <Col>
+                        <h2>Available Space {editMode === "edit" ? 
+                            <AddButton 
+                            listing={listing} 
+                            space={newSpace}
+                            spaceUses={spaceUses} 
+                            spaceTypes={spaceTypes}
+                            onSave={this.handleSave} /> : null}</h2>
+                    </Col>
                 </Row>
                 <Row className="bg-light shadow">
                     <Col md={2} className="font-weight-bold">Unit</Col>
@@ -133,7 +143,13 @@ class ListingDetailAvailableSpace extends React.Component {
                        <Col md={3}>
                            <Row>
                                { editMode === "edit" ?
-                               <Col><EditButton listing={listing} space={space} onSave={this.handleSave}/></Col>
+                               <Col>
+                                   <EditButton 
+                                   listing={listing} 
+                                   space={space} 
+                                   spaceUses={spaceUses}
+                                   spaceTypes={spaceTypes} 
+                                   onSave={this.handleSave}/></Col>
                                : null }
                                { editMode === "edit" ?
                                <Col><FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} /></Col>

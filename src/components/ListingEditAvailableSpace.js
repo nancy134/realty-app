@@ -109,6 +109,7 @@ class ListingEditAvailableSpace extends React.Component {
         if (this.state.size) space.size = this.state.size;
         if (this.state.price) space.price = this.state.price;
         if (this.state.type) space.type = this.state.type;
+        if (this.state.use) space.use = this.state.use;
         if (this.state.description) space.description = this.state.description;
         if (this.state.driveInDoors) space.driveInDoors = this.state.driveInDoors;
         if (this.state.divisible) space.divisible = this.state.divisible;
@@ -175,19 +176,19 @@ class ListingEditAvailableSpace extends React.Component {
                     <Form.Group as={Col} >
                         <Form.Label>Type</Form.Label>
                         <Form.Control as="select" value={this.state.type} onChange={this.onTypeChange}>
-                            <option>Full Gross</option>
-                            <option>Modified Gross</option>
-                            <option>NNN</option>
+                            <option key="-1"></option>
+                            {this.props.spaceTypes.map((spaceType, index) => ( 
+                            <option key={index}>{spaceType}</option>
+                            ))}
                         </Form.Control> 
                     </Form.Group>
                     <Form.Group as={Col} >
                         <Form.Label>Use</Form.Label>
                         <Form.Control as="select" value={this.state.use} onChange={this.onUseChange}>
-                            <option>Office</option>
-                            <option>Flex</option>
-                            <option>Retail</option>
-                            <option>Warehouse</option>
-                            <option>Restaurant</option>
+                            <option key="-1"></option>
+                            {this.props.spaceUses.map((spaceUse, index) =>(
+                            <option key={index}>{spaceUse}</option>
+                            ))}
                         </Form.Control>
                     </Form.Group>
                 </Form.Row>

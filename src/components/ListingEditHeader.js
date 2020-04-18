@@ -54,7 +54,6 @@ class ListingEditHeader extends React.Component {
         });
     }
     handleSave(){
-        console.log("handleSave()");
         var listing = {};
         listing.id = this.state.id;
         if (this.props.listing){

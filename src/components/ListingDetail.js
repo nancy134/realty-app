@@ -43,7 +43,6 @@ class ListingDetail extends React.Component {
         this.props.onEditToggle(value);
     }
     handleListingUpdate(listing){
-        console.log("handleListingUpdate()");
         if (this.props.listingDetail && this.props.listingDetail.listing){
             this.props.onUpdate(listing);
         } else { // Create
@@ -107,6 +106,7 @@ class ListingDetail extends React.Component {
     } 
     componentDidMount(){
         if (this.props.listingDetail){
+                console.log("this.props.listingDetail: "+JSON.stringify(this.props.listingDetail));
                 var listingDetail = this.props.listingDetail;
                 if (this.props.listingDetail.listing){
                     if (isOwner(listingDetail.listing.owner)){
@@ -119,6 +119,8 @@ class ListingDetail extends React.Component {
                     listing: listingDetail.listing,
                     states: listingDetail.states,
                     listingTypes: listingDetail.listingTypes,
+                    spaceUses: listingDetail.spaceUses,
+                    spaceTypes: listingDetail.spaceTypes,
                     propertyTypes: listingDetail.propertyTypes,
                     amenities: listingDetail.amenities
                 });
@@ -133,6 +135,8 @@ class ListingDetail extends React.Component {
         const states = this.state.states;
         //const propertyTypes = this.state.propertyTypes;
         const listingTypes = this.state.listingTypes;
+        const spaceUses = this.state.spaceUses;
+        const spaceTypes = this.state.spaceTypes;
         //const allAmenities = this.state.amenities;
         const listingMode = this.props.listingMode;
         var listing = null;
@@ -169,6 +173,8 @@ class ListingDetail extends React.Component {
                     <ListingDetailAvailableSpace 
                         listing={listing} 
                         editMode={editMode} 
+                        spaceUses={spaceUses}
+                        spaceTypes={spaceTypes}
                         onSpaceUpdate={this.handleSpaceUpdate} 
                         getListing={this.props.onFetchListing}
                     />

@@ -143,7 +143,9 @@ export class ListingPage extends Component {
                     listing: null,
                     states: data.states,
                     listingTypes: data.listingTypes,
-                    propertyTypes: data.propertyTypes
+                    propertyTypes: data.propertyTypes,
+                    spaceUses: data.spaceUses,
+                    spaceTypes: data.spaceTypes
                 }
                 this.setState({
                     listingDetail: listingDetail,

@@ -7,6 +7,22 @@ import {
     ToggleButtonGroup,
     ToggleButton
 } from 'react-bootstrap';
+import FilterSpaceType from "./FilterSpaceType";
+
+const SpaceTypeMenu = React.forwardRef(
+    ({style, className, 'aria-labelledby': labeledBy , onFilterChange}, ref) => {
+    return (
+      <div
+        ref={ref}
+        style={style}
+        className={className}
+        aria-labelledby={labeledBy}
+      >
+          <FilterSpaceType onFilterChange={(filters) => onFilterChange(filters)}/>
+      </div>
+    );
+    }
+);
 
 const CustomMenu = React.forwardRef(
   ({ style, className, 'aria-labelledby': labeledBy }, ref) => {
@@ -58,6 +74,7 @@ class ListingToolbar extends React.Component {
         super(props);
         this.onAddListing = this.onAddListing.bind(this);
         this.handleListingToggle = this.handleListingToggle.bind(this);
+        this.handleFilterChange = this.handleFilterChange.bind(this);
     }
 
     onAddListing(e){
@@ -68,6 +85,11 @@ class ListingToolbar extends React.Component {
         this.props.onListingToggle(value);
     }
 
+    handleFilterChange(filters){
+        console.log("handleFilterChange()");
+        console.log("filters: "+JSON.stringify(filters));
+    }
+
     render(){
         var myListings = "myListings";
         var allListings = "allListings";
@@ -75,22 +97,36 @@ class ListingToolbar extends React.Component {
         return (
             <Form className="toolbar-form m-2">
                 <Form.Row>
-                    <Col xs={3}>
-                        <Form.Control placeholder="Waltham, MA" />
+                    <Col xs={4}>
+                        <Row>
+                            <Col xs={8}>
+                                <Form.Control placeholder="Waltham, MA" />
+                            </Col>
+                            <Col xs={2} className="pl-0">
+                                <Button variant="light">Search</Button>
+                            </Col>
+                        </Row>
                     </Col>
                     <Col xs={1}>
                         <Dropdown>
                             <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                                Filters
+                                Space Type 
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu onFilterChange={(filters) => this.handleFilterChange(filters)} as={SpaceTypeMenu}$>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </Col>
+                    <Col xs={1}>
+                        <Dropdown>
+                            <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                                More Filters
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu as={CustomMenu} className="filter">
                             </Dropdown.Menu>
                         </Dropdown>
                     </Col >
-                    <Col xs={1} >
-                        <Button variant="light">Search</Button>
-                    </Col>
                     <Col xs={2} >
                        { this.props.loggedIn ?
                         <ToggleButtonGroup type="radio" name="options" defaultValue={allListings} onChange={this.handleListingToggle}>
@@ -99,9 +135,7 @@ class ListingToolbar extends React.Component {
                         </ToggleButtonGroup>
                         : null }
                     </Col>
-                    <Col xs={3}>
-                    </Col>
-                    <Col xs={2} className="text-right">
+                    <Col xs={4} className="text-right">
                         { this.props.loggedIn ?
                         <Button onClick={this.onAddListing} variant="light">Add a Listing</Button>
                         : null }
