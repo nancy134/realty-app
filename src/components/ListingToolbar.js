@@ -86,8 +86,7 @@ class ListingToolbar extends React.Component {
     }
 
     handleFilterChange(filters){
-        console.log("handleFilterChange()");
-        console.log("filters: "+JSON.stringify(filters));
+        this.props.onFilterChange(filters);
     }
 
     render(){

@@ -28,13 +28,15 @@ export class ListingPage extends Component {
         this.handleFetchListing = this.handleFetchListing.bind(this);
         this.handlePublish = this.handlePublish.bind(this);
         this.handleUnpublish = this.handleUnpublish.bind(this);
+        this.handleFilterChange = this.handleFilterChange.bind(this);
         this.state = {
             showDetail: false,
             editMode: "view",
             listingMode: "allListings",
             owner: false,
             page: 1,
-            listingDetail: null
+            listingDetail: null,
+            spaceUseFilter: null
         };
     }
     handleShowDetailChange(showDetail, index){
@@ -74,6 +76,18 @@ export class ListingPage extends Component {
     handleOwnerChange(value){
         this.setState({
             owner: value
+        });
+    }
+    handleFilterChange(filters){
+        var spaceUseFilter = "";
+        filters.forEach(filter => {
+            spaceUseFilter += "&spaceUse[]="+filter;
+        });
+
+        this.setState({
+            spaceUseFilter: spaceUseFilter 
+        }, () => {
+            this.handleListUpdate();
         });
     }
     handleNewPage(goToPage){
@@ -170,6 +184,9 @@ export class ListingPage extends Component {
         } else {
            query = 'perPage=20&page='+page;
         }
+        if (this.state.spaceUseFilter){
+            query += this.state.spaceUseFilter;
+        }
         listings.getAll(query, (listings) => {
            this.setState({
                listings: listings.listings.rows,
@@ -204,6 +221,7 @@ export class ListingPage extends Component {
                         loggedIn={loggedIn} 
                         onAddListing={this.handleAddListing} 
                         onListingToggle={this.handleListingToggle}
+                        onFilterChange={this.handleFilterChange}
                     />
                 </Row>
                 <Row>
