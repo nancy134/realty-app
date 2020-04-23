@@ -14,7 +14,7 @@ class FilterSpaceType extends React.Component {
         };
     }
     handleChange(evt){
-       var spaceTypes = this.state.spaceTypes.spaceUse;
+       var spaceTypes = this.state.spaceTypes.spaceUses;
        var filters = this.state.filters;
        if (evt.target.checked){
           filters.push(spaceTypes[parseInt(evt.target.value)]);
@@ -24,7 +24,7 @@ class FilterSpaceType extends React.Component {
                filters.splice( index, 1 );
            }
        }
-
+       console.log("filters: "+JSON.stringify(filters));
        this.props.onFilterChange(filters);
        this.setState({
            filters: filters
@@ -32,6 +32,7 @@ class FilterSpaceType extends React.Component {
     }
     componentDidMount(){
         listings.getSpaceTypes((spaceTypes) => {
+           console.log("spaceTypes: "+JSON.stringify(spaceTypes));
            this.setState({
                spaceTypes: spaceTypes
            })
@@ -41,7 +42,7 @@ class FilterSpaceType extends React.Component {
         if (this.state.spaceTypes){
             return(
             <div className="m-2">
-                {this.state.spaceTypes.spaceUse.map((spaceType,key) => (
+                {this.state.spaceTypes.spaceUses.map((spaceType,key) => (
                     <Form.Check onChange={this.handleChange} value={key} key={key} type="checkbox" label={spaceType} />
                 ))}
             </div>

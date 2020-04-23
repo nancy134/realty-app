@@ -8,6 +8,7 @@ import {
     ToggleButton
 } from 'react-bootstrap';
 import FilterSpaceType from "./FilterSpaceType";
+import FilterMore from "./FilterMore";
 
 const SpaceTypeMenu = React.forwardRef(
     ({style, className, 'aria-labelledby': labeledBy , onFilterChange}, ref) => {
@@ -25,7 +26,7 @@ const SpaceTypeMenu = React.forwardRef(
 );
 
 const CustomMenu = React.forwardRef(
-  ({ style, className, 'aria-labelledby': labeledBy }, ref) => {
+  ({ style, className, 'aria-labelledby': labeledBy, onMoreFilterChange }, ref) => {
 
     return (
       <div
@@ -34,36 +35,7 @@ const CustomMenu = React.forwardRef(
         className={className}
         aria-labelledby={labeledBy}
       >
-      <Form>
-          <Form.Group as={Row} className="mr-1 ml-1">
-              <Form.Label column sm="4">Available Space</Form.Label>
-              <Col sm="4">
-                  <Form.Control placeholder="Min"/>
-              </Col>
-              <Col sm="4">
-                  <Form.Control placeholder="Max"/>
-              </Col>
-          </Form.Group>
-          <Form.Group as={Row} className="mr-1 ml-1">
-              <Form.Label column sm="4">Lease Rate</Form.Label>
-              <Col sm="4">
-                  <Form.Control placeholder="Min"/>
-              </Col>
-              <Col sm="4">
-                  <Form.Control placeholder="Max"/>
-              </Col>
-          </Form.Group>
-          <Form.Group as={Row} className="mr-1 ml-1">
-              <Form.Label column sm="4">Listing Type</Form.Label>
-              <Col sm="4">
-                  <Form.Control as="select">
-                      <option>All</option>
-                      <option>For Lease</option>
-                      <option>For Sale</option>
-                  </Form.Control>
-              </Col>
-          </Form.Group>
-      </Form>
+          <FilterMore onMoreFilterChange={(filters) => onMoreFilterChange(filters)}/>
       </div>
     );
   },
@@ -75,6 +47,7 @@ class ListingToolbar extends React.Component {
         this.onAddListing = this.onAddListing.bind(this);
         this.handleListingToggle = this.handleListingToggle.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
+        this.handleMoreFilterChange = this.handleMoreFilterChange.bind(this);
     }
 
     onAddListing(e){
@@ -88,7 +61,10 @@ class ListingToolbar extends React.Component {
     handleFilterChange(filters){
         this.props.onFilterChange(filters);
     }
-
+    handleMoreFilterChange(moreFilters){
+        console.log("moreFilters: "+JSON.stringify(moreFilters));
+        this.props.onMoreFilterChange(moreFilters);
+    }
     render(){
         var myListings = "myListings";
         var allListings = "allListings";
@@ -112,7 +88,9 @@ class ListingToolbar extends React.Component {
                                 Space Type 
                             </Dropdown.Toggle>
 
-                            <Dropdown.Menu onFilterChange={(filters) => this.handleFilterChange(filters)} as={SpaceTypeMenu}$>
+                            <Dropdown.Menu 
+                                onFilterChange={(filters) => this.handleFilterChange(filters)} 
+                                as={SpaceTypeMenu}>
                             </Dropdown.Menu>
                         </Dropdown>
                     </Col>
@@ -122,7 +100,10 @@ class ListingToolbar extends React.Component {
                                 More Filters
                             </Dropdown.Toggle>
 
-                            <Dropdown.Menu as={CustomMenu} className="filter">
+                            <Dropdown.Menu 
+                                onMoreFilterChange={(filters) => this.handleMoreFilterChange(filters)} 
+                                as={CustomMenu} 
+                                className="filter">
                             </Dropdown.Menu>
                         </Dropdown>
                     </Col >

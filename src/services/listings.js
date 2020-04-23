@@ -56,7 +56,13 @@ export function unpublish(index, cb){
 }
 
 export function getSpaceTypes(cb){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"spaceUse";
+    var url = process.env.REACT_APP_LISTING_SERVICE+"spaceUses";
+    fetch(url, {
+    }).then(checkStatus).then(parseJSON).then(cb);
+}
+
+export function getListingTypes(cb){
+    var url = process.env.REACT_APP_LISTING_SERVICE+"listingTypes";
     fetch(url, {
     }).then(checkStatus).then(parseJSON).then(cb);
 }
@@ -77,7 +83,17 @@ function parseJSON(response){
    return response.json();
 }
 
-const listings = {get, getAll,create, update, getEnums, publish, unpublish, getSpaceTypes};
+const listings = {
+    get, 
+    getAll,
+    create, 
+    update, 
+    getEnums, 
+    publish, 
+    unpublish, 
+    getSpaceTypes, 
+    getListingTypes
+};
 export default listings;
 
 

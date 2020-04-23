@@ -29,6 +29,7 @@ export class ListingPage extends Component {
         this.handlePublish = this.handlePublish.bind(this);
         this.handleUnpublish = this.handleUnpublish.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
+        this.handleMoreFilterChange = this.handleMoreFilterChange.bind(this);
         this.state = {
             showDetail: false,
             editMode: "view",
@@ -90,6 +91,19 @@ export class ListingPage extends Component {
             this.handleListUpdate();
         });
     }
+    handleMoreFilterChange(moreFilters){
+        var moreQuery = "";
+        if (moreFilters.minSize) moreQuery += "&minSize="+moreFilters.minSize; 
+        if (moreFilters.maxSize) moreQuery += "&maxSize="+moreFilters.maxSize;
+        if (moreFilters.minRate) moreQuery += "&minRate="+moreFilters.minRate;
+        if (moreFilters.maxRate) moreQuery += "&maxRate="+moreFilters.maxRate;
+        if (moreFilters.listingType)  moreQuery += "&ListingType="+moreFilters.listingType;
+        this.setState({moreQuery: moreQuery}, () => {
+            this.handleListUpdate();
+        })
+            
+    }
+
     handleNewPage(goToPage){
         this.fetchListings(this.state.listingMode, goToPage);
     }
@@ -187,6 +201,10 @@ export class ListingPage extends Component {
         if (this.state.spaceUseFilter){
             query += this.state.spaceUseFilter;
         }
+        if (this.state.moreQuery){
+            query += this.state.moreQuery;
+        }
+        console.log("query: "+query);
         listings.getAll(query, (listings) => {
            this.setState({
                listings: listings.listings.rows,
@@ -222,6 +240,7 @@ export class ListingPage extends Component {
                         onAddListing={this.handleAddListing} 
                         onListingToggle={this.handleListingToggle}
                         onFilterChange={this.handleFilterChange}
+                        onMoreFilterChange={this.handleMoreFilterChange}
                     />
                 </Row>
                 <Row>
