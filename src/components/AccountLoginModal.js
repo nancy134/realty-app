@@ -50,16 +50,31 @@ class AccountLoginModal extends React.Component {
                 </Alert>
                 : null}
                 <Form.Label>Email</Form.Label>
-                <Form.Control onChange={this.onEmailChange}/>
+                <Form.Control 
+                    id="login_email_input" 
+                    onChange={this.onEmailChange}
+                />
                 <Form.Label>Password</Form.Label>
-                <Form.Control type="password" onChange={this.onPasswordChange}/>
+                <Form.Control
+                    id="login_password_input" 
+                    type="password" 
+                    onChange={this.onPasswordChange}
+                />
                 <Button variant="link">Forgot password?</Button>
-                <Button onClick={this.props.onRegisterStart} variant="link">Don't hava an account? Create one here</Button>
+                <Button 
+                    onClick={this.props.onRegisterStart} 
+                    variant="link">Don't hava an account? Create one here
+                </Button>
                
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={this.props.onCancel}>Cancel</Button>
-                <Button onClick={this.handleLogin}>Login</Button>
+                <Button 
+                    id="login_button"
+                    onClick={this.handleLogin}
+                >
+                    Login
+                </Button>
             </Modal.Footer>
         </Modal>
         );

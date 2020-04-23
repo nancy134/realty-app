@@ -117,7 +117,13 @@ export class AccountButton extends Component{
                 )
                 :( 
                 <span>
-                    <Button onClick={() => this.setState({modalShowLogin: true})} variant="success">Login / Create Account</Button>
+                    <Button 
+                        onClick={() => this.setState({modalShowLogin: true})} 
+                        variant="success"
+                        id="account_button"
+                    >
+                        Login / Create Account
+                    </Button>
                 </span> 
                 )}
             </span>
