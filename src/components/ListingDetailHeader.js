@@ -19,8 +19,12 @@ function EditButton(props) {
 
   return (
       <span>
-      <Button variant="info" onClick={() => setModalShow(true)}>
-      <FontAwesomeIcon className="text-danger" icon={faPencilAlt} /> 
+      <Button 
+          id="header_edit_button"
+          variant="info" 
+          onClick={() => setModalShow(true)}i
+      >
+          <FontAwesomeIcon className="text-danger" icon={faPencilAlt} /> 
       </Button>
 
       <ListingEditHeader
@@ -127,7 +131,13 @@ class ListingDetailHeader extends React.Component {
         return(
             <Row className="align-items-center bg-info">
 	        <Col md={4}className="text-white">
-                    <div>{title} {editMode === "edit" ? <EditButton listing={listing} states={states} onSave={this.handleSave}/> : null}</div>
+                    <div>{title} {editMode === "edit" ? 
+                        <EditButton 
+                            listing={listing} 
+                            states={states} 
+                            onSave={this.handleSave}
+                        /> : null}
+                    </div>
                 </Col>
                 <Col md={8} className="text-right">
                     {(owner)  ?

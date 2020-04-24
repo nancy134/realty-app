@@ -92,17 +92,30 @@ class ListingEditHeader extends React.Component {
                             <Form.Row>
                                 <Col md={12}>
                                     <Form.Label>Address</Form.Label>
-                                    <Form.Control value={this.state.address} onChange={this.onAddressChange}/>
+                                    <Form.Control
+                                        id="header_edit_address_input" 
+                                        value={this.state.address} 
+                                        onChange={this.onAddressChange}
+                                    />
                                 </Col>
                             </Form.Row>
                             <Form.Row>
                                 <Col md={6}>
                                     <Form.Label>City</Form.Label>
-                                    <Form.Control value={this.state.city} onChange={this.onCityChange}/>
+                                    <Form.Control 
+                                        id="header_edit_city_input"
+                                        value={this.state.city} 
+                                        onChange={this.onCityChange}
+                                    />
                                 </Col>
                                 <Col md={6}>
                                     <Form.Label>State</Form.Label>
-                                    <Form.Control as="select" value={this.state.state} onChange={this.onStateChange} >
+                                    <Form.Control 
+                                        id="header_edit_state_select"
+                                        as="select" 
+                                        value={this.state.state} 
+                                        onChange={this.onStateChange} 
+                                    >
                                     {states}
                                     </Form.Control>
                                 </Col>
@@ -110,7 +123,11 @@ class ListingEditHeader extends React.Component {
                             <Form.Row>
                                 <Col md={6}>
                                     <Form.Label>Display Address</Form.Label>
-                                    <Form.Control value={this.state.displayAddress} onChange={this.onDisplayAddressChange}/>
+                                    <Form.Control 
+                                        id="header_edit_display_address_edit"
+                                        value={this.state.displayAddress} 
+                                        onChange={this.onDisplayAddressChange}
+                                    />
                                 </Col>
                             </Form.Row>
                         </Form>
@@ -119,7 +136,12 @@ class ListingEditHeader extends React.Component {
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={this.props.onHide}>Close</Button>
-                <Button onClick={this.handleSave}>Save</Button>
+                <Button 
+                    id="header_edit_save_button"
+                    onClick={this.handleSave}
+                >
+                    Save
+                </Button>
             </Modal.Footer>
         </Modal>        
         );

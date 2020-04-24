@@ -117,7 +117,13 @@ class ListingToolbar extends React.Component {
                     </Col>
                     <Col xs={4} className="text-right">
                         { this.props.loggedIn ?
-                        <Button onClick={this.onAddListing} variant="light">Add a Listing</Button>
+                        <Button 
+                            id="add_a_listing_button"
+                            onClick={this.onAddListing} 
+                            variant="light"
+                        >
+                            Add a Listing
+                        </Button>
                         : null }
                     </Col>
 
