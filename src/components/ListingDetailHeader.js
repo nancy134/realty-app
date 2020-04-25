@@ -83,6 +83,7 @@ class ListingDetailHeader extends React.Component {
         this.props.onUnpublish(this.props.listing.ListingId);
     }
     render() {
+        const listingMode = this.props.listingMode;
         const editMode = this.props.editMode;
         const listing = this.props.listing;
         const states = this.props.states;
@@ -140,7 +141,7 @@ class ListingDetailHeader extends React.Component {
                     </div>
                 </Col>
                 <Col md={8} className="text-right">
-                    {(owner)  ?
+                    {(owner && listingMode === "myListings") ?
                     <ButtonGroup className="border">
                         <Button 
                             type="radio" 

@@ -7,6 +7,74 @@ import {
 } from 'react-bootstrap';
 import {getUserEmail} from '../helpers/authentication';
 
+function ListItem(props){
+    var listing = props.listing;
+    var publishStatus = listing.publishStatus;
+    if (publishStatus === "Draft") {
+        if (listing.listing.latestApprovedId === null){
+            publishStatus = "Unpublished";
+        } else {
+            publishStatus = "Unpublished update";
+        } 
+    }
+    return(
+        <ListGroup.Item key={listing.id}>
+            <Row>
+                <Col>
+                    { listing.images.length > 0 ?
+                    <Image 
+                        src={listing.images[0].url} 
+                        className="border-0" 
+                        thumbnail
+                    />
+                    :
+                    <Image 
+                        src="/default.jpg" 
+                        className="border-0" 
+                        thumbnail 
+                    />
+                    }
+                </Col>
+                <Col>
+                    <Card className="border-0">
+                        <Card.Body >
+                            <Card.Title 
+                                className="listing-title text-danger"  
+                                data-index={listing.id} 
+                                onClick={props.onShowDetailChange}
+                            >
+                                {listing.address}
+                            </Card.Title>
+                            <Card.Subtitle>
+                                {listing.city}, {listing.state}
+                            </Card.Subtitle>
+                            { listing.owner === getUserEmail() ?
+                            <div 
+                                className="text-danger"
+                            >
+                                Status: {publishStatus}
+                            </div>
+                            : null}
+                            {listing.yearBuilt ?
+                            <div>Built in {listing.yearBuilt}</div>
+                            : null}
+                            { listing.spaces.length > 0 ?
+                            <div>{listing.spaces[0].size} sf Space</div>
+                            : null}
+                            { listing.spaces.length > 0 ?
+                            <div>${listing.spaces[0].price} sf/yr</div>
+                            : null }
+                            { listing.listingType === "For Sale" ?
+                            <div>${listing.listingPrice}</div>
+                            : null }
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+        </ListGroup.Item>
+    );
+}
+
 class Listings extends React.Component {
    
     constructor(props) {
@@ -31,63 +99,20 @@ class Listings extends React.Component {
         if (this.props.listings && this.props.listings.length){
             
         var listings = this.props.listings;
-        /*
-        for (var i=0; i<this.props.listings.length; i++){
-            if (this.props.listingMode === "allListings"){
-               if (this.props.listings[i].latestApprovedId){
-                   if (this.props.listings[i].publishStatus === "On Market"){
-                       listings.push(this.props.listings[i].latestApprovedVersion);
-                   }
-               }
-            } else if (this.props.listingMode === "myListings"){
-               if (this.props.listings[i].latestDraftId){
-                   listings.push(this.props.listings[i].latestDraftVersion);
-               } else if  (this.props.listings[i].latestApprovedId){
-                   listings.push(this.props.listings[i].latestApprovedVersion);
-               }
-
-            }
-        }*/
+        //var publishStatus = listing.publishStatus;
+        //if (publishStatus === "Draft" && listing.listing.latestApprovedId !== null){
+        //    publishStatus = "Unpublished";
+        //} else {
+        //    publishStatus = "Unpublished update";
+        //}
         return ( 
             <ListGroup>
                 {listings.map(listing => 
                 (
-                <ListGroup.Item key={listing.id}>
-                    <Row>
-                        <Col>
-                            { listing.images.length > 0 ?
-                            <Image src={listing.images[0].url} className="border-0" thumbnail/>
-                            :
-                            <Image src="/default.jpg" className="border-0" thumbnail />
-                            }
-                        </Col>
-                        <Col>
-                            <Card className="border-0">
-                                <Card.Body >
-                                    <Card.Title className="listing-title text-danger"  data-index={listing.id} onClick={this.showDetailChange}>{listing.address}</Card.Title>
-                                    <Card.Subtitle>{listing.city}, {listing.state}</Card.Subtitle>
-                                    { listing.owner === getUserEmail() ?
-                                    <div>
-                                    <div className="text-danger">Status: {listing.publishStatus}</div>
-                                    </div>
-                                    : null}
-                                    <div>Built in {listing.yearBuilt}</div>
-                                    { listing.spaces.length > 0 ?
-                                    <div>{listing.spaces[0].size} sf Space</div>
-                                    : null}
-                                    { listing.spaces.length > 0 ?
-                                    <div>${listing.spaces[0].price} sf/yr</div>
-                                    : null }
-                                    { listing.listingType === "For Sale" ?
-                                    <div>${listing.listingPrice}</div>
-                                    : null }
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    </Row>
-
-                </ListGroup.Item>
-
+                <ListItem 
+                    listing={listing} 
+                    onShowDetailChange={this.showDetailChange}
+                />
                 ))}
             </ListGroup>
 

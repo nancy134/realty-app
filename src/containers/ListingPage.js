@@ -204,7 +204,6 @@ export class ListingPage extends Component {
         if (this.state.moreQuery){
             query += this.state.moreQuery;
         }
-        console.log("query: "+query);
         listings.getAll(query, (listings) => {
            this.setState({
                listings: listings.listings.rows,

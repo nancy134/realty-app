@@ -106,7 +106,6 @@ class ListingDetail extends React.Component {
     } 
     componentDidMount(){
         if (this.props.listingDetail){
-                console.log("this.props.listingDetail: "+JSON.stringify(this.props.listingDetail));
                 var listingDetail = this.props.listingDetail;
                 if (this.props.listingDetail.listing){
                     if (isOwner(listingDetail.listing.owner)){
