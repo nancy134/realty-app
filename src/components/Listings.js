@@ -18,7 +18,7 @@ function ListItem(props){
         } 
     }
     return(
-        <ListGroup.Item key={listing.id}>
+        <ListGroup.Item>
             <Row>
                 <Col>
                     { listing.images.length > 0 ?
@@ -64,9 +64,10 @@ function ListItem(props){
                             { listing.spaces.length > 0 ?
                             <div>${listing.spaces[0].price} sf/yr</div>
                             : null }
-                            { listing.listingType === "For Sale" ?
+                            { listing.listingType === "For Sale" && listing.listingPrice?
                             <div>${listing.listingPrice}</div>
                             : null }
+                            <div>{listing.shortDescription}</div>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -109,7 +110,8 @@ class Listings extends React.Component {
             <ListGroup>
                 {listings.map(listing => 
                 (
-                <ListItem 
+                <ListItem
+                    key={listing.id}
                     listing={listing} 
                     onShowDetailChange={this.showDetailChange}
                 />
