@@ -103,14 +103,24 @@ class ListingDetail extends React.Component {
          }
     }
     handleTenantUpdate(tenant){
-        if (tenant.id){
-            tenants.update(tenant, (data) => {
-                this.props.onFetchListing(data.ListingVersionId);
-            });
+        if (!tenant.ListingVersionId){
+             var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
+             listingService.create(listingBody, (listingVersion) => {
+                 tenant.ListingVersionId = listingVersion.listing.id;
+                 tenants.create(tenant, (data) => {
+                     this.props.onFetchListing(data.ListingVersionId);
+                 });
+             });
         } else {
-            tenants.create(tenant, (data) => {
-                this.props.onFetchListing(data.ListingVersionId);
-            });
+            if (tenant.id){
+                tenants.update(tenant, (data) => {
+                    this.props.onFetchListing(data.ListingVersionId);
+                });
+            } else {
+                tenants.create(tenant, (data) => {
+                    this.props.onFetchListing(data.ListingVersionId);
+                });
+            }
         }
     }
     handlePortfolioUpdate(portfolio){

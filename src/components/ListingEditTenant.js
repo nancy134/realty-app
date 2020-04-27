@@ -70,13 +70,21 @@ class ListingEditTenant extends React.Component {
                 <Form.Row>
                     <Form.Group as={Col} >
                         <Form.Label>Tenant</Form.Label>
-                        <Form.Control value={this.state.tenant} onChange={this.onTenantChange}/> 
+                        <Form.Control 
+                            id="tenant_edit_tenant"
+                            value={this.state.tenant} 
+                            onChange={this.onTenantChange}
+                        /> 
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
                     <Form.Group as={Col} >
                         <Form.Label>Square Feet</Form.Label>
-                        <Form.Control value={this.state.space} onChange={this.onSpaceChange}/>
+                        <Form.Control 
+                            id="tenant_edit_space"
+                            value={this.state.space} 
+                            onChange={this.onSpaceChange}
+                        />
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
@@ -88,7 +96,11 @@ class ListingEditTenant extends React.Component {
                 <Form.Row>
                     <Form.Group as={Col} >
                         <Form.Label>Lease Ends</Form.Label>
-                        <Form.Control value={this.state.leaseEnds} onChange={this.onLeaseEndsChange}/>
+                        <Form.Control 
+                            id="tenant_edit_lease_ends"
+                            value={this.state.leaseEnds} 
+                            onChange={this.onLeaseEndsChange}
+                        />
                     </Form.Group>
                 </Form.Row>
 
@@ -96,7 +108,12 @@ class ListingEditTenant extends React.Component {
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={this.props.onHide}>Close</Button>
-                <Button onClick={this.handleSave}>Save</Button>
+                <Button 
+                    id="tenant_save_button"
+                    onClick={this.handleSave}
+                >
+                    Save
+                </Button>
             </Modal.Footer>
         </Modal>
         );
