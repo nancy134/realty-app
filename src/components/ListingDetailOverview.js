@@ -18,7 +18,8 @@ function EditButton(props) {
 
     return (
         <span>
-            <span 
+            <span
+                id="overview_edit_button" 
                 onClick={() => setModalShow(true)} 
                 className="edit-button align-top text-danger"
             >

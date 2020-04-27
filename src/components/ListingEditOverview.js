@@ -125,20 +125,51 @@ class ListingEditOverview extends React.Component {
                 <Col>
                     <Form>
                         <Form.Label>Listing Type</Form.Label>
-                        <Form.Control as="select" value={this.state.listingType} onChange={this.onListingTypeChange}>
+                        <Form.Control 
+                            id="overview_edit_listing_type"
+                            as="select" 
+                            value={this.state.listingType} 
+                            onChange={this.onListingTypeChange}>
                             {listingTypes}
                         </Form.Control>
-                        <Form.Label>Listing Price</Form.Label>
-                        <Form.Control value={this.state.listingPrice} onChange={this.onListingPriceChange}/>
                         <Form.Label>Short Description</Form.Label>
-                        <Form.Control value={this.state.shortDescription} onChange={this.onShortDescriptionChange}/> 
+                        <Form.Control 
+                            id="overview_edit_short_description"
+                            value={this.state.shortDescription} 
+                            onChange={this.onShortDescriptionChange}
+                        /> 
                         <Form.Label>Long Description</Form.Label>
-                        <Form.Control value={this.state.longDescription} rows="5" as="textarea" onChange={this.onLongDescriptionChange}/>
+                        <Form.Control 
+                            id="overview_edit_long_description"
+                            value={this.state.longDescription} 
+                            rows="5" 
+                            as="textarea" 
+                            onChange={this.onLongDescriptionChange}
+                        />
                     </Form>
                 </Col>
                 <Col>
                     <Row>
-                    <Upload images={images} shareMethods={this.acceptMethods.bind(this)} listing={this.props.listing} onImageUploadFinished={this.onImageUploadFinished}/>
+                        { this.state.listingType === "For Sale" ?
+                        <div>
+                        <Form.Label>Listing Price</Form.Label>
+                        <Form.Control 
+                            id="overview_edit_listing_price"
+                            value={this.state.listingPrice} 
+                            onChange={this.onListingPriceChange}
+                        />
+                        </div>
+                         : null }
+                    </Row>
+                    <Row>
+
+                    <Upload 
+                        id="overview_edit_image_upload"
+                        images={images} 
+                        shareMethods={this.acceptMethods.bind(this)} 
+                        listing={this.props.listing} 
+                        onImageUploadFinished={this.onImageUploadFinished}
+                    />
                     </Row>
                     <Row>
                         {imgs}
@@ -148,8 +179,18 @@ class ListingEditOverview extends React.Component {
          
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={this.props.onHide}>Cancel</Button>
-                <Button onClick={this.handleSave}>Save</Button>
+                <Button 
+                    id="overview_edit_cancel_button"
+                    onClick={this.props.onHide}
+                >
+                    Cancel
+                </Button>
+                <Button 
+                    id="overview_edit_save_button"
+                    onClick={this.handleSave}
+                >
+                    Save
+                </Button>
             </Modal.Footer>
         </Modal>
         );

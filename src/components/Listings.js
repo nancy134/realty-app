@@ -17,6 +17,11 @@ function ListItem(props){
             publishStatus = "Unpublished update";
         } 
     }
+
+    var address = "No address entered";
+    if (listing.address !== null){
+        address = listing.address;
+    }
     return(
         <ListGroup.Item>
             <Row>
@@ -43,11 +48,13 @@ function ListItem(props){
                                 data-index={listing.id} 
                                 onClick={props.onShowDetailChange}
                             >
-                                {listing.address}
+                                {address}
                             </Card.Title>
+                            { listing.city ?
                             <Card.Subtitle>
                                 {listing.city}, {listing.state}
                             </Card.Subtitle>
+                            : null }
                             { listing.owner === getUserEmail() ?
                             <div 
                                 className="text-danger"
