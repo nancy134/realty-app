@@ -4,8 +4,7 @@ import {
     Row,Col,
     Button,
     Dropdown,
-    ToggleButtonGroup,
-    ToggleButton
+    ButtonGroup
 } from 'react-bootstrap';
 import FilterSpaceType from "./FilterSpaceType";
 import FilterMore from "./FilterMore";
@@ -54,8 +53,10 @@ class ListingToolbar extends React.Component {
         this.props.onAddListing();
     }
 
-    handleListingToggle(value){
-        this.props.onListingToggle(value);
+    handleListingToggle(e){
+        e.preventDefault();
+        console.log("handleListingToggle: "+e.target.value);
+        this.props.onListingToggle(e.target.value);
     }
 
     handleFilterChange(filters){
@@ -66,8 +67,10 @@ class ListingToolbar extends React.Component {
         this.props.onMoreFilterChange(moreFilters);
     }
     render(){
-        var myListings = "myListings";
-        var allListings = "allListings";
+        var allListingsStatus = "p-0";
+        var myListingsStatus = "p-0";
+        if (this.props.listingMode === "allListings") allListingsStatus = "active p-0";
+        if (this.props.listingMode === "myListings") myListingsStatus = "active p-0"
 
         return (
             <Form className="toolbar-form m-2">
@@ -109,11 +112,25 @@ class ListingToolbar extends React.Component {
                     </Col >
                     <Col xs={2} >
                        { this.props.loggedIn ?
-                        <ToggleButtonGroup type="radio" name="options" defaultValue={allListings} onChange={this.handleListingToggle}>
-                            <ToggleButton value={allListings}>Public Listings</ToggleButton>
-                            <ToggleButton value={myListings}>My Listings</ToggleButton>
-                        </ToggleButtonGroup>
-                        : null }
+                       <ButtonGroup className="border">
+                           <Button
+                               type="radio"
+                               value="allListings"
+                               onClick={this.handleListingToggle}
+                               className={allListingsStatus}
+                               variant="info">
+                               Public Listings
+                           </Button>
+                           <Button
+                               type="radio"
+                               value="myListings"
+                               onClick={this.handleListingToggle}
+                               className={myListingsStatus}
+                               variant="info">
+                               MyListings 
+                           </Button>
+                       </ButtonGroup>
+                       : null }
                     </Col>
                     <Col xs={4} className="text-right">
                         { this.props.loggedIn ?

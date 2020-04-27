@@ -63,16 +63,20 @@ export class ListingPage extends Component {
         });
     }
     handleAddListing(){
+        console.log("handleAddListing()");
         var index = 0;
         var showDetail = true;
         var editMode = "edit";
         this.fetchListing(index, showDetail, editMode);
+        this.fetchListings("myListings",this.state.page);
     }
     handleListingToggle(value){
+        console.log("handleListingToggle: "+value);
         this.setState({
             listingMode: value
+        }, () => { 
+            this.fetchListings(value, 1);
         });
-        this.fetchListings(value, 1);
     }
     handleOwnerChange(value){
         this.setState({
@@ -186,6 +190,7 @@ export class ListingPage extends Component {
         }
     }
     fetchListings(listingMode, page){
+        console.log("fetchListings: "+listingMode+" "+page); 
         var lMode = "allListings";
         if (listingMode){
             lMode = listingMode;
@@ -206,6 +211,7 @@ export class ListingPage extends Component {
         }
         listings.getAll(query, (listings) => {
            this.setState({
+               listingMode: listingMode,
                listings: listings.listings.rows,
                page: listings.page,
                perPage: listings.perPage,
@@ -236,6 +242,7 @@ export class ListingPage extends Component {
                 <Row className="bg-success">
                     <ListingToolbar 
                         loggedIn={loggedIn} 
+                        listingMode={listingMode}
                         onAddListing={this.handleAddListing} 
                         onListingToggle={this.handleListingToggle}
                         onFilterChange={this.handleFilterChange}
