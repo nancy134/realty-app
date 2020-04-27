@@ -22,7 +22,7 @@ function EditButton(props) {
       <Button 
           id="header_edit_button"
           variant="info" 
-          onClick={() => setModalShow(true)}i
+          onClick={() => setModalShow(true)}
       >
           <FontAwesomeIcon className="text-danger" icon={faPencilAlt} /> 
       </Button>

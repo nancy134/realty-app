@@ -16,7 +16,7 @@ import spaces from '../services/spaces';
 import units from '../services/units';
 import tenants from '../services/tenants';
 import portfolios from '../services/portfolios';
-import { isOwner } from '../helpers/authentication';
+import { isOwner, getUserEmail } from '../helpers/authentication';
 import listingService from '../services/listings';
 
 class ListingDetail extends React.Component {
@@ -61,14 +61,24 @@ class ListingDetail extends React.Component {
     }
 
     handleSpaceUpdate(space){
-        if (space.id){
-            spaces.update(space, (data) => {
-                this.props.onFetchListing(data.ListingVersionId);
-            });
+        if (!space.ListingVersionId){
+                var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
+                listingService.create(listingBody, (listingVersion) => {
+                    space.ListingVersionId = listingVersion.listing.id;
+                    spaces.create(space, (data) => {
+                        this.props.onFetchListing(data.ListingVersionId);
+                    });
+                });
         } else {
-            spaces.create(space, (data) => {
-                this.props.onFetchListing(data.ListingVersionId);
-            });
+            if (space.id){
+                spaces.update(space, (data) => {
+                    this.props.onFetchListing(data.ListingVersionId);
+                });
+            } else {
+                spaces.create(space, (data) => {
+                    this.props.onFetchListing(data.ListingVersionId);
+                });
+            }
         }
     }
     handleUnitUpdate(unit){

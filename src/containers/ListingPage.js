@@ -116,7 +116,6 @@ export class ListingPage extends Component {
         });
     }
     handleAddListing(){
-        console.log("handleAddListing()");
         var index = 0;
         var showDetail = true;
         var editMode = "edit";
@@ -124,7 +123,6 @@ export class ListingPage extends Component {
         this.fetchListings("myListings",this.state.page);
     }
     handleListingToggle(value){
-        console.log("handleListingToggle: "+value);
         this.setState({
             listingMode: value
         }, () => { 
@@ -220,6 +218,8 @@ export class ListingPage extends Component {
                     editMode: editMode,
                     index: index,
                     owner: owner
+                }, () => {
+                    this.handleListUpdate();
                 });
             });
         } else {
@@ -243,7 +243,6 @@ export class ListingPage extends Component {
         }
     }
     fetchListings(listingMode, page){
-        console.log("fetchListings: "+listingMode+" "+page); 
         var lMode = "allListings";
         if (listingMode){
             lMode = listingMode;

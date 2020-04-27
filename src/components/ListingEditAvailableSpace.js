@@ -148,13 +148,21 @@ class ListingEditAvailableSpace extends React.Component {
 
                     <Form.Group as={Col} >
                         <Form.Label>Unit Name</Form.Label>
-                        <Form.Control value ={this.state.unit} onChange={this.onUnitChange}/> 
+                        <Form.Control 
+                            id="space_edit_unit"
+                            value ={this.state.unit} 
+                            onChange={this.onUnitChange}
+                        /> 
                     </Form.Group>
 
                     <Form.Group as={Col} >
                         <Form.Label>Size</Form.Label>
                         <InputGroup>
-                            <Form.Control value={this.state.size} onChange={this.onSizeChange}/>
+                            <Form.Control 
+                                id="space_edit_size"
+                                value={this.state.size} 
+                                onChange={this.onSizeChange}
+                            />
                             <InputGroup.Append>
                                 <InputGroup.Text id="basic-addon2">sq ft</InputGroup.Text>
                             </InputGroup.Append>
@@ -164,7 +172,11 @@ class ListingEditAvailableSpace extends React.Component {
                     <Form.Group as={Col}>
                         <Form.Label>Price</Form.Label>
                         <InputGroup>
-                            <Form.Control value={this.state.price} onChange={this.onPriceChange}/>
+                            <Form.Control 
+                                id="space_edit_price"
+                                value={this.state.price} 
+                                onChange={this.onPriceChange}
+                            />
                             <InputGroup.Append>
                                 <InputGroup.Text>$/sf/mo</InputGroup.Text>
                             </InputGroup.Append>
@@ -175,7 +187,12 @@ class ListingEditAvailableSpace extends React.Component {
                 <Form.Row>
                     <Form.Group as={Col} >
                         <Form.Label>Type</Form.Label>
-                        <Form.Control as="select" value={this.state.type} onChange={this.onTypeChange}>
+                        <Form.Control 
+                            id="space_edit_type"
+                            as="select" 
+                            value={this.state.type} 
+                            onChange={this.onTypeChange}
+                        >
                             <option key="-1"></option>
                             {this.props.spaceTypes.map((spaceType, index) => ( 
                             <option key={index}>{spaceType}</option>
@@ -184,7 +201,12 @@ class ListingEditAvailableSpace extends React.Component {
                     </Form.Group>
                     <Form.Group as={Col} >
                         <Form.Label>Use</Form.Label>
-                        <Form.Control as="select" value={this.state.use} onChange={this.onUseChange}>
+                        <Form.Control 
+                            id="space_edit_use"
+                            as="select" 
+                            value={this.state.use} 
+                            onChange={this.onUseChange}
+                        >
                             <option key="-1"></option>
                             {this.props.spaceUses.map((spaceUse, index) =>(
                             <option key={index}>{spaceUse}</option>
@@ -236,7 +258,12 @@ class ListingEditAvailableSpace extends React.Component {
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={this.props.onHide}>Close</Button>
-                <Button onClick={this.handleSave}>Save</Button>
+                <Button 
+                    id="space_button_save"
+                    onClick={this.handleSave}
+                >
+                    Save
+                </Button>
             </Modal.Footer>
         </Modal>
         );
