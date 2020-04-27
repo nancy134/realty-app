@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
-    Row, Col
+    Row,
+    Col
 } from 'react-bootstrap';
 import './ListingPage.css';
 import ListingMap from '../components/ListingMap';
@@ -11,6 +12,57 @@ import ListingDetail from '../components/ListingDetail';
 import listings from '../services/listings';
 import {getUserEmail} from '../helpers/authentication';
 import { isOwner } from '../helpers/authentication';
+import { Transition } from 'react-transition-group';
+
+const defaultStyle = {
+  transition: `transform 200ms, opacity 200ms ease`,
+  opacity: 1
+};
+const transitionStyles = {
+  entering: { transform: 'scale(0.5)', opacity: .75 }, 
+  entered: { transform: 'scale(2.0)', opacity: 1},
+  exiting: { opacity: .75 },
+  exited: { opacity: .25 } 
+};
+const AComponent = ({ in: inProp }) => (
+    <Transition 
+        in={inProp} 
+        timeout={{
+            appear: 100,
+            enter: 300,
+            exit: 300 
+        }}
+        appear
+        unmountOnExit
+    >
+        {state => (
+            <div
+                style={{
+                    ...defaultStyle,
+                    ...transitionStyles[state]
+                }}
+            >
+            I am {state}
+            </div>
+        )}
+    </Transition>
+); 
+function TransitionApp(){
+  const [entered, setEntered] = React.useState(false);
+  return (
+    <div
+>
+      <AComponent in={entered} />
+        <button
+          onClick={() => {
+            setEntered(!entered);
+          }}
+        >
+          Toggle Entered
+        </button>
+    </div>
+  );
+}
 
 export class ListingPage extends Component {
     constructor(props){
@@ -37,7 +89,8 @@ export class ListingPage extends Component {
             owner: false,
             page: 1,
             listingDetail: null,
-            spaceUseFilter: null
+            spaceUseFilter: null,
+            enableTransitionTest: false
         };
     }
     handleShowDetailChange(showDetail, index){
@@ -230,6 +283,7 @@ export class ListingPage extends Component {
         return true;
     }
     render() {
+
         var showDetail = this.state.showDetail;
         var index = this.state.index;
         var editMode = this.state.editMode;
@@ -239,6 +293,9 @@ export class ListingPage extends Component {
         var listingDetail = this.state.listingDetail;
         return (
             <React.Fragment>
+                {this.state.enabledTransitionTest ?
+                <TransitionApp />
+                : null}
                 <Row className="bg-success">
                     <ListingToolbar 
                         loggedIn={loggedIn} 
