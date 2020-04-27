@@ -67,10 +67,10 @@ class ListingToolbar extends React.Component {
         this.props.onMoreFilterChange(moreFilters);
     }
     render(){
-        var allListingsStatus = "p-0";
-        var myListingsStatus = "p-0";
-        if (this.props.listingMode === "allListings") allListingsStatus = "active p-0";
-        if (this.props.listingMode === "myListings") myListingsStatus = "active p-0"
+        var allListingsStatus = "p-1";
+        var myListingsStatus = "p-1";
+        if (this.props.listingMode === "allListings") allListingsStatus = "active p-1";
+        if (this.props.listingMode === "myListings") myListingsStatus = "active p-1"
 
         return (
             <Form className="toolbar-form m-2">
@@ -110,7 +110,7 @@ class ListingToolbar extends React.Component {
                             </Dropdown.Menu>
                         </Dropdown>
                     </Col >
-                    <Col xs={2} >
+                    <Col xs={4} className="text-right">
                        { this.props.loggedIn ?
                        <ButtonGroup className="border">
                            <Button
@@ -118,7 +118,8 @@ class ListingToolbar extends React.Component {
                                value="allListings"
                                onClick={this.handleListingToggle}
                                className={allListingsStatus}
-                               variant="info">
+                               variant="light"
+                           >
                                Public Listings
                            </Button>
                            <Button
@@ -126,13 +127,14 @@ class ListingToolbar extends React.Component {
                                value="myListings"
                                onClick={this.handleListingToggle}
                                className={myListingsStatus}
-                               variant="info">
+                               variant="light"
+                           >
                                MyListings 
                            </Button>
                        </ButtonGroup>
                        : null }
                     </Col>
-                    <Col xs={4} className="text-right">
+                    <Col xs={2} className="text-right">
                         { this.props.loggedIn ?
                         <Button 
                             id="add_a_listing_button"
