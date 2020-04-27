@@ -84,25 +84,41 @@ class ListingEditUnit extends React.Component {
                 <Form.Row>
                     <Form.Group as={Col} >
                         <Form.Label>Decription</Form.Label>
-                        <Form.Control value={this.state.description} onChange={this.onDescriptionChange}/> 
+                        <Form.Control 
+                            id="unit_edit_description"
+                            value={this.state.description} 
+                            onChange={this.onDescriptionChange}
+                        /> 
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
                     <Form.Group as={Col} >
                         <Form.Label>No. of Units</Form.Label>
-                        <Form.Control value={this.state.numUnits} onChange={this.onNumUnitsChange}/>
+                        <Form.Control 
+                            id="unit_edit_num_units"
+                            value={this.state.numUnits} 
+                            onChange={this.onNumUnitsChange}
+                        />
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
                     <Form.Group as={Col} >
                         <Form.Label>Square feet</Form.Label>
-                        <Form.Control value={this.state.space} onChange={this.onSpaceChange}/>
+                        <Form.Control 
+                            id="unit_edit_space"
+                            value={this.state.space} 
+                            onChange={this.onSpaceChange}
+                        />
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
                     <Form.Group as={Col} >
                         <Form.Label>Income</Form.Label>
-                        <Form.Control value={this.state.income} onChange={this.onIncomeChange}/>
+                        <Form.Control 
+                            id="unit_edit_income"
+                            value={this.state.income} 
+                            onChange={this.onIncomeChange}
+                        />
                     </Form.Group>
                 </Form.Row>
 
@@ -110,7 +126,12 @@ class ListingEditUnit extends React.Component {
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={this.props.onHide}>Close</Button>
-                <Button onClick={this.handleSave}>Save</Button>
+                <Button
+                    id="unit_save_button"
+                    onClick={this.handleSave}
+                >
+                    Save
+                </Button>
             </Modal.Footer>
         </Modal>
         );

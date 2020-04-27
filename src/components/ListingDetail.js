@@ -62,13 +62,13 @@ class ListingDetail extends React.Component {
 
     handleSpaceUpdate(space){
         if (!space.ListingVersionId){
-                var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
-                listingService.create(listingBody, (listingVersion) => {
-                    space.ListingVersionId = listingVersion.listing.id;
-                    spaces.create(space, (data) => {
-                        this.props.onFetchListing(data.ListingVersionId);
-                    });
+            var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
+            listingService.create(listingBody, (listingVersion) => {
+                space.ListingVersionId = listingVersion.listing.id;
+                spaces.create(space, (data) => {
+                    this.props.onFetchListing(data.ListingVersionId);
                 });
+            });
         } else {
             if (space.id){
                 spaces.update(space, (data) => {
@@ -82,14 +82,24 @@ class ListingDetail extends React.Component {
         }
     }
     handleUnitUpdate(unit){
-         if (unit.id){
-             units.update(unit, (data) => {
-                 this.props.onFetchListing(data.ListingVersionId);
+         if (!unit.ListingVersionId){
+             var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
+             listingService.create(listingBody, (listingVersion) => {
+                 unit.ListingVersionId = listingVersion.listing.id;
+                 units.create(unit, (data) => {
+                     this.props.onFetchListing(data.ListingVersionId);
+                 });
              });
          } else {
-             units.create(unit, (data) => {
-                 this.props.onFetchListing(data.ListingVersionId);
-             });
+             if (unit.id){
+                 units.update(unit, (data) => {
+                     this.props.onFetchListing(data.ListingVersionId);
+                 });
+             } else {
+                 units.create(unit, (data) => {
+                     this.props.onFetchListing(data.ListingVersionId);
+                 });
+             }
          }
     }
     handleTenantUpdate(tenant){

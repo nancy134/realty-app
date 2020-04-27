@@ -17,6 +17,7 @@ function AddButton(props) {
     return (
         <span>
             <span
+                id="unit_add_button"
                 onClick={() => setModalShow(true)}
                 className="edit-button align-top text-danger"
             >
