@@ -124,14 +124,24 @@ class ListingDetail extends React.Component {
         }
     }
     handlePortfolioUpdate(portfolio){
-        if (portfolio.id){
-            portfolios.update(portfolio, (data) => {
-                this.props.onFetchListing(data.ListingVersionId);
-            });
+        if (!portfolio.ListingVersionId){
+             var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
+             listingService.create(listingBody, (listingVersion) => {
+                 portfolio.ListingVersionId = listingVersion.listing.id;
+                 portfolios.create(portfolio, (data) => {
+                     this.props.onFetchListing(data.ListingVersionId);
+                 });
+             });
         } else {
-            portfolios.create(portfolio, (data) => {
-                this.props.onFetchListing(data.ListingVersionId);
-            });
+            if (portfolio.id){
+                portfolios.update(portfolio, (data) => {
+                    this.props.onFetchListing(data.ListingVersionId);
+                });
+            } else {
+                portfolios.create(portfolio, (data) => {
+                    this.props.onFetchListing(data.ListingVersionId);
+                });
+            }
         }
     } 
     componentDidMount(){

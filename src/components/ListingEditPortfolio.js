@@ -55,7 +55,7 @@ class ListingEditPortfolio extends React.Component {
     handleSave(){
         var portfolio = {};
         portfolio.id = this.state.id;
-        if (this.props.portfolio) portfolio.ListingVersionId = this.props.listing.id;
+        if (this.props.listing) portfolio.ListingVersionId = this.props.listing.id;
         if (this.state.tenant) portfolio.tenant = this.state.tenant;
         if (this.state.buildingSize) portfolio.buildingSize = this.state.buildingSize;
         if (this.state.lotSize) portfolio.lotSize = this.state.lotSize;
@@ -79,32 +79,53 @@ class ListingEditPortfolio extends React.Component {
                 <Form.Row>
                     <Form.Group as={Col} >
                         <Form.Label>Tenant</Form.Label>
-                        <Form.Control value={this.state.tenant} onChange={this.onTenantChange}/> 
+                        <Form.Control 
+                            id="portfolio_edit_tenant"
+                            value={this.state.tenant} 
+                            onChange={this.onTenantChange}
+                        /> 
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
                     <Form.Group as={Col} >
                         <Form.Label>Building Size</Form.Label>
-                        <Form.Control value={this.state.buildingSize} onChange={this.onBuildingSizeChange}/>
+                        <Form.Control 
+                            id="portfolio_edit_building_size"
+                            value={this.state.buildingSize} 
+                            onChange={this.onBuildingSizeChange}
+                        />
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
                     <Form.Group as={Col} >
                         <Form.Label>Lot Size</Form.Label>
-                        <Form.Control value={this.state.lotSize} onChange={this.onLotSizeChange}/>
+                        <Form.Control 
+                            id="portfolio_edit_lot_size"
+                            value={this.state.lotSize} 
+                            onChange={this.onLotSizeChange}
+                        />
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
                     <Form.Group as={Col} >
                         <Form.Label>Type</Form.Label>
-                        <Form.Control value={this.state.type} onChange={this.onTypeChange}/>
+                        <Form.Control 
+                            id="portfolio_edit_type"
+                            value={this.state.type} 
+                            onChange={this.onTypeChange}
+                        />
                     </Form.Group>
                 </Form.Row>
             </Form>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={this.props.onHide}>Close</Button>
-                <Button onClick={this.handleSave}>Save</Button>
+                <Button 
+                    id="portfolio_save_button"
+                    onClick={this.handleSave}
+                >
+                    Save
+                </Button>
             </Modal.Footer>
         </Modal>
         );
