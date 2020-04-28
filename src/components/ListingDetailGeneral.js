@@ -15,6 +15,7 @@ function EditButton(props) {
     return (
         <span>
             <span 
+                id="general_edit_button"
                 onClick={() => setModalShow(true)} 
                 className="edit-button align-top text-danger"
             >
@@ -65,25 +66,25 @@ class ListingDetailGeneral extends React.Component {
         this.props.getListing();
     } 
     render() {
-        var propertyType = "---";
-        var totalBuildingSize = "---";
-        var lotSize = "---"; 
-        var taxes = "---";
-        var parking = "---";
-        var floors = "---";
-        var totalNumberOfUnits = "---";
-        var buildingClass = "---";
-        var ceilingHeight = "---";
-        var driveInDoors = "---";
-        var loadingDocks = "---";
-        var yearBuilt = "---";
-        var zone = "---";
-        var totalAvailableSpace = "---";
-        var nets = "---"; 
+        var propertyType = "";
+        var totalBuildingSize = "";
+        var lotSize = ""; 
+        var taxes = "";
+        var parking = "";
+        var floors = "";
+        var totalNumberOfUnits = "";
+        var buildingClass = "";
+        var ceilingHeight = "";
+        var driveInDoors = "";
+        var loadingDocks = "";
+        var yearBuilt = "";
+        var zone = "";
+        var totalAvailableSpace = "";
+        var nets = ""; 
 
         const editMode = this.props.editMode;
         const listing = this.props.listing;
-        if (listing && isEmpty(listing)) return null;
+        if (editMode === "view" && listing && isEmpty(listing)) return null;
         if (listing){
             propertyType = listing.propertType;
             totalBuildingSize = listing.totalBuildingSize;

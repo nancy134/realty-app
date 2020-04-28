@@ -187,7 +187,12 @@ class ListingEditGeneral extends React.Component {
             <Form.Row>
                 <Form.Group as={Col}>
                     <Form.Label>Property Type</Form.Label>
-                    <Form.Control as="select" value={this.state.propertyType} onChange={this.onPropertyTypeChange}>
+                    <Form.Control 
+                        id="general_edit_property_type"
+                        as="select" 
+                        value={this.state.propertyType} 
+                        onChange={this.onPropertyTypeChange}
+                    >
                         <option>Office</option>
                         <option>Coworking</option>
                         <option>Industrial</option>
@@ -200,13 +205,20 @@ class ListingEditGeneral extends React.Component {
                 </Form.Group>
                 <Form.Group as={Col}>
                     <Form.Label>Ceiling Height</Form.Label>
-                    <Form.Control value={this.state.ceilingHeight} onChange={this.onCeilingHeightChange}></Form.Control>
+                    <Form.Control 
+                        id="general_edit_ceiling_height"
+                        value={this.state.ceilingHeight} 
+                        onChange={this.onCeilingHeightChange}
+                    />
                 </Form.Group>
             </Form.Row>
             <Form.Row>
                 <Form.Group as={Col}>
                     <Form.Label>Total Building Size</Form.Label>
-                    <Form.Control value={this.state.totalBuildingSize} onChange={this.onTotalBuildingSizeChange}></Form.Control>
+                    <Form.Control 
+                        value={this.state.totalBuildingSize} 
+                        onChange={this.onTotalBuildingSizeChange}
+                    />
                 </Form.Group>
                 <Form.Group as={Col}>
                     <Form.Label>Drive In Doors</Form.Label>
@@ -274,7 +286,12 @@ class ListingEditGeneral extends React.Component {
         </Modal.Body>
         <Modal.Footer>
             <Button onClick={this.props.onHide}>Cancel</Button>
-            <Button onClick={this.handleSave}>Save</Button>
+            <Button 
+                id="general_save_button"
+                onClick={this.handleSave}
+            >
+                Save
+            </Button>
         </Modal.Footer>
     </Modal>
     );
