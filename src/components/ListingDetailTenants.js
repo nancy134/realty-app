@@ -41,6 +41,7 @@ function EditButton(props){
     return(
         <span>
             <span
+                id="tenant_edit_button"
                 onClick={() => setModalEditShow(true)}
                 className="edit-button align-top text-danger"
             >

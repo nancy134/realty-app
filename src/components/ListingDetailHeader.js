@@ -143,7 +143,8 @@ class ListingDetailHeader extends React.Component {
                 <Col md={8} className="text-right">
                     {(owner && listingMode === "myListings") ?
                     <ButtonGroup className="border">
-                        <Button 
+                        <Button
+                            id="header_edit_toggle" 
                             type="radio" 
                             value="edit" 
                             onClick={() => this.handleEditToggle("edit")} 
@@ -152,6 +153,7 @@ class ListingDetailHeader extends React.Component {
                             Edit
                         </Button>
                         <Button 
+                            id="header_view_toggle"
                             type="radio" 
                             value="view" 
                             onClick={() => this.handleEditToggle("view")}

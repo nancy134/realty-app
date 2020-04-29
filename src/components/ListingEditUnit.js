@@ -65,6 +65,7 @@ class ListingEditUnit extends React.Component {
         if (this.state.numUnits) unit.numUnits = this.state.numUnits;
         if (this.state.space) unit.space = this.state.space;
         if (this.state.income) unit.income = this.state.income;
+        console.log("unit: "+JSON.stringify(unit));
         this.props.onSave(unit);
         this.props.onHide();
     } 

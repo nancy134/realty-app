@@ -18,6 +18,7 @@ class ListingEditHeader extends React.Component {
         if (this.props.listing){
             this.state = {
                 id: this.props.listing.id,
+                ListingId: this.props.listing.ListingId,
                 address: this.props.listing.address ? this.props.listing.address : "",
                 city: this.props.listing.city ? this.props.listing.city : "",
                 state: this.props.listing.state ? this.props.listing.state : "Alabama",
@@ -26,6 +27,7 @@ class ListingEditHeader extends React.Component {
         } else {
             this.state = {
                 id: null,
+                ListingId: null,
                 address: "",
                 city: "",
                 state: "Alabama",
@@ -57,14 +59,15 @@ class ListingEditHeader extends React.Component {
         var listing = {};
         listing.id = this.state.id;
         if (this.props.listing){
-            listing.id = this.props.listing.id;
+            listing.ListingId = this.props.listing.ListingId;
         } else {
-            listing.id = this.state.id;
+            listing.ListingId = this.state.ListingId;
         }
         if (this.state.address) listing.address = this.state.address;
         if (this.state.city) listing.city = this.state.city;
         if (this.state.state) listing.state = this.state.state;
         if (this.state.displayAddress) listing.displayAddress = this.state.displayAddress;
+        console.log("listing: "+JSON.stringify(listing));
         this.props.onSave(listing);
         this.props.onHide();
     }

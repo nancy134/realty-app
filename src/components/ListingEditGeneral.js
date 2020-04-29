@@ -216,6 +216,7 @@ class ListingEditGeneral extends React.Component {
                 <Form.Group as={Col}>
                     <Form.Label>Total Building Size</Form.Label>
                     <Form.Control 
+                        id="general_edit_building_size"
                         value={this.state.totalBuildingSize} 
                         onChange={this.onTotalBuildingSizeChange}
                     />

@@ -46,6 +46,7 @@ function EditButton(props) {
     return (
         <span>
           <span
+              id="space_edit_button"
               onClick={() => setModalEditShow(true)}
               className="edit-button alight-top text-danger"
           >
@@ -145,7 +146,7 @@ class ListingDetailAvailableSpace extends React.Component {
                            <Row>
                                { editMode === "edit" ?
                                <Col>
-                                   <EditButton 
+                                   <EditButton
                                    listing={listing} 
                                    space={space} 
                                    spaceUses={spaceUses}

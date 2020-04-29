@@ -44,6 +44,7 @@ function ListItem(props){
                     <Card className="border-0">
                         <Card.Body >
                             <Card.Title 
+                                id="listing_title"
                                 className="listing-title text-danger"  
                                 data-index={listing.id} 
                                 onClick={props.onShowDetailChange}
