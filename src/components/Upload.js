@@ -153,8 +153,8 @@ class Upload extends Component {
     render(){
         if (this.state.files){
             var images = this.state.files.map((item,key) =>
-                <div>
-                <Image key={key} src={URL.createObjectURL(item)} className="edit-image" />
+                <div key={key}>
+                <Image src={URL.createObjectURL(item)} className="edit-image" />
                 {this.renderProgress(item)}
                 </div>
             );
