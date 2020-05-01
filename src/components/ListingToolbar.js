@@ -87,19 +87,25 @@ class ListingToolbar extends React.Component {
                     </Col>
                     <Col xs={1}>
                         <Dropdown>
-                            <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                            <Dropdown.Toggle 
+                                variant="secondary" 
+                                id="toolbar_dropdown_space_type"
+                            >
                                 Space Type 
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu 
                                 onFilterChange={(filters) => this.handleFilterChange(filters)} 
-                                as={SpaceTypeMenu}>
-                            </Dropdown.Menu>
+                                as={SpaceTypeMenu}
+                            />
                         </Dropdown>
                     </Col>
                     <Col xs={1}>
                         <Dropdown>
-                            <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                            <Dropdown.Toggle 
+                                variant="secondary" 
+                                id="toolbar_dropdown_more_filters"
+                            >
                                 More Filters
                             </Dropdown.Toggle>
 

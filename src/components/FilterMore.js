@@ -110,6 +110,7 @@ class FilterMore extends React.Component {
                 <Form.Label column sm="4">Listing Type</Form.Label>
                 <Col sm="4">
                     <Form.Control 
+                        id="filter_more_listing_type"
                         as="select"
                         value={this.state.listingType}
                         onChange={this.handleListingTypeChange}>

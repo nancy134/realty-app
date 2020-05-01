@@ -174,7 +174,14 @@ class ListingDetailHeader extends React.Component {
                     { listing ? 
                     <Button className="expandButton p-0" variant="info"><FontAwesomeIcon icon={faExpand} /></Button>
                     : null}
-                    <Button className="closeButton p-0" variant="info" onClick={this.handleClose}><FontAwesomeIcon icon={faTimes}/></Button>
+                    <Button
+                        id="header_close_detail"
+                        className="closeButton p-0" 
+                        variant="info" 
+                        onClick={this.handleClose}
+                    >
+                        <FontAwesomeIcon icon={faTimes}/>
+                    </Button>
                 </Col>
             </Row>
         );
