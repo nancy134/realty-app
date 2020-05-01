@@ -82,6 +82,8 @@ export class ListingPage extends Component {
         this.handleUnpublish = this.handleUnpublish.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.handleMoreFilterChange = this.handleMoreFilterChange.bind(this);
+        this.handleFilesAdded = this.handleFilesAdded.bind(this);
+        this.handleImageUploadFinished = this.handleImageUploadFinished.bind(this);
         this.state = {
             showDetail: false,
             editMode: "view",
@@ -90,7 +92,12 @@ export class ListingPage extends Component {
             page: 1,
             listingDetail: null,
             spaceUseFilter: null,
-            enableTransitionTest: false
+            enableTransitionTest: false,
+            files: [],
+            uploading: false,
+            uploadProgress: [],
+            successfullUploaded: false,
+            showSpinner: false
         };
     }
     handleShowDetailChange(showDetail, index){
@@ -100,14 +107,20 @@ export class ListingPage extends Component {
         } else {
             editMode = this.state.editMode;
         }
+
+        var localState = {
+            index: index,
+            showDetail: showDetail,
+            editMode: editMode,
+            files: [],
+            uploading: false,
+            uploadProgress: [],
+            successfullUploaded: false
+        };
         if (showDetail){
-            this.fetchListing(index,showDetail,editMode);
+            this.fetchListing(localState);
         } else {
-            this.setState({
-                showDetail: showDetail,
-                editMode: editMode,
-                index: index
-            });
+            this.setState(localState);
         }
     }
     handleEditToggle(value){
@@ -116,10 +129,16 @@ export class ListingPage extends Component {
         });
     }
     handleAddListing(){
-        var index = 0;
-        var showDetail = true;
-        var editMode = "edit";
-        this.fetchListing(index, showDetail, editMode);
+        var localState = {
+           index: 0,
+           showDetail: true,
+           editMode: "edit",
+           files: [],
+           uploading: false,
+           uploadProgress: [],
+           successfullUploaded: false
+        };
+        this.fetchListing(localState);
         this.fetchListings("myListings",this.state.page);
     }
     handleListingToggle(value){
@@ -167,22 +186,36 @@ export class ListingPage extends Component {
     }
     handleUpdate(listing){
         listings.update(listing, (data) => {
-            this.setState({
-                listingDetail: data,
-                index: data.listing.id
-            });
-            this.handleListUpdate();
+            if (this.state.files.length > 0){
+                this.uploadFiles(data);
+            } else {
+                this.setState({
+                    listingDetail: data,
+                    index: data.listing.id
+                });
+                this.handleListUpdate();
+            } 
         });
     }
     handleCreate(listing){
         listing.owner = getUserEmail();
         listings.create(listing, (data) => {
-            this.setState({
-                listingDetail: data,
-                index: data.listing.id
-            });
-            this.handleListUpdate();
+            if (this.state.files.length > 0){
+                this.uploadFiles(data);
+            }else{
+                this.setState({
+                    listingDetail: data,
+                    index: data.listing.id
+                });
+                this.handleListUpdate();
+            }
         });
+
+    }
+    handleFilesAdded(files){
+        this.setState(prevState => ({
+            files: prevState.files.concat(files)
+        }));
     }
     handlePublish(data){
         this.setState({
@@ -199,25 +232,34 @@ export class ListingPage extends Component {
     handleFetchListing(index){
         var fetchIndex = this.state.index;
         if (index) fetchIndex = index;
-        this.fetchListing(
-            fetchIndex, 
-            this.state.showDetail, 
-            this.state.editMode
-        );
+        var localState = {
+            index: fetchIndex,
+            showDetail: this.state.showDetail,
+            editMode: this.state.editMode,
+            files: [],
+            uploading: false,
+            uploadProgress: [],
+            successfullUploaded: false
+        };
+        this.fetchListing(localState);
     }
-    fetchListing(index, showDetail, editMode){
-        if (index){
-            listings.get(index, (data) => {
+    fetchListing(localState){
+        if (localState.index){
+            listings.get(localState.index, (data) => {
                 var owner = false;
                 if (isOwner(data.listing.owner)){
                     owner = true;
                 }
                 this.setState({
                     listingDetail: data,
-                    showDetail: showDetail,
-                    editMode: editMode,
-                    index: index,
-                    owner: owner
+                    showDetail: localState.showDetail,
+                    editMode: localState.editMode,
+                    index: localState.index,
+                    owner: owner,
+                    files: localState.files,
+                    uploading: localState.uploading,
+                    uploadProgress: localState.uploadProgress,
+                    successfullUploaded: localState.successfullUploaded 
                 }, () => {
                     this.handleListUpdate();
                 });
@@ -234,10 +276,14 @@ export class ListingPage extends Component {
                 }
                 this.setState({
                     listingDetail: listingDetail,
-                    showDetail: showDetail,
-                    editMode: editMode,
-                    index: index,
-                    owner: true
+                    showDetail: localState.showDetail,
+                    editMode: localState.editMode,
+                    index: localState.index,
+                    owner: true,
+                    files: localState.files,
+                    uploading: localState.uploading,
+                    uploadProgress: localState.uploadProgress,
+                    successfullUploaded: localState.successfullUploaded
                 });
             });
         }
@@ -271,6 +317,82 @@ export class ListingPage extends Component {
            });
         }); 
 
+    }
+    handleImageUploadFinished(data){
+        this.setState({
+            listingDetail: data,
+            index: data.listing.id,
+            showSpinner: false
+        });
+        this.handleListUpdate();
+        this.handleFetchListing(data.listing.id);
+
+    }
+    async uploadFiles(data) {
+      
+        this.setState({ 
+            uploadProgress: {}, 
+            uploading: true ,
+            showSpinner: true
+        });
+        const promises = [];
+        this.state.files.forEach(file => {
+            promises.push(this.sendRequest(file,data.listing.id));
+        });
+        try {
+            await Promise.all(promises);
+
+            this.setState({ successfullUploaded: true, uploading: false });
+            this.handleImageUploadFinished(data);
+        } catch (e) {
+        // Not Production ready! Do some error handling here instead...
+            this.setState({ successfullUploaded: true, uploading: false });
+            this.handleImageUploadFinished(data);
+        }
+    }
+    sendRequest(file, id){
+        return new Promise((resolve, reject) => {
+            const req = new XMLHttpRequest();
+
+            req.upload.addEventListener("progress", event => {
+                if (event.lengthComputable) {
+                    const copy = { ...this.state.uploadProgress };
+                    copy[file.name] = {
+                        state: "pending",
+                        percentage: (event.loaded / event.total) * 100
+                    };
+                    this.setState({ uploadProgress: copy });
+                }
+            });
+   
+            req.upload.addEventListener("load", event => {
+                const copy = { ...this.state.uploadProgress };
+                copy[file.name] = { state: "done", percentage: 100 };
+                this.setState({ uploadProgress: copy });
+                //resolve(req.response);
+            });
+   
+            req.upload.addEventListener("error", event => {
+                const copy = { ...this.state.uploadProgress };
+                copy[file.name] = { state: "error", percentage: 0 };
+                this.setState({ uploadProgress: copy });
+                reject(req.response);
+            });
+            const formData = new FormData();
+            formData.append("image", file, file.name);
+            formData.append("listing_id",id);
+            var url = process.env.REACT_APP_LISTING_SERVICE+"upload";
+            req.open("POST", url);
+            req.onreadystatechange = function(){
+                if (req.readyState === 4){
+                    if (req.status === 200)
+                        resolve(req.responseText);
+                    else
+                        reject(req.responsetext);
+                }
+            };
+            req.send(formData);
+        });
     }
 
     componentDidMount(){
@@ -324,6 +446,12 @@ export class ListingPage extends Component {
                                 onFetchListing={this.handleFetchListing}
                                 onPublish={this.handlePublish}
                                 onUnpublish={this.handleUnpublish}
+                                onFilesAdded={this.handleFilesAdded}
+                                files={this.state.files}
+                                uploading={this.state.uploading}
+                                uploadProgress={this.state.uploadProgress}
+                                successfullUploaded={this.state.successfullUploaded}
+                                showSpinner={this.state.showSpinner}
                             />
                         ) : (
                             <ListingMap showDetail={showDetail} />

@@ -7,7 +7,7 @@ import {
     Button,
     Image
 } from 'react-bootstrap';
-import Upload from './Upload';
+import ImageUpload from './ImageUpload';
 
 class ListingEditOverview extends React.Component {
     constructor(props){
@@ -16,8 +16,9 @@ class ListingEditOverview extends React.Component {
         this.onListingTypeChange = this.onListingTypeChange.bind(this);
         this.onListingPriceChange = this.onListingPriceChange.bind(this);
         this.onShortDescriptionChange = this.onShortDescriptionChange.bind(this);
-        this.onImageUploadFinished = this.onImageUploadFinished.bind(this);
+        //this.onImageUploadFinished = this.onImageUploadFinished.bind(this);
         this.onLongDescriptionChange = this.onLongDescriptionChange.bind(this);
+        this.handleFilesAdded = this.handleFilesAdded.bind(this);
         if (this.props.listing){
             this.state = {
                 id: this.props.listing.id,
@@ -62,14 +63,10 @@ class ListingEditOverview extends React.Component {
     }
 
     handleSave(){
-        console.log("handleSave()");
         var listing = {};
         if (this.props.listing){
-
-            //listing.id = this.props.listing.id;
             listing.ListingId = this.props.listing.ListingId;
         } else {
-            //listing.id = this.state.id;
             listing.ListingId = this.state.ListingId;
         }
           
@@ -78,16 +75,10 @@ class ListingEditOverview extends React.Component {
         if (this.state.shortDescription) listing.shortDescription = this.state.shortDescription;
         if (this.state.longDescription) listing.longDescription = this.state.longDescription;
         this.props.onSave(listing);
-        this.uploadFiles();
-    }
-    onImageUploadFinished(){
-        console.log("onImageUloadFinished()");
         this.props.onHide();
-        this.props.getListing();
     }
-    acceptMethods(uploadFiles){
-        console.log("accepthMethods()");
-        this.uploadFiles = uploadFiles;
+    handleFilesAdded(files){
+        this.props.onFilesAdded(files);
     }
     render(){
         var listingTypes = null;
@@ -163,12 +154,16 @@ class ListingEditOverview extends React.Component {
                     </Row>
                     <Row>
 
-                    <Upload 
+                    <ImageUpload 
                         id="overview_edit_image_upload"
                         images={images} 
-                        shareMethods={this.acceptMethods.bind(this)} 
                         listing={this.props.listing} 
                         onImageUploadFinished={this.onImageUploadFinished}
+                        onFilesAdded={this.handleFilesAdded}
+                        files={this.props.files}
+                        uploading={this.props.uploading}
+                        uploadProgress={this.props.uploadProgress}
+                        successfullUploaded={this.props.successfullUploaded}
                     />
                     </Row>
                     <Row>

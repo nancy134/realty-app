@@ -34,6 +34,7 @@ class ListingDetail extends React.Component {
         this.handleTenantUpdate = this.handleTenantUpdate.bind(this);
         this.handlePublish = this.handlePublish.bind(this);
         this.handleUnpublish = this.handleUnpublish.bind(this);
+        this.handleFilesAdded = this.handleFilesAdded.bind(this);
     }
 
     handleShowDetailChange() {
@@ -48,6 +49,9 @@ class ListingDetail extends React.Component {
         } else { // Create
             this.props.onCreate(listing);
         }
+    }
+    handleFilesAdded(files){
+        this.props.onFilesAdded(files);
     }
     handlePublish(id){
         listingService.publish(id, (data) => {
@@ -207,6 +211,13 @@ class ListingDetail extends React.Component {
                     editMode={editMode} 
                     onListingUpdate={this.handleListingUpdate} 
                     getListing={this.props.onFetchListing}
+                    onFilesAdded={this.handleFilesAdded}
+                    files={this.props.files}
+                    uploading={this.props.uploading}
+                    uploadProgress={this.props.uploadProgress}
+                    successfullUploaded={this.props.successfullUploaded}
+                    showSpinner={this.props.showSpinner}
+
                 />
                 { (editMode === "edit") || (listing && listing.spaces.length) > 0 ?
                     <ListingDetailAvailableSpace 

@@ -1,7 +1,8 @@
 import React from 'react';
 import {
     Row,
-    Col
+    Col,
+    Spinner
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -15,26 +16,42 @@ import 'react-image-gallery/styles/css/image-gallery.css';
 
 function EditButton(props) {
     const [modalShow, setModalShow] = React.useState(false);
-
+    console.log("props.showSpinner: "+props.showSpinner);
     return (
         <span>
+           {props.showSpinner ?
             <span
-                id="overview_edit_button" 
-                onClick={() => setModalShow(true)} 
+                id="overview_spinner" 
                 className="edit-button align-top text-danger"
             >
+                <Spinner animation="border" size="sm"/>
+            </span>
+            : null}
+            {!props.showSpinner ?
+            <span
+                id="overview_edit_button"
+                onClick={() => setModalShow(true)}
+                className="edit-button align-top text-danger"
+            >
+
                 <FontAwesomeIcon size="xs" icon={faPencilAlt} />
             </span>
+            : null}
             <ListingEditOverview
                 listing = {props.listing}
                 listingTypes = {props.listingTypes}
                 getListing={props.getListing}
                 show={modalShow}
+                onFilesAdded={props.onFilesAdded}
+                files={props.files}
+                uploading={props.uploading}
+                uploadProgress={props.uploadProgress}
+                successfullUploaded={props.successfullUploaded}
                 onHide={() => setModalShow(false)}
                 onSave={listing => props.onSave(listing)}
             />
         </span>
-  );
+    );
 }
 
 class ListingDetailOverview extends React.Component {
@@ -42,6 +59,7 @@ class ListingDetailOverview extends React.Component {
         super(props);
         this.handleEdit = this.handleEdit.bind(this);
         this.handleSave = this.handleSave.bind(this);
+        this.handleFilesAdded = this.handleFilesAdded.bind(this);
         this.renderLeftNav = this.renderLeftNav.bind(this);
         this.renderRightNav = this.renderRightNav.bind(this);
         this.getListing = this.getListing.bind(this);
@@ -49,8 +67,10 @@ class ListingDetailOverview extends React.Component {
     handleEdit(){
     }
     handleSave(listing){
-        console.log("handleSave");
         this.props.onListingUpdate(listing);
+    }
+    handleFilesAdded(files){
+        this.props.onFilesAdded(files);
     }
     renderLeftNav(onClick, disabled){
         return(
@@ -78,15 +98,14 @@ class ListingDetailOverview extends React.Component {
         </button>
         );
     }
-    acceptMethods(uploadFiles){
-        console.log("acceptMethods");
-        this.upLoadFiles = uploadFiles;
-    }
+    //acceptMethods(uploadFiles){
+    //    this.upLoadFiles = uploadFiles;
+    //}
     getListing(){
         this.props.getListing();
     }
     render() {
-
+        
         var shortDescription = "Lorem.";
         var longDescription = "Lorem ipsum.";
         var defaultImage = {
@@ -118,7 +137,20 @@ class ListingDetailOverview extends React.Component {
             <div>
                 <Row className="mt-2 border-bottom border-warning">
                     <Col>
-	                <h2>Overview {editMode === "edit" ? <EditButton listing={listing} listingTypes={listingTypes} onSave={this.handleSave} getListing={this.props.getListing}/> : null}</h2>
+	                <h2>Overview {editMode === "edit" ? 
+                            <EditButton 
+                                listing={listing} 
+                                listingTypes={listingTypes} 
+                                onSave={this.handleSave} 
+                                getListing={this.props.getListing}
+                                onFilesAdded={this.handleFilesAdded}
+                                files={this.props.files}
+                                uploading={this.props.uploading}
+                                uploadProgress={this.props.uploadProgress}
+                                successfullUploaded={this.props.successfullUploaded}
+                                showSpinner={this.props.showSpinner}
+                            /> 
+                            : null}</h2>
                     </Col>
                     <Col>
                         <div className="text-right">
