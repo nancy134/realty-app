@@ -42,19 +42,23 @@ function TransitionButton(props) {
 
   return (
       <span>
-      <Button variant="info" onClick={() => setModalShow(true)}>
-      {props.buttonText}
-      </Button>
+          <Button 
+              id="header_transition_button"
+              variant="info" 
+              onClick={() => setModalShow(true)}
+          >
+              {props.buttonText}
+          </Button>
 
-      <TransitionModal
-        show={modalShow}
-        message={props.message}
-        states={props.states}
-        transition={props.buttonText}
-        onHide={() => setModalShow(false)}
-        onPublish={props.onPublish}
-        onUnpublish={props.onUnpublish}
-      />
+          <TransitionModal
+              show={modalShow}
+              message={props.message}
+              states={props.states}
+              transition={props.buttonText}
+              onHide={() => setModalShow(false)}
+              onPublish={props.onPublish}
+              onUnpublish={props.onUnpublish}
+          />
       </span>
   );
 }

@@ -120,6 +120,7 @@ class ListingToolbar extends React.Component {
                        { this.props.loggedIn ?
                        <ButtonGroup className="border">
                            <Button
+                               id="toolbar_all_listings"
                                type="radio"
                                value="allListings"
                                onClick={this.handleListingToggle}
@@ -129,6 +130,7 @@ class ListingToolbar extends React.Component {
                                Public Listings
                            </Button>
                            <Button
+                               id="toolbar_my_listings"
                                type="radio"
                                value="myListings"
                                onClick={this.handleListingToggle}

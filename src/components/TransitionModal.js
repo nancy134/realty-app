@@ -46,7 +46,12 @@ class TransitionModal extends React.Component {
             <Modal.Footer>
                 <Button onClick={this.props.onHide}>Cancel</Button>
                 { publish ?
-                <Button onClick={this.onPublish}>Publish</Button>
+                <Button 
+                    id="transition_publish_button"
+                    onClick={this.onPublish}
+                >
+                    Publish
+                </Button>
                 : null}
                 { unpublish ?
                 <Button onClick={this.onUnpublish}>Take off market</Button>

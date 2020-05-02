@@ -80,12 +80,14 @@ class FilterMore extends React.Component {
                 <Form.Label column sm="4">Available Space</Form.Label>
                 <Col sm="4">
                     <Form.Control 
+                        id="filter_min_size"
                         placeholder="Min" 
                         value={this.state.minSize}
                         onChange={this.handleMinSizeChange} />
                 </Col>
                 <Col sm="4">
-                    <Form.Control 
+                    <Form.Control
+                        id="filter_max_size"
                         placeholder="Max"
                         value={this.state.maxSize}
                         onChange={this.handleMaxSizeChange} />
@@ -94,13 +96,15 @@ class FilterMore extends React.Component {
             <Form.Group as={Row} className="mr-1 ml-1">
                 <Form.Label column sm="4">Lease Rate</Form.Label>
                 <Col sm="4">
-                    <Form.Control 
+                    <Form.Control
+                        id="filter_min_rate"
                         placeholder="Min"
                         value={this.state.minRate}
                         onChange={this.handleMinRateChange}/>
                 </Col>
                 <Col sm="4">
                     <Form.Control 
+                        id="filter_max_rate"
                         placeholder="Max"
                         value={this.state.maxRate}
                         onChange={this.handleMaxRateChange}/>
