@@ -164,6 +164,7 @@ class ListingDetail extends React.Component {
                     listingTypes: listingDetail.listingTypes,
                     spaceUses: listingDetail.spaceUses,
                     spaceTypes: listingDetail.spaceTypes,
+                    portfolioTypes: listingDetail.portfolioTypes,
                     propertyTypes: listingDetail.propertyTypes,
                     amenities: listingDetail.amenities
                 });
@@ -180,6 +181,7 @@ class ListingDetail extends React.Component {
         const listingTypes = this.state.listingTypes;
         const spaceUses = this.state.spaceUses;
         const spaceTypes = this.state.spaceTypes;
+        const portfolioTypes = this.state.portfolioTypes;
         //const allAmenities = this.state.amenities;
         const listingMode = this.props.listingMode;
         var listing = null;
@@ -249,6 +251,7 @@ class ListingDetail extends React.Component {
                     <ListingDetailPortfolio 
                         listing={listing} 
                         editMode={editMode} 
+                        portfolioTypes={portfolioTypes}
                         onPortfolioUpdate={this.handlePortfolioUpdate} 
                         getListing={this.props.onFetchListing} />
                 : null }

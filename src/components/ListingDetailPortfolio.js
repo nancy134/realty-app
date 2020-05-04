@@ -26,6 +26,7 @@ function AddButton(props) {
             {modalShow ?
             <ListingEditPortfolio
                 listing={props.listing}
+                portfolioTypes={props.portfolioTypes}
                 portfolio={props.portfolio}
                 show={modalShow}
                 onHide={() => setModalShow(false)}
@@ -50,6 +51,7 @@ function EditButton(props){
             <ListingEditPortfolio
                 listing={props.listing}
                 portfolio={props.portfolio}
+                portfolioTypes={props.portfolioTypes}
                 show={modalEditShow}
                 onHide={() => setModalEditShow(false)}
                 onSave={listing => props.onSave(listing)}
@@ -70,12 +72,21 @@ class ListingDetailPortfolio extends React.Component {
     render(){
         var listing = this.props.listing;
         var editMode = this.props.editMode;
+        var portfolioTypes = this.props.portfolioTypes;
         var newPortfolio = {};
         return(
         <React.Fragment>
             <Row className="mt-2 border-bottom border-warning">
                 <Col>
-                    <h2>Portfolio {editMode === "edit" ? <AddButton listing={listing} portfolio={newPortfolio} onSave={this.handleSave}/> : null}</h2>
+                    <h2>Portfolio 
+                        {editMode === "edit" ? 
+                        <AddButton 
+                            listing={listing} 
+                            portfolio={newPortfolio} 
+                            portfolioTypes={portfolioTypes}
+                            onSave={this.handleSave}
+                        /> 
+                        : null}</h2>
                 </Col>
             </Row>
             <Row className="bg-light shadow">
@@ -95,7 +106,13 @@ class ListingDetailPortfolio extends React.Component {
                 <Col md={3}>
                     <Row>
                         { editMode === "edit" ?
-                        <Col><EditButton listing={listing} portfolio={portfolio} onSave={this.handleSave}/></Col>
+                        <Col>
+                            <EditButton 
+                                listing={listing} 
+                                portfolio={portfolio}
+                                portfolioTypes={portfolioTypes}
+                                onSave={this.handleSave}
+                            /></Col>
                         : null }
                         { editMode === "edit" ?
                         <Col><FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} /></Col>

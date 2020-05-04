@@ -3,107 +3,123 @@ import {
     Col,
     Form,
     Modal,
+    InputGroup,
     Button
 } from 'react-bootstrap';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
+
+    const PortfolioSchema = Yup.object().shape({
+        tenant: Yup.string().required('Tenant Name is required'),
+        buildingSize: Yup.number().typeError('Building Size must be a number'),
+        lotSize: Yup.number().typeError('Lot Size must be a number'),
+        types: Yup.string()
+    });
 
 class ListingEditPortfolio extends React.Component {
     constructor(props){
         super(props);
-        this.onTenantChange = this.onTenantChange.bind(this);
-        this.onBuildingSizeChange =this.onBuildingSizeChange.bind(this);
-        this.onLotSizeChange = this.onLotSizeChange.bind(this);
-        this.onTypeChange = this.onTypeChange.bind(this);
         this.handleSave = this.handleSave.bind(this);
-        if (this.props.portfolio){
-            this.state = {
-                id: this.props.portfolio.id,
-                tenant: this.props.portfolio.tenant ? this.props.portfolio.tenant : "",
-                buildingSize: this.props.portfolio.buildingSize ? this.props.portfolio.buildingSize : "",
-                lotSize: this.props.portfolio.lostSize ? this.props.portfolio.logSize : "",
-                type: this.props.portfolio.type ? this.props.portfolio.type : ""
-            };
-        } else {
-            this.state = {
-                id: null,
-                tenant: "",
-                buildingSize: "",
-                lotSize: "",
-                type: ""
-            };
-        }
     }
-    onTenantChange(event){
-        this.setState({
-            tenant: event.target.value
-        });
-    }
-    onBuildingSizeChange(event){
-        this.setState({
-            buildingSize: event.target.value
-        });
-    }
-    onLotSizeChange(event){
-        this.setState({
-            lotSize: event.target.value
-        });
-    }
-    onTypeChange(event){
-        this.setState({
-            type: event.target.value
-        });
-    }
-    handleSave(){
-        var portfolio = {};
-        portfolio.id = this.state.id;
+    handleSave(portfolio){
+
+        if (this.props.portfolio) portfolio.id = this.props.portfolio.id;
         if (this.props.listing) portfolio.ListingVersionId = this.props.listing.id;
-        if (this.state.tenant) portfolio.tenant = this.state.tenant;
-        if (this.state.buildingSize) portfolio.buildingSize = this.state.buildingSize;
-        if (this.state.lotSize) portfolio.lotSize = this.state.lotSize;
-        if (this.state.type) portfolio.type = this.state.type;
+
+        console.log("portfolio: "+JSON.stringify(portfolio));
         this.props.onSave(portfolio);
-        this.props.onHide(); 
+        this.props.onHide();
     }
     render(){
+        const portfolio = this.props.portfolio;
+        var portfolioValues = {
+            tenant: ""
+        };
+        if (portfolio){
+            if (portfolio.tenant) portfolioValues.tenant = portfolio.tenant;
+            if (portfolio.lotSize) portfolioValues.lotSize = portfolio.lotSize;
+            if (portfolio.buildingSize) portfolioValues.buildingSize = portfolio.buildingSize;
+            if (portfolio.type) portfolioValues.type = portfolio.type;
+        }
         return (
+                 <Formik
+                initialValues={portfolioValues}
+                validationSchema={PortfolioSchema}
+                onSubmit={(values, { setSubmitting }) => {
+                    setSubmitting(true);
+                    this.handleSave(values);
+                    setSubmitting(false);
+                }}
+            >
+            {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, isValid, dirty }) => (
         <Modal
             show={this.props.show}
             onHide={this.props.onHide}
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                Portfolio Edit
+                Portfolio Edit 
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-            <Form>
+
+            <Form noValidate >
                 <Form.Row>
                     <Form.Group as={Col} >
-                        <Form.Label>Tenant</Form.Label>
+                        <Form.Label>Tenant Name</Form.Label>
                         <Form.Control 
                             id="portfolio_edit_tenant"
-                            value={this.state.tenant} 
-                            onChange={this.onTenantChange}
+                            name="tenant"
+                            type="text"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.tenant}
+                            isInvalid={!!errors.tenant}
+                            isValid={touched.tenant && !errors.tenant}
                         /> 
+                        <Form.Control.Feedback type="invalid">{errors.tenant}</Form.Control.Feedback>
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
                     <Form.Group as={Col} >
                         <Form.Label>Building Size</Form.Label>
-                        <Form.Control 
-                            id="portfolio_edit_building_size"
-                            value={this.state.buildingSize} 
-                            onChange={this.onBuildingSizeChange}
-                        />
+                        <InputGroup>
+                            <Form.Control 
+                                id="portfolio_edit_building_size"
+                                name="buildingSize"
+                                type="text"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.buildingSize} 
+                                isInvalid={!!errors.buildingSize}
+                                isValid={touched.buildingSize && !errors.buildingSize}
+                            />
+                            <InputGroup.Append>
+                                <InputGroup.Text id="basic-addon2">sq ft</InputGroup.Text>
+                            </InputGroup.Append>
+                            <Form.Control.Feedback type="invalid">{errors.buildingSize}</Form.Control.Feedback>
+                        </InputGroup>
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
-                    <Form.Group as={Col} >
+                    <Form.Group as={Col}>
                         <Form.Label>Lot Size</Form.Label>
-                        <Form.Control 
-                            id="portfolio_edit_lot_size"
-                            value={this.state.lotSize} 
-                            onChange={this.onLotSizeChange}
-                        />
+                        <InputGroup>
+                            <Form.Control
+                                id="portfolio_edit_lot_size"
+                                name="lotSize"
+                                type="text"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.lotSize}
+                                isInvalid={!!errors.lotSize}
+                                isValid={touched.lotSize && !errors.lotSize}
+                            />
+                            <InputGroup.Append>
+                                <InputGroup.Text id="basic-addon2">acres</InputGroup.Text>
+                            </InputGroup.Append>
+                            <Form.Control.Feedback type="invalid">{errors.lotSize}</Form.Control.Feedback>
+                        </InputGroup>
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
@@ -111,9 +127,17 @@ class ListingEditPortfolio extends React.Component {
                         <Form.Label>Type</Form.Label>
                         <Form.Control 
                             id="portfolio_edit_type"
-                            value={this.state.type} 
-                            onChange={this.onTypeChange}
-                        />
+                            as="select"
+                            name="type"
+                            value={values.type} 
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                        >
+                            <option key="-1"></option>
+                            {this.props.portfolioTypes.map((portfolioType, index) => (
+                            <option key={index}>{portfolioType}</option>
+                            ))}
+                        </Form.Control>
                     </Form.Group>
                 </Form.Row>
             </Form>
@@ -121,13 +145,16 @@ class ListingEditPortfolio extends React.Component {
             <Modal.Footer>
                 <Button onClick={this.props.onHide}>Close</Button>
                 <Button 
+                    disabled={!(isValid && dirty)}
                     id="portfolio_save_button"
-                    onClick={this.handleSave}
+                    onClick={handleSubmit}
                 >
                     Save
                 </Button>
             </Modal.Footer>
         </Modal>
+        )}
+        </Formik>
         );
     }
 }
