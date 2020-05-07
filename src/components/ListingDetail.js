@@ -23,18 +23,28 @@ class ListingDetail extends React.Component {
     constructor(props) {
    super(props);
         this.state = {
-            listing: null
+            listing: null,
+
+            // Portfolio
+            portfolioNew: false,
+            portfolioUpdate: false,
+            portfolioSaving: false
         };
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
         this.handleListingUpdate = this.handleListingUpdate.bind(this);
         this.handleSpaceUpdate = this.handleSpaceUpdate.bind(this);
         this.handleUnitUpdate = this.handleUnitUpdate.bind(this);
-        this.handlePortfolioUpdate = this.handlePortfolioUpdate.bind(this);
         this.handleTenantUpdate = this.handleTenantUpdate.bind(this);
         this.handlePublish = this.handlePublish.bind(this);
         this.handleUnpublish = this.handleUnpublish.bind(this);
         this.handleFilesAdded = this.handleFilesAdded.bind(this);
+
+        // Portfolio
+        this.handlePortfolioUpdate = this.handlePortfolioUpdate.bind(this);
+        this.handlePortfolioModalNew = this.handlePortfolioModalNew.bind(this);
+        this.handlePortfolioModalUpdate = this.handlePortfolioModalUpdate.bind(this);
+        this.handlePortfolioModalHide = this.handlePortfolioModalHide.bind(this);
     }
 
     handleShowDetailChange() {
@@ -127,23 +137,69 @@ class ListingDetail extends React.Component {
             }
         }
     }
+    handlePortfolioModalNew(){
+        this.setState({
+            portfolioNew: true
+        });
+    }
+    handlePortfolioModalUpdate(index){
+        this.setState({
+            portfolioUpdate: true,
+            portfolioUpdateIndex: index,
+            
+        });
+    }
+    handlePortfolioModalHide(){
+        this.setState({
+            portfolioNew: false,
+            portfolioUpdate: false,
+            portfolioSaving: false,
+            portfolioError: null
+        });
+    }
     handlePortfolioUpdate(portfolio){
+        var that = this;
+        this.setState({portfolioSaving: true});
         if (!portfolio.ListingVersionId){
              var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
              listingService.create(listingBody, (listingVersion) => {
                  portfolio.ListingVersionId = listingVersion.listing.id;
-                 portfolios.create(portfolio, (data) => {
-                     this.props.onFetchListing(data.ListingVersionId);
+                 var createPromise = portfolios.createPromise(portfolio);
+                 createPromise.then(function(data){
+                     that.props.onFetchListing(data.ListingVersionId);
+                     that.handlePortfolioModalHide();
+                 }).catch(function(err){
+                     that.setState({
+                         portfolioError: err.message,
+                         portfolioSaving: false
+                     });
+                     that.props.onFetchListing(listingVersion.listing.id);
                  });
              });
         } else {
             if (portfolio.id){
-                portfolios.update(portfolio, (data) => {
-                    this.props.onFetchListing(data.ListingVersionId);
+                var updatePromise = portfolios.updatePromise(portfolio);
+                updatePromise.then(function(data){
+                    that.props.onFetchListing(data.ListingVersionId);
+                    that.handlePortfolioModalHide();
+                }).catch(function(err){
+                     that.setState({
+                         portfolioError: err.message,
+                         portfolioSaving: false
+                     });
+                     that.props.onFetchListing(portfolio.ListingVersionId);
+
                 });
             } else {
-                portfolios.create(portfolio, (data) => {
-                    this.props.onFetchListing(data.ListingVersionId);
+                portfolios.createPromise(portfolio).then(function(data){
+                    that.props.onFetchListing(data.ListingVersionId);
+                    that.handlePortfolioModalHide();
+                }).catch(function(err){
+                     that.setState({
+                         portfolioError: err.message,
+                         portfolioSaving: false
+                     });
+                     that.props.onFetchListing(portfolio.listingVersionId);
                 });
             }
         }
@@ -252,7 +308,16 @@ class ListingDetail extends React.Component {
                         listing={listing} 
                         editMode={editMode} 
                         portfolioTypes={portfolioTypes}
+                        portfolioNew={this.state.portfolioNew}
+                        portfolioUpdate={this.state.portfolioUpdate}
+                        portfolioError={this.state.portfolioError}
+                        portfolioSaving={this.state.portfolioSaving}
+                        onPortfolioModalNew={this.handlePortfolioModalNew}
+                        onPortfolioModalUpdate={this.handlePortfolioModalUpdate}
+                        portfolioUpdateIndex={this.state.portfolioUpdateIndex}
+                        onPortfolioModalHide={this.handlePortfolioModalHide}
                         onPortfolioUpdate={this.handlePortfolioUpdate} 
+                    
                         getListing={this.props.onFetchListing} />
                 : null }
                     <ListingDetailGeneral 

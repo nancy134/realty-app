@@ -1,3 +1,5 @@
+var rp = require('request-promise');
+
 export function getAll(query,cb){
     var url = "";
     if (query) {
@@ -15,22 +17,35 @@ export function get(index, cb){
     }).then(checkStatus).then(parseJSON).then(cb);
 }
 
-export function create(portfolio,cb){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"portfolios";
-    fetch(url, {
-        method: 'post',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify(portfolio)
-    }).then(checkStatus).then(parseJSON).then(cb);
+export function createPromise(portfolio){
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'POST',
+            uri: process.env.REACT_APP_LISTING_SERVICE+"portfolios",
+            body: portfolio,
+            json: true
+        }
+        rp(options).then(function(parsedBody){
+            resolve(parsedBody);
+        }).catch(function(err){
+            reject(err.error);
+        });
+    });
 }
-
-export function update(data,cb){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"portfolios/"+data.id;
-    fetch(url, {
-        method: 'put',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
-    }).then(checkStatus).then(parseJSON).then(cb);
+export function updatePromise(data){
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'PUT',
+            uri: process.env.REACT_APP_LISTING_SERVICE+"portfolios/"+data.id,
+            body: data,
+            json: true
+         };
+         rp(options).then(function(parsedBody){
+             resolve(parsedBody);
+         }).catch(function(err){
+             reject(err.error);
+         });
+    });
 }
 
 function checkStatus(response){
@@ -49,7 +64,7 @@ function parseJSON(response){
    return response.json();
 }
 
-const portfolios = {get, getAll,create, update};
+const portfolios = {get, getAll, createPromise, updatePromise};
 export default portfolios;
 
 

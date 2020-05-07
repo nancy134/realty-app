@@ -5,7 +5,7 @@ import {
     Col
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
+import {
     faPlus,
     faPencilAlt,
     faTrash
@@ -13,24 +13,27 @@ import {
 import ListingEditPortfolio from './ListingEditPortfolio';
 
 function AddButton(props) {
-    const [modalShow, setModalShow] = React.useState(false);
     return (
         <span>
             <span
                 id="portfolio_add_button"
-                onClick={() => setModalShow(true)}
+                onClick={() => {props.onShow()}}
                 className="edit-button align-top text-danger"
             >
                 <FontAwesomeIcon size="xs" icon={faPlus} />
             </span>
-            {modalShow ?
+            {props.show ?
             <ListingEditPortfolio
+                title="Add New Portfolio"
                 listing={props.listing}
+                index={props.index}
                 portfolioTypes={props.portfolioTypes}
                 portfolio={props.portfolio}
-                show={modalShow}
-                onHide={() => setModalShow(false)}
+                show={props.show}
+                onHide={props.onHide}
                 onSave={listing => props.onSave(listing)}
+                errorMessage={props.errorMessage}
+                saving={props.saving}
             />
             : null}
         </span>
@@ -38,24 +41,32 @@ function AddButton(props) {
 }
 
 function EditButton(props){
-    const [modalEditShow, setModalEditShow] = React.useState(false);
+    var portfolio = props.portfolio;
+    if (props.listing){
+        portfolio = props.listing.portfolios[props.portfolioUpdateIndex];
+    }
     return(
         <span>
             <span
                 id="portfolio_edit_button"
-                onClick={() => setModalEditShow(true)}
+                onClick={() => {props.onShow(props.index)}}
                 className="edit-button align-top text-danger"
             >
                 <FontAwesomeIcon icon={faPencilAlt} />
             </span>
+            { props.show ?
             <ListingEditPortfolio
+                title="Edit Portfolio"
                 listing={props.listing}
-                portfolio={props.portfolio}
+                portfolio={portfolio}
                 portfolioTypes={props.portfolioTypes}
-                show={modalEditShow}
-                onHide={() => setModalEditShow(false)}
+                show={props.show}
+                onHide={props.onHide}
                 onSave={listing => props.onSave(listing)}
+                errorMessage={props.errorMessage}
+                saving={props.saving}
             />
+            : null }
         </span>
     );
 }
@@ -80,12 +91,17 @@ class ListingDetailPortfolio extends React.Component {
                 <Col>
                     <h2>Portfolio 
                         {editMode === "edit" ? 
-                        <AddButton 
-                            listing={listing} 
-                            portfolio={newPortfolio} 
+                        <AddButton
+                            listing={listing}
+                            portfolio={newPortfolio}
                             portfolioTypes={portfolioTypes}
                             onSave={this.handleSave}
-                        /> 
+                            onShow={this.props.onPortfolioModalNew}
+                            onHide={this.props.onPortfolioModalHide}
+                            errorMessage={this.props.portfolioError}
+                            show={this.props.portfolioNew}
+                            saving={this.props.portfolioSaving}
+                        />
                         : null}</h2>
                 </Col>
             </Row>
@@ -96,7 +112,7 @@ class ListingDetailPortfolio extends React.Component {
                 <Col md={2} className="font-weight-bold">Type</Col>
             </Row>
             {!listing ? <div></div> :
-            listing.portfolios.map(portfolio =>
+            listing.portfolios.map((portfolio, index) =>
             (
             <Row key={portfolio.id}>
                 <Col md={3}>{portfolio.tenant}</Col>
@@ -108,10 +124,17 @@ class ListingDetailPortfolio extends React.Component {
                         { editMode === "edit" ?
                         <Col>
                             <EditButton 
-                                listing={listing} 
+                                listing={listing}
+                                index={index}
+                                portfolioUpdateIndex={this.props.portfolioUpdateIndex}
                                 portfolio={portfolio}
                                 portfolioTypes={portfolioTypes}
                                 onSave={this.handleSave}
+                                onShow={this.props.onPortfolioModalUpdate}
+                                onHide={this.props.onPortfolioModalHide}
+                                errorMessage={this.props.portfolioError}
+                                show={this.props.portfolioUpdate}
+                                saving={this.props.portfolioSaving}
                             /></Col>
                         : null }
                         { editMode === "edit" ?

@@ -16,7 +16,6 @@ import 'react-image-gallery/styles/css/image-gallery.css';
 
 function EditButton(props) {
     const [modalShow, setModalShow] = React.useState(false);
-    console.log("props.showSpinner: "+props.showSpinner);
     return (
         <span>
            {props.showSpinner ?

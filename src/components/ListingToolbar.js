@@ -55,7 +55,6 @@ class ListingToolbar extends React.Component {
 
     handleListingToggle(e){
         e.preventDefault();
-        console.log("handleListingToggle: "+e.target.value);
         this.props.onListingToggle(e.target.value);
     }
 
