@@ -15,7 +15,10 @@ import {formatDate} from '../helpers/utilities';
 
 function TenantItem(props){
     var tenant = props.tenant;
-    var leaseEnds = formatDate(tenant.leaseEnds);
+    var leaseEnds;
+    if (tenant.leaseEnds && tenant.leaseEnds !== ""){
+        leaseEnds = formatDate(tenant.leaseEnds);
+    }
     return(
             <Row key={tenant.id}>
                 <Col md={3}>{tenant.tenant}</Col>
@@ -34,7 +37,7 @@ function TenantItem(props){
                                 onSave={props.onSave}
                                 onShow={props.onShow}
                                 onHide={props.onHide}
-                                errorMesage={props.errorMessage}
+                                errorMessage={props.errorMessage}
                                 show={props.show}
                                 saving={props.saving}
                             />
@@ -157,7 +160,7 @@ class ListingDetailTenants extends React.Component {
                 onSave={this.handleSave}
                 onShow={this.props.onTenantModalUpdate}
                 onHide={this.props.onTenantModalHide}
-                errorMesage={this.props.tenantError}
+                errorMessage={this.props.tenantError}
                 show={this.props.tenantUpdate}
                 saving={this.props.tenantSaving}
                 editMode={editMode}

@@ -149,7 +149,6 @@ class ListingDetail extends React.Component {
         });
     }
     handleTenantUpdate(tenant){
-        console.log("handleTenantUpdate: tenant: "+JSON.stringify(tenant));
         var that = this;
         this.setState({tenantSaving: true});
         if (!tenant.ListingVersionId){

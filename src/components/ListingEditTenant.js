@@ -76,7 +76,6 @@ class ListingEditTenant extends React.Component {
     }
     render(){
         const tenant = this.props.tenant;
-        console.log("tenant: "+JSON.stringify(tenant));
         var initialValues = {
             tenant: "",
             space: "",
