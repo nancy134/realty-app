@@ -25,6 +25,11 @@ class ListingDetail extends React.Component {
         this.state = {
             listing: null,
 
+            // Tenant
+            tenantNew: false,
+            tenantUpdate: false,
+            tenantSaving: false,
+
             // Portfolio
             portfolioNew: false,
             portfolioUpdate: false,
@@ -35,7 +40,6 @@ class ListingDetail extends React.Component {
         this.handleListingUpdate = this.handleListingUpdate.bind(this);
         this.handleSpaceUpdate = this.handleSpaceUpdate.bind(this);
         this.handleUnitUpdate = this.handleUnitUpdate.bind(this);
-        this.handleTenantUpdate = this.handleTenantUpdate.bind(this);
         this.handlePublish = this.handlePublish.bind(this);
         this.handleUnpublish = this.handleUnpublish.bind(this);
         this.handleFilesAdded = this.handleFilesAdded.bind(this);
@@ -45,6 +49,13 @@ class ListingDetail extends React.Component {
         this.handlePortfolioModalNew = this.handlePortfolioModalNew.bind(this);
         this.handlePortfolioModalUpdate = this.handlePortfolioModalUpdate.bind(this);
         this.handlePortfolioModalHide = this.handlePortfolioModalHide.bind(this);
+
+        // Tenant 
+        this.handleTenantUpdate = this.handleTenantUpdate.bind(this);
+        this.handleTenantModalNew = this.handleTenantModalNew.bind(this);
+        this.handleTenantModalUpdate = this.handleTenantModalUpdate.bind(this);
+        this.handleTenantModalHide = this.handleTenantModalHide.bind(this);
+
     }
 
     handleShowDetailChange() {
@@ -116,6 +127,76 @@ class ListingDetail extends React.Component {
              }
          }
     }
+
+    handleTenantModalNew(){
+        this.setState({
+            tenantNew: true
+        });
+    }
+    handleTenantModalUpdate(index){
+        this.setState({
+            tenantUpdate: true,
+            tenantUpdateIndex: index,
+
+        });
+    }
+    handleTenantModalHide(){
+        this.setState({
+            tenantNew: false,
+            tenantUpdate: false,
+            tenantSaving: false,
+            tenantError: null
+        });
+    }
+    handleTenantUpdate(tenant){
+        console.log("handleTenantUpdate: tenant: "+JSON.stringify(tenant));
+        var that = this;
+        this.setState({tenantSaving: true});
+        if (!tenant.ListingVersionId){
+             var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
+             listingService.create(listingBody, (listingVersion) => {
+                 tenant.ListingVersionId = listingVersion.listing.id;
+                 var createPromise = tenants.createPromise(tenant);
+                 createPromise.then(function(data){
+                     that.props.onFetchListing(data.ListingVersionId);
+                     that.handleTenantModalHide();
+                 }).catch(function(err){
+                     that.setState({
+                         tenantError: err.message,
+                         tenantSaving: false
+                     });
+                     that.props.onFetchListing(listingVersion.listing.id);
+                 });
+             });
+        } else {
+            if (tenant.id){
+                var updatePromise = tenants.updatePromise(tenant);
+                updatePromise.then(function(data){
+                    that.props.onFetchListing(data.ListingVersionId);
+                    that.handleTenantModalHide();
+                }).catch(function(err){
+                     that.setState({
+                         tenantError: err.message,
+                         tenantSaving: false
+                     });
+                     that.props.onFetchListing(tenant.ListingVersionId);
+
+                });
+            } else {
+                tenants.createPromise(tenant).then(function(data){
+                    that.props.onFetchListing(data.ListingVersionId);
+                    that.handleTenantModalHide();
+                }).catch(function(err){
+                     that.setState({
+                         tenantError: err.message,
+                         tenantSaving: false
+                     });
+                     that.props.onFetchListing(tenant.listingVersionId);
+                });
+            }
+        }
+    }
+    /* 
     handleTenantUpdate(tenant){
         if (!tenant.ListingVersionId){
              var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
@@ -137,6 +218,7 @@ class ListingDetail extends React.Component {
             }
         }
     }
+    */
     handlePortfolioModalNew(){
         this.setState({
             portfolioNew: true
@@ -297,9 +379,17 @@ class ListingDetail extends React.Component {
                 : null }
                 {(editMode === "edit") || (listing && listing.tenants.length) > 0 ?
                     <ListingDetailTenants 
-                        listing={listing} 
-                        editMode={editMode} 
-                        onTenantUpdate={this.handleTenantUpdate} 
+                        listing={listing}
+                        editMode={editMode}
+                        tenantNew={this.state.tenantNew}
+                        tenantUpdate={this.state.tenantUpdate}
+                        tenantError={this.state.tenantError}
+                        tenantSaving={this.state.tenantSaving}
+                        onTenantModalNew={this.handleTenantModalNew}
+                        onTenantModalUpdate={this.handleTenantModalUpdate}
+                        tenantUpdateIndex={this.state.tenantUpdateIndex}
+                        onTenantModalHide={this.handleTenantModalHide}
+                        onTenantUpdate={this.handleTenantUpdate}
                         getListing={this.props.onFetchListing}
                     />
                 : null }
@@ -317,8 +407,8 @@ class ListingDetail extends React.Component {
                         portfolioUpdateIndex={this.state.portfolioUpdateIndex}
                         onPortfolioModalHide={this.handlePortfolioModalHide}
                         onPortfolioUpdate={this.handlePortfolioUpdate} 
-                    
-                        getListing={this.props.onFetchListing} />
+                        getListing={this.props.onFetchListing} 
+                    />
                 : null }
                     <ListingDetailGeneral 
                         listing={listing} 

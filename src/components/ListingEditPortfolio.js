@@ -13,7 +13,7 @@ import * as Yup from 'yup';
 
 const PortfolioSchema = Yup.object().shape({
     tenant: Yup.string().required('Tenant Name is required'),
-    buildingSize: Yup.number().typeError('Building Size must be a number'),
+    buildingSize: Yup.number().integer().typeError('Building Size must be a number'),
     lotSize: Yup.number().typeError('Lot Size must be a number'),
     types: Yup.string()
 });
