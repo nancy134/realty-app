@@ -24,6 +24,10 @@ class ListingDetail extends React.Component {
    super(props);
         this.state = {
             listing: null,
+            // Unit
+            unitNew: false,
+            unitUpdate: false,
+            unitSaving: false,
 
             // Tenant
             tenantNew: false,
@@ -39,10 +43,15 @@ class ListingDetail extends React.Component {
         this.handleEditToggle = this.handleEditToggle.bind(this);
         this.handleListingUpdate = this.handleListingUpdate.bind(this);
         this.handleSpaceUpdate = this.handleSpaceUpdate.bind(this);
-        this.handleUnitUpdate = this.handleUnitUpdate.bind(this);
         this.handlePublish = this.handlePublish.bind(this);
         this.handleUnpublish = this.handleUnpublish.bind(this);
         this.handleFilesAdded = this.handleFilesAdded.bind(this);
+
+        // Unit 
+        this.handleUnitUpdate = this.handleUnitUpdate.bind(this);
+        this.handleUnitModalNew = this.handleUnitModalNew.bind(this);
+        this.handleUnitModalUpdate = this.handleUnitModalUpdate.bind(this);
+        this.handleUnitModalHide = this.handleUnitModalHide.bind(this);
 
         // Portfolio
         this.handlePortfolioUpdate = this.handlePortfolioUpdate.bind(this);
@@ -106,27 +115,78 @@ class ListingDetail extends React.Component {
             }
         }
     }
+
+    // Unit
+
+    handleUnitModalNew(){
+        this.setState({
+            unitNew: true
+        });
+    }
+    handleUnitModalUpdate(index){
+        this.setState({
+            unitUpdate: true,
+            unitUpdateIndex: index,
+
+        });
+    }
+    handleUnitModalHide(){
+        this.setState({
+            unitNew: false,
+            unitUpdate: false,
+            unitSaving: false,
+            unitError: null
+        });
+    }
     handleUnitUpdate(unit){
-         if (!unit.ListingVersionId){
+        var that = this;
+        this.setState({unitSaving: true});
+        if (!unit.ListingVersionId){
              var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
              listingService.create(listingBody, (listingVersion) => {
                  unit.ListingVersionId = listingVersion.listing.id;
-                 units.create(unit, (data) => {
-                     this.props.onFetchListing(data.ListingVersionId);
+                 var createPromise = units.createPromise(unit);
+                 createPromise.then(function(data){
+                     that.props.onFetchListing(data.ListingVersionId);
+                     that.handleUnitModalHide();
+                 }).catch(function(err){
+                     that.setState({
+                         unitError: err.message,
+                         unitSaving: false
+                     });
+                     that.props.onFetchListing(listingVersion.listing.id);
                  });
              });
-         } else {
-             if (unit.id){
-                 units.update(unit, (data) => {
-                     this.props.onFetchListing(data.ListingVersionId);
-                 });
-             } else {
-                 units.create(unit, (data) => {
-                     this.props.onFetchListing(data.ListingVersionId);
-                 });
-             }
-         }
+        } else {
+            if (unit.id){
+                var updatePromise = units.updatePromise(unit);
+                updatePromise.then(function(data){
+                    that.props.onFetchListing(data.ListingVersionId);
+                    that.handleUnitModalHide();
+                }).catch(function(err){
+                     that.setState({
+                         unitError: err.message,
+                         unitSaving: false
+                     });
+                     that.props.onFetchListing(unit.ListingVersionId);
+
+                });
+            } else {
+                units.createPromise(unit).then(function(data){
+                    that.props.onFetchListing(data.ListingVersionId);
+                    that.handleUnitModalHide();
+                }).catch(function(err){
+                     that.setState({
+                         unitError: err.message,
+                         unitSaving: false
+                     });
+                     that.props.onFetchListing(unit.listingVersionId);
+                });
+            }
+        }
     }
+
+    // Tenant
 
     handleTenantModalNew(){
         this.setState({
@@ -195,29 +255,9 @@ class ListingDetail extends React.Component {
             }
         }
     }
-    /* 
-    handleTenantUpdate(tenant){
-        if (!tenant.ListingVersionId){
-             var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
-             listingService.create(listingBody, (listingVersion) => {
-                 tenant.ListingVersionId = listingVersion.listing.id;
-                 tenants.create(tenant, (data) => {
-                     this.props.onFetchListing(data.ListingVersionId);
-                 });
-             });
-        } else {
-            if (tenant.id){
-                tenants.update(tenant, (data) => {
-                    this.props.onFetchListing(data.ListingVersionId);
-                });
-            } else {
-                tenants.create(tenant, (data) => {
-                    this.props.onFetchListing(data.ListingVersionId);
-                });
-            }
-        }
-    }
-    */
+
+    // Portfolio
+
     handlePortfolioModalNew(){
         this.setState({
             portfolioNew: true
@@ -372,6 +412,14 @@ class ListingDetail extends React.Component {
                     <ListingDetailUnits 
                         listing={listing} 
                         editMode={editMode} 
+                        unitNew={this.state.unitNew}
+                        unitUpdate={this.state.unitUpdate}
+                        unitError={this.state.unitError}
+                        unitSaving={this.state.unitSaving}
+                        onUnitModalNew={this.handleUnitModalNew}
+                        onUnitModalUpdate={this.handleUnitModalUpdate}
+                        unitUpdateIndex={this.state.unitUpdateIndex}
+                        onUnitModalHide={this.handleUnitModalHide}
                         onUnitUpdate={this.handleUnitUpdate} 
                         getListing={this.props.onFetchListing}
                     />

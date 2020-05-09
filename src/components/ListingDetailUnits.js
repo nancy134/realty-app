@@ -13,23 +13,26 @@ import {
 import ListingEditUnit from './ListingEditUnit';
 
 function AddButton(props) {
-    const [modalShow, setModalShow] = React.useState(false);
     return (
         <span>
             <span
                 id="unit_add_button"
-                onClick={() => setModalShow(true)}
+                onClick={() => {props.onShow()}}
                 className="edit-button align-top text-danger"
             >
                 <FontAwesomeIcon size="xs" icon={faPlus} />
             </span>
-            {modalShow ?
+            {props.show ?
             <ListingEditUnit
+                title="Add New Unit"
                 listing={props.listing}
+                index={props.index}
                 unit={props.unit}
-                show={modalShow}
-                onHide={() => setModalShow(false)}
+                show={props.show}
+                onHide={props.onHide}
                 onSave={listing => props.onSave(listing)}
+                errorMessage={props.errorMessage}
+                saving={props.saving}
             />
             : null}
         </span>
@@ -37,23 +40,31 @@ function AddButton(props) {
 }
 
 function EditButton(props){
-    const [modalEditShow, setModalEditShow] = React.useState(false);
+    var unit = props.unit;
+    if (props.listing){
+        unit = props.listing.units[props.unitUpdateIndex];
+    }
     return(
         <span>
             <span
                 id="unit_edit_button"
-                onClick={() => setModalEditShow(true)}
+                onClick={() => {props.onShow(props.index)}}
                 className="edit-button align-top text-danger"
             >
                 <FontAwesomeIcon icon={faPencilAlt} />
             </span>
+            { props.show ?
             <ListingEditUnit
+                title="Edit Unit"
                 listing={props.listing}
-                unit={props.unit}
-                show={modalEditShow}
-                onHide={() => setModalEditShow(false)}
+                unit={unit}
+                show={props.show}
+                onHide={props.onHide}
                 onSave={listing => props.onSave(listing)}
+                errorMessage={props.errorMessage}
+                saving={props.saving}
             />
+            : null }
         </span>
     );
 }
@@ -73,7 +84,19 @@ class ListingDetailUnits extends React.Component {
         <React.Fragment>
             <Row className="mt-2 border-bottom border-warning">
                 <Col>
-                    <h2>Unit Detail {editMode === "edit" ? <AddButton listing={listing}  unit={newUnit} onSave={this.handleSave}/> : null}</h2>
+                    <h2>Unit Detail 
+                    {editMode === "edit" ?
+                    <AddButton 
+                        listing={listing}
+                        unit={newUnit}
+                        onSave={this.handleSave}
+                        onShow={this.props.onUnitModalNew}
+                        onHide={this.props.onUnitModalHide}
+                        errorMessage={this.props.unitError}
+                        show={this.props.unitNew}
+                        saving={this.props.unitSaving}
+                    /> 
+                    : null}</h2>
                 </Col>
             </Row>
             <Row className="bg-light shadow">
@@ -84,7 +107,7 @@ class ListingDetailUnits extends React.Component {
                 <Col md={3}></Col>
             </Row>
             {!listing ? <div></div> :
-            listing.units.map(unit =>
+            listing.units.map((unit,index) =>
             (
             <Row key={unit.id}>
                 <Col md={3}>{unit.description}</Col>
@@ -94,7 +117,21 @@ class ListingDetailUnits extends React.Component {
                 <Col md={3}>
                            <Row>
                                { editMode === "edit" ?
-                               <Col><EditButton listing={listing} unit={unit} onSave={this.handleSave}/></Col>
+                               <Col>
+                                   <EditButton
+                                       title="Add New Unit"
+                                       listing={listing}
+                                       index={index}
+                                       unitUpdateIndex={this.props.unitUpdateIndex}
+                                       unit={unit}
+                                       onSave={this.handleSave}
+                                       onShow={this.props.onUnitModalUpdate}
+                                       onHide={this.props.onUnitModalHide}
+                                       errorMessage={this.props.unitError}
+                                       show={this.props.unitUpdate}
+                                       saving={this.props.unitSaving}
+                                   />
+                               </Col>
                                : null }
                                { editMode === "edit" ?
                                <Col><FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} /></Col>

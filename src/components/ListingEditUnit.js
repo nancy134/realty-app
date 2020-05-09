@@ -3,74 +3,113 @@ import {
     Col,
     Form,
     Modal,
-    Button
+    InputGroup,
+    Button,
+    Alert,
+    Spinner
 } from 'react-bootstrap';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
+
+const UnitSchema = Yup.object().shape({
+    description: Yup.string().required('Description is required'),
+    numUnits: Yup.number().integer().typeError('Must be an integer'),
+    space: Yup.number().integer().typeError('Must be an integer'),
+    income: Yup.number().typeError('Must be a number')
+});
+
+function ErrorAlert(props) {
+    const [show, setShow] = React.useState(true);
+
+    if (show) {
+        return (
+        <div className="w-100">
+            <Alert 
+                variant="danger" 
+                onClose={() => setShow(false)} 
+                dismissible
+            >
+                <Alert.Heading>Oh no! You got an error!</Alert.Heading>
+                <p>{props.errorMessage}</p>
+            </Alert>
+        </div>
+        );
+    }
+}
+function SavingAlert(){
+    return(
+    <div className="w-100">
+        <Alert
+           variant="info"
+        >
+           Saving...<Spinner animation="border" />
+        </Alert>
+    </div>
+    );
+}
 
 class ListingEditUnit extends React.Component {
     constructor(props){
         super(props);
-        this.onDescriptionChange = this.onDescriptionChange.bind(this);
-        this.onNumUnitsChange = this.onNumUnitsChange.bind(this);
-        this.onSpaceChange = this.onSpaceChange.bind(this);
-        this.onIncomeChange = this.onIncomeChange.bind(this);
         this.handleSave = this.handleSave.bind(this);
-        if (this.props.unit){
-            this.state = {
-                id: this.props.unit.id,
-                description: this.props.unit.description ? this.props.unit.description : "",
-                numUnits: this.props.unit.numUnits ? this.props.unit.NumUnits : "",
-                space: this.props.unit.space ? this.props.unit.space : "",
-                income: this.props.unit.income ? this.props.unit.income : ""
-            };
-        } else {
-            this.state = {
-                id: null,
-                description: "",
-                numUnits: "",
-                space: "",
-                income: ""
-            };
-        } 
-    }
-    componentDidMount(){
-    }
-    componentWillUnmount(){
-    }
-    onDescriptionChange(event){
-        this.setState({
-            description: event.target.value
-        });
-    }
-    onNumUnitsChange(event){
-        this.setState({
-            numUnits: event.target.value
-        });
-    }
-    onSpaceChange(event){
-        this.setState({
-            space: event.target.value
-        });
-    }
-    onIncomeChange(event){
-        this.setState({
-            income: event.target.value
-        });
     }
 
-    handleSave(){
+    handleSave(initialValues, values){
         var unit = {};
-        unit.id = this.state.id;
+        if (this.props.unit) unit.id = this.props.unit.id;
         if (this.props.listing) unit.ListingVersionId = this.props.listing.id;
-        if (this.state.description) unit.description = this.state.description;
-        if (this.state.numUnits) unit.numUnits = this.state.numUnits;
-        if (this.state.space) unit.space = this.state.space;
-        if (this.state.income) unit.income = this.state.income;
-        console.log("unit: "+JSON.stringify(unit));
+
+        if (initialValues.description !== values.description){
+            unit.description = values.description;
+        }
+        if (initialValues.numUnits !== values.numUnits){
+            unit.numUnits = values.numUnits;
+        }        
+        if (initialValues.space !== values.space){
+            unit.space = values.space;
+        }
+        if (initialValues.income !== values.income){
+            unit.income = values.income;
+        }
+
         this.props.onSave(unit);
-        this.props.onHide();
     } 
     render(){
+        const unit = this.props.unit;
+        var initialValues = {
+            description: "",
+            numUnits: "",
+            space: "",
+            income: ""
+        };
+        if (unit){
+            if (unit.description) initialValues.description = unit.description;
+            if (unit.numUnits) initialValues.numUnits = unit.numUnits;
+            if (unit.space) initialValues.space = unit.space;
+            if (unit.income) initialValues.income = unit.income;
+        }
         return (
+       <Formik
+            initialValues={initialValues}
+            validationSchema={UnitSchema}
+            onSubmit={(values, { setSubmitting }) => {
+                setSubmitting(true);
+                this.handleSave(initialValues, values);
+                setSubmitting(false);
+            }}
+        >
+            {({ 
+                values, 
+                errors, 
+                touched, 
+                handleChange, 
+                handleBlur, 
+                handleSubmit, 
+                isSubmitting, 
+                isValid, 
+                dirty, 
+                setFieldValue 
+            }) => (
         <Modal
             show={this.props.show}
             onHide={this.props.onHide}
@@ -84,57 +123,112 @@ class ListingEditUnit extends React.Component {
             <Form>
                 <Form.Row>
                     <Form.Group as={Col} >
-                        <Form.Label>Decription</Form.Label>
+                        <Form.Label className="font-weight-bold">Decription</Form.Label>
                         <Form.Control 
                             id="unit_edit_description"
-                            value={this.state.description} 
-                            onChange={this.onDescriptionChange}
+                            name="description"
+                            type="text"
+                            value={values.description} 
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={!!errors.description}
+                            isValid={touched.description && !errors.description && values.description}
+                            disabled={isSubmitting}
                         /> 
+                        <Form.Control.Feedback type="invalid">
+                            {errors.description}
+                        </Form.Control.Feedback>
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
                     <Form.Group as={Col} >
-                        <Form.Label>No. of Units</Form.Label>
+                        <Form.Label className="font-weight-bold">No. of Units <span className="font-weight-light">(optional)</span></Form.Label>
                         <Form.Control 
                             id="unit_edit_num_units"
-                            value={this.state.numUnits} 
-                            onChange={this.onNumUnitsChange}
+                            name="numUnits"
+                            type="text"
+                            value={values.numUnits} 
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={!!errors.numUnits}
+                            isValid={touched.numUnits && !errors.numUnits && values.numUnits !== ""}
+                            disabled={isSubmitting}
                         />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.numUnits}
+                        </Form.Control.Feedback>
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
                     <Form.Group as={Col} >
-                        <Form.Label>Square feet</Form.Label>
-                        <Form.Control 
-                            id="unit_edit_space"
-                            value={this.state.space} 
-                            onChange={this.onSpaceChange}
-                        />
+                        <Form.Label className="font-weight-bold">Square feet <span className="font-weight-light">(optional)</span></Form.Label>
+                        <InputGroup>
+                            <Form.Control 
+                                id="unit_edit_space"
+                                name="space"
+                                type="text"
+                                value={values.space} 
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                isInvalid={!!errors.space}
+                                isValid={touched.space && !errors.space && values.space !== ""}
+                                disabled={isSubmitting}
+                            />
+                            <InputGroup.Append>
+                                <InputGroup.Text id="basic-addon2">sq ft</InputGroup.Text>
+                            </InputGroup.Append>
+                            <Form.Control.Feedback type="invalid">
+                                {errors.space}
+                            </Form.Control.Feedback>
+                        </InputGroup>
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
                     <Form.Group as={Col} >
-                        <Form.Label>Income</Form.Label>
-                        <Form.Control 
-                            id="unit_edit_income"
-                            value={this.state.income} 
-                            onChange={this.onIncomeChange}
-                        />
+                        <Form.Label className="font-weight-bold">Income <span className="font-weight-light">(optional)</span></Form.Label>
+                        <InputGroup>
+                            <Form.Control 
+                                id="unit_edit_income"
+                                name="income"
+                                type="text"
+                                value={values.income} 
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                isInvalid={!!errors.income}
+                                isValid={touched.income && !errors.income && values.income !== ""}
+                                disabled={isSubmitting}
+                            />
+                            <InputGroup.Append>
+                                <InputGroup.Text id="basic-addon2">$/mo</InputGroup.Text>
+                            </InputGroup.Append>
+
+                            <Form.Control.Feedback type="invalid">
+                                {errors.income}
+                            </Form.Control.Feedback>
+                        </InputGroup>
                     </Form.Group>
                 </Form.Row>
 
             </Form>
             </Modal.Body>
             <Modal.Footer>
+                {this.props.errorMessage ?
+                <ErrorAlert errorMessage={this.props.errorMessage}/>
+                : null}
+                {this.props.saving ?
+                <SavingAlert />
+                : null}
                 <Button onClick={this.props.onHide}>Close</Button>
                 <Button
                     id="unit_save_button"
-                    onClick={this.handleSave}
+                    onClick={handleSubmit}
                 >
                     Save
                 </Button>
             </Modal.Footer>
         </Modal>
+        )}
+        </Formik>
         );
     }
 }
