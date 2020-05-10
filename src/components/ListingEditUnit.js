@@ -132,7 +132,7 @@ class ListingEditUnit extends React.Component {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={!!errors.description}
-                            isValid={touched.description && !errors.description && values.description}
+                            isValid={touched.description && !errors.description && values.description !== ""}
                             disabled={isSubmitting}
                         /> 
                         <Form.Control.Feedback type="invalid">

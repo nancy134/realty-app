@@ -273,6 +273,7 @@ export class ListingPage extends Component {
                     propertyTypes: data.propertyTypes,
                     spaceUses: data.spaceUses,
                     spaceTypes: data.spaceTypes,
+                    spaceDivisibles: data.spaceDivisibles,
                     portfolioTypes: data.portfolioTypes
                 }
                 this.setState({

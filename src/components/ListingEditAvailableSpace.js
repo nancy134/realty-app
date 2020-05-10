@@ -4,268 +4,478 @@ import {
     Form,
     InputGroup,
     Modal,
-    Button
+    Alert,
+    Spinner,
+    Button,
+    Accordion,
+    Card
 } from 'react-bootstrap';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
+
+const SpaceSchema = Yup.object().shape({
+    unit: Yup.string().required('Unit Name is required'),
+    size: Yup.number().integer().typeError('Must be an integer'),
+    price: Yup.number().typeError('Must be a number'),
+    driveInDoors: Yup.number().integer().typeError('Must be an integer'),
+    floors: Yup.number().integer().typeError('Must be an integer'),
+    divisible: Yup.string(),
+    loadingDocks: Yup.number().integer().typeError('Must be an integer'),
+    leaseTerm: Yup.string(),
+    ceilingHeight: Yup.number().typeError('Must be a number'),
+    availableDate: Yup.date().typeError('Must be a date'),
+    nets: Yup.number().typeError('Must be a number'),
+    class: Yup.string()
+});
+
+function ErrorAlert(props) {
+    const [show, setShow] = React.useState(true);
+
+    if (show) {
+        return (
+        <div className="w-100">
+            <Alert 
+                variant="danger" 
+                onClose={() => setShow(false)} 
+                dismissible
+            >
+                <Alert.Heading>Oh no! You got an error!</Alert.Heading>
+                <p>{props.errorMessage}</p>
+            </Alert>
+        </div>
+        );
+    }
+}
+function SavingAlert(){
+    return(
+    <div className="w-100">
+        <Alert
+           variant="info"
+        >
+           Saving...<Spinner animation="border" />
+        </Alert>
+    </div>
+    );
+}
 
 class ListingEditAvailableSpace extends React.Component {
     constructor(props){
         super(props);
-        this.onUnitChange = this.onUnitChange.bind(this);
-        this.onSizeChange = this.onSizeChange.bind(this);
-        this.onPriceChange = this.onPriceChange.bind(this);
-        this.onTypeChange = this.onTypeChange.bind(this);
-        this.onUseChange = this.onUseChange.bind(this);
-        this.onDescriptionChange = this.onDescriptionChange.bind(this);
-        this.onDriveInDoorsChange = this.onDriveInDoorsChange.bind(this);
-        this.onDivisibleChange = this.onDivisibleChange.bind(this);
-        this.onLoadingDocksChange = this.onLoadingDocksChange.bind(this);
-        this.onLeaseTermChange = this.onLeaseTermChange.bind(this);
         this.handleSave = this.handleSave.bind(this);
-        if (this.props.space){
-            this.state = {
-                id: this.props.space.id,
-                unit: this.props.space.unit ? this.props.space.unit : "",
-                size: this.props.space.size ? this.props.space.size : "",
-                price: this.props.space.price ? this.props.space.price : "",
-                type: this.props.space.type ? this.props.space.type : "",
-                use: this.props.space.use ? this.props.space.use : "",
-                description: this.props.space.description ? this.props.space.description : "",
-                driveInDoors: this.props.space.driveInDoors ? this.props.space.driveInDoors : "",
-                divisible: this.props.space.divisible ? this.props.space.divisible : "" ,
-                loadingDocks: this.props.space.loadingDocks ? this.props.space.loadingDocs : "",
-                leaseTerm: this.props.space.leaseTerm ? this.props.space.leaseterm : ""
-            };
-        } else {
-            this.state = {
-                id: null,
-                unit: "",
-                size: "",
-                price: "",
-                type: "",
-                use: "",
-                description: "",
-                driveInDoors: null,
-                divisible: null,
-                loadingDocks: null,
-                leaseTerm: null
-            };
-        }
     }
-    onUnitChange(event){
-        this.setState({
-            unit: event.target.value
-        });
-    }
-    onSizeChange(event){
-        this.setState({
-            size: event.target.value
-        });
-    }
-    onPriceChange(event){
-        this.setState({
-            price: event.target.value
-        });
-    }
-    onTypeChange(event){
-        this.setState({
-            type: event.target.value
-        });
-    }
-    onUseChange(event){
-        this.setState({
-            use: event.target.value
-        });
-    }
-    onDescriptionChange(event){
-        this.setState({
-            description: event.target.value
-        });
-    }
-    onDriveInDoorsChange(event){
-        this.setState({
-            driveInDoors: event.target.value
-        });
-    }
-    onDivisibleChange(event){
-        this.setState({
-            divisible: event.target.value
-        });
-    }
-    onLoadingDocksChange(event){
-        this.setState({
-            loadingDocks: event.target.value
-        });
-    }
-    onLeaseTermChange(event){
-        this.setState({
-            leaseTerm: event.target.value
-        });
-    }
-    handleSave(){
+    handleSave(initialValues, values){
+        console.log("handleSave: values: "+JSON.stringify(values));
         var space = {};
-        space.id = this.state.id;
+        if (this.props.space) space.id = this.props.space.id;
         if (this.props.listing) space.ListingVersionId = this.props.listing.id;
-        if (this.state.unit) space.unit = this.state.unit;
-        if (this.state.size) space.size = this.state.size;
-        if (this.state.price) space.price = this.state.price;
-        if (this.state.type) space.type = this.state.type;
-        if (this.state.use) space.use = this.state.use;
-        if (this.state.description) space.description = this.state.description;
-        if (this.state.driveInDoors) space.driveInDoors = this.state.driveInDoors;
-        if (this.state.divisible) space.divisible = this.state.divisible;
-        if (this.state.loadingDocks) space.loadingDocks = this.state.loadingDocks;
-        if (this.state.leaseTerm) space.leaseTerm = this.state.leaseTerm;
+
+        if (initialValues.unit !== values.unit){
+            space.unit = values.unit;
+        }
+        if (initialValues.size !== values.size){
+            space.size = values.size;
+        }
+        if (initialValues.price !== values.price){
+            space.price = values.price;
+        }
+        if (initialValues.type !== values.type){
+            space.type = values.type;
+        }
+        if (initialValues.use !== values.use){
+            space.use = values.use;
+        }
+        if (initialValues.description !== values.description){
+            space.description = values.description;
+        }
+        if (initialValues.driveInDoors !== values.driveInDoors){
+            space.driveInDoors = values.driveInDoors;
+        }
+        if (initialValues.floors !== values.floors){
+            space.floors = values.floors;
+        }
+        if (initialValues.divisible !== values.divisible){
+            space.divisible = values.divisible;
+        }
+        if (initialValues.loadingDocks !== values.loadingDocks){
+            space.loadingDocks = values.loadingDocks;
+        }
+        if (initialValues.leaseTerm !== values.leaseTerm){
+            space.leaseTerm = values.leaseTerm;
+        }
+        if (initialValues.ceilingHeight !== values.ceilingHeight){
+            space.ceilingHeight = values.ceilingHeight;
+        }
+        if (initialValues.availableDate !== values.availableDate){
+            space.availableDate = values.availableDate;
+        }
+        if (initialValues.nets !== values.nets){
+            space.nets = values.nets;
+        }
+        if (initialValues.class !== values.class){
+            space.class = values.class;
+        }
+
         this.props.onSave(space);
-        this.props.onHide();
     }
     render(){
 
-        /*var image1 = process.env.REACT_APP_WEB_SERVER+'image1.jpg';*/
-        /*var image2 = process.env.REACT_APP_WEB_SERVER+'image2.jpg';*/
-        /*var image3 = process.env.REACT_APP_WEB_SERVER+'image3.jpg';*/
-        /*var images = [];*/
-
         const space = this.props.space;
+        var initialValues = {
+            unit: "",
+            size: "",
+            price: "",
+            type: "",
+            use: "",
+            description: "",
+            driveInDoors: "",
+            floors: "",
+            divisible: "",
+            loadingDocks: "",
+            leaseTerm: "",
+            ceilingHeight: "",
+            availableDate: "",
+            nets: "",
+            class: ""            
+        };
         if (space){
-            /*images = [image1, image2, image3];*/
+            if (space.unit) initialValues.unit = space.unit;
+            if (space.size) initialValues.size = space.size;
+            if (space.price) initialValues.price = space.price;
+            if (space.type) initialValues.type = space.type;
+            if (space.use) initialValues.use = space.use;
+            if (space.description) initialValues.description = space.description;
+            if (space.driveInDoors) initialValues.driveInDoors = space.driveInDoors;
+            if (space.floors) initialValues.floors = space.floors;
+            if (space.divisible) initialValues.divisible = space.divisible;
+            if (space.loadingDocks) initialValues.loadingDocks = space.loadingDocks;
+            if (space.leaseTerm) initialValues.leaseTerm = space.leaseTerm;
+            if (space.ceilingHeight) initialValues.ceilingHeight = space.ceilingHeight;
+            if (space.availableDate) initialValues.availableDate = space.availableDate;
+            if (space.nets) initialValues.nets = space.nets;
+            if (space.class) initialValues.class = space.class;
         }
         return (
-        <Modal
-            show={this.props.show}
-            onHide={this.props.onHide}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >   
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                  Available Space Edit 
-                </Modal.Title>
-            </Modal.Header>                    
-            <Modal.Body >
-            <Form>
-                <Form.Row>
+        <Formik
+            initialValues={initialValues}
+            validationSchema={SpaceSchema}
+            onSubmit={(values, { setSubmitting }) => {
+                setSubmitting(true);
+                this.handleSave(initialValues, values);
+                setSubmitting(false);
+            }}
+        >
+            {({ 
+                values, 
+                errors, 
+                touched, 
+                handleChange, 
+                handleBlur, 
+                handleSubmit, 
+                isSubmitting, 
+                isValid, 
+                dirty, 
+                setFieldValue 
+            }) => (
+            <Modal
+                show={this.props.show}
+                onHide={this.props.onHide}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            >   
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Available Space Edit 
+                    </Modal.Title>
+                </Modal.Header>                    
+                <Modal.Body style={{'maxHeight': 'calc(100vh - 210px)', 'overflowY': 'auto'}}>
+                    <Form>
+                        <Form.Row>
+                            <Form.Group as={Col} >
+                                <Form.Label>Unit Name</Form.Label>
+                                <Form.Control 
+                                    id="space_edit_unit"
+                                    name="unit"
+                                    type="text"
+                                    value ={values.unit} 
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.unit}
+                                    isValid={touched.unit && !errors.unit && values.unit !== ""}
+                                    disabled={isSubmitting}
+                                /> 
+                            </Form.Group>
+                            <Form.Group as={Col} >
+                                <Form.Label>Size</Form.Label>
+                                <InputGroup>
+                                    <Form.Control 
+                                        id="space_edit_size"
+                                        name="size"
+                                        type="text"
+                                        value={values.size} 
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isInvalid={!!errors.size}
+                                        isValid={touched.size && !errors.size && values.size !== ""}
+                                        disabled={isSubmitting}
+                                    />
+                                    <InputGroup.Append>
+                                        <InputGroup.Text id="basic-addon2">sq ft</InputGroup.Text>
+                                    </InputGroup.Append>
+                                </InputGroup>
+                            </Form.Group>
+                            <Form.Group as={Col}>
+                                <Form.Label>Price</Form.Label>
+                                <InputGroup>
+                                    <Form.Control 
+                                        id="space_edit_price"
+                                        name="price"
+                                        type="text"
+                                        value={values.price} 
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isInvalid={!!errors.price}
+                                        isValid={touched.price && !errors.price && values.price !== ""}
+                                        disabled={isSubmitting}
+                                    />
+                                    <InputGroup.Append>
+                                        <InputGroup.Text>$/sf/mo</InputGroup.Text>
+                                    </InputGroup.Append>
+                                </InputGroup>
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} >
+                                <Form.Label>Lease Type</Form.Label>
+                                <Form.Control 
+                                    id="space_edit_type"
+                                    name="type"
+                                    as="select" 
+                                    value={values.type} 
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    disabled={isSubmitting}
+                                   
+                                >
+                                    <option key="-1"></option>
+                                    {this.props.spaceTypes.map((spaceType, index) => ( 
+                                        <option key={index}>{spaceType}</option>
+                                    ))}
+                                </Form.Control> 
+                            </Form.Group>
+                            <Form.Group as={Col} >
+                                <Form.Label>Use</Form.Label>
+                                <Form.Control 
+                                    id="space_edit_use"
+                                    name="use"
+                                    as="select" 
+                                    value={values.use} 
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                >
+                                    <option key="-1"></option>
+                                    {this.props.spaceUses.map((spaceUse, index) =>(
+                                    <option key={index}>{spaceUse}</option>
+                                    ))}
+                                </Form.Control>
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col}>
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control 
+                                    id="space_edit_description"
+                                    name="description"
+                                    as="textarea" 
+                                    rows="5" 
+                                    value={values.description} 
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.description}
+                                    isValid={touched.description && !errors.description && values.description !== ""}
+                                    disabled={isSubmitting}
+                                />
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Accordion className="w-100">
+                                <Card>
+                                    <Card.Header>
+                                        <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                                            Additional Parameters 
+                                        </Accordion.Toggle>
+                                    </Card.Header>
+                                    <Accordion.Collapse eventKey="1">
+                                        <div className="m-2">
+                                            <Form.Row>
+                                                <Form.Group as={Col}>
+                                                </Form.Group>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Form.Group as={Col}>
+                                                    <Form.Label>Drive in Doors</Form.Label>
+                                                    <Form.Control
+                                                        id="space_edit_driveInDoors"
+                                                        name="driveInDoors"
+                                                        type="text"
+                                                        value={values.driveInDoors}
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        isInvalid={!!errors.driveInDoors}
+                                                        isValid={touched.driveInDoors && !errors.driveInDoors && values.driveInDoors !== ""}
+                                                        disabled={isSubmitting}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col}>
+                                                    <Form.Label>Floor</Form.Label>
+                                                    <Form.Control
+                                                        id="space_edit_floors"
+                                                        name="floors"
+                                                        type="text"
+                                                        value={values.floors}
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        isInvalid={!!errors.floors}
+                                                        isValid={touched.floors && !errors.floors && values.floors !== ""}
+                                                        disabled={isSubmitting}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col}>
+                                                    <Form.Label>Divisible</Form.Label>
+                                                    <Form.Control
+                                                        id="space_edit_divisible"
+                                                        name="divisible"
+                                                        as="select"
+                                                        value={values.divisible}
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        isInvalid={!!errors.divisible}
+                                                        isValid={touched.divisible && !errors.divisible && values.divisible !== ""}
+                                                        disabled={isSubmitting}
+                                                    >
+                                                        <option key="-1"></option>
+                                                        {this.props.spaceDivisibles.map((spaceDivisible, index) =>(
+                                                        <option key={index}>{spaceDivisible}</option>
+                                                        ))}
+                                                    </Form.Control>
+                                                </Form.Group>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Form.Group as={Col}>
+                                                    <Form.Label>Loading Docks</Form.Label>
+                                                    <Form.Control
+                                                        id="space_edit_loadingDocks"
+                                                        name="loadingDocks"
+                                                        type="text"
+                                                        value={values.loadingDocks}
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        isInvalid={!!errors.loadingDocks}
+                                                        isValid={touched.loadingDocks && !errors.loadingDocks && values.loadingDocks !== ""}
+                                                        disabled={isSubmitting}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col}>
+                                                    <Form.Label>Lease Term</Form.Label>
+                                                    <Form.Control
+                                                        id="space_edit_leaseTerm"
+                                                        name="leaseTerm"
+                                                        type="text"
+                                                        value={values.leaseTerm}
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        isInvalid={!!errors.leaseTerm}
+                                                        isValid={touched.leaseTerm && !errors.leaseTerm && values.leaseTerm !== ""}
+                                                        disabled={isSubmitting}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col}>
+                                                    <Form.Label>Ceiling Height</Form.Label>
+                                                    <Form.Control
+                                                        id="space_edit_ceilingHeight"
+                                                        name="ceilingHeight"
+                                                        type="text"
+                                                        value={values.ceilingHeight}
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        isInvalid={!!errors.ceilingHeight}
+                                                        isValid={touched.ceilingHeight && !errors.ceilingHeight && values.ceilingHeight !== ""}
+                                                        disabled={isSubmitting}
+                                                    />
 
-                    <Form.Group as={Col} >
-                        <Form.Label>Unit Name</Form.Label>
-                        <Form.Control 
-                            id="space_edit_unit"
-                            value ={this.state.unit} 
-                            onChange={this.onUnitChange}
-                        /> 
-                    </Form.Group>
+                                                </Form.Group>
+                                            </Form.Row>
+                                            <Form.Row>
+                                                <Form.Group as={Col}>
+                                                    <Form.Label>Available Date</Form.Label>
+                                                    <Form.Control
+                                                        id="space_edit_availableDate"
+                                                        name="availableDate"
+                                                        type="text"
+                                                        value={values.availableDate}
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        isInvalid={!!errors.availableDate}
+                                                        isValid={touched.availableDate && !errors.availableDate && values.availableDate !== ""}
+                                                        disabled={isSubmitting}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col}>
+                                                    <Form.Label>Nets</Form.Label>
+                                                    <Form.Control
+                                                        id="space_edit_nets"
+                                                        name="nets"
+                                                        type="text"
+                                                        value={values.nets}
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        isInvalid={!!errors.nets}
+                                                        isValid={touched.nets && !errors.nets && values.nets !== ""}
+                                                        disabled={isSubmitting}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col}>
+                                                    <Form.Label>Class</Form.Label>
+                                                    <Form.Control
+                                                        id="space_edit_class"
+                                                        name="class"
+                                                        type="text"
+                                                        value={values.class}
+                                                        onChange={handleChange}
+                                                        onBlur={handleBlur}
+                                                        isInvalid={!!errors.class}
+                                                        isValid={touched.class && !errors.class && values.class !== ""}
+                                                        disabled={isSubmitting}
+                                                    />
 
-                    <Form.Group as={Col} >
-                        <Form.Label>Size</Form.Label>
-                        <InputGroup>
-                            <Form.Control 
-                                id="space_edit_size"
-                                value={this.state.size} 
-                                onChange={this.onSizeChange}
-                            />
-                            <InputGroup.Append>
-                                <InputGroup.Text id="basic-addon2">sq ft</InputGroup.Text>
-                            </InputGroup.Append>
-                        </InputGroup>
-                    </Form.Group>
+                                                </Form.Group>
+                                            </Form.Row>
 
-                    <Form.Group as={Col}>
-                        <Form.Label>Price</Form.Label>
-                        <InputGroup>
-                            <Form.Control 
-                                id="space_edit_price"
-                                value={this.state.price} 
-                                onChange={this.onPriceChange}
-                            />
-                            <InputGroup.Append>
-                                <InputGroup.Text>$/sf/mo</InputGroup.Text>
-                            </InputGroup.Append>
-                        </InputGroup>
-                    </Form.Group>
-
-                </Form.Row>
-                <Form.Row>
-                    <Form.Group as={Col} >
-                        <Form.Label>Type</Form.Label>
-                        <Form.Control 
-                            id="space_edit_type"
-                            as="select" 
-                            value={this.state.type} 
-                            onChange={this.onTypeChange}
-                        >
-                            <option key="-1"></option>
-                            {this.props.spaceTypes.map((spaceType, index) => ( 
-                            <option key={index}>{spaceType}</option>
-                            ))}
-                        </Form.Control> 
-                    </Form.Group>
-                    <Form.Group as={Col} >
-                        <Form.Label>Use</Form.Label>
-                        <Form.Control 
-                            id="space_edit_use"
-                            as="select" 
-                            value={this.state.use} 
-                            onChange={this.onUseChange}
-                        >
-                            <option key="-1"></option>
-                            {this.props.spaceUses.map((spaceUse, index) =>(
-                            <option key={index}>{spaceUse}</option>
-                            ))}
-                        </Form.Control>
-                    </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                    <Form.Group as={Col}>
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control as="textarea" rows="5" value={this.state.description} onChange={this.onDescriptionChange}/>
-                    </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                    <Form.Group as={Col}>
-                    </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                    <Form.Group as={Col}>
-                        <Form.Label>Drive in Doors</Form.Label>
-                        <Form.Control value={this.state.driveInDoors} onChange={this.onDriveInDoorsChange}></Form.Control>
-                    </Form.Group>
-                    <Form.Group as={Col}>
-                        <Form.Label>Floor</Form.Label>
-                        <Form.Control value={this.state.driveInDoors} onChange={this.onDriveInDoorsChange}></Form.Control>
-                    </Form.Group>
-                    <Form.Group as={Col}>
-                        <Form.Label>Divisible</Form.Label>
-                        <Form.Control as="select" value={this.state.divisible} onChange={this.onDivisibleChange}>
-                            <option>No</option>
-                            <option>Yes</option>
-                        </Form.Control>
-                    </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                    <Form.Group as={Col}>
-                        <Form.Label>Loading Docks</Form.Label>
-                        <Form.Control value={this.state.loadingDocks} onChange={this.onLoadingDocksChange}></Form.Control>
-                    </Form.Group>
-                    <Form.Group as={Col}>
-                        <Form.Label>Lease Term</Form.Label>
-                        <Form.Control value={this.state.leaseTerm} onChange={this.onLeaseTermChange}></Form.Control>
-                    </Form.Group>
-                    <Form.Group as={Col}>
-                    </Form.Group>
-
-                </Form.Row>
-            </Form>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={this.props.onHide}>Close</Button>
-                <Button 
-                    id="space_button_save"
-                    onClick={this.handleSave}
-                >
-                    Save
-                </Button>
-            </Modal.Footer>
-        </Modal>
+                                        </div>
+                                    </Accordion.Collapse>
+                                </Card>
+                            </Accordion>
+                        </Form.Row>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    {this.props.errorMessage ?
+                    <ErrorAlert errorMessage={this.props.errorMessage}/>
+                    : null}
+                    {this.props.saving ?
+                    <SavingAlert />
+                    : null}
+                    <Button onClick={this.props.onHide}>Close</Button>
+                    <Button 
+                        id="space_button_save"
+                        onClick={handleSubmit}
+                    >
+                        Save
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            )}
+        </Formik>
         );
     }
 }

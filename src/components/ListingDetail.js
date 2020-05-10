@@ -24,6 +24,11 @@ class ListingDetail extends React.Component {
    super(props);
         this.state = {
             listing: null,
+            // Space
+            spaceNew: false,
+            spaceUpdate: false,
+            spaceSaving: false,
+
             // Unit
             unitNew: false,
             unitUpdate: false,
@@ -46,6 +51,12 @@ class ListingDetail extends React.Component {
         this.handlePublish = this.handlePublish.bind(this);
         this.handleUnpublish = this.handleUnpublish.bind(this);
         this.handleFilesAdded = this.handleFilesAdded.bind(this);
+
+        // Space 
+        this.handleSpaceUpdate = this.handleSpaceUpdate.bind(this);
+        this.handleSpaceModalNew = this.handleSpaceModalNew.bind(this);
+        this.handleSpaceModalUpdate = this.handleSpaceModalUpdate.bind(this);
+        this.handleSpaceModalHide = this.handleSpaceModalHide.bind(this);
 
         // Unit 
         this.handleUnitUpdate = this.handleUnitUpdate.bind(this);
@@ -94,6 +105,76 @@ class ListingDetail extends React.Component {
         });
     }
 
+    // Space
+
+    handleSpaceModalNew(){
+        this.setState({
+            spaceNew: true
+        });
+    }
+    handleSpaceModalUpdate(index){
+        this.setState({
+            spaceUpdate: true,
+            spaceUpdateIndex: index,
+
+        });
+    }
+    handleSpaceModalHide(){
+        this.setState({
+            spaceNew: false,
+            spaceUpdate: false,
+            spaceSaving: false,
+            spaceError: null
+        });
+    }
+    handleSpaceUpdate(space){
+        var that = this;
+        this.setState({spaceSaving: true});
+        if (!space.ListingVersionId){
+             var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
+             listingService.create(listingBody, (listingVersion) => {
+                 space.ListingVersionId = listingVersion.listing.id;
+                 var createPromise = spaces.createPromise(space);
+                 createPromise.then(function(data){
+                     that.props.onFetchListing(data.ListingVersionId);
+                     that.handleSpaceModalHide();
+                 }).catch(function(err){
+                     that.setState({
+                         spaceError: err.message,
+                         spaceSaving: false
+                     });
+                     that.props.onFetchListing(listingVersion.listing.id);
+                 });
+             });
+        } else {
+            if (space.id){
+                var updatePromise = spaces.updatePromise(space);
+                updatePromise.then(function(data){
+                    that.props.onFetchListing(data.ListingVersionId);
+                    that.handleSpaceModalHide();
+                }).catch(function(err){
+                     that.setState({
+                         spaceError: err.message,
+                         spaceSaving: false
+                     });
+                     that.props.onFetchListing(space.ListingVersionId);
+
+                });
+            } else {
+                spaces.createPromise(space).then(function(data){
+                    that.props.onFetchListing(data.ListingVersionId);
+                    that.handleSpaceModalHide();
+                }).catch(function(err){
+                     that.setState({
+                         spaceError: err.message,
+                         spaceSaving: false
+                     });
+                     that.props.onFetchListing(space.listingVersionId);
+                });
+            }
+        }
+    }
+    /*
     handleSpaceUpdate(space){
         if (!space.ListingVersionId){
             var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
@@ -115,7 +196,7 @@ class ListingDetail extends React.Component {
             }
         }
     }
-
+    */
     // Unit
 
     handleUnitModalNew(){
@@ -341,6 +422,7 @@ class ListingDetail extends React.Component {
                     listingTypes: listingDetail.listingTypes,
                     spaceUses: listingDetail.spaceUses,
                     spaceTypes: listingDetail.spaceTypes,
+                    spaceDivisibles: listingDetail.spaceDivisibles,
                     portfolioTypes: listingDetail.portfolioTypes,
                     propertyTypes: listingDetail.propertyTypes,
                     amenities: listingDetail.amenities
@@ -358,6 +440,8 @@ class ListingDetail extends React.Component {
         const listingTypes = this.state.listingTypes;
         const spaceUses = this.state.spaceUses;
         const spaceTypes = this.state.spaceTypes;
+        const spaceDivisibles = this.state.spaceDivisibles;
+        console.log("spaceDivisibles: "+JSON.stringify(spaceDivisibles));
         const portfolioTypes = this.state.portfolioTypes;
         //const allAmenities = this.state.amenities;
         const listingMode = this.props.listingMode;
@@ -400,11 +484,20 @@ class ListingDetail extends React.Component {
                 />
                 { (editMode === "edit") || (listing && listing.spaces.length) > 0 ?
                     <ListingDetailAvailableSpace 
-                        listing={listing} 
-                        editMode={editMode} 
+                        listing={listing}
+                        editMode={editMode}
                         spaceUses={spaceUses}
                         spaceTypes={spaceTypes}
-                        onSpaceUpdate={this.handleSpaceUpdate} 
+                        spaceDivisibles={spaceDivisibles}
+                        spaceNew={this.state.spaceNew}
+                        spaceUpdate={this.state.spaceUpdate}
+                        spaceError={this.state.spaceError}
+                        spaceSaving={this.state.spaceSaving}
+                        onSpaceModalNew={this.handleSpaceModalNew}
+                        onSpaceModalUpdate={this.handleSpaceModalUpdate}
+                        spaceUpdateIndex={this.state.spaceUpdateIndex}
+                        onSpaceModalHide={this.handleSpaceModalHide}
+                        onSpaceUpdate={this.handleSpaceUpdate}
                         getListing={this.props.onFetchListing}
                     />
                 : null }
