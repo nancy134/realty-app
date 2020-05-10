@@ -441,7 +441,6 @@ class ListingDetail extends React.Component {
         const spaceUses = this.state.spaceUses;
         const spaceTypes = this.state.spaceTypes;
         const spaceDivisibles = this.state.spaceDivisibles;
-        console.log("spaceDivisibles: "+JSON.stringify(spaceDivisibles));
         const portfolioTypes = this.state.portfolioTypes;
         //const allAmenities = this.state.amenities;
         const listingMode = this.props.listingMode;

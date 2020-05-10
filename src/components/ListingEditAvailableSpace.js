@@ -12,6 +12,7 @@ import {
 } from 'react-bootstrap';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {formatDate} from '../helpers/utilities';
 
 const SpaceSchema = Yup.object().shape({
     unit: Yup.string().required('Unit Name is required'),
@@ -154,6 +155,11 @@ class ListingEditAvailableSpace extends React.Component {
             if (space.nets) initialValues.nets = space.nets;
             if (space.class) initialValues.class = space.class;
         }
+
+        if (initialValues.availableDate !== ""){
+            initialValues.availableDate = formatDate(initialValues.availableDate);
+        }
+
         return (
         <Formik
             initialValues={initialValues}
@@ -204,6 +210,9 @@ class ListingEditAvailableSpace extends React.Component {
                                     isValid={touched.unit && !errors.unit && values.unit !== ""}
                                     disabled={isSubmitting}
                                 /> 
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.unit}
+                                </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group as={Col} >
                                 <Form.Label>Size</Form.Label>
@@ -222,6 +231,9 @@ class ListingEditAvailableSpace extends React.Component {
                                     <InputGroup.Append>
                                         <InputGroup.Text id="basic-addon2">sq ft</InputGroup.Text>
                                     </InputGroup.Append>
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.size}
+                                    </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
                             <Form.Group as={Col}>
@@ -241,6 +253,9 @@ class ListingEditAvailableSpace extends React.Component {
                                     <InputGroup.Append>
                                         <InputGroup.Text>$/sf/mo</InputGroup.Text>
                                     </InputGroup.Append>
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.price}
+                                    </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
                         </Form.Row>
@@ -295,6 +310,9 @@ class ListingEditAvailableSpace extends React.Component {
                                     isValid={touched.description && !errors.description && values.description !== ""}
                                     disabled={isSubmitting}
                                 />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.description}
+                                </Form.Control.Feedback>
                             </Form.Group>
                         </Form.Row>
                         <Form.Row>
@@ -325,6 +343,9 @@ class ListingEditAvailableSpace extends React.Component {
                                                         isValid={touched.driveInDoors && !errors.driveInDoors && values.driveInDoors !== ""}
                                                         disabled={isSubmitting}
                                                     />
+                                                    <Form.Control.Feedback type="invalid">
+                                                        {errors.driveInDoors}
+                                                    </Form.Control.Feedback>
                                                 </Form.Group>
                                                 <Form.Group as={Col}>
                                                     <Form.Label>Floor</Form.Label>
@@ -339,6 +360,9 @@ class ListingEditAvailableSpace extends React.Component {
                                                         isValid={touched.floors && !errors.floors && values.floors !== ""}
                                                         disabled={isSubmitting}
                                                     />
+                                                    <Form.Control.Feedback type="invalid">
+                                                        {errors.floors}
+                                                    </Form.Control.Feedback>
                                                 </Form.Group>
                                                 <Form.Group as={Col}>
                                                     <Form.Label>Divisible</Form.Label>
@@ -374,6 +398,10 @@ class ListingEditAvailableSpace extends React.Component {
                                                         isValid={touched.loadingDocks && !errors.loadingDocks && values.loadingDocks !== ""}
                                                         disabled={isSubmitting}
                                                     />
+                                                    <Form.Control.Feedback type="invalid">
+                                                        {errors.loadingDocks}
+                                                    </Form.Control.Feedback>
+
                                                 </Form.Group>
                                                 <Form.Group as={Col}>
                                                     <Form.Label>Lease Term</Form.Label>
@@ -388,6 +416,10 @@ class ListingEditAvailableSpace extends React.Component {
                                                         isValid={touched.leaseTerm && !errors.leaseTerm && values.leaseTerm !== ""}
                                                         disabled={isSubmitting}
                                                     />
+                                                    <Form.Control.Feedback type="invalid">
+                                                        {errors.leaseTerm}
+                                                    </Form.Control.Feedback>
+
                                                 </Form.Group>
                                                 <Form.Group as={Col}>
                                                     <Form.Label>Ceiling Height</Form.Label>
@@ -402,7 +434,9 @@ class ListingEditAvailableSpace extends React.Component {
                                                         isValid={touched.ceilingHeight && !errors.ceilingHeight && values.ceilingHeight !== ""}
                                                         disabled={isSubmitting}
                                                     />
-
+                                                    <Form.Control.Feedback type="invalid">
+                                                        {errors.ceilingHeight}
+                                                    </Form.Control.Feedback>
                                                 </Form.Group>
                                             </Form.Row>
                                             <Form.Row>
@@ -419,6 +453,9 @@ class ListingEditAvailableSpace extends React.Component {
                                                         isValid={touched.availableDate && !errors.availableDate && values.availableDate !== ""}
                                                         disabled={isSubmitting}
                                                     />
+                                                    <Form.Control.Feedback type="invalid">
+                                                        {errors.availableDate}
+                                                    </Form.Control.Feedback>
                                                 </Form.Group>
                                                 <Form.Group as={Col}>
                                                     <Form.Label>Nets</Form.Label>
@@ -433,6 +470,9 @@ class ListingEditAvailableSpace extends React.Component {
                                                         isValid={touched.nets && !errors.nets && values.nets !== ""}
                                                         disabled={isSubmitting}
                                                     />
+                                                    <Form.Control.Feedback type="invalid">
+                                                        {errors.nets}
+                                                    </Form.Control.Feedback>
                                                 </Form.Group>
                                                 <Form.Group as={Col}>
                                                     <Form.Label>Class</Form.Label>
@@ -447,7 +487,9 @@ class ListingEditAvailableSpace extends React.Component {
                                                         isValid={touched.class && !errors.class && values.class !== ""}
                                                         disabled={isSubmitting}
                                                     />
-
+                                                    <Form.Control.Feedback type="invalid">
+                                                        {errors.class}
+                                                    </Form.Control.Feedback>
                                                 </Form.Group>
                                             </Form.Row>
 
