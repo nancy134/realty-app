@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Row,
     Col,
     Form,
     InputGroup,
@@ -8,11 +9,13 @@ import {
     Spinner,
     Button,
     Accordion,
-    Card
+    Card,
+    Image
 } from 'react-bootstrap';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {formatDate} from '../helpers/utilities';
+import ImageUpload from './ImageUpload';
 
 const SpaceSchema = Yup.object().shape({
     unit: Yup.string().required('Unit Name is required'),
@@ -136,7 +139,7 @@ class ListingEditAvailableSpace extends React.Component {
             ceilingHeight: "",
             availableDate: "",
             nets: "",
-            class: ""            
+            class: ""
         };
         if (space){
             if (space.unit) initialValues.unit = space.unit;
@@ -155,11 +158,18 @@ class ListingEditAvailableSpace extends React.Component {
             if (space.nets) initialValues.nets = space.nets;
             if (space.class) initialValues.class = space.class;
         }
+        var images = [];
+        if (space && space.images) images = space.images;
 
         if (initialValues.availableDate !== ""){
             initialValues.availableDate = formatDate(initialValues.availableDate);
         }
-
+        var imgs = [];
+        if (space && space.images){
+            imgs = space.images.map((item,key) =>
+                <Image key={key} src={item.url} className="edit-image p-2"/>
+            );
+        }
         return (
         <Formik
             initialValues={initialValues}
@@ -493,6 +503,38 @@ class ListingEditAvailableSpace extends React.Component {
                                                 </Form.Group>
                                             </Form.Row>
 
+                                        </div>
+                                    </Accordion.Collapse>
+                                </Card>
+                            </Accordion>
+                        </Form.Row>
+                        <Form.Row>
+                            <Accordion className="w-100">
+                                <Card>
+                                    <Card.Header>
+                                        <Accordion.Toggle as={Button} variant="link" eventKey="2">
+                                            Images
+                                        </Accordion.Toggle>
+                                    </Card.Header>
+                                    <Accordion.Collapse eventKey="2">
+                                        <div className="m-2">
+                                            <Row>
+
+                                                <ImageUpload 
+                                                    id="overview_edit_image_upload"
+                                                    images={images} 
+                                                    listing={this.props.listing} 
+                                                    onImageUploadFinished={this.onImageUploadFinished}
+                                                    onFilesAdded={this.handleFilesAdded}
+                                                    files={this.props.files}
+                                                    uploading={this.props.uploading}
+                                                    uploadProgress={this.props.uploadProgress}
+                                                    successfullUploaded={this.props.successfullUploaded}
+                                                />
+                                            </Row>
+                                            <Row>
+                                                {imgs}
+                                            </Row>
                                         </div>
                                     </Accordion.Collapse>
                                 </Card>
