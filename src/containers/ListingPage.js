@@ -143,6 +143,7 @@ export class ListingPage extends Component {
     }
     handleListingToggle(value){
         this.setState({
+            showDetail: false,
             listingMode: value
         }, () => { 
             this.fetchListings(value, 1);
