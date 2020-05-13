@@ -9,6 +9,8 @@ import Listings from '../components/Listings';
 import ListingToolbar from '../components/ListingToolbar';
 import ListingPagination from '../components/ListingPagination';
 import ListingDetail from '../components/ListingDetail';
+import ListingAddType from '../components/ListingAddType';
+import ListingAddAddress from '../components/ListingAddAddress';
 import listings from '../services/listings';
 import {getUserEmail} from '../helpers/authentication';
 import { isOwner } from '../helpers/authentication';
@@ -67,8 +69,13 @@ function TransitionApp(){
 export class ListingPage extends Component {
     constructor(props){
         super(props);
-        this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
+
+        // Add Listing
         this.handleAddListing = this.handleAddListing.bind(this);
+        this.handleListingTypeNext = this.handleListingTypeNext.bind(this);
+        this.handleListingAddressNext = this.handleListingAddressNext.bind(this);
+
+        this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleListingToggle = this.handleListingToggle.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
         this.handleOwnerChange = this.handleOwnerChange.bind(this);
@@ -84,7 +91,15 @@ export class ListingPage extends Component {
         this.handleMoreFilterChange = this.handleMoreFilterChange.bind(this);
         this.handleFilesAdded = this.handleFilesAdded.bind(this);
         this.handleImageUploadFinished = this.handleImageUploadFinished.bind(this);
+
         this.state = {
+
+            // Add listing
+            addListingType: false,
+            addListingAddress: false,
+            newListing: {},
+             
+
             showDetail: false,
             editMode: "view",
             listingMode: "allListings",
@@ -109,6 +124,8 @@ export class ListingPage extends Component {
         }
 
         var localState = {
+            addListingAddress: false,
+            listingMode: this.state.listingMode,
             index: index,
             showDetail: showDetail,
             editMode: editMode,
@@ -128,7 +145,14 @@ export class ListingPage extends Component {
             editMode: value
         });
     }
+
+    // Add Listing
+
     handleAddListing(){
+        this.setState({
+            addListingType: true
+        });
+        /*
         var localState = {
            index: 0,
            showDetail: true,
@@ -140,7 +164,38 @@ export class ListingPage extends Component {
         };
         this.fetchListing(localState);
         this.fetchListings("myListings",this.state.page);
+        */
     }
+    handleListingTypeNext(listing){
+        console.log("listing: "+JSON.stringify(listing));
+        this.setState({
+            addListingType: false,
+            addListingAddress: true,
+            newListing: listing
+        });
+    }
+
+    handleListingAddressNext(listing){
+        listing.owner = getUserEmail();
+        listings.create(listing, (data) => {
+
+            var localState = {
+                addListingAddress: false,
+                listingMode: "myListings",
+                index: data.listing.id,
+                showDetail: true,
+                editMode: "edit",
+                files: [],
+                uploading: false,
+                uploadProgress: [],
+                successfullUploaded: false
+            };
+            this.fetchListing(localState);
+            this.fetchListings("myListings",this.state.page);
+        });
+
+    }
+
     handleListingToggle(value){
         this.setState({
             showDetail: false,
@@ -234,6 +289,8 @@ export class ListingPage extends Component {
         var fetchIndex = this.state.index;
         if (index) fetchIndex = index;
         var localState = {
+            addListingAddress: false,
+            listingMode: this.state.listingMode,
             index: fetchIndex,
             showDetail: this.state.showDetail,
             editMode: this.state.editMode,
@@ -252,6 +309,8 @@ export class ListingPage extends Component {
                     owner = true;
                 }
                 this.setState({
+                    listingMode: localState.listingMode,
+                    addListingAddress: localState.addListingAddress,            
                     listingDetail: data,
                     showDetail: localState.showDetail,
                     editMode: localState.editMode,
@@ -310,14 +369,19 @@ export class ListingPage extends Component {
         if (this.state.moreQuery){
             query += this.state.moreQuery;
         }
-        listings.getAll(query, (listings) => {
-           this.setState({
+        var that = this;
+        var getAllPromise = listings.getAll(query);
+        getAllPromise.then(function(listings){
+           console.log("listings: "+JSON.stringify(listings));
+           that.setState({
                listingMode: listingMode,
                listings: listings.listings.rows,
                page: listings.page,
                perPage: listings.perPage,
                count: listings.listings.count
            });
+        }).catch(function(err){
+            console.log("err: "+err);
         }); 
 
     }
@@ -428,6 +492,15 @@ export class ListingPage extends Component {
                         onListingToggle={this.handleListingToggle}
                         onFilterChange={this.handleFilterChange}
                         onMoreFilterChange={this.handleMoreFilterChange}
+                    />
+                    <ListingAddType
+                        show={this.state.addListingType}
+                        onNext={this.handleListingTypeNext}
+                    />
+                    <ListingAddAddress
+                        show={this.state.addListingAddress}
+                        onNext={this.handleListingAddressNext}
+                        listing={this.state.newListing}
                     />
                 </Row>
                 <Row>

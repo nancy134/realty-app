@@ -1,3 +1,5 @@
+var rp = require('request-promise');
+
 export function getAll(query,cb){
     var url = "";
     if (query) {
@@ -5,14 +7,40 @@ export function getAll(query,cb){
     } else {
         url = process.env.REACT_APP_LISTING_SERVICE+"listings";
     }
-    return fetch(url, {
-    }).then(checkStatus).then(parseJSON).then(cb);
+
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'GET',
+            uri: url,
+            json: true
+        };
+        rp(options).then(function(parsedBody){
+            resolve(parsedBody);
+        }).catch(function(err){
+            reject(err.error);
+        });
+    });
 }
 
 export function get(index, cb){
     var url = process.env.REACT_APP_LISTING_SERVICE+"listings/"+index;
     return fetch(url, {
     }).then(checkStatus).then(parseJSON).then(cb);
+}
+
+export function getEnumsPromise(){
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'GET',
+            uri: process.env.REACT_APP_LISTING_SERVICE+"enums",
+            json: true
+        };
+        rp(options).then(function(parsedBody){
+            resolve(parsedBody);
+        }).catch(function(err){
+            reject(err.error);
+        });
+    });
 }
 export function getEnums(cb){
     var url = process.env.REACT_APP_LISTING_SERVICE+"enums";
@@ -89,6 +117,7 @@ const listings = {
     create, 
     update, 
     getEnums, 
+    getEnumsPromise,
     publish, 
     unpublish, 
     getSpaceTypes, 
