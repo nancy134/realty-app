@@ -22,10 +22,20 @@ export function getAll(query,cb){
     });
 }
 
-export function get(index, cb){
+export function get(index){
     var url = process.env.REACT_APP_LISTING_SERVICE+"listings/"+index;
-    return fetch(url, {
-    }).then(checkStatus).then(parseJSON).then(cb);
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'GET',
+            uri: url,
+            json: true
+        };
+        rp(options).then(function(parsedBody){
+            resolve(parsedBody);
+        }).catch(function(err){
+            reject(err.error);
+        });
+    });
 }
 
 export function getEnumsPromise(){

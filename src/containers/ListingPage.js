@@ -14,57 +14,7 @@ import ListingAddAddress from '../components/ListingAddAddress';
 import listings from '../services/listings';
 import {getUserEmail} from '../helpers/authentication';
 import { isOwner } from '../helpers/authentication';
-import { Transition } from 'react-transition-group';
-
-const defaultStyle = {
-  transition: `transform 200ms, opacity 200ms ease`,
-  opacity: 1
-};
-const transitionStyles = {
-  entering: { transform: 'scale(0.5)', opacity: .75 }, 
-  entered: { transform: 'scale(2.0)', opacity: 1},
-  exiting: { opacity: .75 },
-  exited: { opacity: .25 } 
-};
-const AComponent = ({ in: inProp }) => (
-    <Transition 
-        in={inProp} 
-        timeout={{
-            appear: 100,
-            enter: 300,
-            exit: 300 
-        }}
-        appear
-        unmountOnExit
-    >
-        {state => (
-            <div
-                style={{
-                    ...defaultStyle,
-                    ...transitionStyles[state]
-                }}
-            >
-            I am {state}
-            </div>
-        )}
-    </Transition>
-); 
-function TransitionApp(){
-  const [entered, setEntered] = React.useState(false);
-  return (
-    <div
->
-      <AComponent in={entered} />
-        <button
-          onClick={() => {
-            setEntered(!entered);
-          }}
-        >
-          Toggle Entered
-        </button>
-    </div>
-  );
-}
+import { CSSTransition } from 'react-transition-group';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -167,7 +117,6 @@ export class ListingPage extends Component {
         */
     }
     handleListingTypeNext(listing){
-        console.log("listing: "+JSON.stringify(listing));
         this.setState({
             addListingType: false,
             addListingAddress: true,
@@ -303,12 +252,14 @@ export class ListingPage extends Component {
     }
     fetchListing(localState){
         if (localState.index){
-            listings.get(localState.index, (data) => {
+            var that = this;
+            var getPromise = listings.get(localState.index);
+            getPromise.then(function(data){
                 var owner = false;
                 if (isOwner(data.listing.owner)){
                     owner = true;
                 }
-                this.setState({
+                that.setState({
                     listingMode: localState.listingMode,
                     addListingAddress: localState.addListingAddress,            
                     listingDetail: data,
@@ -321,8 +272,10 @@ export class ListingPage extends Component {
                     uploadProgress: localState.uploadProgress,
                     successfullUploaded: localState.successfullUploaded 
                 }, () => {
-                    this.handleListUpdate();
+                    that.handleListUpdate();
                 });
+            }).catch(function(err){
+                console.log("err: "+err);
             });
         } else {
             listings.getEnums((data) => {
@@ -372,7 +325,6 @@ export class ListingPage extends Component {
         var that = this;
         var getAllPromise = listings.getAll(query);
         getAllPromise.then(function(listings){
-           console.log("listings: "+JSON.stringify(listings));
            that.setState({
                listingMode: listingMode,
                listings: listings.listings.rows,
@@ -481,9 +433,6 @@ export class ListingPage extends Component {
         var listingDetail = this.state.listingDetail;
         return (
             <React.Fragment>
-                {this.state.enabledTransitionTest ?
-                <TransitionApp />
-                : null}
                 <Row className="bg-success">
                     <ListingToolbar 
                         loggedIn={loggedIn} 
@@ -505,7 +454,12 @@ export class ListingPage extends Component {
                 </Row>
                 <Row>
                     <Col xs={7} className={showDetail? "rightcol" : "leftcol"}>
-                        {showDetail ? (
+                        <CSSTransition
+                            in={showDetail}
+                            appear={false}
+                            timeout={900}
+                            classNames="slide"
+                        >
                             <ListingDetail 
                                 editMode={editMode} 
                                 index={index} 
@@ -529,9 +483,10 @@ export class ListingPage extends Component {
                                 successfullUploaded={this.state.successfullUploaded}
                                 showSpinner={this.state.showSpinner}
                             />
-                        ) : (
+                        </CSSTransition>
+                    {!showDetail ?
                             <ListingMap showDetail={showDetail} />
-                        )}
+                    : null}
                     </Col>
                     <Col xs={5} className="rightcol" >
                         <ListingPagination 
@@ -548,7 +503,7 @@ export class ListingPage extends Component {
                     </Col>
                 </Row>
                 <Row className="bg-secondary">footer</Row>
-            </React.Fragment> 
+            </React.Fragment>
         );
     }
 }
