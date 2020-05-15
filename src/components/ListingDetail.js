@@ -407,29 +407,15 @@ class ListingDetail extends React.Component {
         }
     } 
     componentDidMount(){
-        console.log("this.props.listingDetail: "+JSON.stringify(this.props.listingDetail));
         if (this.props.listingDetail){
-                var listingDetail = this.props.listingDetail;
-                if (this.props.listingDetail.listing){
-                    if (isOwner(listingDetail.listing.owner)){
-                        this.props.onOwnerChange(true);
-                    } else {
-                        this.props.onOwnerChange(false);
-                    }
+            var listingDetail = this.props.listingDetail;
+            if (this.props.listingDetail.listing){
+                if (isOwner(listingDetail.listing.owner)){
+                    this.props.onOwnerChange(true);
+                } else {
+                    this.props.onOwnerChange(false);
                 }
-                /*
-                this.setState({
-                    listing: listingDetail.listing,
-                    states: listingDetail.states,
-                    listingTypes: listingDetail.listingTypes,
-                    spaceUses: listingDetail.spaceUses,
-                    spaceTypes: listingDetail.spaceTypes,
-                    spaceDivisibles: listingDetail.spaceDivisibles,
-                    portfolioTypes: listingDetail.portfolioTypes,
-                    propertyTypes: listingDetail.propertyTypes,
-                    amenities: listingDetail.amenities
-                });
-                */
+            }
         }
 
     }

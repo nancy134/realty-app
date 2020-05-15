@@ -20,14 +20,20 @@ import { CSSTransition } from 'react-transition-group';
 export class ListingPage extends Component {
     constructor(props){
         super(props);
-        console.log("id: "+props.match.params.id);
-        console.log("props.location: "+JSON.stringify(props.location));
         var fullscreen = false;
-        var index = null; 
+        var index = null;
         if (props.match.params.id){
            fullscreen = true;
            index = props.match.params.id;
         }
+
+        const params = new URLSearchParams(props.location.search);
+        var listingModeParam = params.get('listingMode');
+        var listingMode = "allListings";
+        if (listingModeParam){
+           listingMode = listingModeParam;
+        }
+
         // Add Listing
         this.handleAddListing = this.handleAddListing.bind(this);
         this.handleListingTypeNext = this.handleListingTypeNext.bind(this);
@@ -63,7 +69,7 @@ export class ListingPage extends Component {
             fullscreen: fullscreen,
             showDetail: false,
             editMode: "view",
-            listingMode: "allListings",
+            listingMode: listingMode,
             owner: false,
             page: 1,
             listingDetail: null,
@@ -266,7 +272,6 @@ export class ListingPage extends Component {
                 if (isOwner(data.listing.owner)){
                     owner = true;
                 }
-                console.log("data: "+JSON.stringify(data));
                 that.setState({
                     listingMode: localState.listingMode,
                     addListingAddress: localState.addListingAddress,            

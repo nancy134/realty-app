@@ -102,6 +102,10 @@ export class AccountButton extends Component{
        this.setState({authenticated: false});
        this.props.onLogout();
     }
+    onMyListings(){
+        var url = window.location.protocol + "//" + window.location.hostname + "/listing?listingMode=myListings";
+        window.location.href = url;
+    }
     render(){
         const userName = getUserName();
         return(
@@ -111,7 +115,7 @@ export class AccountButton extends Component{
                 ( 
                 <DropdownButton id="dropdown-item-button" title={userName}>
                     <Dropdown.Item as="button" onClick={() => {this.onMyAccount()}}>My Account</Dropdown.Item>
-                    <Dropdown.Item as="button">My Listings</Dropdown.Item>
+                    <Dropdown.Item as="button" onClick={() => {this.onMyListings()}}>My Listings</Dropdown.Item>
                     <Dropdown.Item as="button" onClick={() => {this.onLogout()}}>Logout</Dropdown.Item>
                 </DropdownButton> 
                 )
