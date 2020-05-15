@@ -407,6 +407,7 @@ class ListingDetail extends React.Component {
         }
     } 
     componentDidMount(){
+        console.log("this.props.listingDetail: "+JSON.stringify(this.props.listingDetail));
         if (this.props.listingDetail){
                 var listingDetail = this.props.listingDetail;
                 if (this.props.listingDetail.listing){
@@ -416,6 +417,7 @@ class ListingDetail extends React.Component {
                         this.props.onOwnerChange(false);
                     }
                 }
+                /*
                 this.setState({
                     listing: listingDetail.listing,
                     states: listingDetail.states,
@@ -427,6 +429,7 @@ class ListingDetail extends React.Component {
                     propertyTypes: listingDetail.propertyTypes,
                     amenities: listingDetail.amenities
                 });
+                */
         }
 
     }
@@ -436,26 +439,31 @@ class ListingDetail extends React.Component {
         const showDetail = this.props.showDetail;
         var editMode = this.props.editMode;
         const states = this.state.states;
-        //const propertyTypes = this.state.propertyTypes;
-        const listingTypes = this.state.listingTypes;
-        const spaceUses = this.state.spaceUses;
-        const spaceTypes = this.state.spaceTypes;
-        const spaceDivisibles = this.state.spaceDivisibles;
-        const portfolioTypes = this.state.portfolioTypes;
-        //const allAmenities = this.state.amenities;
+
         const listingMode = this.props.listingMode;
         var listing = null;
+        var listingTypes = null;
+        var spaceUses = null;
+        var spaceTypes = null;
+        var spaceDivisibles = null;
+        var portfolioTypes = null;
         if (this.props.listingDetail){
            listing = this.props.listingDetail.listing;
+           listingTypes = this.props.listingDetail.listngTypes;
+           spaceUses = this.props.listingDetail.spaceUses;
+           spaceTypes = this.props.listingDetail.spaceTypes;
+           spaceDivisibles = this.props.listingDetail.spaceDivisibles;
+           portfolioTypes = this.props.listingDetail.portfolioTypes;
         }  
         if (states){
         }
         const owner = this.props.owner;
-
+        const fullscreen = this.props.fullscreen;
         if (showDetail){
             return (
             <div>
                 <ListingDetailHeader 
+                    fullscreen={fullscreen}
                     listing={listing} 
                     states={states} 
                     owner={owner} 

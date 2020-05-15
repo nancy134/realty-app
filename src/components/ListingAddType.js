@@ -60,7 +60,7 @@ class ListingAddType extends React.Component{
             <Modal.Footer>
                 <Button 
                     id="overview_edit_cancel_button"
-                    onClick={this.props.onHide}
+                    onClick={this.props.onCancel}
                 >
                     Cancel
                 </Button>

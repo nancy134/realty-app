@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+    Container,
     Row,
     Col
 } from 'react-bootstrap';
@@ -19,11 +20,20 @@ import { CSSTransition } from 'react-transition-group';
 export class ListingPage extends Component {
     constructor(props){
         super(props);
-
+        console.log("id: "+props.match.params.id);
+        console.log("props.location: "+JSON.stringify(props.location));
+        var fullscreen = false;
+        var index = null; 
+        if (props.match.params.id){
+           fullscreen = true;
+           index = props.match.params.id;
+        }
         // Add Listing
         this.handleAddListing = this.handleAddListing.bind(this);
         this.handleListingTypeNext = this.handleListingTypeNext.bind(this);
         this.handleListingAddressNext = this.handleListingAddressNext.bind(this);
+        this.handleCancelAddType = this.handleCancelAddType.bind(this);
+        this.handleCancelAddAddress = this.handleCancelAddAddress.bind(this);
 
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleListingToggle = this.handleListingToggle.bind(this);
@@ -49,7 +59,8 @@ export class ListingPage extends Component {
             addListingAddress: false,
             newListing: {},
              
-
+            index: index,
+            fullscreen: fullscreen,
             showDetail: false,
             editMode: "view",
             listingMode: "allListings",
@@ -102,19 +113,6 @@ export class ListingPage extends Component {
         this.setState({
             addListingType: true
         });
-        /*
-        var localState = {
-           index: 0,
-           showDetail: true,
-           editMode: "edit",
-           files: [],
-           uploading: false,
-           uploadProgress: [],
-           successfullUploaded: false
-        };
-        this.fetchListing(localState);
-        this.fetchListings("myListings",this.state.page);
-        */
     }
     handleListingTypeNext(listing){
         this.setState({
@@ -144,7 +142,16 @@ export class ListingPage extends Component {
         });
 
     }
-
+    handleCancelAddType(){
+        this.setState({
+            addListingType: false
+        });
+    }
+    handleCancelAddAddress(){
+        this.setState({
+            addListingAddress: false
+        });
+    }
     handleListingToggle(value){
         this.setState({
             showDetail: false,
@@ -259,6 +266,7 @@ export class ListingPage extends Component {
                 if (isOwner(data.listing.owner)){
                     owner = true;
                 }
+                console.log("data: "+JSON.stringify(data));
                 that.setState({
                     listingMode: localState.listingMode,
                     addListingAddress: localState.addListingAddress,            
@@ -415,6 +423,9 @@ export class ListingPage extends Component {
     }
 
     componentDidMount(){
+        if (this.state.fullscreen){
+            this.handleFetchListing();
+        }
         this.fetchListings(this.state.listingMode, this.state.page);
     }
     componentWillUnmount(){
@@ -431,8 +442,41 @@ export class ListingPage extends Component {
         var loggedIn = this.props.loggedIn;
         var owner = this.state.owner;
         var listingDetail = this.state.listingDetail;
+
+        var fullscreen = this.state.fullscreen;
         return (
             <React.Fragment>
+                {fullscreen ?
+                (<Container>
+                            <ListingDetail
+                                fullscreen={fullscreen}
+                                editMode={editMode}
+                                index={index}
+                                listingDetail={listingDetail}
+                                showDetail={true}
+                                owner={owner}
+                                listingMode={listingMode}
+                                onShowDetailChange={this.handleShowDetailChange}
+                                onEditToggle={this.handleEditToggle}
+                                onOwnerChange={this.handleOwnerChange}
+                                onListUpdate={this.handleListUpdate}
+                                onUpdate={this.handleUpdate}
+                                onCreate={this.handleCreate}
+                                onFetchListing={this.handleFetchListing}
+                                onPublish={this.handlePublish}
+                                onUnpublish={this.handleUnpublish}
+                                onFilesAdded={this.handleFilesAdded}
+                                files={this.state.files}
+                                uploading={this.state.uploading}
+                                uploadProgress={this.state.uploadProgress}
+                                successfullUploaded={this.state.successfullUploaded}
+                                showSpinner={this.state.showSpinner}
+                            />
+                            </Container>)
+
+                :
+                ( 
+                <div>
                 <Row className="bg-success">
                     <ListingToolbar 
                         loggedIn={loggedIn} 
@@ -445,11 +489,13 @@ export class ListingPage extends Component {
                     <ListingAddType
                         show={this.state.addListingType}
                         onNext={this.handleListingTypeNext}
+                        onCancel={this.handleCancelAddType}
                     />
                     <ListingAddAddress
                         show={this.state.addListingAddress}
                         onNext={this.handleListingAddressNext}
                         listing={this.state.newListing}
+                        onCancel={this.handleCancelAddAddress}
                     />
                 </Row>
                 <Row>
@@ -461,6 +507,7 @@ export class ListingPage extends Component {
                             classNames="slide"
                         >
                             <ListingDetail 
+                                fullscreen={fullscreen}
                                 editMode={editMode} 
                                 index={index} 
                                 listingDetail={listingDetail} 
@@ -503,6 +550,8 @@ export class ListingPage extends Component {
                     </Col>
                 </Row>
                 <Row className="bg-secondary">footer</Row>
+                </div>
+                ) }
             </React.Fragment>
         );
     }

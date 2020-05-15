@@ -70,6 +70,7 @@ class ListingDetailHeader extends React.Component {
         this.handleEditToggle = this.handleEditToggle.bind(this);
         this.handlePublish = this.handlePublish.bind(this);
         this.handleUnpublish = this.handleUnpublish.bind(this);
+        this.handleExpand = this.handleExpand.bind(this);
     }
     handleClose(){
         this.props.onShowDetailChange(false);
@@ -85,6 +86,10 @@ class ListingDetailHeader extends React.Component {
     }
     handleUnpublish(){
         this.props.onUnpublish(this.props.listing.ListingId);
+    }
+    handleExpand(){
+        var url = window.location.protocol + "//" + window.location.hostname + "/listing/"+this.props.listing.id;
+        window.location.href = url;
     }
     render() {
         const listingMode = this.props.listingMode;
@@ -132,7 +137,7 @@ class ListingDetailHeader extends React.Component {
                 owner = null;
             }
         }
-
+        var fullscreen = this.props.fullscreen;
         return(
             <Row className="align-items-center bg-info">
 	        <Col md={4}className="text-white">
@@ -175,9 +180,16 @@ class ListingDetailHeader extends React.Component {
                         onUnpublish={this.handleUnpublish}
                     />
                     : null }
-                    { listing ? 
-                    <Button className="expandButton p-0" variant="info"><FontAwesomeIcon icon={faExpand} /></Button>
+                    { listing && !fullscreen ? 
+                    <Button
+                        onClick={this.handleExpand} 
+                        className="expandButton p-0" 
+                        variant="info"
+                    >
+                        <FontAwesomeIcon icon={faExpand} />
+                    </Button>
                     : null}
+                    {!fullscreen ?
                     <Button
                         id="header_close_detail"
                         className="closeButton p-0" 
@@ -186,6 +198,7 @@ class ListingDetailHeader extends React.Component {
                     >
                         <FontAwesomeIcon icon={faTimes}/>
                     </Button>
+                    : null }
                 </Col>
             </Row>
         );

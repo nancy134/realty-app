@@ -41,7 +41,6 @@ class ListingAddAddress extends React.Component{
         var that = this;
         var enumPromise = listingService.getEnumsPromise();
         enumPromise.then(function(data){
-            console.log("data: "+JSON.stringify(data));
             that.setState({
                 states: data.states
             });
@@ -131,7 +130,7 @@ class ListingAddAddress extends React.Component{
                                         value={values.city} 
                                         onChange={handleChange}
                                         onBlur={handleBlur}
-                                        isInvalid={!!errors.city}
+                                        isInvalid={touched.city && !!errors.city}
                                         isValid={touched.city && !errors.city && values.city !== ""}
                                         disabled={isSubmitting}
                                     />
@@ -165,7 +164,7 @@ class ListingAddAddress extends React.Component{
                                         type="text"
                                         value={values.displayAddress} 
                                         onChange={handleChange}
-                                        //onBlur={handleBlur}
+                                        onBlur={handleBlur}
                                         isInvalid={!!errors.displayAddress}
                                         isValid={touched.displayAddress && !errors.displayAddress && values.displayAddress !== ""}
                                     />
@@ -181,7 +180,7 @@ class ListingAddAddress extends React.Component{
             <Modal.Footer>
                 <Button 
                     id="overview_edit_cancel_button"
-                    onClick={this.props.onHide}
+                    onClick={this.props.onCancel}
                 >
                     Cancel
                 </Button>
@@ -190,7 +189,7 @@ class ListingAddAddress extends React.Component{
                     id="overview_edit_next_button"
                     onClick={handleSubmit}
                 >
-                    Next 
+                    Create New Listing 
                 </Button>
             </Modal.Footer>
        </Modal>

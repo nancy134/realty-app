@@ -14,7 +14,9 @@ render(){
       <Redirect to="/home"/>
     )}/>
     <Route path="/home" exact component={Home} />
+    <Route path="/listing/:id" render={props => (<ListingPage {...props} loggedIn={this.props.loggedIn}/>)}/>
     <Route path="/listing" render={props => (<ListingPage {...props} loggedIn={this.props.loggedIn}/>)}/>
+
 
     <Route path="/account" exact component={AccountPage} />
     <Route path="/instructions" exact component={InstructionPage} />
