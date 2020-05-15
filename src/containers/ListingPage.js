@@ -238,6 +238,7 @@ export class ListingPage extends Component {
     handlePublish(data){
         this.setState({
             listingDetail: data,
+            showDetail: false
         });
         this.handleListUpdate();
     }
