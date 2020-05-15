@@ -137,6 +137,14 @@ class ListingDetailHeader extends React.Component {
                 owner = null;
             }
         }
+
+        // View button
+        var viewButton = "View";
+        if (listing){
+           if (listing.publishStatus === "Draft"){
+               viewButton = "Preview";
+           }
+        }
         var fullscreen = this.props.fullscreen;
         return(
             <Row className="align-items-center bg-info">
@@ -168,7 +176,7 @@ class ListingDetailHeader extends React.Component {
                             onClick={() => this.handleEditToggle("view")}
                             className={viewStatus} 
                             variant="info">
-                            View
+                            {viewButton} 
                         </Button>
                     </ButtonGroup>
                     : null }
