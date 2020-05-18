@@ -43,13 +43,12 @@ class ListingDetail extends React.Component {
             portfolioNew: false,
             portfolioUpdate: false,
             portfolioSaving: false
+
         };
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
         this.handleListingUpdate = this.handleListingUpdate.bind(this);
         this.handleSpaceUpdate = this.handleSpaceUpdate.bind(this);
-        this.handlePublish = this.handlePublish.bind(this);
-        this.handleUnpublish = this.handleUnpublish.bind(this);
         this.handleFilesAdded = this.handleFilesAdded.bind(this);
 
         // Space 
@@ -93,16 +92,6 @@ class ListingDetail extends React.Component {
     }
     handleFilesAdded(files){
         this.props.onFilesAdded(files);
-    }
-    handlePublish(id){
-        listingService.publish(id, (data) => {
-            this.props.onPublish(data);
-        });
-    }
-    handleUnpublish(id){
-        listingService.unpublish(id, (data) => {
-            this.props.onUnpublish(data);
-        });
     }
 
     // Space
@@ -174,29 +163,7 @@ class ListingDetail extends React.Component {
             }
         }
     }
-    /*
-    handleSpaceUpdate(space){
-        if (!space.ListingVersionId){
-            var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
-            listingService.create(listingBody, (listingVersion) => {
-                space.ListingVersionId = listingVersion.listing.id;
-                spaces.create(space, (data) => {
-                    this.props.onFetchListing(data.ListingVersionId);
-                });
-            });
-        } else {
-            if (space.id){
-                spaces.update(space, (data) => {
-                    this.props.onFetchListing(data.ListingVersionId);
-                });
-            } else {
-                spaces.create(space, (data) => {
-                    this.props.onFetchListing(data.ListingVersionId);
-                });
-            }
-        }
-    }
-    */
+
     // Unit
 
     handleUnitModalNew(){
@@ -458,8 +425,13 @@ class ListingDetail extends React.Component {
                     onShowDetailChange={this.handleShowDetailChange} 
                     onEditToggle={this.handleEditToggle} 
                     onListingUpdate={this.handleListingUpdate} 
-                    onPublish={this.handlePublish}
-                    onUnpublish={this.handleUnpublish}
+
+                    onTransitionStart={this.props.onTransitionStart}
+                    onPublish={this.props.onPublish}
+                    onUnpublish={this.props.onUnpublish}
+                    onTransitionHide={this.props.onTransitionHide}
+                    transitionStart={this.props.transitionStart}
+                    transitionSaving={this.props.transitionSaving}
                 />
                 <ListingDetailOverview 
                     listing={listing} 

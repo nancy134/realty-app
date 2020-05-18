@@ -1,7 +1,8 @@
 import React from 'react';
 import {
     Modal,
-    Button
+    Button,
+    Spinner
 } from 'react-bootstrap';
 
 class TransitionModal extends React.Component {
@@ -11,11 +12,9 @@ class TransitionModal extends React.Component {
         this.onUnpublish = this.onUnpublish.bind(this);
     }
     onPublish(){
-        this.props.onHide();
         this.props.onPublish();
     }
     onUnpublish(){
-        this.props.onHide();
         this.props.onUnpublish();
     }
     render(){
@@ -41,7 +40,11 @@ class TransitionModal extends React.Component {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {this.props.message}
+                <div>{this.props.message}</div>
+                {this.props.saving ?
+                <div>Saving...<Spinner animation="border" /></div>
+                : null}
+                <div>{this.props.transitionMessage}</div>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={this.props.onHide}>Cancel</Button>

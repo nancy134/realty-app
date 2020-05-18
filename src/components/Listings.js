@@ -51,6 +51,7 @@ function ListItem(props){
                             >
                                 {address}
                             </Card.Title>
+                            
                             { listing.city ?
                             <Card.Subtitle>
                                 {listing.city}, {listing.state}

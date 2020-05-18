@@ -77,20 +77,37 @@ export function update(data,cb){
     }).then(checkStatus).then(parseJSON).then(cb);
 }
 
-export function publish(index, cb){
+export function publish(index){
     var url = process.env.REACT_APP_LISTING_SERVICE+"listings/"+index+"/directPublications";
-    fetch(url, {
-        method: 'post',
-        headers: {'Content-Type':'application/json'},
-    }).then(checkStatus).then(parseJSON).then(cb);
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'POST',
+            uri: url,
+            json: true
+        };
+        rp(options).then(function(parsedBody){
+            resolve(parsedBody);
+        }).catch(function(err){
+            reject(err.error);
+        });
+    });
 }
 
 export function unpublish(index, cb){
     var url = process.env.REACT_APP_LISTING_SERVICE+"listings/"+index+"/publications";
-    fetch(url, {
-        method: 'delete',
-        headers: {'Content-Type':'application/json'},
-    }).then(checkStatus).then(parseJSON).then(cb);
+
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'delete',
+            uri: url,
+            json: true
+        };
+        rp(options).then(function(parsedBody){
+            resolve(parsedBody);
+        }).catch(function(err){
+            reject(err.error);
+        });
+    });
 }
 
 export function getSpaceTypes(cb){

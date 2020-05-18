@@ -38,26 +38,26 @@ function EditButton(props) {
   );
 }
 function TransitionButton(props) {
-  const [modalShow, setModalShow] = React.useState(false);
-
   return (
       <span>
           <Button 
               id="header_transition_button"
               variant="info" 
-              onClick={() => setModalShow(true)}
+              onClick={() => {props.onShow()}}
           >
               {props.buttonText}
           </Button>
 
           <TransitionModal
-              show={modalShow}
+              show={props.show}
               message={props.message}
               states={props.states}
               transition={props.buttonText}
-              onHide={() => setModalShow(false)}
+              onHide={props.onHide}
               onPublish={props.onPublish}
               onUnpublish={props.onUnpublish}
+              saving={props.saving}
+              transitionMessage={props.TransitionMessage}
           />
       </span>
   );
@@ -186,6 +186,11 @@ class ListingDetailHeader extends React.Component {
                         buttonText={transitionButton} 
                         onPublish={this.handlePublish}
                         onUnpublish={this.handleUnpublish}
+                        onShow={this.props.onTransitionStart}
+                        onHide={this.props.onTransitionHide}
+                        show={this.props.transitionStart}
+                        saving={this.props.transitionSaving}
+                        transitionMessage={this.props.transitionMessage}
                     />
                     : null }
                     { listing && !fullscreen ? 

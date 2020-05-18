@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import {
     Container,
     Row,
-    Col
+    Col,
+    Modal,
+    Button
 } from 'react-bootstrap';
 import './ListingPage.css';
 import ListingMap from '../components/ListingMap';
@@ -51,12 +53,17 @@ export class ListingPage extends Component {
         this.handleCreate = this.handleCreate.bind(this);
         this.fetchListing = this.fetchListing.bind(this);
         this.handleFetchListing = this.handleFetchListing.bind(this);
-        this.handlePublish = this.handlePublish.bind(this);
-        this.handleUnpublish = this.handleUnpublish.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.handleMoreFilterChange = this.handleMoreFilterChange.bind(this);
         this.handleFilesAdded = this.handleFilesAdded.bind(this);
         this.handleImageUploadFinished = this.handleImageUploadFinished.bind(this);
+
+        // Transition
+        this.handleTransitionStart = this.handleTransitionStart.bind(this);
+        this.handlePublish = this.handlePublish.bind(this);
+        this.handleUnpublish = this.handleUnpublish.bind(this);
+        this.handleTransitionHide = this.handleTransitionHide.bind(this);
+        this.handleClose = this.handleClose.bind(this);
 
         this.state = {
 
@@ -64,7 +71,14 @@ export class ListingPage extends Component {
             addListingType: false,
             addListingAddress: false,
             newListing: {},
-             
+
+            // Transition
+            transitionStart: false,
+            transitionSaving: false,
+            showModal: false,
+            transitionModalTitle: "",
+            transitionModalMessage: "",
+ 
             index: index,
             fullscreen: fullscreen,
             showDetail: false,
@@ -235,19 +249,59 @@ export class ListingPage extends Component {
             files: prevState.files.concat(files)
         }));
     }
-    handlePublish(data){
+
+    // Transition
+    handleTransitionStart(){
+        console.log("handleTransitionStart");
         this.setState({
+            transitionStart: true
+        });
+    }
+    handleTransitionHide(data, title, message){
+        console.log("handleTransitionHide");
+        this.setState({
+            transitionStart: false,
+            transitionSaving: false,
             listingDetail: data,
-            showDetail: false
+            showDetail: false,
+            showModal: true,
+            transitionModalTitle: title,
+            transitionModalMessage: message
+        }, () => {
+            this.handleListUpdate();
         });
-        this.handleListUpdate();
     }
-    handleUnpublish(data){
-        this.setState({
-            listingDetail: data
+    handlePublish(id){
+        var publishPromise = listings.publish(id);
+        this.setState({transitionSaving: true});
+        var that = this;
+        publishPromise.then(function(data){
+            var title = "Congratulations!";
+            var message = "You Listing has been published!";
+            that.handleTransitionHide(data, title, message);
+        }).catch(function(err){
+            var title = "Oops!"
+            var message = "We're sorry! Something went wrong";
+            that.handleTransitionHide(null, title, message);
         });
-        this.handleListUpdate();
+
     }
+    handleUnpublish(id){
+        var unpublishPromise = listings.unpublish(id);
+        this.setState({transitionSaving: true});
+        var that = this;
+        unpublishPromise.then(function(data){
+            var title = "Off Market";
+            var message = "Your listing is now off the market";
+            that.handleTransitionHide(data, title, message);
+        }).catch(function(err){
+            var title = "Oops!"
+            var message = "We're sorry! Something went wrong";
+            that.handleTransitionHide(null, title, message);
+        });
+    }
+
+
     handleFetchListing(index){
         var fetchIndex = this.state.index;
         if (index) fetchIndex = index;
@@ -347,7 +401,7 @@ export class ListingPage extends Component {
                count: listings.listings.count
            });
         }).catch(function(err){
-            console.log("err: "+err);
+            console.log("err: "+JSON.stringify(err));
         }); 
 
     }
@@ -439,8 +493,12 @@ export class ListingPage extends Component {
     shouldComponentUpdate(){
         return true;
     }
+    handleClose() {
+        this.setState({
+            showModal: false
+        });
+    }
     render() {
-
         var showDetail = this.state.showDetail;
         var index = this.state.index;
         var editMode = this.state.editMode;
@@ -448,10 +506,20 @@ export class ListingPage extends Component {
         var loggedIn = this.props.loggedIn;
         var owner = this.state.owner;
         var listingDetail = this.state.listingDetail;
-
         var fullscreen = this.state.fullscreen;
         return (
             <React.Fragment>
+                <Modal show={this.state.showModal}>
+                    <Modal.Header>
+                        <Modal.Title>{this.state.transitionModalTitle}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>{this.state.transitionModalMessage}</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={this.handleClose}>
+                        Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
                 {fullscreen ?
                 (<Container>
                             <ListingDetail
@@ -469,14 +537,19 @@ export class ListingPage extends Component {
                                 onUpdate={this.handleUpdate}
                                 onCreate={this.handleCreate}
                                 onFetchListing={this.handleFetchListing}
-                                onPublish={this.handlePublish}
-                                onUnpublish={this.handleUnpublish}
                                 onFilesAdded={this.handleFilesAdded}
                                 files={this.state.files}
                                 uploading={this.state.uploading}
                                 uploadProgress={this.state.uploadProgress}
                                 successfullUploaded={this.state.successfullUploaded}
                                 showSpinner={this.state.showSpinner}
+                                // Transition
+                                onTransitionStart={this.handleTransitionStart}
+                                onPublish={this.handlePublish}
+                                onUnpublish={this.handleUnpublish}
+                                onTransitionHide={this.handleTransitionHide}
+                                transitionStart={this.state.transitionStart}
+                                transitionSaving={this.state.transitionSaving}
                             />
                             </Container>)
 
@@ -497,12 +570,14 @@ export class ListingPage extends Component {
                         onNext={this.handleListingTypeNext}
                         onCancel={this.handleCancelAddType}
                     />
+                    {this.state.addListingAddress ?
                     <ListingAddAddress
                         show={this.state.addListingAddress}
                         onNext={this.handleListingAddressNext}
                         listing={this.state.newListing}
                         onCancel={this.handleCancelAddAddress}
                     />
+                    : null}
                 </Row>
                 <Row>
                     <Col xs={7} className={showDetail? "rightcol" : "leftcol"}>
@@ -527,14 +602,21 @@ export class ListingPage extends Component {
                                 onUpdate={this.handleUpdate}
                                 onCreate={this.handleCreate}
                                 onFetchListing={this.handleFetchListing}
-                                onPublish={this.handlePublish}
-                                onUnpublish={this.handleUnpublish}
                                 onFilesAdded={this.handleFilesAdded}
                                 files={this.state.files}
                                 uploading={this.state.uploading}
                                 uploadProgress={this.state.uploadProgress}
                                 successfullUploaded={this.state.successfullUploaded}
                                 showSpinner={this.state.showSpinner}
+
+                                // Transition
+                                onTransitionStart={this.handleTransitionStart}
+                                onPublish={this.handlePublish}
+                                onUnpublish={this.handleUnpublish}
+                                onTransitionHide={this.handleTransitionHide}
+                                transitionStart={this.state.transitionStart}
+                                transitionSaving={this.state.transitionSaving}
+
                             />
                         </CSSTransition>
                     {!showDetail ?
