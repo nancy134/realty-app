@@ -13,7 +13,8 @@ import listingService from '../services/listings';
 const AddressSchema = Yup.object().shape({
     address: Yup.string().required('Address is required'),
     city: Yup.string().required('City is required'),
-    state: Yup.string()
+    state: Yup.string(),
+    zip: Yup.number().integer().typeError("Must be a valid zip code")
 });
 
 class ListingAddAddress extends React.Component{
@@ -25,14 +26,11 @@ class ListingAddAddress extends React.Component{
         };
     }
     handleNext(initialValues, values){
-        console.log("handleNext");
-        console.log("initialValues: "+JSON.stringify(initialValues));
-        console.log("values: "+JSON.stringify(values));
-        console.log("this.props.listing: "+JSON.stringify(this.props.listing));
         var listing = this.props.listing;
         if (values.address !== initialValues.address) listing.address = values.address;
         if (values.city !== initialValues.city) listing.city = values.city;
         if (values.state !== initialValues.state) listing.state = values.state;
+        if (values.zip !== initialValues.zip) listing.zip = values.zip;
         if (values.displayAddress !== initialValues.displayAddress) listing.displayAddress = values.displayAddress;
         
         this.props.onNext(listing);
@@ -64,12 +62,13 @@ class ListingAddAddress extends React.Component{
            zip: "",
            displayAddress: ""
        };
+
+       if (this.props.show){
        return(
        <Formik
             initialValues={initialValues}
             validationSchema={AddressSchema}
             onSubmit={(values, { setSubmitting }) => {
-                console.log("onSubmit");
                 setSubmitting(true);
                 this.handleNext(initialValues, values);
                 setSubmitting(false);
@@ -103,7 +102,7 @@ class ListingAddAddress extends React.Component{
                         <Form>
                             <Form.Row>
                                 <Col md={12}>
-                                    <Form.Label>Address</Form.Label>
+                                    <Form.Label className="font-weight-bold">Address</Form.Label>
                                     <Form.Control
                                         id="header_edit_address_input" 
                                         name="address"
@@ -122,7 +121,7 @@ class ListingAddAddress extends React.Component{
                             </Form.Row>
                             <Form.Row>
                                 <Col md={6}>
-                                    <Form.Label>City</Form.Label>
+                                    <Form.Label className="font-weight-bold">City</Form.Label>
                                     <Form.Control 
                                         id="header_edit_city_input"
                                         name="city"
@@ -139,7 +138,7 @@ class ListingAddAddress extends React.Component{
                                     </Form.Control.Feedback>
                                 </Col>
                                 <Col md={6}>
-                                    <Form.Label>State</Form.Label>
+                                    <Form.Label className="font-weight-bold">State</Form.Label>
                                     <Form.Control 
                                         id="header_edit_state_select"
                                         as="select" 
@@ -157,7 +156,26 @@ class ListingAddAddress extends React.Component{
                             </Form.Row>
                             <Form.Row>
                                 <Col md={6}>
-                                    <Form.Label>Display Address</Form.Label>
+                                    <Form.Label className="font-weight-bold">Zip</Form.Label>
+                                    <Form.Control
+                                        id="header_edit_zip_input"
+                                        name="zip"
+                                        type="text"
+                                        value={values.zip}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isInvalid={touched.zip && !!errors.zip}
+                                        isValid={touched.zip && !errors.zip && values.zip !== ""}
+                                        disabled={isSubmitting}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.zip}
+                                    </Form.Control.Feedback>
+                                </Col>
+                            </Form.Row>
+                            <Form.Row>
+                                <Col md={12}>
+                                    <Form.Label className="font-weight-bold">Display Address <span className="font-weight-light">(optional)</span></Form.Label>
                                     <Form.Control 
                                         id="header_edit_display_address_edit"
                                         name="displayAddress"
@@ -189,13 +207,16 @@ class ListingAddAddress extends React.Component{
                     id="overview_edit_next_button"
                     onClick={handleSubmit}
                 >
-                    Create New Listing 
+                    Next 
                 </Button>
             </Modal.Footer>
        </Modal>
        )}
        </Formik>
        );
+       } else {
+       return(null);
+       }
     }
 }
 export default ListingAddAddress;

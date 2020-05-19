@@ -14,6 +14,7 @@ import ListingPagination from '../components/ListingPagination';
 import ListingDetail from '../components/ListingDetail';
 import ListingAddType from '../components/ListingAddType';
 import ListingAddAddress from '../components/ListingAddAddress';
+import ListingAddOverview from '../components/ListingAddOverview';
 import listings from '../services/listings';
 import {getUserEmail} from '../helpers/authentication';
 import { isOwner } from '../helpers/authentication';
@@ -40,8 +41,10 @@ export class ListingPage extends Component {
         this.handleAddListing = this.handleAddListing.bind(this);
         this.handleListingTypeNext = this.handleListingTypeNext.bind(this);
         this.handleListingAddressNext = this.handleListingAddressNext.bind(this);
+        this.handleListingOverviewNext = this.handleListingOverviewNext.bind(this);
         this.handleCancelAddType = this.handleCancelAddType.bind(this);
         this.handleCancelAddAddress = this.handleCancelAddAddress.bind(this);
+        this.handleCancelAddOverview = this.handleCancelAddOverview.bind(this);
 
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleListingToggle = this.handleListingToggle.bind(this);
@@ -70,6 +73,7 @@ export class ListingPage extends Component {
             // Add listing
             addListingType: false,
             addListingAddress: false,
+            addListingOverview: false,
             newListing: {},
 
             // Transition
@@ -143,11 +147,22 @@ export class ListingPage extends Component {
     }
 
     handleListingAddressNext(listing){
+        this.setState({
+            addListingAddress: false,
+            addListingOverview: true,
+            newListing: listing
+        });
+    }
+    handleListingOverviewNext(listing){
+        console.log("handleListingOverviewNext: listing: "+JSON.stringify(listing));
         listing.owner = getUserEmail();
-        listings.create(listing, (data) => {
+        var createPromise = listings.create(listing);
+        var that = this;
+        createPromise.then(function(data) {
+            console.log("data: "+JSON.stringify(data));
 
             var localState = {
-                addListingAddress: false,
+                addListingOverview: false,
                 listingMode: "myListings",
                 index: data.listing.id,
                 showDetail: true,
@@ -157,10 +172,11 @@ export class ListingPage extends Component {
                 uploadProgress: [],
                 successfullUploaded: false
             };
-            this.fetchListing(localState);
-            this.fetchListings("myListings",this.state.page);
+            that.fetchListing(localState);
+            that.fetchListings("myListings",that.state.page);
+        }).catch(function(err){
+            console.log("err: "+err);
         });
-
     }
     handleCancelAddType(){
         this.setState({
@@ -170,6 +186,12 @@ export class ListingPage extends Component {
     handleCancelAddAddress(){
         this.setState({
             addListingAddress: false
+        });
+    }
+    handleCancelAddOverview(){
+        console.log("handleCancelAddOverview()");
+        this.setState({
+            addListingOverview: false
         });
     }
     handleListingToggle(value){
@@ -231,7 +253,8 @@ export class ListingPage extends Component {
     }
     handleCreate(listing){
         listing.owner = getUserEmail();
-        listings.create(listing, (data) => {
+        var createPromise = listings.create(listing);
+        createPromise(function(data){
             if (this.state.files.length > 0){
                 this.uploadFiles(data);
             }else{
@@ -329,7 +352,7 @@ export class ListingPage extends Component {
                 }
                 that.setState({
                     listingMode: localState.listingMode,
-                    addListingAddress: localState.addListingAddress,            
+                    addListingOverview: localState.addListingOverview,
                     listingDetail: data,
                     showDetail: localState.showDetail,
                     editMode: localState.editMode,
@@ -522,36 +545,36 @@ export class ListingPage extends Component {
                 </Modal>
                 {fullscreen ?
                 (<Container>
-                            <ListingDetail
-                                fullscreen={fullscreen}
-                                editMode={editMode}
-                                index={index}
-                                listingDetail={listingDetail}
-                                showDetail={true}
-                                owner={owner}
-                                listingMode={listingMode}
-                                onShowDetailChange={this.handleShowDetailChange}
-                                onEditToggle={this.handleEditToggle}
-                                onOwnerChange={this.handleOwnerChange}
-                                onListUpdate={this.handleListUpdate}
-                                onUpdate={this.handleUpdate}
-                                onCreate={this.handleCreate}
-                                onFetchListing={this.handleFetchListing}
-                                onFilesAdded={this.handleFilesAdded}
-                                files={this.state.files}
-                                uploading={this.state.uploading}
-                                uploadProgress={this.state.uploadProgress}
-                                successfullUploaded={this.state.successfullUploaded}
-                                showSpinner={this.state.showSpinner}
-                                // Transition
-                                onTransitionStart={this.handleTransitionStart}
-                                onPublish={this.handlePublish}
-                                onUnpublish={this.handleUnpublish}
-                                onTransitionHide={this.handleTransitionHide}
-                                transitionStart={this.state.transitionStart}
-                                transitionSaving={this.state.transitionSaving}
-                            />
-                            </Container>)
+                     <ListingDetail
+                         fullscreen={fullscreen}
+                         editMode={editMode}
+                         index={index}
+                         listingDetail={listingDetail}
+                         showDetail={true}
+                         owner={owner}
+                         listingMode={listingMode}
+                         onShowDetailChange={this.handleShowDetailChange}
+                         onEditToggle={this.handleEditToggle}
+                         onOwnerChange={this.handleOwnerChange}
+                         onListUpdate={this.handleListUpdate}
+                         onUpdate={this.handleUpdate}
+                         onCreate={this.handleCreate}
+                         onFetchListing={this.handleFetchListing}
+                         onFilesAdded={this.handleFilesAdded}
+                         files={this.state.files}
+                         uploading={this.state.uploading}
+                         uploadProgress={this.state.uploadProgress}
+                         successfullUploaded={this.state.successfullUploaded}
+                         showSpinner={this.state.showSpinner}
+                         // Transition
+                         onTransitionStart={this.handleTransitionStart}
+                         onPublish={this.handlePublish}
+                         onUnpublish={this.handleUnpublish}
+                         onTransitionHide={this.handleTransitionHide}
+                         transitionStart={this.state.transitionStart}
+                         transitionSaving={this.state.transitionSaving}
+                     />
+                </Container>)
 
                 :
                 ( 
@@ -570,14 +593,18 @@ export class ListingPage extends Component {
                         onNext={this.handleListingTypeNext}
                         onCancel={this.handleCancelAddType}
                     />
-                    {this.state.addListingAddress ?
                     <ListingAddAddress
                         show={this.state.addListingAddress}
                         onNext={this.handleListingAddressNext}
                         listing={this.state.newListing}
                         onCancel={this.handleCancelAddAddress}
                     />
-                    : null}
+                    <ListingAddOverview
+                        show={this.state.addListingOverview}
+                        onNext={this.handleListingOverviewNext}
+                        listing={this.state.newListing}
+                        onCancel={this.handleCancelAddOverview}
+                    />
                 </Row>
                 <Row>
                     <Col xs={7} className={showDetail? "rightcol" : "leftcol"}>

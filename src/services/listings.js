@@ -58,13 +58,21 @@ export function getEnums(cb){
     }).then(checkStatus).then(parseJSON).then(cb);
 }
 
-export function create(listing,cb){
+export function create(listing){
     var url = process.env.REACT_APP_LISTING_SERVICE+"listings";
-    fetch(url, {
-        method: 'post',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify(listing)
-    }).then(checkStatus).then(parseJSON).then(cb);
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'POST',
+            uri: url,
+            json: true,
+            body: listing
+        };
+        rp(options).then(function(parsedBody){
+            resolve(parsedBody);
+        }).catch(function(err){
+            reject(err.error);
+        });
+    });
 }
 
 export function update(data,cb){

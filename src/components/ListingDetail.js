@@ -121,7 +121,8 @@ class ListingDetail extends React.Component {
         this.setState({spaceSaving: true});
         if (!space.ListingVersionId){
              var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
-             listingService.create(listingBody, (listingVersion) => {
+             var createPromise = listingService.create(listingBody);
+             createPromise.then(function(listingVersion){
                  space.ListingVersionId = listingVersion.listing.id;
                  var createPromise = spaces.createPromise(space);
                  createPromise.then(function(data){
@@ -191,7 +192,8 @@ class ListingDetail extends React.Component {
         this.setState({unitSaving: true});
         if (!unit.ListingVersionId){
              var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
-             listingService.create(listingBody, (listingVersion) => {
+             var createPromise = listingService.create(listingBody);
+             createPromise.then(function(listingVersion){
                  unit.ListingVersionId = listingVersion.listing.id;
                  var createPromise = units.createPromise(unit);
                  createPromise.then(function(data){
@@ -261,7 +263,8 @@ class ListingDetail extends React.Component {
         this.setState({tenantSaving: true});
         if (!tenant.ListingVersionId){
              var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
-             listingService.create(listingBody, (listingVersion) => {
+             var createPromise = listingService.create(listingBody);
+             createPromise.then(function(listingVersion){
                  tenant.ListingVersionId = listingVersion.listing.id;
                  var createPromise = tenants.createPromise(tenant);
                  createPromise.then(function(data){
@@ -331,7 +334,8 @@ class ListingDetail extends React.Component {
         this.setState({portfolioSaving: true});
         if (!portfolio.ListingVersionId){
              var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
-             listingService.create(listingBody, (listingVersion) => {
+             var createPromise = listingService.create(listingBody);
+             createPromise.then(function(listingVersion){
                  portfolio.ListingVersionId = listingVersion.listing.id;
                  var createPromise = portfolios.createPromise(portfolio);
                  createPromise.then(function(data){
