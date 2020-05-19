@@ -126,7 +126,7 @@ class ListingToolbar extends React.Component {
                                className={allListingsStatus}
                                variant="light"
                            >
-                               Public Listings
+                               All Listings
                            </Button>
                            <Button
                                id="toolbar_my_listings"
