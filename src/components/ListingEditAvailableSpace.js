@@ -170,6 +170,7 @@ class ListingEditAvailableSpace extends React.Component {
                 <Image key={key} src={item.url} className="edit-image p-2"/>
             );
         }
+        var showImages = false;
         return (
         <Formik
             initialValues={initialValues}
@@ -508,6 +509,7 @@ class ListingEditAvailableSpace extends React.Component {
                                 </Card>
                             </Accordion>
                         </Form.Row>
+                        {showImages ?
                         <Form.Row>
                             <Accordion className="w-100">
                                 <Card>
@@ -540,6 +542,7 @@ class ListingEditAvailableSpace extends React.Component {
                                 </Card>
                             </Accordion>
                         </Form.Row>
+                        : null}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>

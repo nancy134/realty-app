@@ -411,9 +411,6 @@ class ListingDetail extends React.Component {
            spaceTypes = this.props.listingDetail.spaceTypes;
            spaceDivisibles = this.props.listingDetail.spaceDivisibles;
            portfolioTypes = this.props.listingDetail.portfolioTypes;
-
-           // If listng is draft, default to edit mode
-           if (listing.publishStatus === "Draft") editMode = "edit";
         }  
         if (states){
         }

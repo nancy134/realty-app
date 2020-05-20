@@ -27,6 +27,7 @@ function SpaceItem(props){
     if (space.availableDate && space.availableDate !== ""){
         availableDate = formatDate(space.availableDate);
     }
+    var showImages = false;
     return(
     <Accordion key={space.unit}> 
         <Row className="border-bottom align-items-center" >
@@ -164,11 +165,13 @@ function SpaceItem(props){
                     : null }
                 </Col>
             </Row>
+            {showImages ?
             <Row className="border-bottom">
                 <Col><Image src="/image1.jpg" thumbnail /></Col>
                 <Col><Image src="/image2.jpg" thumbnail /></Col>
                 <Col><Image src="/image3.jpg" thumbnail /></Col>
             </Row>
+            : null}
         </div>
     </Accordion.Collapse>
     </Accordion>

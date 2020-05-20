@@ -90,9 +90,6 @@ class Listings extends React.Component {
     constructor(props) {
         super(props);
         this.showDetailChange = this.showDetailChange.bind(this);
-        //this.state = {
-        //    listingMode: this.props.listingMode
-        //};
     }
     componentDidMount() {
     }
@@ -109,17 +106,12 @@ class Listings extends React.Component {
         if (this.props.listings && this.props.listings.length){
             
         var listings = this.props.listings;
-        //var publishStatus = listing.publishStatus;
-        //if (publishStatus === "Draft" && listing.listing.latestApprovedId !== null){
-        //    publishStatus = "Unpublished";
-        //} else {
-        //    publishStatus = "Unpublished update";
-        //}
         return ( 
             <ListGroup>
-                {listings.map(listing => 
+                {listings.map((index, listing) => 
                 (
                 <ListItem
+                    index={index}
                     key={listing.id}
                     listing={listing} 
                     onShowDetailChange={this.showDetailChange}
