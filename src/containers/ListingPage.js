@@ -539,7 +539,10 @@ export class ListingPage extends Component {
                     </Modal.Header>
                     <Modal.Body>{this.state.transitionModalMessage}</Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={this.handleClose}>
+                        <Button
+                            id="alert_modal_close"
+                            variant="secondary" 
+                            onClick={this.handleClose}>
                         Close
                         </Button>
                     </Modal.Footer>
