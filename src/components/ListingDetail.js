@@ -395,10 +395,10 @@ class ListingDetail extends React.Component {
     render(){
         const showDetail = this.props.showDetail;
         var editMode = this.props.editMode;
-        const states = this.state.states;
 
         const listingMode = this.props.listingMode;
         var listing = null;
+        var states = null;
         var listingTypes = null;
         var spaceUses = null;
         var spaceTypes = null;
@@ -406,14 +406,14 @@ class ListingDetail extends React.Component {
         var portfolioTypes = null;
         if (this.props.listingDetail){
            listing = this.props.listingDetail.listing;
+           states = this.props.listingDetail.states;
            listingTypes = this.props.listingDetail.listngTypes;
            spaceUses = this.props.listingDetail.spaceUses;
            spaceTypes = this.props.listingDetail.spaceTypes;
            spaceDivisibles = this.props.listingDetail.spaceDivisibles;
            portfolioTypes = this.props.listingDetail.portfolioTypes;
         }  
-        if (states){
-        }
+        console.log("states: "+JSON.stringify(states));
         const owner = this.props.owner;
         const fullscreen = this.props.fullscreen;
         if (showDetail){

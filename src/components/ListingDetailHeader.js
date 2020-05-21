@@ -96,6 +96,7 @@ class ListingDetailHeader extends React.Component {
         const editMode = this.props.editMode;
         const listing = this.props.listing;
         const states = this.props.states;
+        console.log("this.props.states: "+JSON.stringify(states));
         var owner = this.props.owner;
         var address = "<Address>";
         var city = "<City>"; 
@@ -148,7 +149,7 @@ class ListingDetailHeader extends React.Component {
         var fullscreen = this.props.fullscreen;
         return(
             <Row className="align-items-center bg-info">
-	        <Col md={4}className="text-white">
+	        <Col md={6}className="text-white">
                     <div>{title} {editMode === "edit" ? 
                         <EditButton 
                             listing={listing} 
@@ -157,7 +158,7 @@ class ListingDetailHeader extends React.Component {
                         /> : null}
                     </div>
                 </Col>
-                <Col md={8} className="text-right">
+                <Col md={6} className="text-right">
                     {(owner && listingMode === "myListings") ?
                     <ButtonGroup className="border">
                         <Button

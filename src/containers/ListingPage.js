@@ -416,6 +416,7 @@ export class ListingPage extends Component {
         var that = this;
         var getAllPromise = listings.getAll(query);
         getAllPromise.then(function(listings){
+           console.log("listings: "+JSON.stringify(listings));
            that.setState({
                listingMode: listingMode,
                listings: listings.listings.rows,

@@ -9,6 +9,7 @@ import {getUserEmail} from '../helpers/authentication';
 
 function ListItem(props){
     var listing = props.listing;
+    console.log("listing: "+JSON.stringify(listing));
     var publishStatus = listing.publishStatus;
     if (publishStatus === "Draft") {
         if (listing.listing.latestApprovedId === null){
@@ -21,6 +22,9 @@ function ListItem(props){
     var address = "No address entered";
     if (listing.address !== null){
         address = listing.address;
+    }
+    if (listing.displayAddress !== null && listing.displayAddress !== ""){
+        address = listing.displayAddress;
     }
     return(
         <ListGroup.Item>
@@ -108,7 +112,7 @@ class Listings extends React.Component {
         var listings = this.props.listings;
         return ( 
             <ListGroup>
-                {listings.map((index, listing) => 
+                {listings.map((listing, index) => 
                 (
                 <ListItem
                     index={index}
