@@ -52,14 +52,16 @@ export class ListingPage extends Component {
         this.handleOwnerChange = this.handleOwnerChange.bind(this);
         this.handleListUpdate = this.handleListUpdate.bind(this);
         this.handleNewPage = this.handleNewPage.bind(this);
-        this.handleUpdate = this.handleUpdate.bind(this);
-        this.handleCreate = this.handleCreate.bind(this);
-        this.fetchListing = this.fetchListing.bind(this);
-        this.handleFetchListing = this.handleFetchListing.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.handleMoreFilterChange = this.handleMoreFilterChange.bind(this);
         this.handleFilesAdded = this.handleFilesAdded.bind(this);
         this.handleImageUploadFinished = this.handleImageUploadFinished.bind(this);
+
+        // Listing
+        this.handleUpdate = this.handleUpdate.bind(this);
+        this.handleCreate = this.handleCreate.bind(this);
+        this.fetchListing = this.fetchListing.bind(this);
+        this.handleFetchListing = this.handleFetchListing.bind(this);
 
         // Transition
         this.handleTransitionStart = this.handleTransitionStart.bind(this);
@@ -82,17 +84,22 @@ export class ListingPage extends Component {
             showModal: false,
             transitionModalTitle: "",
             transitionModalMessage: "",
- 
+
+            // Listing
             index: index,
+            owner: false,
+            listingDetail: null,
+
+            // Controls
             fullscreen: fullscreen,
             showDetail: false,
             editMode: "view",
             listingMode: listingMode,
-            owner: false,
             page: 1,
-            listingDetail: null,
             spaceUseFilter: null,
             enableTransitionTest: false,
+
+            // Images
             files: [],
             uploading: false,
             uploadProgress: [],
@@ -154,13 +161,10 @@ export class ListingPage extends Component {
         });
     }
     handleListingOverviewNext(listing){
-        console.log("handleListingOverviewNext: listing: "+JSON.stringify(listing));
         listing.owner = getUserEmail();
         var createPromise = listings.create(listing);
         var that = this;
         createPromise.then(function(data) {
-            console.log("data: "+JSON.stringify(data));
-
             var localState = {
                 addListingOverview: false,
                 listingMode: "myListings",
@@ -189,7 +193,6 @@ export class ListingPage extends Component {
         });
     }
     handleCancelAddOverview(){
-        console.log("handleCancelAddOverview()");
         this.setState({
             addListingOverview: false
         });
@@ -239,16 +242,27 @@ export class ListingPage extends Component {
         this.fetchListings(this.state.listingMode, this.state.page);
     }
     handleUpdate(listing){
-        listings.update(listing, (data) => {
-            if (this.state.files.length > 0){
-                this.uploadFiles(data);
+        var updatePromise = listings.update(listing);
+        var that = this;
+        updatePromise.then(function(data){
+            if (that.state.files.length > 0){
+                that.uploadFiles(data);
             } else {
-                this.setState({
+                that.setState({
                     listingDetail: data,
                     index: data.listing.id
                 });
-                this.handleListUpdate();
+                that.handleFetchListing(data.listing.id);
+                that.handleListUpdate();
             } 
+        }).catch(function(err){
+            var errMessage = "An error occurred while trying to save your listing";
+            that.setState({
+               showModal: true,
+               transitionModalTitle: "Oops!",
+               transitionModalMessage: errMessage 
+            });
+            console.log("err: "+err);
         });
     }
     handleCreate(listing){
@@ -275,13 +289,11 @@ export class ListingPage extends Component {
 
     // Transition
     handleTransitionStart(){
-        console.log("handleTransitionStart");
         this.setState({
             transitionStart: true
         });
     }
     handleTransitionHide(data, title, message){
-        console.log("handleTransitionHide");
         this.setState({
             transitionStart: false,
             transitionSaving: false,
@@ -416,7 +428,6 @@ export class ListingPage extends Component {
         var that = this;
         var getAllPromise = listings.getAll(query);
         getAllPromise.then(function(listings){
-           console.log("listings: "+JSON.stringify(listings));
            that.setState({
                listingMode: listingMode,
                listings: listings.listings.rows,

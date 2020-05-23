@@ -413,7 +413,6 @@ class ListingDetail extends React.Component {
            spaceDivisibles = this.props.listingDetail.spaceDivisibles;
            portfolioTypes = this.props.listingDetail.portfolioTypes;
         }  
-        console.log("states: "+JSON.stringify(states));
         const owner = this.props.owner;
         const fullscreen = this.props.fullscreen;
         if (showDetail){

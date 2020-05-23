@@ -96,7 +96,6 @@ class ListingDetailHeader extends React.Component {
         const editMode = this.props.editMode;
         const listing = this.props.listing;
         const states = this.props.states;
-        console.log("this.props.states: "+JSON.stringify(states));
         var owner = this.props.owner;
         var address = "<Address>";
         var city = "<City>"; 

@@ -9,7 +9,6 @@ import {getUserEmail} from '../helpers/authentication';
 
 function ListItem(props){
     var listing = props.listing;
-    console.log("listing: "+JSON.stringify(listing));
     var publishStatus = listing.publishStatus;
     if (publishStatus === "Draft") {
         if (listing.listing.latestApprovedId === null){

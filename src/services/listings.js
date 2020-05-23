@@ -76,13 +76,20 @@ export function create(listing){
 }
 
 export function update(data,cb){
-    console.log("data.ListingId: "+data.ListingId);
     var url = process.env.REACT_APP_LISTING_SERVICE+"listings/"+data.ListingId;
-    fetch(url, {
-        method: 'put',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
-    }).then(checkStatus).then(parseJSON).then(cb);
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'PUT',
+            uri: url,
+            json: true,
+            body: data
+        };
+        rp(options).then(function(parsedBody){
+            resolve(parsedBody);
+        }).catch(function(err){
+            reject(err.error);
+        });
+    });
 }
 
 export function publish(index){

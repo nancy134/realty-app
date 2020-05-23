@@ -15,14 +15,12 @@ class ListingAddType extends React.Component{
         };
     }
     handleChange(e){
-        console.log('e.target.value: '+e.target.value); 
         this.setState({
             listingType: e.target.value
         });
     }
     handleNext(){
         var listing = {};
-        console.log("this.state.listingType: "+this.state.listingType); 
         listing.listingType = this.state.listingType;
         this.props.onNext(listing);
     }
