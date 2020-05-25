@@ -418,6 +418,7 @@ class ListingDetail extends React.Component {
         if (showDetail){
             return (
             <div>
+                <div id="stickyHeader">
                 <ListingDetailHeader 
                     fullscreen={fullscreen}
                     listing={listing} 
@@ -436,6 +437,7 @@ class ListingDetail extends React.Component {
                     transitionStart={this.props.transitionStart}
                     transitionSaving={this.props.transitionSaving}
                 />
+                </div>
                 <ListingDetailOverview 
                     listing={listing} 
                     listingTypes={listingTypes} 

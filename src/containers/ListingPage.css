@@ -106,3 +106,9 @@
     opacity: 0;
     transition: all 300ms linear; 
 }
+
+#stickyHeader{
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
