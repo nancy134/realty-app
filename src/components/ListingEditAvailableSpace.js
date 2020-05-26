@@ -262,7 +262,7 @@ class ListingEditAvailableSpace extends React.Component {
                                         disabled={isSubmitting}
                                     />
                                     <InputGroup.Append>
-                                        <InputGroup.Text>$/sf/mo</InputGroup.Text>
+                                        <InputGroup.Text>$/sf/yr</InputGroup.Text>
                                     </InputGroup.Append>
                                     <Form.Control.Feedback type="invalid">
                                         {errors.price}
