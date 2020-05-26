@@ -8,72 +8,52 @@ import {
     Image
 } from 'react-bootstrap';
 import ImageUpload from './ImageUpload';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
+
+const OverviewSchema = Yup.object().shape({
+    shortDescription: Yup.string().required('Short Description is required'),
+    longDescription: Yup.string(),
+    listingPrice: Yup.number(),
+    listingType: Yup.string()
+});
 
 class ListingEditOverview extends React.Component {
     constructor(props){
         super(props);
         this.handleSave = this.handleSave.bind(this);
-        this.onListingTypeChange = this.onListingTypeChange.bind(this);
-        this.onListingPriceChange = this.onListingPriceChange.bind(this);
-        this.onShortDescriptionChange = this.onShortDescriptionChange.bind(this);
-        //this.onImageUploadFinished = this.onImageUploadFinished.bind(this);
-        this.onLongDescriptionChange = this.onLongDescriptionChange.bind(this);
         this.handleFilesAdded = this.handleFilesAdded.bind(this);
         if (this.props.listing){
             this.state = {
-                id: this.props.listing.id,
-                ListingId: this.props.listing.ListingId,
-                listingType: this.props.listing.listingType ? this.props.listing.listingType : "For Lease",
-                listingPrice: this.props.listing.listingPrice ? this.props.listing.listingPrice : "",
-                shortDescription: this.props.listing.shortDescription ? this.props.listing.shortDescription : "",
-                longDescription: this.props.listing.longDescription ? this.props.listing.longDescription : "",
                 images: this.props.listing.images ? this.props.listing.images : []
             };
         } else {
            this.state = {
-                id: null,
-                ListingId: null,
-                listingType: "For Lease",
-                listingPrices: "",
-                shortDescription: "",
-                longDescription: "",
                 images: []
            };
         }
     }
-    onListingTypeChange(event){
-        this.setState({
-            listingType: event.target.value
-        });
-    }
-    onListingPriceChange(event){
-        this.setState({
-            listingPrice: event.target.value
-        });
-    }
-    onShortDescriptionChange(event){
-        this.setState({
-            shortDescription: event.target.value
-        });
-    }
-    onLongDescriptionChange(event){
-         this.setState({
-            longDescription: event.target.value
-         });
-    }
 
-    handleSave(){
+    handleSave(initialValues, values){
         var listing = {};
         if (this.props.listing){
             listing.ListingId = this.props.listing.ListingId;
         } else {
             listing.ListingId = this.state.ListingId;
         }
-          
-        if (this.state.listingType) listing.listingType = this.state.listingType;
-        if (this.state.listingPrice) listing.listingPrice = this.state.listingPrice;
-        if (this.state.shortDescription) listing.shortDescription = this.state.shortDescription;
-        if (this.state.longDescription) listing.longDescription = this.state.longDescription;
+        
+        if (initialValues.shortDescription !== values.shortDescription){
+            listing.shortDescription = values.shortDescription;
+        }
+        if (initialValues.longDescription !== values.longDescription){
+            listing.longDescription = values.longDescription;
+        }
+        if (initialValues.listingPrice !== values.listingPrice){
+            listing.listingPrice = values.listingPrice;
+        }
+        if (initialValues.listingType !== values.listingType){
+            listing.listingType = values.listingType;
+        }  
         this.props.onSave(listing);
         this.props.onHide();
     }
@@ -99,7 +79,41 @@ class ListingEditOverview extends React.Component {
                 <Image key={key} src={item.url} className="edit-image p-2"/>
             );
         }
+        var listing = this.props.listing;
+        var initialValues = {
+            shortDescription: "",
+            longDescription: "",
+            listingPrice: "",
+            listingType: ""
+        };
+        if (listing){
+            if (listing.shortDescription) initialValues.shortDescription = listing.shortDescription;
+            if (listing.longDescription) initialValues.longDescription = listing.longDescription;
+            if (listing.listingPrice) initialValues.listingPrice = listing.listingPrice;
+            if (listing.listingType) initialValues.listingType = listing.listingType;
+        }
         return (
+        <Formik
+            initialValues={initialValues}
+            validationSchema={OverviewSchema}
+            onSubmit={(values, { setSubmitting }) => {
+                setSubmitting(true);
+                this.handleSave(initialValues, values);
+                setSubmitting(false);
+            }}
+        >
+            {({ 
+                values, 
+                errors, 
+                touched, 
+                handleChange, 
+                handleBlur, 
+                handleSubmit, 
+                isSubmitting, 
+                isValid, 
+                dirty, 
+                setFieldValue 
+            }) => (       
         <Modal
           show={this.props.show}
           onHide={this.props.onHide}
@@ -118,24 +132,41 @@ class ListingEditOverview extends React.Component {
                         <Form.Label>Listing Type</Form.Label>
                         <Form.Control 
                             id="overview_edit_listing_type"
+                            name="listingType"
                             as="select" 
-                            value={this.state.listingType} 
-                            onChange={this.onListingTypeChange}>
+                            value={values.listingType}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={!!errors.listingType}
+                            isValid={touched.listingType && !errors.listingType && values.listingType !== ""}
+                            disabled={isSubmitting}
+                        >
                             {listingTypes}
                         </Form.Control>
                         <Form.Label>Short Description</Form.Label>
                         <Form.Control 
                             id="overview_edit_short_description"
-                            value={this.state.shortDescription} 
-                            onChange={this.onShortDescriptionChange}
+                            name="shortDescription"
+                            type="text"
+                            value={values.shortDescription} 
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={!!errors.shortDescription}
+                            isValid={touched.shortDescription && !errors.shortDescription && values.shortDescription !== ""}
+                            disabled={isSubmitting} 
                         /> 
                         <Form.Label>Long Description</Form.Label>
                         <Form.Control 
                             id="overview_edit_long_description"
-                            value={this.state.longDescription} 
+                            name="longDescription"
+                            value={values.longDescription} 
                             rows="5" 
                             as="textarea" 
-                            onChange={this.onLongDescriptionChange}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={!!errors.longDescription}
+                            isValid={touched.longDescription && !errors.longDescription && values.longDescription !== ""}
+                            disabled={isSubmitting}
                         />
                     </Form>
                 </Col>
@@ -146,11 +177,17 @@ class ListingEditOverview extends React.Component {
                         <Form.Label>Listing Price</Form.Label>
                         <Form.Control 
                             id="overview_edit_listing_price"
-                            value={this.state.listingPrice} 
-                            onChange={this.onListingPriceChange}
+                            name="listingPrice"
+                            type="text"
+                            value={values.listingPrice} 
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={touched.listingPrice && !!errors.listingPrice}
+                            isValid={touched.listingPrice && !errors.listingPrice && values.listingPrice !== ""}
+                            disabled={isSubmitting}
                         />
                         </div>
-                         : null }
+                        : null}
                     </Row>
                     <Row>
 
@@ -180,14 +217,17 @@ class ListingEditOverview extends React.Component {
                 >
                     Cancel
                 </Button>
-                <Button 
+                <Button
+                    disabled={!(isValid && dirty) || isSubmitting}
                     id="overview_edit_save_button"
-                    onClick={this.handleSave}
+                    onClick={handleSubmit}
                 >
                     Save
                 </Button>
             </Modal.Footer>
         </Modal>
+        )}
+        </Formik> 
         );
     }
 }
