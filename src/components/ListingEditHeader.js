@@ -24,7 +24,6 @@ class ListingEditHeader extends React.Component {
     }
     handleSave(initialValues, values){
         var listing = {};
-        listing.id = this.props.listing.id;
         if (this.props.listing){
             listing.ListingId = this.props.listing.ListingId;
         } else {
