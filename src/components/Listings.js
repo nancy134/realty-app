@@ -25,6 +25,7 @@ function ListItem(props){
     if (listing.displayAddress !== null && listing.displayAddress !== ""){
         address = listing.displayAddress;
     }
+
     return(
         <ListGroup.Item>
             <Row>
@@ -57,7 +58,7 @@ function ListItem(props){
                             
                             { listing.city ?
                             <Card.Subtitle>
-                                {listing.city}, {listing.state}
+                                {listing.city}, {listing.state} {listing.zip}
                             </Card.Subtitle>
                             : null }
                             { listing.owner === getUserEmail() ?
