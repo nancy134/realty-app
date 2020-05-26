@@ -99,6 +99,7 @@ class ListingDetailHeader extends React.Component {
         var owner = this.props.owner;
         var address = "<Address>";
         var city = "<City>"; 
+        var zip = "<Zip>";
         if (listing){
 
             if (listing.address){
@@ -110,8 +111,11 @@ class ListingDetailHeader extends React.Component {
             if (listing.city){
                 city = listing.city;
             }
+            if (listing.zip){
+                zip = listing.zip;
+            }
         }
-        var title = address + " (" + city + ")";
+        var title = address + ", " + city + ", "+zip;
 
         //var closeButton = "Close";
         //if (!listing) closeButton = "Cancel";
