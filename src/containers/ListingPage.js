@@ -70,6 +70,9 @@ export class ListingPage extends Component {
         this.handleTransitionHide = this.handleTransitionHide.bind(this);
         this.handleClose = this.handleClose.bind(this);
 
+        //Accordion
+        this.handleAccordionChange = this.handleAccordionChange.bind(this);
+
         this.state = {
 
             // Add listing
@@ -89,6 +92,9 @@ export class ListingPage extends Component {
             index: index,
             owner: false,
             listingDetail: null,
+
+            // Spaces
+            spaceAccordionText: [],
 
             // Controls
             fullscreen: fullscreen,
@@ -362,6 +368,14 @@ export class ListingPage extends Component {
                 if (isOwner(data.listing.owner)){
                     owner = true;
                 }
+                // Create accordion text
+                var accordionText = [];
+                if (data.listing.spaces.length > 0){
+                    for (var i=0; i<data.listing.spaces.length; i++){
+                        var more = "More";
+                        accordionText.push(more);
+                    }
+                }
                 that.setState({
                     listingMode: localState.listingMode,
                     addListingOverview: localState.addListingOverview,
@@ -373,7 +387,8 @@ export class ListingPage extends Component {
                     files: localState.files,
                     uploading: localState.uploading,
                     uploadProgress: localState.uploadProgress,
-                    successfullUploaded: localState.successfullUploaded 
+                    successfullUploaded: localState.successfullUploaded,
+                    spaceAccordionText: accordionText
                 }, () => {
                     that.handleListUpdate();
                 });
@@ -533,6 +548,18 @@ export class ListingPage extends Component {
             showModal: false
         });
     }
+    handleAccordionChange(e){
+        var index = parseInt(e.target.value);
+        var spaceAccordionText = this.state.spaceAccordionText;
+        if (this.state.spaceAccordionText[index] === "More"){
+            spaceAccordionText[index] = "Less";
+        } else {
+            spaceAccordionText[index] = "More";
+        }
+        this.setState({
+            spaceAccordionText: spaceAccordionText
+        });
+    }
     render() {
         var showDetail = this.state.showDetail;
         var index = this.state.index;
@@ -588,6 +615,9 @@ export class ListingPage extends Component {
                          onTransitionHide={this.handleTransitionHide}
                          transitionStart={this.state.transitionStart}
                          transitionSaving={this.state.transitionSaving}
+                         // Space
+                         spaceAccordionText={this.state.spaceAccordionText}
+                         onAccordionChange={this.handleAccordionChange}
                      />
                 </Container>)
 
@@ -658,7 +688,9 @@ export class ListingPage extends Component {
                                 onTransitionHide={this.handleTransitionHide}
                                 transitionStart={this.state.transitionStart}
                                 transitionSaving={this.state.transitionSaving}
-
+                                // Space
+                                spaceAccordionText={this.state.spaceAccordionText}
+                                onAccordionChange={this.handleAccordionChange}
                             />
                         </CSSTransition>
                     {!showDetail ?

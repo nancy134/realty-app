@@ -28,6 +28,28 @@ function SpaceItem(props){
         availableDate = formatDate(space.availableDate);
     }
     var showImages = false;
+
+    // Calculate if Accordion is need
+    var accordionNeeded = false;
+    if (editMode === "edit"){
+        accordionNeeded = true;
+    } else {
+        if (space.description || 
+            space.driveInDoors ||
+            space.floors ||
+            space.divisible ||
+            space.loadingDocks ||
+            space.leaseTerm ||
+            space.ceilingHeight ||
+            space.availableDate ||
+            space.nets ||
+            space.class){
+            accordionNeeded = true;
+        }
+    }
+    var accordionText = props.accordionText[index];
+
+    if (accordionNeeded){
     return(
     <Accordion key={space.unit}> 
         <Row className="border-bottom align-items-center" >
@@ -67,20 +89,20 @@ function SpaceItem(props){
                     : null }
                     <Col >
                         <Accordion.Toggle 
-                            value="1"
+                            value={index}
                             className="text-danger"
                             as={Button}
-                            onClick={props.handleAccordionChange}
+                            onClick={props.onAccordionChange}
                             variant="link"
-                            eventKey="0"
+                            eventKey={index}
                         >
-                           {props.text1} <FontAwesomeIcon icon={props.text1 === "More" ? faAngleDown : faAngleUp} />
+                           {accordionText} <FontAwesomeIcon icon={accordionText === "More" ? faAngleDown : faAngleUp} />
                         </Accordion.Toggle>
                     </Col>
                 </Row>
             </Col>  
         </Row>
-    <Accordion.Collapse eventKey="0">
+    <Accordion.Collapse eventKey={index}>
         <div>
             <Row>
                 <Col>
@@ -176,6 +198,50 @@ function SpaceItem(props){
     </Accordion.Collapse>
     </Accordion>
     );
+    } else {
+    return(
+        <Row className="border-bottom align-items-center" >
+            <Col md={2}>{space.unit}</Col>
+            <Col md={2}>{space.size} sq ft</Col>
+            <Col md={2}>${space.price}/sq ft</Col>
+            <Col md={3}>
+                <Row>
+                    <Col >{space.type}</Col>
+                    <Col >{space.use}</Col>
+                </Row>
+            </Col>
+            <Col md={3}>
+                <Row>
+                    { editMode === "edit" ?
+                    <Col>
+                         <EditButton
+                             title="Update Space"
+                             listing={listing}
+                             index={index}
+                             spaceUpdateIndex={props.spaceUpdateIndex}
+                             space={space}
+                             spaceUses={props.spaceUses}
+                             spaceTypes={props.spaceTypes}
+                             spaceDivisibles={props.spaceDivisibles}
+                             onSave={props.onSave}
+                             onShow={props.onShow}
+                             onHide={props.onHide}
+                             errorMessage={props.errorMessage}
+                             show={props.show}
+                             saving={props.saving}
+                         />
+                    </Col>
+                    : null }
+                    { editMode === "edit" ?
+                    <Col><FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} /></Col>
+                    : null }
+                    <Col></Col>
+                </Row>
+            </Col>
+        </Row>
+
+    );
+    } 
 }
 
 
@@ -248,7 +314,7 @@ class ListingDetailAvailableSpace extends React.Component {
         this.handleClose = this.handleClose.bind(this);
         this.state = {
             text1: "More",
-            text2: "More",
+            accordionText: []
         }
     }
 
@@ -258,12 +324,6 @@ class ListingDetailAvailableSpace extends React.Component {
                 this.setState({text1: "Less"});
             } else {
                 this.setState({text1: "More"});
-            }
-        } else {
-            if (this.state.text2 === "More") {
-                this.setState({text2: "Less"});
-            } else {
-                this.setState({text2: "More"});
             }
         }
     }
@@ -332,9 +392,9 @@ class ListingDetailAvailableSpace extends React.Component {
                     errorMessage={this.props.spaceError}
                     show={this.props.spaceUpdate}
                     saving={this.props.spaceSaving}
-                    handleAccordionChange={this.handleAccordionChange}
+                    onAccordionChange={this.props.onAccordionChange}
+                    accordionText={this.props.accordionText}
                     text1={this.state.text1}
-                    text2={this.state.text2}
                 />
                 ))}
             </div>

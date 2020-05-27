@@ -71,7 +71,7 @@ class ListingAddAddress extends React.Component{
             onSubmit={(values, { setSubmitting }) => {
                 setSubmitting(true);
                 this.handleNext(initialValues, values);
-                setSubmitting(false);
+                //setSubmitting(false);
             }}
         >
             {({ 

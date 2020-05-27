@@ -469,6 +469,9 @@ class ListingDetail extends React.Component {
                         onSpaceModalHide={this.handleSpaceModalHide}
                         onSpaceUpdate={this.handleSpaceUpdate}
                         getListing={this.props.onFetchListing}
+                        accordionText={this.props.spaceAccordionText}
+                        onAccordionChange={this.props.onAccordionChange}
+
                     />
                 : null }
                 {(editMode === "edit") || (listing && (listing.units.length > 0)) ?
