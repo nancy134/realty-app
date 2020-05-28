@@ -7,6 +7,19 @@ import {
 } from 'react-bootstrap';
 import {getUserEmail} from '../helpers/authentication';
 
+function getMinSize(array){
+    return array.reduce((min, p) => p.size < min ? p.size : min, array[0].size);
+}
+function getMaxSize(array){
+    return array.reduce((max, p) => p.size > max ? p.size : max, array[0].size);
+}
+function getMinPrice(array){
+    return array.reduce((min, p) => p.price < min ? p.price : min, array[0].price);
+}
+function getMaxPrice(array){
+    return array.reduce((max, p) => p.price > max ? p.price : max, array[0].price);
+}
+
 function ListItem(props){
     var listing = props.listing;
     var publishStatus = listing.publishStatus;
@@ -25,7 +38,30 @@ function ListItem(props){
     if (listing.displayAddress !== null && listing.displayAddress !== ""){
         address = listing.displayAddress;
     }
+    var size = null;
+    var price = null;
+    if (listing.spaces.length === 1){
+        size = listing.spaces[0].size;
+        price = listing.spaces[0].price;
+    } else if (listing.spaces.length > 1){
+        var minSize = getMinSize(listing.spaces);
+        var maxSize = getMaxSize(listing.spaces);
+        console.log("minSize: "+minSize+" maxSize: "+maxSize);
+        if (minSize === maxSize){
+            size = minSize;
+        } else {
+            size = minSize+" - "+maxSize;
+        }
 
+        var minPrice = getMinPrice(listing.spaces);
+        var maxPrice = getMaxPrice(listing.spaces);
+        console.log("minPrice: "+minPrice+" maxPrice: "+maxPrice);
+        if (minPrice === maxPrice){
+            price = minPrice;
+        } else {
+            price = minPrice+" - "+maxPrice;
+        }
+    }
     return(
         <ListGroup.Item>
             <Row>
@@ -72,10 +108,10 @@ function ListItem(props){
                             <div>Built in {listing.yearBuilt}</div>
                             : null}
                             { listing.spaces.length > 0 ?
-                            <div>{listing.spaces[0].size} sf Space</div>
+                            <div>{size} sf Space</div>
                             : null}
                             { listing.spaces.length > 0 ?
-                            <div>${listing.spaces[0].price} sf/yr</div>
+                            <div>${price} sf/yr</div>
                             : null }
                             { listing.listingType === "For Sale" && listing.listingPrice?
                             <div>${listing.listingPrice}</div>
