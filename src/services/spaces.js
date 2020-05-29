@@ -49,6 +49,21 @@ export function updatePromise(data){
     });
 }
 
+export function deletePromise(id){
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'DELETE',
+            uri: process.env.REACT_APP_LISTING_SERVICE+"spaces/"+id,
+            json: true
+        };
+        rp(options).then(function(result){
+            resolve(result);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
 function checkStatus(response){
     if (response.status >= 200 && response.status < 300){
         return response;
@@ -65,7 +80,7 @@ function parseJSON(response){
    return response.json();
 }
 
-const spaces = {get, getAll,createPromise, updatePromise};
+const spaces = {get, getAll,createPromise, updatePromise, deletePromise};
 export default spaces;
 
 

@@ -46,7 +46,6 @@ function ListItem(props){
     } else if (listing.spaces.length > 1){
         var minSize = getMinSize(listing.spaces);
         var maxSize = getMaxSize(listing.spaces);
-        console.log("minSize: "+minSize+" maxSize: "+maxSize);
         if (minSize === maxSize){
             size = minSize;
         } else {
@@ -55,7 +54,6 @@ function ListItem(props){
 
         var minPrice = getMinPrice(listing.spaces);
         var maxPrice = getMaxPrice(listing.spaces);
-        console.log("minPrice: "+minPrice+" maxPrice: "+maxPrice);
         if (minPrice === maxPrice){
             price = minPrice;
         } else {

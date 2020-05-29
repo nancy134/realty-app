@@ -471,6 +471,7 @@ class ListingDetail extends React.Component {
                         getListing={this.props.onFetchListing}
                         accordionText={this.props.spaceAccordionText}
                         onAccordionChange={this.props.onAccordionChange}
+                        onDelete={this.props.onDeleteSpace}
 
                     />
                 : null }

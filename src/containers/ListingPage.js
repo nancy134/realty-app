@@ -16,9 +16,11 @@ import ListingAddType from '../components/ListingAddType';
 import ListingAddAddress from '../components/ListingAddAddress';
 import ListingAddOverview from '../components/ListingAddOverview';
 import listings from '../services/listings';
+import spaceService from '../services/spaces';
 import {getUserEmail} from '../helpers/authentication';
 import { isOwner } from '../helpers/authentication';
 import { CSSTransition } from 'react-transition-group';
+import DeleteModal from '../components/DeleteModal';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -70,9 +72,13 @@ export class ListingPage extends Component {
         this.handleTransitionHide = this.handleTransitionHide.bind(this);
         this.handleClose = this.handleClose.bind(this);
 
-        //Accordion
+        // Space
         this.handleAccordionChange = this.handleAccordionChange.bind(this);
+        this.handleDeleteSpace = this.handleDeleteSpace.bind(this);
 
+        // Delete
+        this.handleDeleteHide = this.handleDeleteHide.bind(this);
+        this.handleDeleteConfirm = this.handleDeleteConfirm.bind(this);
         this.state = {
 
             // Add listing
@@ -110,7 +116,14 @@ export class ListingPage extends Component {
             uploading: false,
             uploadProgress: [],
             successfullUploaded: false,
-            showSpinner: false
+            showSpinner: false,
+
+            // Delete
+            deleteTable: null,
+            deleteId: null,
+            showDeleteModal: false,
+            deleteTitle: null,
+            deleteMessage: null
         };
     }
     handleShowDetailChange(showDetail, index){
@@ -548,6 +561,7 @@ export class ListingPage extends Component {
             showModal: false
         });
     }
+    // Space
     handleAccordionChange(e){
         var index = parseInt(e.target.value);
         var spaceAccordionText = this.state.spaceAccordionText;
@@ -560,6 +574,33 @@ export class ListingPage extends Component {
             spaceAccordionText: spaceAccordionText
         });
     }
+    handleDeleteSpace(id){
+        this.setState({
+            deleteTable: "Space",
+            deleteId: id,
+            showDeleteModal: true,
+            deleteTitle: "Delete Space",
+            deleteMessage: "Are you sure you want to delete this space?"
+        });
+    }
+    handleDeleteConfirm(){
+        console.log("this.state.deleteId: "+this.state.deleteId);
+        var that=this;
+        var deleteSpace = spaceService.deletePromise(this.state.deleteId);
+        deleteSpace.then(function(result){
+            that.handleFetchListing();
+            that.fetchListings("myListings",that.state.page);
+            that.handleDeleteHide();
+        }).catch(function(err){
+            console.log("err: "+err);
+        });
+    }
+    handleDeleteHide(){
+        this.setState({
+            showDeleteModal: false
+        });
+    }
+
     render() {
         var showDetail = this.state.showDetail;
         var index = this.state.index;
@@ -569,8 +610,18 @@ export class ListingPage extends Component {
         var owner = this.state.owner;
         var listingDetail = this.state.listingDetail;
         var fullscreen = this.state.fullscreen;
+        console.log("this.state.deleteId: "+this.state.deleteId);
         return (
             <React.Fragment>
+                <DeleteModal
+                    id={this.state.deleteId}
+                    show={this.state.showDeleteModal}
+                    title={this.state.deleteTitle}
+                    message={this.state.deleteMessage}
+                    onHide={this.handleDeleteHide}
+                    saving={this.state.deleteSaving}
+                    onDelete={this.handleDeleteConfirm}
+                />
                 <Modal show={this.state.showModal}>
                     <Modal.Header>
                         <Modal.Title>{this.state.transitionModalTitle}</Modal.Title>
@@ -618,6 +669,7 @@ export class ListingPage extends Component {
                          // Space
                          spaceAccordionText={this.state.spaceAccordionText}
                          onAccordionChange={this.handleAccordionChange}
+                         onDeleteSpace={this.handleDeleteSpace}
                      />
                 </Container>)
 
@@ -691,6 +743,7 @@ export class ListingPage extends Component {
                                 // Space
                                 spaceAccordionText={this.state.spaceAccordionText}
                                 onAccordionChange={this.handleAccordionChange}
+                                onDeleteSpace={this.handleDeleteSpace}
                             />
                         </CSSTransition>
                     {!showDetail ?

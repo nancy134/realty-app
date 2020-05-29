@@ -85,7 +85,16 @@ function SpaceItem(props){
                     </Col>
                     : null }
                     { editMode === "edit" ?
-                    <Col><FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} /></Col>
+                    <Col>
+                        <span>
+                        <FontAwesomeIcon 
+                            className="edit-button alight-top text-danger" 
+                            size="xs"
+                            onClick={() => {props.onDelete(props.space.id)}} 
+                            icon={faTrash} 
+                        />
+                        </span>
+                    </Col>
                     : null }
                     <Col >
                         <Accordion.Toggle 
@@ -233,7 +242,13 @@ function SpaceItem(props){
                     </Col>
                     : null }
                     { editMode === "edit" ?
-                    <Col><FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} /></Col>
+                    <Col>
+                        <FontAwesomeIcon 
+                            className="text-danger" 
+                            size="xs" 
+                            onClick={() => {props.onDelete(space.id)}}
+                            icon={faTrash} />
+                    </Col>
                     : null }
                     <Col></Col>
                 </Row>
@@ -247,13 +262,15 @@ function SpaceItem(props){
 
 function AddButton(props) {
     return (
-        <span>
+        <span id="span_space_add_button">
             <span
-                id="space_add_button"
-                onClick={() => {props.onShow()}}
                 className="edit-button align-top text-danger"
             >
-                <FontAwesomeIcon size="xs" icon={faPlus} />
+                <FontAwesomeIcon
+                    id="space_add_button"
+                    onClick={() => {props.onShow()}}
+                    size="xs" 
+                    icon={faPlus} />
             </span>
             {props.show ?
             <ListingEditAvailableSpace
@@ -395,6 +412,7 @@ class ListingDetailAvailableSpace extends React.Component {
                     onAccordionChange={this.props.onAccordionChange}
                     accordionText={this.props.accordionText}
                     text1={this.state.text1}
+                    onDelete={this.props.onDelete}
                 />
                 ))}
             </div>

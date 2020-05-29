@@ -68,7 +68,6 @@ class ListingEditAvailableSpace extends React.Component {
         this.handleSave = this.handleSave.bind(this);
     }
     handleSave(initialValues, values){
-        console.log("handleSave: values: "+JSON.stringify(values));
         var space = {};
         if (this.props.space) space.id = this.props.space.id;
         if (this.props.listing) space.ListingVersionId = this.props.listing.id;
