@@ -31,7 +31,11 @@ class App extends React.Component {
       this.setState({loggedIn: true});
   }
   handleLogout(){
-      this.setState({loggedIn: false});
+      this.setState({
+          loggedIn: false
+      },() => {
+          window.location.reload();
+      });
   }
   handleRegister(){
   }
