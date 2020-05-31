@@ -84,7 +84,8 @@ function ListItem(props){
                             <Card.Title 
                                 id="listing_title"
                                 className="listing-title text-danger"  
-                                data-index={listing.id} 
+                                data-index={listing.id}
+                                data-arrayindex={props.index}
                                 onClick={props.onShowDetailChange}
                             >
                                 {address}
@@ -136,7 +137,7 @@ class Listings extends React.Component {
 
 
     showDetailChange(e){
-        this.props.onShowDetailChange(true, e.target.dataset.index);
+        this.props.onShowDetailChange(true, e.target.dataset.index, e.target.dataset.arrayindex);
     }
  
     render() {

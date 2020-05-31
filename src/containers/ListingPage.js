@@ -126,13 +126,16 @@ export class ListingPage extends Component {
             deleteMessage: null
         };
     }
-    handleShowDetailChange(showDetail, index){
+    handleShowDetailChange(showDetail, index, arrayIndex){
         var editMode = "view";
         if (index !== this.state.index){
             editMode = "view";
         } else {
             editMode = this.state.editMode;
         }
+        if (showDetail && this.state.listings[arrayIndex].publishStatus === "Draft"){
+            editMode = "edit";
+        }        
 
         var localState = {
             addListingAddress: false,
@@ -610,7 +613,6 @@ export class ListingPage extends Component {
         var owner = this.state.owner;
         var listingDetail = this.state.listingDetail;
         var fullscreen = this.state.fullscreen;
-        console.log("this.state.deleteId: "+this.state.deleteId);
         return (
             <React.Fragment>
                 <DeleteModal
