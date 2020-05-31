@@ -29,7 +29,8 @@ class ListingEditOverview extends React.Component {
             };
         } else {
            this.state = {
-                images: []
+                images: [],
+                imagesAdded: false
            };
         }
     }
@@ -58,15 +59,19 @@ class ListingEditOverview extends React.Component {
         this.props.onHide();
     }
     handleFilesAdded(files){
+        console.log("handleFilesAdded");
+        this.setState({imagesAdded: true});
         this.props.onFilesAdded(files);
     }
     render(){
+        /*
         var listingTypes = null;
         if (this.props.listingTypes){
             listingTypes = this.props.listingTypes.map((item,key) =>
                 <option key={key}>{item}</option>
             );
         }
+        */
         var images = [];
         if (this.props.listing){
             for (var i=0; i<this.props.listing.images.length; i++){
@@ -92,6 +97,7 @@ class ListingEditOverview extends React.Component {
             if (listing.listingPrice) initialValues.listingPrice = listing.listingPrice;
             if (listing.listingType) initialValues.listingType = listing.listingType;
         }
+        
         return (
         <Formik
             initialValues={initialValues}
@@ -117,7 +123,7 @@ class ListingEditOverview extends React.Component {
         <Modal
           show={this.props.show}
           onHide={this.props.onHide}
-          size="lg"
+          dialogClassName="modal-90w"
           aria-labelledby="contained-modal-title-vcenter"
         >
             <Modal.Header closeButton>
@@ -127,22 +133,8 @@ class ListingEditOverview extends React.Component {
             </Modal.Header>
             <Modal.Body>
             <Row className="mt-2">
-                <Col>
+                <Col xs={5}>
                     <Form>
-                        <Form.Label>Listing Type</Form.Label>
-                        <Form.Control 
-                            id="overview_edit_listing_type"
-                            name="listingType"
-                            as="select" 
-                            value={values.listingType}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            isInvalid={!!errors.listingType}
-                            isValid={touched.listingType && !errors.listingType && values.listingType !== ""}
-                            disabled={isSubmitting}
-                        >
-                            {listingTypes}
-                        </Form.Control>
                         <Form.Label>Short Description</Form.Label>
                         <Form.Control 
                             id="overview_edit_short_description"
@@ -160,7 +152,7 @@ class ListingEditOverview extends React.Component {
                             id="overview_edit_long_description"
                             name="longDescription"
                             value={values.longDescription} 
-                            rows="5" 
+                            rows="8" 
                             as="textarea" 
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -168,18 +160,14 @@ class ListingEditOverview extends React.Component {
                             isValid={touched.longDescription && !errors.longDescription && values.longDescription !== ""}
                             disabled={isSubmitting}
                         />
-                    </Form>
-                </Col>
-                <Col>
-                    <Row>
-                        { this.state.listingType === "For Sale" ?
+                        { listing.listingType === "For Sale" ?
                         <div>
                         <Form.Label>Listing Price</Form.Label>
-                        <Form.Control 
+                        <Form.Control
                             id="overview_edit_listing_price"
                             name="listingPrice"
                             type="text"
-                            value={values.listingPrice} 
+                            value={values.listingPrice}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={touched.listingPrice && !!errors.listingPrice}
@@ -188,9 +176,11 @@ class ListingEditOverview extends React.Component {
                         />
                         </div>
                         : null}
-                    </Row>
-                    <Row>
 
+                    </Form>
+                </Col>
+                <Col xs={7}>
+                    <Row>
                     <ImageUpload 
                         id="overview_edit_image_upload"
                         images={images} 
@@ -218,7 +208,7 @@ class ListingEditOverview extends React.Component {
                     Cancel
                 </Button>
                 <Button
-                    disabled={!(isValid && dirty) || isSubmitting}
+                    disabled={(!(isValid && dirty) || isSubmitting) && !this.state.imagesAdded}
                     id="overview_edit_save_button"
                     onClick={handleSubmit}
                 >

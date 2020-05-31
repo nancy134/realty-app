@@ -26,7 +26,7 @@ function EditButton(props) {
       >
           <FontAwesomeIcon className="text-danger" icon={faPencilAlt} /> 
       </Button>
-
+      {modalShow ?
       <ListingEditHeader
         show={modalShow}
         listing={props.listing}
@@ -34,6 +34,7 @@ function EditButton(props) {
         onHide={() => setModalShow(false)}
         onSave={listing => props.onSave(listing)}
       />
+      : null}
       </span>
   );
 }

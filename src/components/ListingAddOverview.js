@@ -9,10 +9,17 @@ import {
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
-const OverviewSchema = Yup.object().shape({
+const OverviewSchemaForSale = Yup.object().shape({
+    shortDescription: Yup.string().required('Short Description is required'),
+    longDescription: Yup.string(),
+    listingPrice: Yup.number().required('Listing Price is required').positive().integer()
+});
+
+const OverviewSchemaForLease = Yup.object().shape({
     shortDescription: Yup.string().required('Short Description is required'),
     longDescription: Yup.string()
 });
+
 
 class ListingAddOverview extends React.Component{
     constructor(props){
@@ -23,6 +30,7 @@ class ListingAddOverview extends React.Component{
         var listing = this.props.listing;
         if (values.shortDescription !== initialValues.shortDescription) listing.shortDescription = values.shortDescription;
         if (values.longDescription !== initialValues.longDescription) listing.longDescription = values.longDescription;
+        if (values.listingPrice !== initialValues.listingPrice) listing.listingPrice = values.listingPrice;
         
         this.props.onNext(listing);
     }
@@ -33,14 +41,20 @@ class ListingAddOverview extends React.Component{
 
        var initialValues = {
            shortDescription: "",
-           longDescription: ""
+           longDescription: "",
+           listingPrice: ""
        };
+
+       var schema = OverviewSchemaForLease;
+       if (this.props.listing.listingType === "For Sale"){
+           schema = OverviewSchemaForSale;
+       }
 
        if (this.props.show){
        return(
        <Formik
             initialValues={initialValues}
-            validationSchema={OverviewSchema}
+            validationSchema={schema}
             onSubmit={(values, { setSubmitting }) => {
                 setSubmitting(true);
                 this.handleNext(initialValues, values);
@@ -74,6 +88,28 @@ class ListingAddOverview extends React.Component{
                     <Col>
                         <Form>
                             <Form.Row>
+                                { this.props.listing.listingType === "For Sale" ?
+                                <div>
+                                    <Form.Label className="font-weight-bold">Listing Price</Form.Label>
+                                    <Form.Control 
+                                        id="overview_edit_listing_price"
+                                        name="listingPrice"
+                                        type="text"
+                                        value={values.listingPrice} 
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isInvalid={touched.listingPrice && !!errors.listingPrice}
+                                        isValid={touched.listingPrice && !errors.listingPrice && values.listingPrice !== ""}
+                                        disabled={isSubmitting}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.listingPrice}
+                                    </Form.Control.Feedback>
+
+                                </div>
+                                : null}
+                            </Form.Row>
+                            <Form.Row>
                                 <Col md={12}>
                                     <Form.Label className="font-weight-bold">Short Description</Form.Label>
                                     <Form.Control
@@ -83,7 +119,7 @@ class ListingAddOverview extends React.Component{
                                         value={values.shortDescription} 
                                         onChange={handleChange}
                                         onBlur={handleBlur}
-                                        isInvalid={!!errors.shortDescription}
+                                        isInvalid={touched.shortDescription && !!errors.shortDescription}
                                         isValid={touched.shortDescription && !errors.shortDescription && values.shortDescription !== ""}
                                         disabled={isSubmitting}
                                     />

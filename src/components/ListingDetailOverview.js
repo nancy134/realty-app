@@ -36,6 +36,7 @@ function EditButton(props) {
                 <FontAwesomeIcon size="xs" icon={faPencilAlt} />
             </span>
             : null}
+            {modalShow ?
             <ListingEditOverview
                 listing = {props.listing}
                 listingTypes = {props.listingTypes}
@@ -49,6 +50,7 @@ function EditButton(props) {
                 onHide={() => setModalShow(false)}
                 onSave={listing => props.onSave(listing)}
             />
+            : null}
         </span>
     );
 }
@@ -112,6 +114,7 @@ class ListingDetailOverview extends React.Component {
         };
         var listingType = "For Lease";
         var galleryImages = [];
+        var listingPrice = "";
         if (this.props.listing){
             shortDescription = this.props.listing.shortDescription;
             longDescription = this.props.listing.longDescription;
@@ -124,6 +127,8 @@ class ListingDetailOverview extends React.Component {
               }
             }
             listingType = this.props.listing.listingType;
+            var floatPrice = parseFloat(this.props.listing.listingPrice);
+            listingPrice = floatPrice.toLocaleString(undefined, {maximumFractionDigits:0});
         }
         if (galleryImages.length === 0){
             galleryImages.push(defaultImage);
@@ -132,6 +137,7 @@ class ListingDetailOverview extends React.Component {
         const listing = this.props.listing;
         const editMode = this.props.editMode;
         const listingTypes = this.props.listingTypes;
+
         return (
             <div>
                 <Row className="mt-2 border-bottom border-warning">
@@ -151,11 +157,19 @@ class ListingDetailOverview extends React.Component {
                             /> 
                             : null}</h2>
                     </Col>
+                    {listing.listingPrice ?
+                    <Col>
+                        <div className="text-right">
+                            <h4>{listingType} ${listingPrice}</h4>
+                         </div>
+                    </Col>
+                    :
                     <Col>
                         <div className="text-right">
                             <h4>{listingType}</h4>
-                         </div>
+                        </div>
                     </Col>
+                    }
                 </Row>
                 <Row>
                     <Col md={6}>

@@ -60,6 +60,11 @@ function ListItem(props){
             price = minPrice+" - "+maxPrice;
         }
     }
+
+    // Listing Price
+    var floatPrice = parseFloat(listing.listingPrice);
+    var listingPrice = floatPrice.toLocaleString(undefined, {maximumFractionDigits:0});
+
     return(
         <ListGroup.Item>
             <Row>
@@ -113,7 +118,7 @@ function ListItem(props){
                             <div>${price} sf/yr</div>
                             : null }
                             { listing.listingType === "For Sale" && listing.listingPrice?
-                            <div>${listing.listingPrice}</div>
+                            <div>For Sale ${listingPrice}</div>
                             : null }
                             <div>{listing.shortDescription}</div>
                         </Card.Body>
