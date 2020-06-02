@@ -4,7 +4,8 @@ import {
     Col,
     Modal,
     Button,
-    Form
+    Form,
+    InputGroup
 } from 'react-bootstrap';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -89,24 +90,28 @@ class ListingAddOverview extends React.Component{
                         <Form>
                             <Form.Row>
                                 { this.props.listing.listingType === "For Sale" ?
-                                <div>
+                                <Col md={6}>
                                     <Form.Label className="font-weight-bold">Listing Price</Form.Label>
-                                    <Form.Control 
-                                        id="overview_edit_listing_price"
-                                        name="listingPrice"
-                                        type="text"
-                                        value={values.listingPrice} 
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        isInvalid={touched.listingPrice && !!errors.listingPrice}
-                                        isValid={touched.listingPrice && !errors.listingPrice && values.listingPrice !== ""}
-                                        disabled={isSubmitting}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {errors.listingPrice}
-                                    </Form.Control.Feedback>
-
-                                </div>
+                                    <InputGroup>
+                                        <InputGroup.Prepend>
+                                            <InputGroup.Text>$</InputGroup.Text>
+                                        </InputGroup.Prepend>
+                                        <Form.Control 
+                                            id="overview_edit_listing_price"
+                                            name="listingPrice"
+                                            type="text"
+                                            value={values.listingPrice} 
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            isInvalid={touched.listingPrice && !!errors.listingPrice}
+                                            isValid={touched.listingPrice && !errors.listingPrice && values.listingPrice !== ""}
+                                            disabled={isSubmitting}
+                                        />
+                                        <Form.Control.Feedback type="invalid">
+                                            {errors.listingPrice}
+                                        </Form.Control.Feedback>
+                                    </InputGroup>
+                                </Col>
                                 : null}
                             </Form.Row>
                             <Form.Row>

@@ -157,7 +157,7 @@ class ListingEditTenant extends React.Component {
                                 disabled={isSubmitting}
                             />
                             <InputGroup.Append>
-                                <InputGroup.Text id="basic-addon2">sq ft</InputGroup.Text>
+                                <InputGroup.Text id="basic-addon2">sf</InputGroup.Text>
                             </InputGroup.Append>
                             <Form.Control.Feedback type="invalid">
                                 {errors.space}
@@ -169,6 +169,9 @@ class ListingEditTenant extends React.Component {
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Base Rent <span className="font-weight-light">(optional)</span></Form.Label>
                         <InputGroup>
+                            <InputGroup.Prepend>
+                                <InputGroup.Text>$</InputGroup.Text>
+                            </InputGroup.Prepend>
                             <Form.Control 
                                 id="tenant_edit_base_rent"
                                 name="baseRent"
@@ -181,7 +184,7 @@ class ListingEditTenant extends React.Component {
                                 disabled={isSubmitting}
                             />
                             <InputGroup.Append>
-                                <InputGroup.Text id="basic-addon2">$/mo</InputGroup.Text>
+                                <InputGroup.Text id="basic-addon2">mo</InputGroup.Text>
                             </InputGroup.Append>
                             <Form.Control.Feedback type="invalid">
                                 {errors.baseRent}

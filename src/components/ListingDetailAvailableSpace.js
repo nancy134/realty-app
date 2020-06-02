@@ -54,8 +54,8 @@ function SpaceItem(props){
     <Accordion key={space.unit}> 
         <Row className="border-bottom align-items-center" >
             <Col md={2}>{space.unit}</Col>
-            <Col md={2}>{space.size} sq ft</Col>
-            <Col md={2}>${space.price}/sq ft</Col>
+            <Col md={2}>{space.size} sf</Col>
+            <Col md={2}>${space.price} sf/yr</Col>
             <Col md={3}>
                 <Row>
                     <Col >{space.type}</Col>
@@ -211,8 +211,8 @@ function SpaceItem(props){
     return(
         <Row className="border-bottom align-items-center" >
             <Col md={2}>{space.unit}</Col>
-            <Col md={2}>{space.size} sq ft</Col>
-            <Col md={2}>${space.price}/sq ft</Col>
+            <Col md={2}>{space.size} sf</Col>
+            <Col md={2}>${space.price} sf/yr</Col>
             <Col md={3}>
                 <Row>
                     <Col >{space.type}</Col>

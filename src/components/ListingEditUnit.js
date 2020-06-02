@@ -187,6 +187,9 @@ class ListingEditUnit extends React.Component {
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Income <span className="font-weight-light">(optional)</span></Form.Label>
                         <InputGroup>
+                            <InputGroup.Prepend>
+                                <InputGroup.Text>$</InputGroup.Text>
+                            </InputGroup.Prepend>
                             <Form.Control 
                                 id="unit_edit_income"
                                 name="income"
@@ -199,7 +202,7 @@ class ListingEditUnit extends React.Component {
                                 disabled={isSubmitting}
                             />
                             <InputGroup.Append>
-                                <InputGroup.Text id="basic-addon2">$/mo</InputGroup.Text>
+                                <InputGroup.Text id="basic-addon2">mo</InputGroup.Text>
                             </InputGroup.Append>
 
                             <Form.Control.Feedback type="invalid">

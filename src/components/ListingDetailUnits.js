@@ -112,8 +112,8 @@ class ListingDetailUnits extends React.Component {
             <Row key={unit.id}>
                 <Col md={3}>{unit.description}</Col>
                 <Col md={2}>{unit.numUnits}</Col>
-                <Col md={2}>{unit.space}</Col>
-                <Col md={2}>{unit.income}</Col>
+                <Col md={2}>{unit.space} sf</Col>
+                <Col md={2}>${unit.income}/mo</Col>
                 <Col md={3}>
                            <Row>
                                { editMode === "edit" ?

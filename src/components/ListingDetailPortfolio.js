@@ -116,8 +116,8 @@ class ListingDetailPortfolio extends React.Component {
             (
             <Row key={portfolio.id}>
                 <Col md={3}>{portfolio.tenant}</Col>
-                <Col md={2}>{portfolio.buildingSize}</Col>
-                <Col md={2}>{portfolio.lotSize}</Col>
+                <Col md={2}>{portfolio.buildingSize} sf</Col>
+                <Col md={2}>{portfolio.lotSize} acres</Col>
                 <Col md={2}>{portfolio.type}</Col>
                 <Col md={3}>
                     <Row>

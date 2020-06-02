@@ -150,7 +150,7 @@ class ListingEditPortfolio extends React.Component {
                                 disabled={isSubmitting}
                             />
                             <InputGroup.Append>
-                                <InputGroup.Text id="basic-addon2">sq ft</InputGroup.Text>
+                                <InputGroup.Text id="basic-addon2">sf</InputGroup.Text>
                             </InputGroup.Append>
                             <Form.Control.Feedback type="invalid">{errors.buildingSize}</Form.Control.Feedback>
                         </InputGroup>

@@ -239,7 +239,7 @@ class ListingEditAvailableSpace extends React.Component {
                                         disabled={isSubmitting}
                                     />
                                     <InputGroup.Append>
-                                        <InputGroup.Text id="basic-addon2">sq ft</InputGroup.Text>
+                                        <InputGroup.Text id="basic-addon2">sf</InputGroup.Text>
                                     </InputGroup.Append>
                                     <Form.Control.Feedback type="invalid">
                                         {errors.size}
@@ -249,6 +249,9 @@ class ListingEditAvailableSpace extends React.Component {
                             <Form.Group as={Col}>
                                 <Form.Label>Price</Form.Label>
                                 <InputGroup>
+                                    <InputGroup.Prepend>
+                                        <InputGroup.Text>$</InputGroup.Text>
+                                    </InputGroup.Prepend>
                                     <Form.Control 
                                         id="space_edit_price"
                                         name="price"
@@ -261,7 +264,7 @@ class ListingEditAvailableSpace extends React.Component {
                                         disabled={isSubmitting}
                                     />
                                     <InputGroup.Append>
-                                        <InputGroup.Text>$/sf/yr</InputGroup.Text>
+                                        <InputGroup.Text>sf/yr</InputGroup.Text>
                                     </InputGroup.Append>
                                     <Form.Control.Feedback type="invalid">
                                         {errors.price}
@@ -358,7 +361,7 @@ class ListingEditAvailableSpace extends React.Component {
                                                     </Form.Control.Feedback>
                                                 </Form.Group>
                                                 <Form.Group as={Col}>
-                                                    <Form.Label>Floor</Form.Label>
+                                                    <Form.Label>Floors</Form.Label>
                                                     <Form.Control
                                                         id="space_edit_floors"
                                                         name="floors"

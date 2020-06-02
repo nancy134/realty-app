@@ -22,8 +22,8 @@ function TenantItem(props){
     return(
             <Row key={tenant.id}>
                 <Col md={3}>{tenant.tenant}</Col>
-                <Col md={2}>{tenant.space}</Col>
-                <Col md={2}>{tenant.baseRent}</Col>
+                <Col md={2}>{tenant.space} sf</Col>
+                <Col md={2}>${tenant.baseRent}/mo</Col>
                 <Col md={3}>{leaseEnds}</Col>
                 <Col md={2}>
                     <Row>
