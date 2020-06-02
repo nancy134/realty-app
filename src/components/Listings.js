@@ -111,8 +111,11 @@ function ListItem(props){
                             {listing.yearBuilt ?
                             <div>Built in {listing.yearBuilt}</div>
                             : null}
-                            { listing.spaces.length > 0 ?
+                            { listing.spaces.length === 1 ?
                             <div>{size} sf Space</div>
+                            : null}
+                            { listing.spaces.length > 1 ?
+                            <div>{size} sf ({listing.spaces.length} spaces)</div>
                             : null}
                             { listing.spaces.length > 0 ?
                             <div>${price} sf/yr</div>
