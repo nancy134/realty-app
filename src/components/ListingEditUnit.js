@@ -113,8 +113,9 @@ class ListingEditUnit extends React.Component {
         <Modal
             show={this.props.show}
             onHide={this.props.onHide}
+            backdrop='static'
         >
-            <Modal.Header closeButton>
+            <Modal.Header>
                 <Modal.Title id="contained-modal-title-vcenter">
                 Unit Edit
                 </Modal.Title>
@@ -221,8 +222,13 @@ class ListingEditUnit extends React.Component {
                 {this.props.saving ?
                 <SavingAlert />
                 : null}
+                { dirty ?
+                <Button onClick={this.props.onHide}>Discard Changes</Button>
+                :
                 <Button onClick={this.props.onHide}>Close</Button>
+                }
                 <Button
+                    disabled={!(isValid && dirty) || isSubmitting}
                     id="unit_save_button"
                     onClick={handleSubmit}
                 >

@@ -95,9 +95,10 @@ class ListingEditHeader extends React.Component {
         <Modal
             show={this.props.show}
             onHide={this.props.onHide}
+            backdrop='static'
             aria-labelledby="contained-modal-title-vcenter"
         >
-            <Modal.Header closeButton>
+            <Modal.Header>
                 <Modal.Title id="contained-modal-title-vcenter">Address Edit</Modal.Title>
             </Modal.Header>
             <Modal.Body >
@@ -193,7 +194,11 @@ class ListingEditHeader extends React.Component {
                 </Row>
             </Modal.Body>
             <Modal.Footer>
+                {dirty ?
+                <Button onClick={this.props.onHide}>Discard Changes</Button>
+                :
                 <Button onClick={this.props.onHide}>Close</Button>
+                }
                 <Button
                     disabled={!(isValid && dirty) || isSubmitting} 
                     id="header_edit_save_button"

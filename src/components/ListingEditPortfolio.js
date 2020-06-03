@@ -110,8 +110,9 @@ class ListingEditPortfolio extends React.Component {
         <Modal
             show={this.props.show}
             onHide={this.props.onHide}
+            backdrop='static'
         >
-            <Modal.Header closeButton>
+            <Modal.Header>
                 <Modal.Title id="contained-modal-title-vcenter">{this.props.title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -206,7 +207,11 @@ class ListingEditPortfolio extends React.Component {
                 {this.props.saving ?
                 <SavingAlert />
                 : null}
+                { dirty ?
+                <Button onClick={this.props.onHide}>Discard Changes</Button>
+                :
                 <Button onClick={this.props.onHide}>Close</Button>
+                }
                 <Button 
                     disabled={!(isValid && dirty) || isSubmitting}
                     id="portfolio_save_button"

@@ -198,8 +198,9 @@ class ListingEditAvailableSpace extends React.Component {
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
+                backdrop='static'
             >   
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title id="contained-modal-title-vcenter">
                         Available Space Edit 
                     </Modal.Title>
@@ -554,7 +555,11 @@ class ListingEditAvailableSpace extends React.Component {
                     {this.props.saving ?
                     <SavingAlert />
                     : null}
+                    { dirty ?
+                    <Button onClick={this.props.onHide}>Discard Changes</Button>
+                    : 
                     <Button onClick={this.props.onHide}>Close</Button>
+                    }
                     <Button 
                         id="space_button_save"
                         onClick={handleSubmit}

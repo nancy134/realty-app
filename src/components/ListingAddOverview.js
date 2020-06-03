@@ -78,8 +78,9 @@ class ListingAddOverview extends React.Component{
           show={this.props.show}
           onHide={this.props.onHide}
           aria-labelledby="contained-modal-title-vcenter"
+          backdrop='static'
         >
-            <Modal.Header closeButton>
+            <Modal.Header>
                 <Modal.Title id="contained-modal-title-vcenter">
                   Enter Overview 
                 </Modal.Title>
@@ -163,7 +164,7 @@ class ListingAddOverview extends React.Component{
                     id="overview_edit_cancel_button"
                     onClick={this.props.onCancel}
                 >
-                    Cancel
+                    Discard Changes 
                 </Button>
                 <Button 
                     disabled={!(isValid && dirty) || isSubmitting}

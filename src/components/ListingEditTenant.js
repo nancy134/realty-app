@@ -48,7 +48,6 @@ function SavingAlert(){
     </div>
     );
 }
-
 class ListingEditTenant extends React.Component {
     constructor(props){
         super(props);
@@ -92,7 +91,7 @@ class ListingEditTenant extends React.Component {
             initialValues.leaseEnds = formatDate(initialValues.leaseEnds);
         }
         return (
-       <Formik
+        <Formik
             initialValues={initialValues}
             validationSchema={TenantSchema}
             onSubmit={(values, { setSubmitting }) => {
@@ -116,8 +115,9 @@ class ListingEditTenant extends React.Component {
         <Modal
             show={this.props.show}
             onHide={this.props.onHide}
+            backdrop='static'
         >
-            <Modal.Header closeButton>
+            <Modal.Header>
                 <Modal.Title id="contained-modal-title-vcenter">{this.props.title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -221,7 +221,16 @@ class ListingEditTenant extends React.Component {
                 {this.props.saving ?
                 <SavingAlert />
                 : null}
-                <Button onClick={this.props.onHide}>Close</Button>
+                { dirty ?
+                <Button 
+                    onClick={this.props.onHide}
+                >Discard changes</Button>
+                :
+                <Button
+                    onClick={this.props.onHide}
+                >Cancel</Button>
+                }
+  
                 <Button
                     disabled={!(isValid && dirty) || isSubmitting}
                     id="tenant_save_button"

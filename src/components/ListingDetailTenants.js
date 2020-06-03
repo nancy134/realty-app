@@ -96,6 +96,7 @@ function EditButton(props){
             </span>
             { props.show ?
             <ListingEditTenant
+                title="Edit Tenant"
                 listing={props.listing}
                 tenant={tenant}
                 show={props.show}
