@@ -3,298 +3,489 @@ import {
     Col,
     Form,
     Modal,
-    Button
+    Button,
+    InputGroup
 } from 'react-bootstrap';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
+
+const GeneralSchema = Yup.object().shape({
+    propertyType: Yup.string().required('Property Type is required'),
+    zone: Yup.string(),
+    buildingClass: Yup.string(),
+    totalBuildingSize: Yup.number().integer().typeError('Must be an integer'),
+    totalAvailableSpace: Yup.number().integer().typeError('Must be an integer'),
+    lotSize: Yup.number().typeError('Must be a number'),
+    totalNumberOfUnits: Yup.number().integer().typeError('Must be an integer'),
+    yearBuilt:  Yup.number().integer().typeError('Must be an integer'),
+    parking: Yup.string(),
+    driveInDoors: Yup.number().integer().typeError('Must be an integer'),
+    loadingDocks: Yup.number().integer().typeError('Must be an integer'),
+    floors: Yup.number().integer().typeError('Must be an integer'),
+    ceilingHeight: Yup.number().typeError('Must be a number'),
+    taxes: Yup.number().typeError('Must be a number'),
+    nets: Yup.number().typeError('Must be a number')
+
+});
 
 class ListingEditGeneral extends React.Component {
     constructor(props){
         super(props);
         this.handleSave = this.handleSave.bind(this);
-        this.onPropertyTypeChange = this.onPropertyTypeChange.bind(this);
-        this.onTotalBuildingSizeChange = this.onTotalBuildingSizeChange.bind(this);
-        this.onLotSizeChange = this.onLotSizeChange.bind(this);
-        this.onTaxesChange = this.onTaxesChange.bind(this);
-        this.onParkingChange = this.onParkingChange.bind(this);
-        this.onFloorsChange = this.onFloorsChange.bind(this);
-        this.onTotalNumberOfUnitsChange = this.onTotalNumberOfUnitsChange.bind(this);
-        this.onBuildingClassChange = this.onBuildingClassChange.bind(this);
-        this.onCeilingHeightChange = this.onCeilingHeightChange.bind(this);
-        this.onDriveInDoorsChange = this.onDriveInDoorsChange.bind(this);
-        this.onLoadingDocksChange = this.onLoadingDocksChange.bind(this);
-        this.onYearBuiltChange = this.onYearBuiltChange.bind(this);
-        this.onZoneChange = this.onZoneChange.bind(this);
-        this.onTotalAvailableSpaceChange = this.onTotalAvailableSpaceChange.bind(this);
-        this.onNetsChange = this.onNetsChange.bind(this);
-        if (this.props.listing){
-            this.state = {
-                id: this.props.listing.id,
-                ListingId: this.props.listing.ListingId,
-                propertyType: this.props.listing.propertyType ? this.props.listing.propertyType : "",
-                totalBuildingSize: this.props.listing.totalBuildingSize ? this.props.listing.totalBuildingSize : "",
-                lotSize : this.props.listing.lotSize ? this.props.listing.lotSize : "",
-                taxes : this.props.listing.taxes ? this.props.listing.taxes : "",
-                parking: this.props.listing.parking ? this.props.listing.parking : "",
-                floors: this.props.listing.floors ? this.props.listing.floors : "",
-                totalNumberOfUnits : this.props.listing.totalNumberOfUnits ? this.props.listing.totalNumberOfUnits : "",
-                buildingClass : this.props.listing.buildingClass ? this.props.listing.buildingClass : "",
-                ceilingHeight : this.props.listing.ceilingHeight ? this.props.listing.ceilingHeight : "",
-                driveInDoors : this.props.listing.driveInDoors ? this.props.listing.driveInDoors : "",
-                loadingDocks : this.props.listing.loadinDocks ? this.props.listing.loadingDocks : "",
-                yearBuilt : this.props.listing.yearBuilt ? this.props.listing.yearBuild : "",
-                zone : this.props.listing.zone ? this.props.listing.zone : "",
-                totalAvailableSpace : this.props.listing.totalAvailableSpace ? this.props.listing.totalAvailableSpace : "",
-                nets : this.props.listing.nets ? this.props.listing.nets : ""
-
-            };
-        } else {
-            this.state = {
-                id: null,
-                ListingId: null,
-                propertyType: "",
-                totalBuildingSize : "",
-                lotSize : "",
-                taxes : "",
-                parking : "",
-                floors : "",
-                totalNumberOfUnits : "",
-                buildingClass : "",
-                ceilingHeight : "",
-                driveInDoors : "",
-                loadingDocks : "",
-                yearBuilt : "",
-                zone : "",
-                totalAvailableSpace : "",
-                nets : ""
-            };
-        }
     }
-    onPropertyTypeChange(event){
-        this.setState({
-            propertyType: event.target.value
-        });
-    }
-    onTotalBuildingSizeChange(event){
-        this.setState({
-            totalBuildingSize: event.target.value
-        });
-    }
-    onLotSizeChange(event){
-        this.setState({
-            lotSize: event.target.value
-        });
-    }
-    onTaxesChange(event){
-        this.setState({
-            taxes: event.target.value
-        });
-    }
-    onParkingChange(event){
-        this.setState({
-            parking: event.target.value
-        });
-    }
-    onFloorsChange(event){
-        this.setState({
-            floors: event.target.value
-        });
-    }
-    onTotalNumberOfUnitsChange(event){
-        this.setState({
-            totalNumberOfUnit: event.target.value
-        });
-    }
-    onBuildingClassChange(event){
-        this.setState({
-            buildingClass: event.target.value
-        });
-    }
-    onCeilingHeightChange(event){
-        this.setState({
-            ceilingHeight: event.target.value
-        });
-    }
-    onDriveInDoorsChange(event){
-        this.setState({
-            driveInDoors: event.target.value
-        });
-    }
-    onLoadingDocksChange(event){
-        this.setState({
-            loadingDocks: event.target.value
-        });
-    }
-    onYearBuiltChange(event){
-        this.setState({
-            yearBuilt: event.target.value
-        });
-    }
-    onZoneChange(event){
-        this.setState({
-            zone: event.target.value
-        });
-    }
-    onTotalAvailableSpaceChange(event){
-        this.setState({
-            totalAvailableSpace: event.target.value
-        });
-    }
-    onNetsChange(event){
-        this.setState({
-            nets: event.target.value
-        });
-    }
-    handleSave(){
+    handleSave(initialValues, values){
         var listing = {};
         if (this.props.listing){
             listing.ListingId = this.props.listing.ListingId;
         } else {
             listing.ListingId = this.state.ListingId;
         }
-        if (this.state.propertyType) listing.propertyType = this.state.propertyType;
-        if (this.state.totalBuildingSize) listing.totalBuildingSize = this.state.totalBuildingSize;
-        if (this.state.lotSize) listing.lotSize = this.state.lotSize;
-        if (this.state.taxes) listing.taxes = this.state.taxes;
-        if (this.state.parking) listing.parking = this.state.parking;
-        if (this.state.floors) listing.floors = this.state.floors;
-        if (this.state.totalNumberOfUnit) listing.totalNumberOfUnits = this.state.totalNumberOfUnits;
-        if (this.state.buildingClass) listing.buildingClass = this.state.buildingClass;
-        if (this.state.ceilingHeight) listing.ceilingHeight = this.state.ceilingHeight;
-        if (this.state.driveInDoors) listing.driveInDoors = this.state.driveInDoors;
-        if (this.state.loadingDocks) listing.loadingDocks = this.state.loadingDocks;
-        if (this.state.yearBuilt) listing.yearBuilt = this.state.yearBuilt;
-        if (this.state.zone) listing.zone = this.state.zone;
-        if (this.state.totalAvailableSpace) listing.totalAvailableSpace = this.state.totalAvailableSpace;
-        if (this.state.nets) listing.nets = this.state.nets;
+        if (initialValues.propertyType !== values.propertyType){
+            listing.propertyType = values.propertyType;
+        }
+        if (initialValues.totalBuildingSize !== values.totalBuildingSize){
+            listing.totalBuildingSize = values.totalBuildingSize;
+        }
+        if (initialValues.lotSize !== values.lotSize){
+            listing.lotSize = values.lotSize;
+        }
+        if (initialValues.taxes !== values.taxes){
+            listing.taxes = values.taxes;
+        }
+        if (initialValues.parking !== values.parking){
+            listing.parking = values.parking;
+        }
+        if (initialValues.floors !== values.floors){
+            listing.floors = values.floors;
+        }
+        if (initialValues.totalNumberOfUnits !== values.totalNumberOfUnits){
+            listing.totalNumberOfUnits = values.totalNumberOfUnits;
+        }
+        if (initialValues.buildingClass !== values.buildingClass){
+            listing.buildingClass = values.buildingClass;
+        }
+        if (initialValues.ceilingHeight !== values.ceilingHeight){
+            listing.ceilingHeight = values.ceilingHeight;
+        }
+        if (initialValues.driveInDoors !== values.driveInDoors){
+            listing.driveInDoors = values.driveInDoors;
+        }
+        if (initialValues.loadingDocks !== values.loadingDocks){
+            listing.loadingDocks = values.loadingDocks;
+        }
+        if (initialValues.yearBuilt !== values.yearBuilt){
+            listing.yearBuilt = values.yearBuilt;
+        }
+        if (initialValues.zone !== values.zone){
+            listing.zone = values.zone;
+        }
+        if (initialValues.totalAvailableSpace !== values.totalAvailableSpace){
+            listing.totalAvailableSpace = values.totalAvailableSpace;
+        }
+        if (initialValues.nets !== values.nets){
+            listing.nets = values.nets;
+        }
+
         this.props.onSave(listing);
         this.props.onHide();
     }
     render()
     {
+
+    var listing = this.props.listing;
+    var initialValues = {
+        propertyType: "",
+        totalBuildingSize : "",
+        lotSize : "",
+        taxes : "",
+        parking : "",
+        floors : "",
+        totalNumberOfUnits : "",
+        buildingClass : "",
+        ceilingHeight : "",
+        driveInDoors : "",
+        loadingDocks : "",
+        yearBuilt : "",
+        zone : "",
+        totalAvailableSpace : "",
+        nets : ""
+    };
+    if (listing){
+        if (listing.propertyType) initialValues.propertyType = listing.propertyType;
+        if (listing.totalBuildingSize) initialValues.totalBuildingSize = listing.totalBuildingSize;
+        if (listing.lotSize) initialValues.lotSize = listing.lotSize;
+        if (listing.taxes) initialValues.taxes = listing.taxes;
+        if (listing.parking) initialValues.parking = listing.parking;
+        if (listing.floors) initialValues.floors = listing.floors;
+        if (listing.totalNumberOfUnits) initialValues.totalNumberOfUnits = listing.totalNumberOfUnits;
+        if (listing.buildingClass) initialValues.buildingClass = listing.buildingClass;
+        if (listing.ceilingHeight) initialValues.ceilingHeight = listing.ceilingHeight;
+        if (listing.driveInDoors) initialValues.driveInDoors = listing.driveInDoors;
+        if (listing.loadingDocks) initialValues.loadingDocks = listing.loadingDocks;
+        if (listing.yearBuilt) initialValues.yearBuilt = listing.yearBuilt;
+        if (listing.zone) initialValues.zone = listing.zone;
+        if (listing.totalAvailableSpace) initialValues.totalAvailableSpace = listing.totalAvailableSpace;
+        if (listing.nets) initialValues.nets = listing.nets;
+    }
     return(
+    <Formik
+        initialValues={initialValues}
+        validationSchema={GeneralSchema}
+        onSubmit={(values, { setSubmitting }) => {
+            setSubmitting(true);
+            this.handleSave(initialValues, values);
+        }}
+    >
+        {({ 
+            values, 
+            errors, 
+            touched, 
+            handleChange, 
+            handleBlur, 
+            handleSubmit, 
+            isSubmitting, 
+            isValid, 
+            dirty, 
+            setFieldValue 
+        }) => (       
     <Modal
         show={this.props.show}
         onHide={this.props.onHide}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
     >
-        <Modal.Header closeButton>
+        <Modal.Header>
             <Modal.Title id="contained-modal-title-vcenter">
             Edit Building Details
             </Modal.Title>
         </Modal.Header>
-        <Modal.Body> 
+        <Modal.Body style={{'maxHeight': 'calc(100vh - 210px)', 'overflowY': 'auto'}}> 
         <Form>
             <Form.Row>
                 <Form.Group as={Col}>
-                    <Form.Label>Property Type</Form.Label>
+                    <Form.Label className="font-weight-bold">Property Type</Form.Label>
                     <Form.Control 
                         id="general_edit_property_type"
+                        name="propertyType"
                         as="select" 
-                        value={this.state.propertyType} 
-                        onChange={this.onPropertyTypeChange}
+                        value={values.propertyType} 
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                     >
-                        <option>Office</option>
-                        <option>Coworking</option>
-                        <option>Industrial</option>
-                        <option>Retail</option>
-                        <option>Restaurant</option>
-                        <option>Flex</option>
-                        <option>Medical</option>
-                        <option>Land</option>
+                        <option key="-1"></option>
+                        {this.props.propertyTypes.map((propertyType, index) => (
+                        <option key={index}>{propertyType}</option>
+                        ))}
                     </Form.Control>
                 </Form.Group>
                 <Form.Group as={Col}>
-                    <Form.Label>Ceiling Height</Form.Label>
-                    <Form.Control 
-                        id="general_edit_ceiling_height"
-                        value={this.state.ceilingHeight} 
-                        onChange={this.onCeilingHeightChange}
+                    <Form.Label className="font-weight-bold">Zone <span className="font-weight-light">(optional)</span></Form.Label>
+                    <Form.Control
+                        id="general_edit_zone"
+                        name="zone"
+                        type="text"
+                        value={values.zone}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.zone}
+                        isValid={touched.zone && !errors.zone && values.zone !== ""}
+                        disabled={isSubmitting}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.zone}
+                    </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col}>
+                    <Form.Label className="font-weight-bold">Building Class <span className="font-weight-light">(optional)</span></Form.Label>
+                    <Form.Control
+                        id="general_edit_building_class"
+                        name="buildingClass"
+                        type="text"
+                        value={values.buildingClass}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.buildingClass}
+                        isValid={touched.buildingClass && !errors.buildingClass && values.buildingClass !== ""}
+                        disabled={isSubmitting}
                     />
                 </Form.Group>
             </Form.Row>
             <Form.Row>
                 <Form.Group as={Col}>
-                    <Form.Label>Total Building Size</Form.Label>
-                    <Form.Control 
-                        id="general_edit_building_size"
-                        value={this.state.totalBuildingSize} 
-                        onChange={this.onTotalBuildingSizeChange}
+                    <Form.Label className="font-weight-bold">Building Size <span className="font-weight-light">(optional)</span></Form.Label>
+                    <InputGroup>
+                        <Form.Control
+                            id="general_edit_building_size"
+                            name="totalBuildingSize"
+                            type="text"
+                            value={values.totalBuildingSize}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={!!errors.totalBuildingSize}
+                            isValid={touched.totalBuildingSize && !errors.totalBuildingSize && values.totalBuildingSize !== ""}
+                        />
+                        <InputGroup.Append>
+                            <InputGroup.Text id="basic-addon2">sf</InputGroup.Text>
+                        </InputGroup.Append> 
+                        <Form.Control.Feedback type="invalid">
+                            {errors.totalBuildingSize}
+                        </Form.Control.Feedback>
+                    </InputGroup>
+                </Form.Group>
+                <Form.Group as={Col}>
+                    <Form.Label className="font-weight-bold">Available Space <span className="font-weight-light">(optional)</span></Form.Label>
+                    <InputGroup>
+                        <Form.Control
+                            id="general_edit_total_available_space"
+                            name="totalAvailableSpace"
+                            type="text"
+                            value={values.totalAvailableSpace}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={!!errors.totalAvailableSpace}
+                            isValid={touched.totalAvailableSpace && values.totalAvailableSpace && values.totalAvailableSpace !== ""}
+                            disabled={isSubmitting}
+                        />
+                        <InputGroup.Append>
+                            <InputGroup.Text id="basic-addon2">sf</InputGroup.Text>
+                        </InputGroup.Append>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.totalAvailableSpace}
+                        </Form.Control.Feedback>
+                    </InputGroup>
+                </Form.Group>
+                <Form.Group as={Col}>
+                    <Form.Label className="font-weight-bold">Lot Size <span className="font-weight-light">(optional)</span></Form.Label>
+                    <InputGroup>
+                        <Form.Control
+                            id="general_edit_lot_size"
+                            name="lotSize"
+                            type="text"
+                            value={values.lotSize}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={!!errors.lotSize}
+                            isValid={touched.lotSize && !errors.lotSize && values.lotSize !== ""}
+                            disabled={isSubmitting}
+                        />
+                        <InputGroup.Append>
+                            <InputGroup.Text id="basic-addon2">acres</InputGroup.Text>
+                        </InputGroup.Append>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.lotSize}
+                        </Form.Control.Feedback>
+                    </InputGroup>
+                </Form.Group>
+            </Form.Row>
+            <Form.Row>
+                <Form.Group as={Col}>
+                    <Form.Label className="font-weight-bold">Number of Units <span className="font-weight-light">(optional)</span></Form.Label>
+                    <Form.Control
+                        id="general_edit_total_number_of_units"
+                        name="totalNumberOfUnits"
+                        type="text"
+                        value={values.totalNumberOfUnits}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.totalNumberOfUnits}
+                        isValid={touched.totalNumberOfUnits && !errors.totalNumberOfUnits && values.totalNumberOfUnits !== ""}
+                        disabled={isSubmitting}
                     />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.totalNumberOfUnits}
+                    </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Col}>
-                    <Form.Label>Drive In Doors</Form.Label>
-                    <Form.Control value={this.state.driveInDoors} onChange={this.onDriveInDoorsChange}></Form.Control>
-                </Form.Group>
-            </Form.Row>
-            <Form.Row>
-                <Form.Group as={Col}>
-                    <Form.Label>Lot Size</Form.Label>
-                    <Form.Control value={this.state.lotSize} onChange={this.onLotSizeChange}></Form.Control>
-                </Form.Group>
-                <Form.Group as={Col}>
-                    <Form.Label>Loading Docks</Form.Label>
-                    <Form.Control value={this.state.loadingDocks} onChange={this.onLoadingDocksChange}></Form.Control>
-                </Form.Group>
-            </Form.Row>
-            <Form.Row>
-                <Form.Group as={Col}>
-                    <Form.Label>Taxes</Form.Label>
-                    <Form.Control value={this.state.taxes} onChange={this.onTaxesChange}></Form.Control>
+                    <Form.Label className="font-weight-bold">Year Built <span className="font-weight-light">(optional)</span></Form.Label>
+                    <Form.Control
+                        id="general_edit_year_built"
+                        name="yearBuilt"
+                        type="text"
+                        value={values.yearBuilt}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.yearBuilt}
+                        isValid={touched.yearBuilt && !errors.yearBuilt && values.yearBuilt !== ""}
+                        disabled={isSubmitting}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.yearBuilt}
+                    </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Col}>
-                    <Form.Label>Year Built</Form.Label>
-                    <Form.Control value={this.state.yearBuilt} onChange={this.onYearBuiltChange}></Form.Control>
-                </Form.Group>
-            </Form.Row>
-            <Form.Row>
-                <Form.Group as={Col}>
-                    <Form.Label>Parking</Form.Label>
-                    <Form.Control value={this.state.parking} onChange={this.onParkingChange}></Form.Control>
-                </Form.Group>
-                <Form.Group as={Col}>
-                    <Form.Label>Zone</Form.Label>
-                    <Form.Control value={this.state.zone} onChange={this.onZoneChange}></Form.Control>
-                </Form.Group>
-            </Form.Row>
-            <Form.Row>
-                <Form.Group as={Col}>
-                    <Form.Label>Floors</Form.Label>
-                    <Form.Control value={this.state.floors} onChange={this.onFloorsChange}></Form.Control>
-                </Form.Group>
-                <Form.Group as={Col}>
-                    <Form.Label>Total Available Space</Form.Label>
-                    <Form.Control value={this.state.totalAvailableSpace} onChange={this.onTotalAvailableSpaceChange}></Form.Control>
+                    <Form.Label className="font-weight-bold">Parking <span className="font-weight-light">(optional)</span></Form.Label>
+                    <Form.Control
+                        id="general_edit_parking"
+                        name="parking"
+                        type="text"
+                        value={values.parking}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.parking}
+                        isValid={touched.parking && !errors.parking && values.parking !== ""}
+                        disabled={isSubmitting}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.parking}
+                    </Form.Control.Feedback>
                 </Form.Group>
             </Form.Row>
             <Form.Row>
                 <Form.Group as={Col}>
-                    <Form.Label>Total Number of Units</Form.Label>
-                    <Form.Control value={this.state.totalNumberOfUnits} onChange={this.onTotalNumberOfUnitsChange}></Form.Control>
+                    <Form.Label className="font-weight-bold">Drive In Doors <span className="font-weight-light">(optional)</span></Form.Label>
+                    <Form.Control
+                        id="general_edit_drive_in_doors"
+                        name="driveInDoors"
+                        type="text"
+                        value={values.driveInDoors}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.driveInDoors}
+                        isValid={touched.driveInDoors && !errors.driveInDoors && values.driveIndoors !== ""}
+                        disabled={isSubmitting}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.driveInDoors}
+                    </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Col}>
-                    <Form.Label>Nets</Form.Label>
-                    <Form.Control value={this.state.nets} onChange={this.onNetsChange}></Form.Control>
+                    <Form.Label className="font-weight-bold">Loading Docks <span className="font-weight-light">(optional)</span></Form.Label>
+                    <Form.Control
+                        id="general_edit_loading_docks"
+                        name="loadingDocks"
+                        type="text"
+                        value={values.loadingDocks}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.loadingDocks}
+                        isValid={touched.loadingDocks && !errors.loadingDocks && values.loadingDocks !== ""}
+                        disabled={isSubmitting}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.loadingDocks}
+                    </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col}>
+                    <Form.Label className="font-weight-bold">Floors <span className="font-weight-light">(optional)</span></Form.Label>
+                    <Form.Control
+                        id="general_edit_floors"
+                        name="floors"
+                        type="text"
+                        value={values.floors}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.floors}
+                        isValid={touched.floors && !errors.floors && values.floors !== ""}
+                        disabled={isSubmitting}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.floors}
+                    </Form.Control.Feedback>
                 </Form.Group>
             </Form.Row>
             <Form.Row>
                 <Form.Group as={Col}>
-                    <Form.Label>Building Class</Form.Label>
-                    <Form.Control value={this.state.buildingClass} onChange={this.onBuildingClassChange}></Form.Control>
+                    <Form.Label className="font-weight-bold">Ceiling Height <span className="font-weight-light">(optional)</span></Form.Label>
+                    <InputGroup>
+                        <Form.Control
+                            id="general_edit_ceiling_height"
+                            name="ceilingHeight"
+                            type="text"
+                            value={values.ceilingHeight}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={!!errors.ceilingHeight}
+                            isValid={touched.ceilingHeight && !errors.ceilingHeight && values.ceilingHeight !== ""}
+                        />
+                        <InputGroup.Append>
+                            <InputGroup.Text>ft</InputGroup.Text>
+                        </InputGroup.Append>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.ceilingHeight}
+                        </Form.Control.Feedback>
+                    </InputGroup>
+                </Form.Group>
+                <Form.Group as={Col}>
+                    <Form.Label className="font-weight-bold">Taxes <span className="font-weight-light">(optional)</span></Form.Label>
+                    <InputGroup>
+                        <InputGroup.Prepend>
+                            <InputGroup.Text>$</InputGroup.Text>
+                        </InputGroup.Prepend>
+                        <Form.Control
+                            id="general_edit_taxes"
+                            name="taxes"
+                            type="text"
+                            value={values.taxes}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={!!errors.taxes}
+                            isValid={touched.taxes && !errors.taxes && values.taxes !== ""}
+                            disabled={isSubmitting}
+                        />
+                        <InputGroup.Append>
+                            <InputGroup.Text>mo</InputGroup.Text>
+                        </InputGroup.Append>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.taxes}
+                        </Form.Control.Feedback>
+                    </InputGroup>
+                </Form.Group>
+                <Form.Group as={Col}>
+                    <Form.Label className="font-weight-bold">Nets <span className="font-weight-light">(optional)</span></Form.Label>
+                    <InputGroup>
+                        <InputGroup.Prepend>
+                            <InputGroup.Text>$</InputGroup.Text>
+                        </InputGroup.Prepend>
+                        <Form.Control
+                            id="general_edit_nets"
+                            name="nets"
+                            type="text"
+                            value={values.nets}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={!!errors.nets}
+                            isValid={touched.nets && !errors.nets && values.nets !== ""}
+                            disabled={isSubmitting}
+                        />
+                        <InputGroup.Append>
+                            <InputGroup.Text>mo</InputGroup.Text>
+                        </InputGroup.Append>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.nets}
+                        </Form.Control.Feedback>
+                    </InputGroup>
                 </Form.Group>
             </Form.Row>
 
         </Form>
         </Modal.Body>
         <Modal.Footer>
-            <Button onClick={this.props.onHide}>Cancel</Button>
-            <Button 
-                id="general_save_button"
-                onClick={this.handleSave}
+            { dirty ?
+            <Button
+                id="general_edit_cancel_button" 
+                onClick={this.props.onHide}
+            >
+                Discard Changes
+            </Button>
+            :
+            <Button
+                id="general_edit_cancel_button"
+                onClick={this.props.onHide}
+            >
+                Close
+            </Button>
+            }
+            <Button
+                disabled={(!(isValid && dirty) || isSubmitting)} 
+                id="general_edit_save_button"
+                onClick={handleSubmit}
             >
                 Save
             </Button>
         </Modal.Footer>
     </Modal>
+    )}
+    </Formik> 
     );
     }
 

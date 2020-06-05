@@ -1,7 +1,8 @@
 import React from 'react';
 import {
     Row,
-    Col
+    Col,
+    Spinner
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -14,6 +15,14 @@ function EditButton(props) {
 
     return (
         <span>
+            {props.showSpinner ?
+            <span
+                id="general_spinner"
+                className="edit-button align-top text-danger"
+            >
+                <Spinner animation="border" size="sm"/>
+            </span>
+            : 
             <span 
                 id="general_edit_button"
                 onClick={() => setModalShow(true)} 
@@ -21,12 +30,17 @@ function EditButton(props) {
             >
                 <FontAwesomeIcon size="xs" icon={faPencilAlt} />
             </span>
+            }
+            {modalShow ?
             <ListingEditGeneral
                 listing={props.listing}
+                propertyTypes={props.propertyTypes}
                 show={modalShow}
+                getListing={props.getListing}
                 onHide={() => setModalShow(false)}
                 onSave={listing => props.onSave(listing)}
             />
+            : null}
         </span>
   );
 }
@@ -84,9 +98,11 @@ class ListingDetailGeneral extends React.Component {
 
         const editMode = this.props.editMode;
         const listing = this.props.listing;
+        var propertyTypes = this.props.propertyTypes;
+
         if (editMode === "view" && listing && isEmpty(listing)) return null;
         if (listing){
-            propertyType = listing.propertType;
+            propertyType = listing.propertyType;
             totalBuildingSize = listing.totalBuildingSize;
 
             lotSize = listing.lotSize;
@@ -121,7 +137,15 @@ class ListingDetailGeneral extends React.Component {
         return (
             <React.Fragment>
                 <Row className="mt-3 border-bottom border-warning">
-                    <Col><h2>Building Detail {editMode === "edit" ? <EditButton listing={listing} onSave={this.handleSave} getListing={this.props.getListing}/> : null}</h2></Col>
+                    <Col>
+                        <h2>Building Detail {editMode === "edit" ?
+                            <EditButton 
+                                listing={listing}
+                                propertyTypes={propertyTypes}
+                                onSave={this.handleSave}
+                                getListing={this.props.getListing}
+                            /> : null}</h2>
+                    </Col>
                 </Row>
                 <Row>
                     <Col>

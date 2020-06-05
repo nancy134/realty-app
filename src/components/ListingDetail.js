@@ -404,6 +404,7 @@ class ListingDetail extends React.Component {
         var spaceTypes = null;
         var spaceDivisibles = null;
         var portfolioTypes = null;
+        var propertyTypes = null;
         if (this.props.listingDetail){
            listing = this.props.listingDetail.listing;
            states = this.props.listingDetail.states;
@@ -412,6 +413,7 @@ class ListingDetail extends React.Component {
            spaceTypes = this.props.listingDetail.spaceTypes;
            spaceDivisibles = this.props.listingDetail.spaceDivisibles;
            portfolioTypes = this.props.listingDetail.portfolioTypes;
+           propertyTypes = this.props.listingDetail.propertyTypes;
         }  
         const owner = this.props.owner;
         const fullscreen = this.props.fullscreen;
@@ -529,6 +531,7 @@ class ListingDetail extends React.Component {
                         editMode={editMode} 
                         onListingUpdate={this.handleListingUpdate} 
                         getListing={this.props.onFetchListing}
+                        propertyTypes={propertyTypes}
                 />
             </div>
 //                {(editMode === "edit") ?
