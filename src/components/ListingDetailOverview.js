@@ -157,7 +157,7 @@ class ListingDetailOverview extends React.Component {
                             /> 
                             : null}</h2>
                     </Col>
-                    {listing.listingPrice ?
+                    {listing && listing.listingPrice ?
                     <Col>
                         <div className="text-right">
                             <h4>{listingType} ${listingPrice}</h4>
