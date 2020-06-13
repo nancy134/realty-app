@@ -31,12 +31,37 @@ class ListingMap extends React.Component {
 
     render(){
         const showDetail = this.props.showDetail;
+        var bounds = new this.props.google.maps.LatLngBounds();
+        console.log("this.props.lat0: "+this.props.lat0);
+        var nePoint = {};
+        var swPoint = {};
+        if (this.props.lat0){
+            nePoint = { 
+                lat: parseFloat(this.props.lat0), 
+                lng: parseFloat(this.props.lng0) 
+            };
+            swPoint = { 
+                lat: parseFloat(this.props.lat1), 
+                lng: parseFloat(this.props.lng1) 
+            };
+        } else {
+            nePoint = {
+                lat: 42.424226,
+                lng: -71.1938809
+            };
+            swPoint = {
+                lat: 42.353715,
+                lng: -71.285501
+            };
+        }
+          
+        bounds.extend(nePoint);
+        bounds.extend(swPoint);
         if (!showDetail) {
             return (
                 <Map
                     google={this.props.google}
-                    zoom={13}
-                    initialCenter={{ lat: 42.372376, lng: -71.236423}}
+                    bounds={bounds}
                 >
                     {this.displayMarkers()}
                 </Map>

@@ -112,3 +112,7 @@
     top: 0;
     z-index: 999;
 }
+.autocomplete-dropdown-container{
+    position:absolute;
+    width: 100%;
+}

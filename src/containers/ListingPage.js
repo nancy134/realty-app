@@ -39,6 +39,11 @@ export class ListingPage extends Component {
            listingMode = listingModeParam;
         }
 
+        var formatted_address = params.get('formatted_address');
+        var lat0 = params.get('lat0');
+        var lng0 = params.get('lng0');
+        var lat1 = params.get('lat1');
+        var lng1 = params.get('lng1');
         // Add Listing
         this.handleAddListing = this.handleAddListing.bind(this);
         this.handleListingTypeNext = this.handleListingTypeNext.bind(this);
@@ -123,7 +128,14 @@ export class ListingPage extends Component {
             deleteId: null,
             showDeleteModal: false,
             deleteTitle: null,
-            deleteMessage: null
+            deleteMessage: null,
+
+            // Search
+            formatted_address: formatted_address,
+            lat0: lat0,
+            lng0: lng0,
+            lat1: lat1,
+            lng1: lng1
         };
     }
     handleShowDetailChange(showDetail, index, arrayIndex){
@@ -686,6 +698,7 @@ export class ListingPage extends Component {
                         onListingToggle={this.handleListingToggle}
                         onFilterChange={this.handleFilterChange}
                         onMoreFilterChange={this.handleMoreFilterChange}
+                        formatted_address={this.state.formatted_address}
                     />
                     <ListingAddType
                         show={this.state.addListingType}
@@ -749,7 +762,13 @@ export class ListingPage extends Component {
                             />
                         </CSSTransition>
                     {!showDetail ?
-                            <ListingMap showDetail={showDetail} />
+                            <ListingMap 
+                                showDetail={showDetail} 
+                                lat0={this.state.lat0}
+                                lng0={this.state.lng0}
+                                lat1={this.state.lat1}
+                                lng1={this.state.lng1}
+                            />
                     : null}
                     </Col>
                     <Col xs={5} className="rightcol" >

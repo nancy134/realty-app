@@ -77,7 +77,7 @@ class ListingToolbar extends React.Component {
                     <Col xs={4}>
                         <Row>
                             <Col xs={8}>
-                                <Form.Control placeholder="Waltham, MA" />
+                                <Form.Control placeholder={this.props.formatted_address} />
                             </Col>
                             <Col xs={2} className="pl-0">
                                 <Button variant="light">Search</Button>
