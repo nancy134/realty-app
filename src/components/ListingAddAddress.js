@@ -4,14 +4,18 @@ import {
     Col,
     Modal,
     Button,
-    Form
+    Form,
+    InputGroup
 } from 'react-bootstrap';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import listingService from '../services/listings';
+import PlacesAutocomplete from 'react-places-autocomplete';
+import {
+    geocodeByAddress
+} from 'react-places-autocomplete';
 
 const AddressSchema = Yup.object().shape({
-    address: Yup.string().required('Address is required'),
     city: Yup.string().required('City is required'),
     state: Yup.string(),
     zip: Yup.number().integer().typeError("Must be a valid zip code")
@@ -21,8 +25,10 @@ class ListingAddAddress extends React.Component{
     constructor(props){
         super(props);
         this.handleNext = this.handleNext.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
         this.state = {
-            states: null
+            states: null,
+            address: ''
         };
     }
     handleNext(initialValues, values){
@@ -35,6 +41,47 @@ class ListingAddAddress extends React.Component{
         
         this.props.onNext(listing);
     }
+    handleChange = address => {
+        this.setState({
+            address: address
+        });
+    }
+    handleSelect = (address, values) => {
+        geocodeByAddress(address).then(results => {
+            var street_address = "";
+            var street_number = "";
+            var city = "";
+            var state = "";
+            var zip = "";
+            var len = results[0].address_components.length;
+            for (var i=0; i<len; i++){
+               var len2 = results[0].address_components[i].types.length;
+               for (var j=0; j<len2; j++){
+                   if (results[0].address_components[i].types[j] === "route"){
+                       street_address = results[0].address_components[i].long_name;
+                   } else if (results[0].address_components[i].types[j] === "street_number"){
+                       street_number = results[0].address_components[i].long_name;
+                   } else if (results[0].address_components[i].types[j] === "locality"){
+                       city = results[0].address_components[i].long_name;
+                   } else if (results[0].address_components[i].types[j] === "administrative_area_level_1"){
+                       state = results[0].address_components[i].long_name;
+                   } else if (results[0].address_components[i].types[j] === "postal_code"){
+                       zip = results[0].address_components[i].long_name;
+                   }
+               }
+            }
+            var addr = street_number + " " + street_address;
+            values.city = city;
+            values.state = state;
+            values.zip = zip;
+            this.setState({
+                address: addr
+            });
+        }).catch(err => {
+            console.log("err: "+err);
+        });
+    }
+
     componentDidMount(){
         var that = this;
         var enumPromise = listingService.getEnumsPromise();
@@ -54,7 +101,6 @@ class ListingAddAddress extends React.Component{
                 <option key={key}>{item}</option>
             );
         }
-
        var initialValues = {
            address: "",
            city: "",
@@ -104,20 +150,57 @@ class ListingAddAddress extends React.Component{
                             <Form.Row>
                                 <Col md={12}>
                                     <Form.Label className="font-weight-bold">Address</Form.Label>
-                                    <Form.Control
-                                        id="header_edit_address_input" 
-                                        name="address"
-                                        type="text"
-                                        value={values.address} 
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        isInvalid={!!errors.address}
-                                        isValid={touched.address && !errors.address && values.address !== ""}
-                                        disabled={isSubmitting}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {errors.address}
-                                    </Form.Control.Feedback>
+                                    <PlacesAutocomplete
+                                        value={this.state.address}
+                                        onChange={this.handleChange}
+                                        onSelect={(e) => this.handleSelect(e, values)}
+                                    >
+                                    {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                                    <div>
+                                        <InputGroup>                
+                                            <Form.Control
+                                                {...getInputProps({
+                                                    placeholder: 'Search...',
+                                                    className: 'form-control location-search-input',
+                                                    id: "header_edit_address_input",
+                                                    name: "address",
+                                                    onBlur: handleBlur,
+                                                    isInvalid: !!errors.address,
+                                                    isValid: touched.address && !errors.address && values.address !== "",
+                                                    disabled: isSubmitting
+                                                })}
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.address}
+                                            </Form.Control.Feedback>
+                                        </InputGroup>
+                                        <InputGroup>
+                                            <div className="autocomplete-dropdown-container">
+                                                {loading && <div></div>}
+                                                {suggestions.map(suggestion => {
+                                                    const className = suggestion.active
+                                                        ? 'suggestion-item--active'
+                                                        : 'suggestion-item';
+                                                    // inline style for demonstration purpose
+                                                    const style = suggestion.active
+                                                        ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                                        : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                                    return (
+                                                        <div
+                                                            {...getSuggestionItemProps(suggestion, {
+                                                                className,
+                                                                style,
+                                                            })}
+                                                        >
+                                                            <span className="ml-3">{suggestion.description}</span>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </InputGroup>
+                                    </div>
+                                    )}
+                                    </PlacesAutocomplete>
                                 </Col>
                             </Form.Row>
                             <Form.Row>

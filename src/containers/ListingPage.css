@@ -115,4 +115,7 @@
 .autocomplete-dropdown-container{
     position:absolute;
     width: 100%;
+    z-index:9;
+    background: #fff;
+    box-shadow: 0px 3px 8px #aaaaaa;
 }

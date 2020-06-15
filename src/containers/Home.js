@@ -9,8 +9,7 @@ import {
 } from 'react-bootstrap';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {
-    geocodeByAddress,
-    getLatLng,
+    geocodeByAddress
 } from 'react-places-autocomplete';
 import { GoogleApiWrapper } from 'google-maps-react';
 
@@ -24,19 +23,15 @@ export class Home extends Component {
   }
 
   handleChange = address => {
-      console.log("handleChange address: "+address);
       this.setState({address});
   };
   handleSelect = address => {
-      console.log("handleSelect address; "+address);
       geocodeByAddress(address).then(results => { 
-          console.log("results: "+JSON.stringify(results));
           var formatted_address = results[0].formatted_address;
           var lat0 = results[0].geometry.viewport.getNorthEast().lat();
           var lng0 = results[0].geometry.viewport.getNorthEast().lng();
           var lat1 = results[0].geometry.viewport.getSouthWest().lat();
           var lng1 = results[0].geometry.viewport.getSouthWest().lng(); 
-          console.log("lat0: "+lat0);
           this.setState({
               address: address,
               formatted_address: formatted_address,
@@ -50,7 +45,6 @@ export class Home extends Component {
       });
   };
   handleClick(){
-    console.log("handleClick()");
     var url = "";
     url = window.location.protocol + "//" + window.location.hostname + "/listing";
     if (this.state.formatted_address){
@@ -105,7 +99,7 @@ export class Home extends Component {
                         style,
                       })}
                     >
-                      <span>{suggestion.description}</span>
+                      <span className="ml-3">{suggestion.description}</span>
                     </div>
                   );
                 })}
