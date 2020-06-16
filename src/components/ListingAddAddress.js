@@ -12,7 +12,8 @@ import * as Yup from 'yup';
 import listingService from '../services/listings';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {
-    geocodeByAddress
+    geocodeByAddress,
+    getLatLng
 } from 'react-places-autocomplete';
 
 const AddressSchema = Yup.object().shape({
@@ -33,11 +34,12 @@ class ListingAddAddress extends React.Component{
     }
     handleNext(initialValues, values){
         var listing = this.props.listing;
-        if (values.address !== initialValues.address) listing.address = values.address;
+        listing.address = this.state.address;
         if (values.city !== initialValues.city) listing.city = values.city;
         if (values.state !== initialValues.state) listing.state = values.state;
         if (values.zip !== initialValues.zip) listing.zip = values.zip;
         if (values.displayAddress !== initialValues.displayAddress) listing.displayAddress = values.displayAddress;
+        listing.location = values.location;
         
         this.props.onNext(listing);
     }
@@ -54,6 +56,12 @@ class ListingAddAddress extends React.Component{
             var state = "";
             var zip = "";
             var len = results[0].address_components.length;
+            getLatLng(results[0]).then(({lat, lng}) => {
+                values.location = {
+                    type: 'Point',
+                    coordinates: [lat, lng]
+                };
+            });
             for (var i=0; i<len; i++){
                var len2 = results[0].address_components[i].types.length;
                for (var j=0; j<len2; j++){
