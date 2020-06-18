@@ -20,13 +20,18 @@ class ListingMap extends React.Component {
     }
 
     displayMarkers = () => {
-        return this.state.stores.map((store, index) => {
-            return <Marker key={index} id={index} position={{
-                lat: store.latitude,
-                lng: store.longitude
-            }}
-            onClick={() => console.log("You clicked me!")} />
-        })
+        if (this.props.listings){
+            var listings = this.props.listings;
+            return listings.map((listing, index) => {
+                return <Marker key={index} id={index} position={{
+                    lat: listing.location.coordinates[0],
+                    lng: listing.location.coordinates[1]
+                }}
+                onClick={() => console.log("You clicked me!")} />
+            })
+        } else {
+            return null;
+        }
     }
 
     render(){

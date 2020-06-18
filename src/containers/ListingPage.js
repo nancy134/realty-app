@@ -213,7 +213,7 @@ export class ListingPage extends Component {
             that.fetchListing(localState);
             that.fetchListings("myListings",that.state.page);
         }).catch(function(err){
-            console.log("err: "+err);
+            console.log("err: "+JSON.stringify(err));
         });
     }
     handleCancelAddType(){
@@ -467,6 +467,16 @@ export class ListingPage extends Component {
         }
         if (this.state.moreQuery){
             query += this.state.moreQuery;
+        }
+
+        // Location query 
+        var locationQuery = "";
+        if (this.state.lat0){
+            locationQuery += "&lat0="+this.state.lat0;
+            locationQuery += "&lng0="+this.state.lng0;
+            locationQuery += "&lat1="+this.state.lat1;
+            locationQuery += "&lng1="+this.state.lng1;
+            query += locationQuery;
         }
         var that = this;
         var getAllPromise = listings.getAll(query);
@@ -763,6 +773,7 @@ export class ListingPage extends Component {
                         </CSSTransition>
                     {!showDetail ?
                             <ListingMap 
+                                listings={this.state.listings}
                                 showDetail={showDetail} 
                                 lat0={this.state.lat0}
                                 lng0={this.state.lng0}
