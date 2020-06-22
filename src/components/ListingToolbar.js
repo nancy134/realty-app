@@ -4,10 +4,16 @@ import {
     Row,Col,
     Button,
     Dropdown,
-    ButtonGroup
+    ButtonGroup,
+    InputGroup
 } from 'react-bootstrap';
 import FilterSpaceType from "./FilterSpaceType";
 import FilterMore from "./FilterMore";
+import PlacesAutocomplete from 'react-places-autocomplete';
+import {
+    geocodeByAddress,
+    getLatLng
+} from 'react-places-autocomplete';
 
 const SpaceTypeMenu = React.forwardRef(
     ({style, className, 'aria-labelledby': labeledBy , onFilterChange}, ref) => {
@@ -47,8 +53,49 @@ class ListingToolbar extends React.Component {
         this.handleListingToggle = this.handleListingToggle.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.handleMoreFilterChange = this.handleMoreFilterChange.bind(this);
+        this.handleSearchChange = this.handleSearchChange.bind(this);
+        this.handleSearchSelect = this.handleSearchSelect.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
+        this.state = {
+            address: this.props.formatted_address 
+        };
     }
+    handleSearchChange = address => {
+        this.setState({address});
+    };
+    handleSearchSelect = address => {
+        console.log('address: '+address);
 
+        geocodeByAddress(address).then(results => { 
+            var formatted_address = results[0].formatted_address;
+            var lat0 = results[0].geometry.viewport.getNorthEast().lat();
+            var lng0 = results[0].geometry.viewport.getNorthEast().lng();
+            var lat1 = results[0].geometry.viewport.getSouthWest().lat();
+            var lng1 = results[0].geometry.viewport.getSouthWest().lng(); 
+            this.setState({
+                address: address,
+                formatted_address: formatted_address,
+                lat0: lat0,
+                lng0: lng0,
+                lat1: lat1,
+                lng1: lng1
+            });
+        }).catch(error => {
+            console.error('Error', error);
+        });
+    };
+    handleSearch(){
+        var url = "";
+        url = window.location.protocol + "//" + window.location.hostname + "/listing";
+        if (this.state.formatted_address){
+            url += "?formatted_address="+this.state.formatted_address+
+            "&lat0="+this.state.lat0+
+            "&lng0="+this.state.lng0+
+            "&lat1="+this.state.lat1+
+            "&lng1="+this.state.lng1;
+        }
+        window.location.href = url; 
+    }
     onAddListing(e){
         this.props.onAddListing();
     }
@@ -70,17 +117,62 @@ class ListingToolbar extends React.Component {
         var myListingsStatus = "p-1";
         if (this.props.listingMode === "allListings") allListingsStatus = "active p-1";
         if (this.props.listingMode === "myListings") myListingsStatus = "active p-1"
-
+        var address = this.state.address;
         return (
             <Form className="toolbar-form m-2">
                 <Form.Row>
                     <Col xs={4}>
                         <Row>
                             <Col xs={8}>
-                                <Form.Control placeholder={this.props.formatted_address} />
+                                <PlacesAutocomplete
+                                    value={address}
+                                    onChange={this.handleSearchChange}
+                                    onSelect={this.handleSearchSelect}
+                                >
+                                {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                                <div>
+                                    <InputGroup>                
+                                        <Form.Control
+                                            {...getInputProps({
+                                                placeholder: address,
+                                            })}
+                                        />
+                                    </InputGroup>
+                                    <InputGroup>
+                                        <div className="autocomplete-dropdown-container">
+                                            {loading && <div></div>}
+                                            {suggestions.map(suggestion => {
+                                                const className = suggestion.active
+                                                    ? 'suggestion-item--active'
+                                                    : 'suggestion-item';
+                                                // inline style for demonstration purpose
+                                                const style = suggestion.active
+                                                    ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                                return (
+                                                    <div
+                                                        {...getSuggestionItemProps(suggestion, {
+                                                            className,
+                                                            style,
+                                                        })}
+                                                    >
+                                                        <span className="ml-3">{suggestion.description}</span>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </InputGroup>
+                                </div>
+                                )}
+                                </PlacesAutocomplete>
                             </Col>
                             <Col xs={2} className="pl-0">
-                                <Button variant="light">Search</Button>
+                                <Button
+                                    variant="light"
+                                    onClick={this.handleSearch}
+                                >
+                                    Search
+                                </Button>
                             </Col>
                         </Row>
                     </Col>

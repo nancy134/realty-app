@@ -21,6 +21,7 @@ import {getUserEmail} from '../helpers/authentication';
 import { isOwner } from '../helpers/authentication';
 import { CSSTransition } from 'react-transition-group';
 import DeleteModal from '../components/DeleteModal';
+import { GoogleApiWrapper } from 'google-maps-react';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -804,4 +805,6 @@ export class ListingPage extends Component {
     }
 }
 
-export default ListingPage;
+export default GoogleApiWrapper({
+    apiKey: 'AIzaSyB47KccZa8VRlzFuQJAvZ8UPembfW-3gq4'
+})(ListingPage);
