@@ -11,8 +11,7 @@ import FilterSpaceType from "./FilterSpaceType";
 import FilterMore from "./FilterMore";
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {
-    geocodeByAddress,
-    getLatLng
+    geocodeByAddress
 } from 'react-places-autocomplete';
 
 const SpaceTypeMenu = React.forwardRef(

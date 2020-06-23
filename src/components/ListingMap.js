@@ -1,5 +1,10 @@
 import React from 'react';
-import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+import { 
+    Map,
+    GoogleApiWrapper,
+    Marker,
+    InfoWindow
+} from 'google-maps-react';
 
 class ListingMap extends React.Component {
     constructor(props) {
@@ -10,7 +15,10 @@ class ListingMap extends React.Component {
                 {latitude: 42.397269, longitude: -71.255798},
                 {latitude: 42.377510, longitude: -71.225547},
                 {latitude: 42.371878, longitude: -71.237794}
-            ]
+            ],
+            activeMarker: {},
+            selectedPlace: {},
+            showingInfoWindow: false
         } 
         this.handleChange = this.handleChange.bind(this);  
     }
@@ -19,15 +27,40 @@ class ListingMap extends React.Component {
         this.props.onShowDetailChange(e.target.value);
     }
 
+    onMarkerClick = (props, marker) => {
+        this.setState({
+            activeMarker: marker,
+            selectedPlace: props,
+            showingInfoWindow: true
+        });
+    }
+
+    onInfoWindowClose = () => {
+        this.setState({
+            activeMarker: null,
+            showingInfoWindow: false
+        });
+    }
+
+    onMapClicked = () => {
+        if (this.state.showingInfoWindow)
+            this.setState({
+                activeMarker: null,
+                showingInfoWindow: false
+            });
+    };
+
     displayMarkers = () => {
         if (this.props.listings){
             var listings = this.props.listings;
             return listings.map((listing, index) => {
-                return <Marker key={index} id={index} position={{
-                    lat: listing.location.coordinates[0],
-                    lng: listing.location.coordinates[1]
-                }}
-                onClick={() => console.log("You clicked me!")} />
+                return <Marker
+                    key={index}
+                    name={listing.address}
+                    onClick={this.onMarkerClick}
+                    position={{ lat: listing.location.coordinates[0], lng: listing.location.coordinates[1] }}
+                />
+
             })
         } else {
             return null;
@@ -37,7 +70,6 @@ class ListingMap extends React.Component {
     render(){
         const showDetail = this.props.showDetail;
         var bounds = new this.props.google.maps.LatLngBounds();
-        console.log("this.props.lat0: "+this.props.lat0);
         var nePoint = {};
         var swPoint = {};
         if (this.props.lat0){
@@ -64,12 +96,25 @@ class ListingMap extends React.Component {
         bounds.extend(swPoint);
         if (!showDetail) {
             return (
-                <Map
-                    google={this.props.google}
-                    bounds={bounds}
-                >
-                    {this.displayMarkers()}
-                </Map>
+            <Map
+                className="map"
+                google={this.props.google}
+                onClick={this.onMapClicked}
+                style={{ height: '100%', position: 'relative', width: '100%' }}
+                bounds={bounds}
+            >
+                {this.displayMarkers()}
+
+               <InfoWindow
+                   marker={this.state.activeMarker}
+                   onClose={this.onInfoWindowClose}
+                   visible={this.state.showingInfoWindow}
+               >
+                   <div>
+                       <p>{this.state.selectedPlace.name}</p>
+                   </div>
+               </InfoWindow>
+            </Map>
             );
         } else {
              return null;
