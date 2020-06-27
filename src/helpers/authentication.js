@@ -43,7 +43,7 @@ export function loginResponse(email, password){
         var signinPromise = auth.signin(signinParams);
         signinPromise.then(function(result){
             const cookies = new Cookies();
-            cookies.set('email',email);
+            cookies.set('email',email.toLowerCase());
             cookies.set('name', email);
             cookies.set('jwt','dj39fjtyzRwiD09');
             resolve(result);

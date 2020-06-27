@@ -22,7 +22,7 @@ class AccountLoginModal extends React.Component {
     }
     onEmailChange(event){
         this.setState({
-            email: event.target.value
+            email: event.target.value.toLowerCase()
         });
     }
     onPasswordChange(event){
