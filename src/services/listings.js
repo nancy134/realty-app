@@ -125,6 +125,22 @@ export function unpublish(index, cb){
     });
 }
 
+export function deleteListing(id){
+    var url = process.env.REACT_APP_LISTING_SERVICE+"listings/"+id;
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'delete',
+            uri: url,
+            json: true
+        };
+        rp(options).then(function(parsedBody){
+           resolve(parsedBody);
+        }).catch(function(err){
+           reject(err.error);
+        });
+    });
+}
+
 export function getSpaceTypes(cb){
     var url = process.env.REACT_APP_LISTING_SERVICE+"spaceUses";
     fetch(url, {
@@ -163,7 +179,8 @@ const listings = {
     publish, 
     unpublish, 
     getSpaceTypes, 
-    getListingTypes
+    getListingTypes,
+    deleteListing
 };
 export default listings;
 

@@ -21,6 +21,7 @@ import {getUserEmail} from '../helpers/authentication';
 import { isOwner } from '../helpers/authentication';
 import { CSSTransition } from 'react-transition-group';
 import DeleteModal from '../components/DeleteModal';
+import DeleteListingModal from '../components/DeleteListingModal';
 import { GoogleApiWrapper } from 'google-maps-react';
 
 export class ListingPage extends Component {
@@ -85,6 +86,12 @@ export class ListingPage extends Component {
         // Delete
         this.handleDeleteHide = this.handleDeleteHide.bind(this);
         this.handleDeleteConfirm = this.handleDeleteConfirm.bind(this);
+
+        // DeleteListing
+        this.handleDeleteListing = this.handleDeleteListing.bind(this);
+        this.handleDeleteListingConfirm = this.handleDeleteListingConfirm.bind(this);
+        this.handleDeleteListingHide = this.handleDeleteListingHide.bind(this);
+
         this.state = {
 
             // Add listing
@@ -130,6 +137,11 @@ export class ListingPage extends Component {
             showDeleteModal: false,
             deleteTitle: null,
             deleteMessage: null,
+
+            // Delete Listing
+            deleteListingId: null,
+            showDeleteListingModal: false,
+            deleteListingSaving: false,
 
             // Search
             formatted_address: formatted_address,
@@ -626,7 +638,32 @@ export class ListingPage extends Component {
             showDeleteModal: false
         });
     }
-
+    handleDeleteListing(listingId){
+        console.log("listingId: "+listingId);
+        var message = "Are you sure you want to delete listing: "+listingId+"?";
+        this.setState({
+            deleteListingId: listingId,
+            showDeleteListingModal: true,
+            deleteListingSaving: false,
+            deleteListingMessage: message 
+        });
+    }
+    handleDeleteListingConfirm(){
+        var that = this;
+        var deleteListingPromise = listings.deleteListing(this.state.deleteListingId);
+        deleteListingPromise.then(function(result){
+            that.fetchListings(that.state.listingMode, that.state.page);
+            that.handleFetchListing();
+            that.handleDeleteListingHide();
+        }).catch(function(err){
+            console.log("err: "+err);
+        });
+    }
+    handleDeleteListingHide(){
+        this.setState({
+            showDeleteListingModal: false
+        });
+    }
     render() {
         var showDetail = this.state.showDetail;
         var index = this.state.index;
@@ -646,6 +683,14 @@ export class ListingPage extends Component {
                     onHide={this.handleDeleteHide}
                     saving={this.state.deleteSaving}
                     onDelete={this.handleDeleteConfirm}
+                />
+                <DeleteListingModal
+                    id={this.state.deleteListingId}
+                    show={this.state.showDeleteListingModal}
+                    message={this.state.deleteListingMessage}
+                    onHide={this.handleDeleteListingHide}
+                    saving={this.state.deleteListingSaving}
+                    onDelete={this.handleDeleteListingConfirm}
                 />
                 <Modal show={this.state.showModal}>
                     <Modal.Header>
@@ -793,6 +838,7 @@ export class ListingPage extends Component {
                         <Listings 
                             listingMode={listingMode} 
                             onShowDetailChange={this.handleShowDetailChange} 
+                            onDelete={this.handleDeleteListing}
                             listings={this.state.listings}
                         />
                     </Col>

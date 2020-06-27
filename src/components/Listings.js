@@ -3,7 +3,8 @@ import {
     ListGroup,
     Row, Col,
     Card,
-    Image
+    Image,
+    Button
 } from 'react-bootstrap';
 import {getUserEmail} from '../helpers/authentication';
 
@@ -124,6 +125,10 @@ function ListItem(props){
                             <div>For Sale ${listingPrice}</div>
                             : null }
                             <div>{listing.shortDescription}</div>
+                            { listing.owner === getUserEmail() && props.listingMode === "myListings" ?
+                            <Button data-id={listing.ListingId} variant="light" size="sm" onClick={props.onDelete}>Delete</Button>
+                            : null}
+
                         </Card.Body>
                     </Card>
                 </Col>
@@ -137,12 +142,16 @@ class Listings extends React.Component {
     constructor(props) {
         super(props);
         this.showDetailChange = this.showDetailChange.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
     componentDidMount() {
     }
     componentWillUnmount() {
     }
-
+    handleDelete(e){
+        console.log("e.target.dataset.id: "+e.target.dataset.id);
+        this.props.onDelete(e.target.dataset.id);
+    };
 
     showDetailChange(e){
         this.props.onShowDetailChange(true, e.target.dataset.index, e.target.dataset.arrayindex);
@@ -162,6 +171,8 @@ class Listings extends React.Component {
                     key={listing.id}
                     listing={listing} 
                     onShowDetailChange={this.showDetailChange}
+                    onDelete={this.handleDelete}
+                    listingMode={this.props.listingMode}
                 />
                 ))}
             </ListGroup>
