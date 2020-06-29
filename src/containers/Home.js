@@ -12,6 +12,7 @@ import {
     geocodeByAddress
 } from 'react-places-autocomplete';
 import { GoogleApiWrapper } from 'google-maps-react';
+import Geocode from 'react-geocode';
 
 export class Home extends Component { 
   constructor(props, context) {
@@ -56,6 +57,52 @@ export class Home extends Component {
     }
     window.location.href = url; 
   }
+
+  componentDidMount(){
+    Geocode.setApiKey('AIzaSyB47KccZa8VRlzFuQJAvZ8UPembfW-3gq4');
+    var that = this;
+    if ("geolocation" in navigator){
+        navigator.geolocation.getCurrentPosition(function(position){
+            Geocode.fromLatLng(position.coords.latitude, position.coords.longitude).then(function(response){
+               var city = "";
+               var state = "";
+               var len = response.results[0].address_components.length;
+               for (var i=0; i<len; i++){
+                  var len2 = response.results[0].address_components[i].types.length;
+                   for (var j=0; j<len2; j++){
+                       if (response.results[0].address_components[i].types[j] === "locality"){
+                           city = response.results[0].address_components[i].long_name;
+                       } else if (response.results[0].address_components[i].types[j] === "administrative_area_level_1"){
+                           state = response.results[0].address_components[i].short_name;
+                      }
+                   }
+               }
+
+               var address = city+", "+state;
+               Geocode.fromAddress(address).then(function(response2){
+
+                   var lat0 = response2.results[0].geometry.bounds.northeast.lat;
+                   var lng0 = response2.results[0].geometry.bounds.northeast.lng;
+                   var lat1 = response2.results[0].geometry.bounds.southwest.lat;
+                   var lng1 = response2.results[0].geometry.bounds.southwest.lng;
+
+                    that.setState({
+                        address: address,
+                        formatted_address: address,
+                        lat0: lat0,
+                        lng0: lng0,
+                        lat1: lat1,
+                        lng1: lng1
+                    });
+                });
+
+            });
+        });
+    } else {
+       console.log("geolocation not available");
+    }
+  }
+
   render(){
   return (
     <div className="bimage">

@@ -5,6 +5,7 @@ import {
     Marker,
     InfoWindow
 } from 'google-maps-react';
+import Geocode from 'react-geocode';
 
 class ListingMap extends React.Component {
     constructor(props) {
@@ -67,19 +68,20 @@ class ListingMap extends React.Component {
         }
     }
 
-    render(){
-        const showDetail = this.props.showDetail;
+    makeBounds = () => {
         var bounds = new this.props.google.maps.LatLngBounds();
         var nePoint = {};
         var swPoint = {};
+        console.log("this.props.lat0: "+this.props.lat0);
+
         if (this.props.lat0){
-            nePoint = { 
-                lat: parseFloat(this.props.lat0), 
-                lng: parseFloat(this.props.lng0) 
+            nePoint = {
+                lat: parseFloat(this.props.lat0),
+                lng: parseFloat(this.props.lng0)
             };
-            swPoint = { 
-                lat: parseFloat(this.props.lat1), 
-                lng: parseFloat(this.props.lng1) 
+            swPoint = {
+                lat: parseFloat(this.props.lat1),
+                lng: parseFloat(this.props.lng1)
             };
         } else {
             nePoint = {
@@ -91,17 +93,31 @@ class ListingMap extends React.Component {
                 lng: -71.285501
             };
         }
-          
         bounds.extend(nePoint);
         bounds.extend(swPoint);
+
+        this.setState({
+            bounds: bounds
+        });
+
+    }
+
+    onReady = () => {
+        this.makeBounds();
+    }
+
+    render(){
+        const showDetail = this.props.showDetail;
+        console.log("bounds: "+this.state.bounds);
         if (!showDetail) {
             return (
             <Map
                 className="map"
                 google={this.props.google}
+                onReady={this.onReady}
                 onClick={this.onMapClicked}
                 style={{ height: '100%', position: 'relative', width: '100%' }}
-                bounds={bounds}
+                bounds={this.state.bounds}
             >
                 {this.displayMarkers()}
 

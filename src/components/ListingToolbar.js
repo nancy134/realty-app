@@ -55,8 +55,10 @@ class ListingToolbar extends React.Component {
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.handleSearchSelect = this.handleSearchSelect.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
+        var address = "";
+        if (this.props.formatted_address) address = this.props.formatted_address;
         this.state = {
-            address: this.props.formatted_address 
+            address: address 
         };
     }
     handleSearchChange = address => {
