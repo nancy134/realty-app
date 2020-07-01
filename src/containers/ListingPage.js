@@ -92,6 +92,8 @@ export class ListingPage extends Component {
         this.handleDeleteListingConfirm = this.handleDeleteListingConfirm.bind(this);
         this.handleDeleteListingHide = this.handleDeleteListingHide.bind(this);
 
+        // Map
+        this.handleBoundsChange = this.handleBoundsChange.bind(this);
         this.state = {
 
             // Add listing
@@ -622,7 +624,6 @@ export class ListingPage extends Component {
         });
     }
     handleDeleteConfirm(){
-        console.log("this.state.deleteId: "+this.state.deleteId);
         var that=this;
         var deleteSpace = spaceService.deletePromise(this.state.deleteId);
         deleteSpace.then(function(result){
@@ -639,7 +640,6 @@ export class ListingPage extends Component {
         });
     }
     handleDeleteListing(listingId){
-        console.log("listingId: "+listingId);
         var message = "Are you sure you want to delete listing: "+listingId+"?";
         this.setState({
             deleteListingId: listingId,
@@ -663,6 +663,20 @@ export class ListingPage extends Component {
         this.setState({
             showDeleteListingModal: false
         });
+    }
+
+    handleBoundsChange(bounds){
+        if (bounds.lat0){
+            this.setState({
+                lat0: bounds.lat0,
+                lng0: bounds.lng0,
+                lat1: bounds.lat1,
+                lng1: bounds.lng1
+            }, () => {
+                this.fetchListings(this.state.listingMode,this.state.page);
+            });
+        }
+
     }
     render() {
         var showDetail = this.state.showDetail;
@@ -825,6 +839,7 @@ export class ListingPage extends Component {
                                 lng0={this.state.lng0}
                                 lat1={this.state.lat1}
                                 lng1={this.state.lng1}
+                                onBoundsChange={this.handleBoundsChange}
                             />
                     : null}
                     </Col>

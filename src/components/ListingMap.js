@@ -3,9 +3,9 @@ import {
     Map,
     GoogleApiWrapper,
     Marker,
-    InfoWindow
+    InfoWindow,
+    Polygon
 } from 'google-maps-react';
-import Geocode from 'react-geocode';
 
 class ListingMap extends React.Component {
     constructor(props) {
@@ -21,7 +21,9 @@ class ListingMap extends React.Component {
             selectedPlace: {},
             showingInfoWindow: false
         } 
-        this.handleChange = this.handleChange.bind(this);  
+        this.handleChange = this.handleChange.bind(this);
+        this.handleZoomChanged = this.handleZoomChanged.bind(this);
+        this.handleDragEnd = this.handleDragEnd.bind(this);
     }
 
     handleChange(e) {
@@ -68,11 +70,10 @@ class ListingMap extends React.Component {
         }
     }
 
-    makeBounds = () => {
+    makeBounds = (map) => {
         var bounds = new this.props.google.maps.LatLngBounds();
         var nePoint = {};
         var swPoint = {};
-        console.log("this.props.lat0: "+this.props.lat0);
 
         if (this.props.lat0){
             nePoint = {
@@ -95,20 +96,52 @@ class ListingMap extends React.Component {
         }
         bounds.extend(nePoint);
         bounds.extend(swPoint);
-
+        map.fitBounds(bounds);
         this.setState({
             bounds: bounds
         });
 
     }
 
-    onReady = () => {
-        this.makeBounds();
+    onReady = (mapProps, map) => {
+        this.makeBounds(map);
     }
+    handleZoomChanged(props, map){
+        var mapBounds = map.getBounds();
+        var ne = mapBounds.getNorthEast();
+        var sw = mapBounds.getSouthWest();
+        var bounds = {
+            lat0: ne.lat(),
+            lng0: ne.lng(),
+            lat1: sw.lat(),
+            lng1: sw.lng()
+        };
+        this.props.onBoundsChange(bounds);
 
+    }
+    handleDragEnd(props, map){
+        var mapBounds = map.getBounds();
+        var ne = mapBounds.getNorthEast();
+        var sw = mapBounds.getSouthWest();
+        var bounds = {
+            lat0: ne.lat(),
+            lng0: ne.lng(),
+            lat1: sw.lat(),
+            lng1: sw.lng()
+        };
+        this.props.onBoundsChange(bounds);
+    }
     render(){
         const showDetail = this.props.showDetail;
-        console.log("bounds: "+this.state.bounds);
+
+        const polygon = [
+           {lat: parseFloat(this.props.lat0), lng: parseFloat(this.props.lng0)},
+           {lat: parseFloat(this.props.lat1), lng: parseFloat(this.props.lng0)},
+           {lat: parseFloat(this.props.lat1), lng: parseFloat(this.props.lng1)},
+           {lat: parseFloat(this.props.lat0), lng: parseFloat(this.props.lng1)},
+           {lat: parseFloat(this.props.lat0), lng: parseFloat(this.props.lng0)}
+        ];
+
         if (!showDetail) {
             return (
             <Map
@@ -117,7 +150,8 @@ class ListingMap extends React.Component {
                 onReady={this.onReady}
                 onClick={this.onMapClicked}
                 style={{ height: '100%', position: 'relative', width: '100%' }}
-                bounds={this.state.bounds}
+                onZoomChanged={this.handleZoomChanged}
+                onDragend={this.handleDragEnd}
             >
                 {this.displayMarkers()}
 
@@ -130,6 +164,16 @@ class ListingMap extends React.Component {
                        <p>{this.state.selectedPlace.name}</p>
                    </div>
                </InfoWindow>
+               { false ?
+               <Polygon
+                   paths={polygon}
+                   strokeColor="#0000FF"
+                   strokeOpacity={0.8}
+                   strokeWeight={2}
+                   fillColor="#0000FF"
+                   fillOpacity={0.35}
+               />
+               : null}
             </Map>
             );
         } else {
