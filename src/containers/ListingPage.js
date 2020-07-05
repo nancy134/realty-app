@@ -23,6 +23,7 @@ import { CSSTransition } from 'react-transition-group';
 import DeleteModal from '../components/DeleteModal';
 import DeleteListingModal from '../components/DeleteListingModal';
 import { GoogleApiWrapper } from 'google-maps-react';
+import imageService from '../services/images';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -63,8 +64,11 @@ export class ListingPage extends Component {
         this.handleNewPage = this.handleNewPage.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.handleMoreFilterChange = this.handleMoreFilterChange.bind(this);
+
+        // Image
         this.handleFilesAdded = this.handleFilesAdded.bind(this);
         this.handleImageUploadFinished = this.handleImageUploadFinished.bind(this);
+        this.onProgress = this.onProgress.bind(this);
 
         // Listing
         this.handleUpdate = this.handleUpdate.bind(this);
@@ -295,7 +299,22 @@ export class ListingPage extends Component {
         var that = this;
         updatePromise.then(function(data){
             if (that.state.files.length > 0){
-                that.uploadFiles(data);
+                that.setState({
+                    uploadProgress: {},
+                    uploading: true ,
+                    showSpinner: true
+                });
+
+                var uploadFilesPromise = imageService.uploadFiles(that.state.files, "listing", data.listing.id, that.onProgress);
+                
+                uploadFilesPromise.then(function(ret){
+                    that.setState({ successfullUploaded: true, uploading: false });
+                    that.handleImageUploadFinished(data);
+                }).catch(function(err){
+                    that.setState({ successfullUploaded: true, uploading: false });
+                    that.handleImageUploadFinished(data);
+                });
+
             } else {
                 that.setState({
                     listingDetail: data,
@@ -317,9 +336,25 @@ export class ListingPage extends Component {
     handleCreate(listing){
         listing.owner = getUserEmail();
         var createPromise = listings.create(listing);
+        var that = this;
         createPromise(function(data){
             if (this.state.files.length > 0){
-                this.uploadFiles(data);
+                that.setState({
+                    uploadProgress: {},
+                    uploading: true ,
+                    showSpinner: true
+                });
+
+                var uploadFilesPromise = imageService.uploadFiles(that.state.files, "listing", data.listing.id, that.onProgress);
+
+                uploadFilesPromise.then(function(ret){
+                    that.setState({ successfullUploaded: true, uploading: false });
+                    that.handleImageUploadFinished(data);
+                }).catch(function(err){
+                    that.setState({ successfullUploaded: true, uploading: false });
+                    that.handleImageUploadFinished(data);
+                });
+
             }else{
                 this.setState({
                     listingDetail: data,
@@ -518,71 +553,10 @@ export class ListingPage extends Component {
         this.handleFetchListing(data.listing.id);
 
     }
-    async uploadFiles(data) {
-      
-        this.setState({ 
-            uploadProgress: {}, 
-            uploading: true ,
-            showSpinner: true
-        });
-        const promises = [];
-        this.state.files.forEach(file => {
-            promises.push(this.sendRequest(file,data.listing.id));
-        });
-        try {
-            await Promise.all(promises);
-
-            this.setState({ successfullUploaded: true, uploading: false });
-            this.handleImageUploadFinished(data);
-        } catch (e) {
-        // Not Production ready! Do some error handling here instead...
-            this.setState({ successfullUploaded: true, uploading: false });
-            this.handleImageUploadFinished(data);
-        }
-    }
-    sendRequest(file, id){
-        return new Promise((resolve, reject) => {
-            const req = new XMLHttpRequest();
-
-            req.upload.addEventListener("progress", event => {
-                if (event.lengthComputable) {
-                    const copy = { ...this.state.uploadProgress };
-                    copy[file.name] = {
-                        state: "pending",
-                        percentage: (event.loaded / event.total) * 100
-                    };
-                    this.setState({ uploadProgress: copy });
-                }
-            });
-   
-            req.upload.addEventListener("load", event => {
-                const copy = { ...this.state.uploadProgress };
-                copy[file.name] = { state: "done", percentage: 100 };
-                this.setState({ uploadProgress: copy });
-                //resolve(req.response);
-            });
-   
-            req.upload.addEventListener("error", event => {
-                const copy = { ...this.state.uploadProgress };
-                copy[file.name] = { state: "error", percentage: 0 };
-                this.setState({ uploadProgress: copy });
-                reject(req.response);
-            });
-            const formData = new FormData();
-            formData.append("image", file, file.name);
-            formData.append("listing_id",id);
-            var url = process.env.REACT_APP_LISTING_SERVICE+"upload";
-            req.open("POST", url);
-            req.onreadystatechange = function(){
-                if (req.readyState === 4){
-                    if (req.status === 200)
-                        resolve(req.responseText);
-                    else
-                        reject(req.responsetext);
-                }
-            };
-            req.send(formData);
-        });
+    onProgress(copy){
+        console.log("onProgress");
+        console.log(copy);
+        this.setState({ uploadProgress: copy });
     }
 
     componentDidMount(){

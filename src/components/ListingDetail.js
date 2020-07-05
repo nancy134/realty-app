@@ -24,6 +24,12 @@ class ListingDetail extends React.Component {
    super(props);
         this.state = {
             listing: null,
+
+            // Overview
+            overviewNew: false,
+            overviewUpdate: false,
+            overviewSaving: false,
+
             // Space
             spaceNew: false,
             spaceUpdate: false,
@@ -48,8 +54,12 @@ class ListingDetail extends React.Component {
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
         this.handleListingUpdate = this.handleListingUpdate.bind(this);
-        this.handleSpaceUpdate = this.handleSpaceUpdate.bind(this);
+
+        // Overview
         this.handleFilesAdded = this.handleFilesAdded.bind(this);
+        this.handleOverviewModalNew = this.handleOverviewModalNew.bind(this);
+        this.handleOverviewModalUpdate = this.handleOverviewModalUpdate.bind(this);
+        this.handleOverviewModalHide = this.handleOverviewModalHide.bind(this);
 
         // Space 
         this.handleSpaceUpdate = this.handleSpaceUpdate.bind(this);
@@ -90,8 +100,17 @@ class ListingDetail extends React.Component {
             this.props.onCreate(listing);
         }
     }
+
+    // Overview
+
     handleFilesAdded(files){
         this.props.onFilesAdded(files);
+    }
+    handleOverviewModalNew(){
+    }
+    handleOverviewModalUpdate(){
+    }
+    handleOverviewModalHide(){
     }
 
     // Space
@@ -452,6 +471,10 @@ class ListingDetail extends React.Component {
                     uploadProgress={this.props.uploadProgress}
                     successfullUploaded={this.props.successfullUploaded}
                     showSpinner={this.props.showSpinner}
+
+                    onOverviewModalNew={this.handleOverviewModalNew}
+                    onOverviewModalUpdate={this.handleOverviewModalUpdate}
+                    onOverviewModalHide={this.handleOverviewModalHide}
 
                 />
                 { (editMode === "edit") || (listing && listing.spaces.length) > 0 ?

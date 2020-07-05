@@ -105,7 +105,7 @@ class ListingEditOverview extends React.Component {
             onSubmit={(values, { setSubmitting }) => {
                 setSubmitting(true);
                 this.handleSave(initialValues, values);
-                setSubmitting(false);
+                //setSubmitting(false);
             }}
         >
             {({ 
