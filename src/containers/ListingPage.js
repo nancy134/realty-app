@@ -23,7 +23,6 @@ import { CSSTransition } from 'react-transition-group';
 import DeleteModal from '../components/DeleteModal';
 import DeleteListingModal from '../components/DeleteListingModal';
 import { GoogleApiWrapper } from 'google-maps-react';
-import imageService from '../services/images';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -64,11 +63,6 @@ export class ListingPage extends Component {
         this.handleNewPage = this.handleNewPage.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.handleMoreFilterChange = this.handleMoreFilterChange.bind(this);
-
-        // Image
-        this.handleFilesAdded = this.handleFilesAdded.bind(this);
-        this.handleImageUploadFinished = this.handleImageUploadFinished.bind(this);
-        this.onProgress = this.onProgress.bind(this);
 
         // Listing
         this.handleUpdate = this.handleUpdate.bind(this);
@@ -130,11 +124,6 @@ export class ListingPage extends Component {
             spaceUseFilter: null,
             enableTransitionTest: false,
 
-            // Images
-            files: [],
-            uploading: false,
-            uploadProgress: [],
-            successfullUploaded: false,
             showSpinner: false,
 
             // Delete
@@ -174,10 +163,6 @@ export class ListingPage extends Component {
             index: index,
             showDetail: showDetail,
             editMode: editMode,
-            files: [],
-            uploading: false,
-            uploadProgress: [],
-            successfullUploaded: false
         };
         if (showDetail){
             this.fetchListing(localState);
@@ -224,10 +209,6 @@ export class ListingPage extends Component {
                 index: data.listing.id,
                 showDetail: true,
                 editMode: "edit",
-                files: [],
-                uploading: false,
-                uploadProgress: [],
-                successfullUploaded: false
             };
             that.fetchListing(localState);
             that.fetchListings("myListings",that.state.page);
@@ -298,31 +279,12 @@ export class ListingPage extends Component {
         var updatePromise = listings.update(listing);
         var that = this;
         updatePromise.then(function(data){
-            if (that.state.files.length > 0){
-                that.setState({
-                    uploadProgress: {},
-                    uploading: true ,
-                    showSpinner: true
-                });
-
-                var uploadFilesPromise = imageService.uploadFiles(that.state.files, "listing", data.listing.id, that.onProgress);
-                
-                uploadFilesPromise.then(function(ret){
-                    that.setState({ successfullUploaded: true, uploading: false });
-                    that.handleImageUploadFinished(data);
-                }).catch(function(err){
-                    that.setState({ successfullUploaded: true, uploading: false });
-                    that.handleImageUploadFinished(data);
-                });
-
-            } else {
-                that.setState({
-                    listingDetail: data,
-                    index: data.listing.id
-                });
-                that.handleFetchListing(data.listing.id);
-                that.handleListUpdate();
-            } 
+            that.setState({
+                listingDetail: data,
+                index: data.listing.id
+            });
+            that.handleFetchListing(data.listing.id);
+            that.handleListUpdate();
         }).catch(function(err){
             var errMessage = "An error occurred while trying to save your listing";
             that.setState({
@@ -336,39 +298,14 @@ export class ListingPage extends Component {
     handleCreate(listing){
         listing.owner = getUserEmail();
         var createPromise = listings.create(listing);
-        var that = this;
         createPromise(function(data){
-            if (this.state.files.length > 0){
-                that.setState({
-                    uploadProgress: {},
-                    uploading: true ,
-                    showSpinner: true
-                });
-
-                var uploadFilesPromise = imageService.uploadFiles(that.state.files, "listing", data.listing.id, that.onProgress);
-
-                uploadFilesPromise.then(function(ret){
-                    that.setState({ successfullUploaded: true, uploading: false });
-                    that.handleImageUploadFinished(data);
-                }).catch(function(err){
-                    that.setState({ successfullUploaded: true, uploading: false });
-                    that.handleImageUploadFinished(data);
-                });
-
-            }else{
-                this.setState({
-                    listingDetail: data,
-                    index: data.listing.id
-                });
-                this.handleListUpdate();
-            }
+            this.setState({
+                listingDetail: data,
+                index: data.listing.id
+            });
+            this.handleListUpdate();
         });
 
-    }
-    handleFilesAdded(files){
-        this.setState(prevState => ({
-            files: prevState.files.concat(files)
-        }));
     }
 
     // Transition
@@ -430,10 +367,6 @@ export class ListingPage extends Component {
             index: fetchIndex,
             showDetail: this.state.showDetail,
             editMode: this.state.editMode,
-            files: [],
-            uploading: false,
-            uploadProgress: [],
-            successfullUploaded: false
         };
         this.fetchListing(localState);
     }
@@ -462,10 +395,6 @@ export class ListingPage extends Component {
                     editMode: localState.editMode,
                     index: localState.index,
                     owner: owner,
-                    files: localState.files,
-                    uploading: localState.uploading,
-                    uploadProgress: localState.uploadProgress,
-                    successfullUploaded: localState.successfullUploaded,
                     spaceAccordionText: accordionText
                 }, () => {
                     that.handleListUpdate();
@@ -491,10 +420,6 @@ export class ListingPage extends Component {
                     editMode: localState.editMode,
                     index: localState.index,
                     owner: true,
-                    files: localState.files,
-                    uploading: localState.uploading,
-                    uploadProgress: localState.uploadProgress,
-                    successfullUploaded: localState.successfullUploaded
                 });
             });
         }
@@ -542,21 +467,6 @@ export class ListingPage extends Component {
             console.log("err: "+JSON.stringify(err));
         }); 
 
-    }
-    handleImageUploadFinished(data){
-        this.setState({
-            listingDetail: data,
-            index: data.listing.id,
-            showSpinner: false
-        });
-        this.handleListUpdate();
-        this.handleFetchListing(data.listing.id);
-
-    }
-    onProgress(copy){
-        console.log("onProgress");
-        console.log(copy);
-        this.setState({ uploadProgress: copy });
     }
 
     componentDidMount(){
@@ -711,11 +621,6 @@ export class ListingPage extends Component {
                          onUpdate={this.handleUpdate}
                          onCreate={this.handleCreate}
                          onFetchListing={this.handleFetchListing}
-                         onFilesAdded={this.handleFilesAdded}
-                         files={this.state.files}
-                         uploading={this.state.uploading}
-                         uploadProgress={this.state.uploadProgress}
-                         successfullUploaded={this.state.successfullUploaded}
                          showSpinner={this.state.showSpinner}
                          // Transition
                          onTransitionStart={this.handleTransitionStart}
@@ -785,11 +690,6 @@ export class ListingPage extends Component {
                                 onUpdate={this.handleUpdate}
                                 onCreate={this.handleCreate}
                                 onFetchListing={this.handleFetchListing}
-                                onFilesAdded={this.handleFilesAdded}
-                                files={this.state.files}
-                                uploading={this.state.uploading}
-                                uploadProgress={this.state.uploadProgress}
-                                successfullUploaded={this.state.successfullUploaded}
                                 showSpinner={this.state.showSpinner}
 
                                 // Transition
