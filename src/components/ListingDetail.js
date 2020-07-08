@@ -18,6 +18,7 @@ import tenants from '../services/tenants';
 import portfolios from '../services/portfolios';
 import { isOwner, getUserEmail } from '../helpers/authentication';
 import listingService from '../services/listings';
+import imageService from '../services/images';
 
 class ListingDetail extends React.Component {
     constructor(props) {
@@ -29,6 +30,10 @@ class ListingDetail extends React.Component {
             overviewNew: false,
             overviewUpdate: false,
             overviewSaving: false,
+            overviewFiles: [],
+            uploadProgress: [],
+            uploading: false,
+            successfullyUploaded: false,
 
             // Space
             spaceNew: false,
@@ -57,9 +62,11 @@ class ListingDetail extends React.Component {
 
         // Overview
         this.handleFilesAdded = this.handleFilesAdded.bind(this);
+        this.handleOverviewUpdate = this.handleOverviewUpdate.bind(this);
         this.handleOverviewModalNew = this.handleOverviewModalNew.bind(this);
         this.handleOverviewModalUpdate = this.handleOverviewModalUpdate.bind(this);
         this.handleOverviewModalHide = this.handleOverviewModalHide.bind(this);
+        this.handleImageProgress = this.handleImageProgress.bind(this);
 
         // Space 
         this.handleSpaceUpdate = this.handleSpaceUpdate.bind(this);
@@ -104,13 +111,69 @@ class ListingDetail extends React.Component {
     // Overview
 
     handleFilesAdded(files){
-        this.props.onFilesAdded(files);
+        //this.props.onFilesAdded(files);
+        this.setState(prevState => ({
+            overviewFiles: prevState.overviewFiles.concat(files) 
+        }));
     }
     handleOverviewModalNew(){
+        this.setState({
+            overviewNew: true
+        });
     }
     handleOverviewModalUpdate(){
+        this.setState({
+            overviewUpdate: true,
+            successfullyUploaded: false,
+            uploading: false
+        });
     }
     handleOverviewModalHide(){
+        this.setState({
+            overviewNew: false,
+            overviewUpdate: false,
+            overviewSaving: false,
+            overviewError: null,
+            overviewFiles: []
+        });
+    }
+    handleOverviewUpdate(listing){
+        var listingUpdatePromise = listingService.update(listing);
+        var that = this;
+        listingUpdatePromise.then(function(data){
+            if (that.state.overviewFiles.length > 0){
+
+                that.setState({
+                    uploadProgress :[],
+                    uploading: true
+                });
+                var uploadFilesPromise = imageService.uploadFiles(
+                    that.state.overviewFiles, 
+                    "listing", 
+                    data.listing.id, 
+                    that.handleImageProgress
+                );
+                uploadFilesPromise.then(function(ret){
+                    that.setState({
+                        successfullyUploaded: true,
+                        uploading: false
+                    });
+                    that.handleOverviewModalHide(); 
+                    that.props.onFetchListing(data.ListingVersionId);
+                }).catch(function(err){
+                    console.log(err);
+                });
+            } else {
+                that.props.onFetchListing(data.ListingVersionId);
+            }
+        }).catch(function(err){
+            console.log(err);
+        });
+    }
+    handleImageProgress(uploadProgress){
+        this.setState({
+            uploadProgress: uploadProgress
+        });
     }
 
     // Space
@@ -463,18 +526,19 @@ class ListingDetail extends React.Component {
                     listing={listing} 
                     listingTypes={listingTypes} 
                     editMode={editMode} 
-                    onListingUpdate={this.handleListingUpdate} 
                     getListing={this.props.onFetchListing}
                     onFilesAdded={this.handleFilesAdded}
-                    files={this.props.files}
-                    uploading={this.props.uploading}
-                    uploadProgress={this.props.uploadProgress}
-                    successfullUploaded={this.props.successfullUploaded}
+                    files={this.state.overviewFiles}
+                    uploading={this.state.uploading}
+                    uploadProgress={this.state.uploadProgress}
+                    successfullyUploaded={this.state.successfullyUploaded}
                     showSpinner={this.props.showSpinner}
 
+                    onOverviewUpdate={this.handleOverviewUpdate}
                     onOverviewModalNew={this.handleOverviewModalNew}
                     onOverviewModalUpdate={this.handleOverviewModalUpdate}
                     onOverviewModalHide={this.handleOverviewModalHide}
+                    overviewUpdate={this.state.overviewUpdate}
 
                 />
                 { (editMode === "edit") || (listing && listing.spaces.length) > 0 ?

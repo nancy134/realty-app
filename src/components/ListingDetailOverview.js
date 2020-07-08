@@ -15,7 +15,6 @@ import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
 
 function EditButton(props) {
-    const [modalShow, setModalShow] = React.useState(false);
     return (
         <span>
            {props.showSpinner ?
@@ -29,26 +28,29 @@ function EditButton(props) {
             {!props.showSpinner ?
             <span
                 id="overview_edit_button"
-                onClick={() => setModalShow(true)}
+                onClick={() => props.onShow()}
                 className="edit-button align-top text-danger"
             >
 
                 <FontAwesomeIcon size="xs" icon={faPencilAlt} />
             </span>
             : null}
-            {modalShow ?
+            {props.show ?
             <ListingEditOverview
                 listing = {props.listing}
                 listingTypes = {props.listingTypes}
                 getListing={props.getListing}
-                show={modalShow}
                 onFilesAdded={props.onFilesAdded}
                 files={props.files}
                 uploading={props.uploading}
                 uploadProgress={props.uploadProgress}
-                successfullUploaded={props.successfullUploaded}
-                onHide={() => setModalShow(false)}
+                successfullyUploaded={props.successfullyUploaded}
                 onSave={listing => props.onSave(listing)}
+
+                show={props.show}
+                onHide={props.onHide}
+                saving={props.saving}
+                errorMessage={props.errorMessage}
             />
             : null}
         </span>
@@ -68,7 +70,8 @@ class ListingDetailOverview extends React.Component {
     handleEdit(){
     }
     handleSave(listing){
-        this.props.onListingUpdate(listing);
+        console.log("handleSave");
+        this.props.onOverviewUpdate(listing);
     }
     handleFilesAdded(files){
         this.props.onFilesAdded(files);
@@ -106,7 +109,6 @@ class ListingDetailOverview extends React.Component {
         this.props.getListing();
     }
     render() {
-        
         var shortDescription = "Lorem.";
         var longDescription = "Lorem ipsum.";
         var defaultImage = {
@@ -152,8 +154,14 @@ class ListingDetailOverview extends React.Component {
                                 files={this.props.files}
                                 uploading={this.props.uploading}
                                 uploadProgress={this.props.uploadProgress}
-                                successfullUploaded={this.props.successfullUploaded}
+                                successfullyUploaded={this.props.successfullyUploaded}
                                 showSpinner={this.props.showSpinner}
+
+                                onShow={this.props.onOverviewModalUpdate}
+                                onHide={this.props.onOverviewModalHide}
+                                show={this.props.overviewUpdate}
+                                saving={this.props.overviewSaving}
+                                errorMessage={this.props.errorMessage}
                             /> 
                             : null}</h2>
                     </Col>

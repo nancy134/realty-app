@@ -5,7 +5,9 @@ import {
     Form,
     Modal,
     Button,
-    Image
+    Image,
+    Alert,
+    Spinner
 } from 'react-bootstrap';
 import ImageUpload from './ImageUpload';
 import {Formik} from 'formik';
@@ -18,6 +20,35 @@ const OverviewSchema = Yup.object().shape({
     listingType: Yup.string()
 });
 
+function ErrorAlert(props) {
+    const [show, setShow] = React.useState(true);
+
+    if (show) {
+        return (
+        <div className="w-100">
+            <Alert 
+                variant="danger" 
+                onClose={() => setShow(false)} 
+                dismissible
+            >
+                <Alert.Heading>Oh no! You got an error!</Alert.Heading>
+                <p>{props.errorMessage}</p>
+            </Alert>
+        </div>
+        );
+    }
+}
+function SavingAlert(){
+    return(
+    <div className="w-100">
+        <Alert
+           variant="info"
+        >
+           Saving...<Spinner animation="border" />
+        </Alert>
+    </div>
+    );
+}
 class ListingEditOverview extends React.Component {
     constructor(props){
         super(props);
@@ -56,7 +87,6 @@ class ListingEditOverview extends React.Component {
             listing.listingType = values.listingType;
         }  
         this.props.onSave(listing);
-        this.props.onHide();
     }
     handleFilesAdded(files){
         console.log("handleFilesAdded");
@@ -191,7 +221,7 @@ class ListingEditOverview extends React.Component {
                         files={this.props.files}
                         uploading={this.props.uploading}
                         uploadProgress={this.props.uploadProgress}
-                        successfullUploaded={this.props.successfullUploaded}
+                        successfullyUploaded={this.props.successfullyUploaded}
                     />
                     </Row>
                     <Row>
@@ -202,6 +232,12 @@ class ListingEditOverview extends React.Component {
          
             </Modal.Body>
             <Modal.Footer>
+                {this.props.errorMessage ?
+                <ErrorAlert errorMessage={this.props.errorMessage}/>
+                : null}
+                {this.props.saving ?
+                <SavingAlert />
+                : null}
                 { dirty ?
                 <Button 
                     id="overview_edit_cancel_button"

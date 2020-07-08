@@ -1,6 +1,5 @@
-var uploadProgress = [];
+var uploadProgress = {};
 export function uploadFiles(files, table, id, progressCB) {
-    console.log("uploadFiles: table: "+table+" id: "+id);
     return new Promise((resolve, reject) => {
 
         const promises = [];
@@ -22,27 +21,33 @@ function sendRequest(file,table, id, progressCB){
 
         req.upload.addEventListener("progress", event => {
             if (event.lengthComputable) {
-                const copy = { ...uploadProgress };
-                copy[file.name] = {
+                console.log("progress: event.loaded: "+event.loaded+" event.total: "+event.total);
+                //const copy = { ...uploadProgress };
+
+                uploadProgress[file.name] = {
                     state: "pending",
                     percentage: (event.loaded / event.total) * 100
                 };
-                progressCB(copy);
+                progressCB(uploadProgress);
             }
         });
 
         req.upload.addEventListener("load", event => {
-            const copy = { ...uploadProgress };
-            copy[file.name] = { state: "done", percentage: 100 };
-            progressCB(copy);
+            console.log("load copy");
+            //const copy = { ...uploadProgress };
+            uploadProgress[file.name] = { state: "done", percentage: 100 };
+            progressCB(uploadProgress);
         });
 
         req.upload.addEventListener("error", event => {
-            const copy = { ...uploadProgress };
-            copy[file.name] = { state: "error", percentage: 0 };
-            progressCB(copy);
+            console.log("error");
+            //const copy = { ...uploadProgress };
+            uploadProgress[file.name] = { state: "error", percentage: 0 };
+            progressCB(uploadProgress);
             reject(req.response);
         });
+
+        uploadProgress = [];
         const formData = new FormData();
         formData.append("image", file, file.name);
         formData.append("listing_id",id);
@@ -50,10 +55,12 @@ function sendRequest(file,table, id, progressCB){
         req.open("POST", url);
         req.onreadystatechange = function(){
             if (req.readyState === 4){
-                if (req.status === 200)
+                if (req.status === 200) {
+                    console.log("readyState=4");
                     resolve(req.responseText);
-                else
+                } else {
                     reject(req.responsetext);
+                }
             }
         };
         req.send(formData);

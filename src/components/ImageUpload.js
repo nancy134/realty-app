@@ -34,8 +34,12 @@ class ImageUpload extends Component {
         }));
     }
     renderProgress(file) {
+        console.log("renderProgress this.props.uploadProgress");
+        console.log(this.props.uploadProgress);
         const uploadProgress = this.props.uploadProgress[file.name];
-        if (this.props.uploading || this.props.successfullUploaded) {
+        if (this.props.uploading || this.props.successfullyUploaded) {
+            if (uploadProgress) console.log("file.name: "+file.name+" percentage: "+uploadProgress.percentage+" state: "+uploadProgress.state);
+
             return (
                 <div className="ProgressWrapper">
                     <Progress progress={uploadProgress ? uploadProgress.percentage : 0} />
@@ -46,12 +50,16 @@ class ImageUpload extends Component {
                         }}
                         icon={faCheck} 
                     />
-
+                    {uploadProgress ?
+                    <p>{file.name} {uploadProgress.percentage}</p>
+                    : null}
                 </div>
             );
         }
     }
     render(){
+        console.log("this.props.uploading: "+this.props.uploading);
+        console.log("this.props.successfullyUploaded: "+this.props.successfullyUploaded);
         if (this.props.files){
             var images = this.props.files.map((item,key) =>
                 <div key={key}>
@@ -68,7 +76,7 @@ class ImageUpload extends Component {
                     <Dropzone
                         onFilesAdded={this.onFilesAdded}
                         onImagesAdded={this.onImagesAdded}
-                        disabled={this.props.uploading || this.props.successfullUploaded}
+                        disabled={this.props.uploading || this.props.successfullyUploaded}
                     />
                 </div>
                 <div className="Files">
