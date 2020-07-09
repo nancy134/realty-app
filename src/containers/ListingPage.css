@@ -122,3 +122,21 @@
 
 /* Workaround for map zoom icon */
 .gm-control-active{min-width: 44px}
+
+/* Close icon for image */
+.img-wrap {
+    position: relative;
+}
+
+.img-wrap .close {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    z-index: 100;
+}
+.img-wrap .primary {
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    z-index: 100;
+}
