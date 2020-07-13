@@ -18,6 +18,10 @@ import {
     faCheck
 } from '@fortawesome/free-solid-svg-icons';
 
+import ImageContainer from './ImageContainer';
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+
 const OverviewSchema = Yup.object().shape({
     shortDescription: Yup.string().required('Short Description is required'),
     longDescription: Yup.string(),
@@ -78,6 +82,7 @@ class ListingEditOverview extends React.Component {
         this.handleFilesAdded = this.handleFilesAdded.bind(this);
         this.handleDeleteImage = this.handleDeleteImage.bind(this);
         this.handlePrimaryImage = this.handlePrimaryImage.bind(this);
+        this.handleDrop = this.handleDrop.bind(this);
 
         if (this.props.listing){
             this.state = {
@@ -136,6 +141,12 @@ class ListingEditOverview extends React.Component {
         console.log("handlePrimaryImage");
         console.log(e);
     }
+    handleDrop(cards){
+        console.log("handledrop");
+        console.log(cards);
+        this.props.onDrop(cards);
+    }
+ 
     render(){
         /*
         var listingTypes = null;
@@ -291,7 +302,14 @@ class ListingEditOverview extends React.Component {
                     />
                     </Row>
                     <Row>
-                        {imgs}
+                        <div className="App">
+                            <DndProvider backend={HTML5Backend}>
+                                <ImageContainer
+                                    listing={this.props.listing}
+                                    onDrop={this.handleDrop}
+                                />
+                            </DndProvider>
+                         </div>
                     </Row>
                 </Col>
             </Row>

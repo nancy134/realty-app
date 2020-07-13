@@ -41,6 +41,7 @@ function EditButton(props) {
                 listingTypes = {props.listingTypes}
                 getListing={props.getListing}
                 onFilesAdded={props.onFilesAdded}
+                onDrop={props.onDrop}
                 files={props.files}
                 uploading={props.uploading}
                 uploadProgress={props.uploadProgress}
@@ -152,6 +153,7 @@ class ListingDetailOverview extends React.Component {
                                 getListing={this.props.getListing}
                                 onFilesAdded={this.handleFilesAdded}
                                 files={this.props.files}
+                                onDrop={this.props.onDrop}
                                 uploading={this.props.uploading}
                                 uploadProgress={this.props.uploadProgress}
                                 successfullyUploaded={this.props.successfullyUploaded}

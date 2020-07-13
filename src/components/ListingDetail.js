@@ -31,6 +31,7 @@ class ListingDetail extends React.Component {
             overviewUpdate: false,
             overviewSaving: false,
             overviewFiles: [],
+            imageCards: [],
             uploadProgress: [],
             uploading: false,
             successfullyUploaded: false,
@@ -62,6 +63,7 @@ class ListingDetail extends React.Component {
 
         // Overview
         this.handleFilesAdded = this.handleFilesAdded.bind(this);
+        this.handleImageDrop = this.handleImageDrop.bind(this);
         this.handleOverviewUpdate = this.handleOverviewUpdate.bind(this);
         this.handleOverviewModalNew = this.handleOverviewModalNew.bind(this);
         this.handleOverviewModalUpdate = this.handleOverviewModalUpdate.bind(this);
@@ -116,6 +118,13 @@ class ListingDetail extends React.Component {
             overviewFiles: prevState.overviewFiles.concat(files) 
         }));
     }
+    handleImageDrop(cards){
+        console.log("handleImageDrop");
+        console.log(cards);
+        this.setState({
+            imageCards: cards
+        });
+    }
     handleOverviewModalNew(){
         this.setState({
             overviewNew: true
@@ -149,6 +158,7 @@ class ListingDetail extends React.Component {
                 });
                 var uploadFilesPromise = imageService.uploadFiles(
                     that.state.overviewFiles, 
+                    that.state.cards,
                     "listing", 
                     data.listing.id, 
                     that.handleImageProgress
@@ -529,6 +539,7 @@ class ListingDetail extends React.Component {
                     getListing={this.props.onFetchListing}
                     onFilesAdded={this.handleFilesAdded}
                     files={this.state.overviewFiles}
+                    onDrop={this.handleImageDrop}
                     uploading={this.state.uploading}
                     uploadProgress={this.state.uploadProgress}
                     successfullyUploaded={this.state.successfullyUploaded}
