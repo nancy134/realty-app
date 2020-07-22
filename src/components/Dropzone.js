@@ -32,7 +32,6 @@ class Dropzone extends Component {
         if (this.props.onFilesAdded) {
             const array = this.fileListToArray(files);
             this.props.onFilesAdded(array);
-            this.props.onImagesAdded(array);
         }
     }
     fileListToArray(list) {
@@ -61,13 +60,12 @@ class Dropzone extends Component {
         if (this.props.onFilesAdded) {
             const array = this.fileListToArray(files);
             this.props.onFilesAdded(array);
-            this.props.onImagesAdded(array);
         }
         this.setState({ highlight: false });
     }
     render() {
     return (
-        <div
+        <span
             className={`Dropzone ${this.state.highlight ? "Highlight" : ""}`}
             onDragOver={this.onDragOver}
             onDragLeave={this.onDragLeave}
@@ -75,7 +73,7 @@ class Dropzone extends Component {
             onClick={this.openFileDialog}
             style={{ cursor: this.props.disabled ? "default" : "pointer" }}
         >
-            <FontAwesomeIcon icon={faCloudUploadAlt} />
+            <div><FontAwesomeIcon icon={faCloudUploadAlt} /></div>
             <input
                 ref={this.fileInputRef}
                 className="FileInput"
@@ -83,8 +81,8 @@ class Dropzone extends Component {
                 multiple
                 onChange={this.onFilesAdded}
             />
-            <span>Upload Images</span>
-        </div>
+            <span className="upload-images">Upload Images</span>
+        </span>
     );
     }
 }

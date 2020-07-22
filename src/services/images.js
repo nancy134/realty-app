@@ -1,7 +1,7 @@
 var rp = require('request-promise');
 
 var uploadProgress = {};
-export function uploadFiles(files, cards, table, id, progressCB) {
+export function uploadFiles(files, table, id, progressCB) {
     return new Promise((resolve, reject) => {
 
         const promises = [];
@@ -73,7 +73,7 @@ export function updatePromise(data){
     return new Promise(function(resolve, reject){
         var options = {
             method: 'PUT',
-            uri: process.env.REACT_LISTING_SERVICE+"images/"+data.id,
+            uri: process.env.REACT_APP_LISTING_SERVICE+"images/"+data.id,
             body: data,
             json: true
         };
@@ -85,7 +85,24 @@ export function updatePromise(data){
     });
 }
 
+export function deletePromise(id)
+{
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'DELETE',
+            uri: process.env.REACT_APP_LISTING_SERVICE+"images/"+id,
+            json: true
+        };
+        rp(options).then(function(parsedBody){
+            resolve(parsedBody);
+        }).catch(function(err){
+            reject(err.error);
+        });
+    });
+}
+
 const images = {
-    uploadFiles
+    uploadFiles,
+    deletePromise
 };
 export default images;

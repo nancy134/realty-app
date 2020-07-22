@@ -7,38 +7,85 @@ import {
     faCheck
 } from '@fortawesome/free-solid-svg-icons';
 import {
-    Image
+//    Image
 } from 'react-bootstrap';
+import ImageContainer from './ImageContainer';
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import update from 'immutability-helper'
 
 class ImageUpload extends Component {
     constructor(props) {
         super(props);
+
+        var cards = [];
+        if (this.props.listing && this.props.listing.images.length > 0){
+            for (var i=0; i<this.props.listing.images.length; i++){
+                var image = this.props.listing.images[i];
+                var card = {
+                    id: image.id,
+                    url: image.url,
+                    file: null
+                }
+                cards.push(card);
+            }
+        }
+
         this.state = {
-            images: [] 
+            cards: cards,
         };
 
         this.onFilesAdded = this.onFilesAdded.bind(this);
-        this.onImagesAdded = this.onImagesAdded.bind(this);
         this.renderProgress = this.renderProgress.bind(this);
+        this.handleMoveCard = this.handleMoveCard.bind(this);
+        this.handleDeleteCard = this.handleDeleteCard.bind(this);
+
     }
     onFilesAdded(files) {
         this.props.onFilesAdded(files);
-    }
-    onImagesAdded(files){
-        var images = [];
-        files.forEach(file => {
-            images.push(URL.createObjectURL(file));
+        var cards = this.state.cards;
+        if (files){
+            for (var j=0; j<files.length; j++){
+                var file = files[j];
+                var card = {
+                    id: Math.floor(Math.random() * 101)+1,
+                    url: null,
+                    file: file
+                };
+                cards.push(card);
+            }
+        }
+        this.setState({
+            cards: cards
         });
-        this.setState(prevState => ({
-            images: prevState.images.concat(images)
+        this.props.onImagesChanged(cards);
+
+    }
+    handleMoveCard(dragIndex, hoverIndex){
+        var cards = this.state.cards;
+        var dragCard = cards[dragIndex];
+        this.setState(update(this.state, {
+            cards: {
+                $splice: [
+                    [dragIndex, 1],
+                    [hoverIndex, 0, dragCard]
+                ]
+            }
         }));
+        this.props.onImagesChanged(cards);
+
+    }
+    handleDeleteCard(index){
+        var cards = this.state.cards;
+        cards.splice(index,1);
+        this.setState({
+            cards: cards
+        });
+        this.props.onImagesChanged(cards);
     }
     renderProgress(file) {
-        console.log("renderProgress this.props.uploadProgress");
-        console.log(this.props.uploadProgress);
         const uploadProgress = this.props.uploadProgress[file.name];
         if (this.props.uploading || this.props.successfullyUploaded) {
-            if (uploadProgress) console.log("file.name: "+file.name+" percentage: "+uploadProgress.percentage+" state: "+uploadProgress.state);
 
             return (
                 <div className="ProgressWrapper">
@@ -57,35 +104,30 @@ class ImageUpload extends Component {
             );
         }
     }
-    render(){
-        console.log("this.props.uploading: "+this.props.uploading);
-        console.log("this.props.successfullyUploaded: "+this.props.successfullyUploaded);
-        if (this.props.files){
-            var images = this.props.files.map((item,key) =>
-                <div key={key}>
-                <Image src={URL.createObjectURL(item)} className="edit-image" />
-                {this.renderProgress(item)}
-                </div>
-            );
-        }
 
+    moveCard(dragIndex, hoverIndex){
+
+    }
+    render(){
         return (
-        <div className="Upload">
-            <div className="Content">
-                <div>
+        <div>
+                    <DndProvider backend={HTML5Backend}>
+                        <ImageContainer
+                            listing={this.props.listing}
+                            cards={this.state.cards}
+                            onListChanged={this.handleListChanged}
+                            onMoveCard={this.handleMoveCard}
+                            onDeleteCard={this.handleDeleteCard}
+                        />
+                    </DndProvider>
+           
                     <Dropzone
                         onFilesAdded={this.onFilesAdded}
-                        onImagesAdded={this.onImagesAdded}
                         disabled={this.props.uploading || this.props.successfullyUploaded}
+
                     />
-                </div>
-                <div className="Files">
-                {images}
-                </div>
-            </div>
-            <div className="Actions">
-            </div>
-        </div>
+       </div>
+
     );
   }
 }

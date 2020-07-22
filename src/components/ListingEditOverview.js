@@ -5,22 +5,12 @@ import {
     Form,
     Modal,
     Button,
-    Image,
     Alert,
     Spinner
 } from 'react-bootstrap';
 import ImageUpload from './ImageUpload';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-    faTimesCircle,
-    faCheck
-} from '@fortawesome/free-solid-svg-icons';
-
-import ImageContainer from './ImageContainer';
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
 
 const OverviewSchema = Yup.object().shape({
     shortDescription: Yup.string().required('Short Description is required'),
@@ -59,31 +49,13 @@ function SavingAlert(){
     );
 }
 
-function ImgItem(props){
-    return(
-    <div key={props.index} item={props.item} className="img-wrap">
-        <FontAwesomeIcon
-            data-index={props.index}
-            className="close text-danger"
-            icon={faTimesCircle}
-             size="xs"
-         />
-        <Image src={props.item.url} className="edit-image p-2"/>
-        <span data-index={props.index} onClick={props.onPrimaryImage} className="primary">&times;</span>
-    </div>
-    );
-
-}
 
 class ListingEditOverview extends React.Component {
     constructor(props){
         super(props);
         this.handleSave = this.handleSave.bind(this);
         this.handleFilesAdded = this.handleFilesAdded.bind(this);
-        this.handleDeleteImage = this.handleDeleteImage.bind(this);
-        this.handlePrimaryImage = this.handlePrimaryImage.bind(this);
-        this.handleDrop = this.handleDrop.bind(this);
-
+        this.handleImagesChanged = this.handleImagesChanged.bind(this);
         if (this.props.listing){
             this.state = {
                 images: this.props.listing.images ? this.props.listing.images : [],
@@ -121,75 +93,19 @@ class ListingEditOverview extends React.Component {
         this.props.onSave(listing);
     }
     handleFilesAdded(files){
-        console.log("handleFilesAdded");
         this.setState({imagesAdded: true});
         this.props.onFilesAdded(files);
     }
-    handleDeleteImage(e){
-        console.log("handleDeleteImage");
-        console.log(e);
-        /*
-        console.log(this.props.listing.images[e.target.dataset.index].id);
-        var imagesToDelete = this.state.imagesToDelete;
-        imagesToDelete.push(this.props.listing.images[e.target.dataset.index].id);
-        this.setState({
-            imagesToDelete: imagesToDelete
-        });
-        */
-    }
-    handlePrimaryImage(e){
-        console.log("handlePrimaryImage");
-        console.log(e);
-    }
-    handleDrop(cards){
-        console.log("handledrop");
-        console.log(cards);
-        this.props.onDrop(cards);
-    }
- 
+    handleImagesChanged(cards,values,dirty){
+        this.setState({imagesAdded: true});
+        this.props.onImagesChanged(cards);
+    } 
     render(){
-        /*
-        var listingTypes = null;
-        if (this.props.listingTypes){
-            listingTypes = this.props.listingTypes.map((item,key) =>
-                <option key={key}>{item}</option>
-            );
-        }
-        */
         var images = [];
         if (this.props.listing){
             for (var i=0; i<this.props.listing.images.length; i++){
                 images.push(this.props.listing.images[i].url);
             }
-        }
-        var imgs = [];
-        if (this.props.listing && this.props.listing.images){
-            imgs = this.props.listing.images.map((item,key) =>
-
-                <div key={key} item={item} className="img-wrap">
-                <span 
-                    data-index={key} 
-                    onClick={e => this.handleDeleteImage(key)}
-                >
-                <FontAwesomeIcon
-                    className="close text-danger"
-                    icon={faTimesCircle}
-                    size="xs"
-                />
-                </span>
-                <Image src={item.url} className="edit-image p-2"/>
-                <span 
-                    data-index={key} 
-                    onClick={e => this.handlePrimaryImage(key)}
-                >
-                <FontAwesomeIcon
-                    className="primary text-info"
-                    icon={faCheck}
-                    size="xs"
-                />
-                </span>
-                </div>
-            );
         }
         var listing = this.props.listing;
         var initialValues = {
@@ -299,17 +215,8 @@ class ListingEditOverview extends React.Component {
                         uploading={this.props.uploading}
                         uploadProgress={this.props.uploadProgress}
                         successfullyUploaded={this.props.successfullyUploaded}
+                        onImagesChanged={(e) => this.handleImagesChanged(e, values, dirty)}
                     />
-                    </Row>
-                    <Row>
-                        <div className="App">
-                            <DndProvider backend={HTML5Backend}>
-                                <ImageContainer
-                                    listing={this.props.listing}
-                                    onDrop={this.handleDrop}
-                                />
-                            </DndProvider>
-                         </div>
                     </Row>
                 </Col>
             </Row>

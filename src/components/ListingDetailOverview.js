@@ -41,7 +41,6 @@ function EditButton(props) {
                 listingTypes = {props.listingTypes}
                 getListing={props.getListing}
                 onFilesAdded={props.onFilesAdded}
-                onDrop={props.onDrop}
                 files={props.files}
                 uploading={props.uploading}
                 uploadProgress={props.uploadProgress}
@@ -52,6 +51,8 @@ function EditButton(props) {
                 onHide={props.onHide}
                 saving={props.saving}
                 errorMessage={props.errorMessage}
+
+                onImagesChanged={props.onImagesChanged}
             />
             : null}
         </span>
@@ -71,7 +72,6 @@ class ListingDetailOverview extends React.Component {
     handleEdit(){
     }
     handleSave(listing){
-        console.log("handleSave");
         this.props.onOverviewUpdate(listing);
     }
     handleFilesAdded(files){
@@ -153,7 +153,6 @@ class ListingDetailOverview extends React.Component {
                                 getListing={this.props.getListing}
                                 onFilesAdded={this.handleFilesAdded}
                                 files={this.props.files}
-                                onDrop={this.props.onDrop}
                                 uploading={this.props.uploading}
                                 uploadProgress={this.props.uploadProgress}
                                 successfullyUploaded={this.props.successfullyUploaded}
@@ -164,6 +163,7 @@ class ListingDetailOverview extends React.Component {
                                 show={this.props.overviewUpdate}
                                 saving={this.props.overviewSaving}
                                 errorMessage={this.props.errorMessage}
+                                onImagesChanged={this.props.onImagesChanged}
                             /> 
                             : null}</h2>
                     </Col>

@@ -31,10 +31,10 @@ class ListingDetail extends React.Component {
             overviewUpdate: false,
             overviewSaving: false,
             overviewFiles: [],
-            imageCards: [],
             uploadProgress: [],
             uploading: false,
             successfullyUploaded: false,
+            cards: [],
 
             // Space
             spaceNew: false,
@@ -63,12 +63,12 @@ class ListingDetail extends React.Component {
 
         // Overview
         this.handleFilesAdded = this.handleFilesAdded.bind(this);
-        this.handleImageDrop = this.handleImageDrop.bind(this);
         this.handleOverviewUpdate = this.handleOverviewUpdate.bind(this);
         this.handleOverviewModalNew = this.handleOverviewModalNew.bind(this);
         this.handleOverviewModalUpdate = this.handleOverviewModalUpdate.bind(this);
         this.handleOverviewModalHide = this.handleOverviewModalHide.bind(this);
         this.handleImageProgress = this.handleImageProgress.bind(this);
+        this.handleImagesChanged = this.handleImagesChanged.bind(this);
 
         // Space 
         this.handleSpaceUpdate = this.handleSpaceUpdate.bind(this);
@@ -118,13 +118,6 @@ class ListingDetail extends React.Component {
             overviewFiles: prevState.overviewFiles.concat(files) 
         }));
     }
-    handleImageDrop(cards){
-        console.log("handleImageDrop");
-        console.log(cards);
-        this.setState({
-            imageCards: cards
-        });
-    }
     handleOverviewModalNew(){
         this.setState({
             overviewNew: true
@@ -147,9 +140,41 @@ class ListingDetail extends React.Component {
         });
     }
     handleOverviewUpdate(listing){
+        var listingProperties = Object.keys(listing).length;
+        var imagesToDelete = this.checkForDeletedImages(this.props.listingDetail.listing.images, this.state.cards);
+
+        var imagesToAdd = this.checkForAddedImages(this.state.overviewFiles, this.state.cards);
+
+        var promises = [];
+        if (listingProperties > 1){
+            promises.push(listingService.update(listing));
+        }
+        if (imagesToAdd.length > 0){
+             var uploadFilesPromise = imageService.uploadFiles(
+                imagesToAdd,
+                "listing",
+                listing.id,
+                this.handleImageProgress
+            );
+            promises.push(uploadFilesPromise);
+
+        }
+        if (imagesToDelete.length > 0){
+            for (var i=0; i<imagesToDelete.length; i++){
+                var deleteImagePromise = imageService.deletePromise(imagesToDelete[i]);
+                promises.push(deleteImagePromise);
+            }
+        }
+        Promise.all(promises).then(function(values){
+            console.log(values);
+        }).catch(function(err){
+            console.log(err);
+        });
+        /*
         var listingUpdatePromise = listingService.update(listing);
         var that = this;
         listingUpdatePromise.then(function(data){
+            console.log("data: "+JSON.stringify(data));
             if (that.state.overviewFiles.length > 0){
 
                 that.setState({
@@ -175,17 +200,49 @@ class ListingDetail extends React.Component {
                 });
             } else {
                 that.props.onFetchListing(data.ListingVersionId);
+                that.handleOverviewModalHide();
             }
         }).catch(function(err){
             console.log(err);
         });
+        */
     }
     handleImageProgress(uploadProgress){
         this.setState({
             uploadProgress: uploadProgress
         });
     }
-
+    handleImagesChanged(cards){
+        this.setState({
+            cards: cards
+        });
+    }
+    checkForDeletedImages(images, cards){
+        var imagesToDelete = [];
+        for (var i=0; i<images.length; i++){
+            var idToDelete = images[i].id;
+            for (var j=0; j<cards.length; j++){
+                if (images[i].url === cards[j].url){
+                    idToDelete = 0;
+                } 
+            }
+            if (idToDelete !== 0){
+                imagesToDelete.push(idToDelete);
+            }
+        }
+        return imagesToDelete;
+    }
+    checkForAddedImages(files, cards){
+        var imagesToAdd = [];
+        for (var i=0; i<cards.length; i++){
+            for(var j=0; j<files.length; j++){
+                if (cards[i].file === files[j]){
+                    imagesToAdd.push(files[j]);
+                }
+            }
+        }
+        return imagesToAdd;
+    }
     // Space
 
     handleSpaceModalNew(){
@@ -539,7 +596,6 @@ class ListingDetail extends React.Component {
                     getListing={this.props.onFetchListing}
                     onFilesAdded={this.handleFilesAdded}
                     files={this.state.overviewFiles}
-                    onDrop={this.handleImageDrop}
                     uploading={this.state.uploading}
                     uploadProgress={this.state.uploadProgress}
                     successfullyUploaded={this.state.successfullyUploaded}
@@ -550,6 +606,7 @@ class ListingDetail extends React.Component {
                     onOverviewModalUpdate={this.handleOverviewModalUpdate}
                     onOverviewModalHide={this.handleOverviewModalHide}
                     overviewUpdate={this.state.overviewUpdate}
+                    onImagesChanged={this.handleImagesChanged}
 
                 />
                 { (editMode === "edit") || (listing && listing.spaces.length) > 0 ?

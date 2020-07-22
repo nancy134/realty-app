@@ -511,7 +511,7 @@ export class ListingPage extends Component {
         var that=this;
         var deleteSpace = spaceService.deletePromise(this.state.deleteId);
         deleteSpace.then(function(result){
-            that.handleFetchListing();
+            that.handleFetchListing(result.latestDraftId);
             that.fetchListings("myListings",that.state.page);
             that.handleDeleteHide();
         }).catch(function(err){

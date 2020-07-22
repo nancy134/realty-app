@@ -1,24 +1,29 @@
 import React, { useRef } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 import { ItemTypes } from './ItemTypes'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faTimesCircle
-} from '@fortawesome/free-solid-svg-icons';
 import {
     Image
 } from 'react-bootstrap';
 
 const style = {
 //  border: '1px dashed gray',
-  padding: '0.5rem 1rem',
+
+//  padding: '0.5rem 1rem',
   marginRight: '.5rem',
-  marginBottom: '.5rem',
+//  marginBottom: '.5rem',
+
 //  backgroundColor: 'white',
+
   cursor: 'move',
+
+  display: 'inline-block',
+  height: '80px'
 }
-export const Card = ({ id, url, index, moveCard, moveComplete }) => {
+export const Card = ({ id, url, index, file, onMoveCard, onDeleteCard }) => {
   const ref = useRef(null)
+  function onClick(){
+      onDeleteCard(index);
+  }
   const [, drop] = useDrop({
     accept: ItemTypes.CARD,
     hover(item, monitor) {
@@ -52,13 +57,12 @@ export const Card = ({ id, url, index, moveCard, moveComplete }) => {
         return
       }
       // Time to actually perform the action
-      moveCard(dragIndex, hoverIndex)
+      onMoveCard(dragIndex, hoverIndex)
       // Note: we're mutating the monitor item here!
       // Generally it's better to avoid mutations,
       // but it's good here for the sake of performance
       // to avoid expensive index searches.
       item.index = hoverIndex
-      moveComplete()
     },
   })
   const [{ isDragging }, drag] = useDrag({
@@ -69,15 +73,14 @@ export const Card = ({ id, url, index, moveCard, moveComplete }) => {
   })
   const opacity = isDragging ? 0 : 1
   drag(drop(ref))
+  var src = "";
+  if (file) src =  URL.createObjectURL(file);
+  else src = url;
   return (
-    <span ref={ref} style={{ ...style, opacity }}>
+    <span className="border" ref={ref} style={{ ...style, opacity }}>
     <span className="img-wrap">
-        <FontAwesomeIcon
-            className="close text-danger"
-            icon={faTimesCircle}
-             size="xs"
-         />
-        <Image src={url} className="edit-image p-2"/>
+        <span onClick={onClick} className="close">&times;</span>
+        <Image src={src} className="edit-image p-2"/>
     </span>
 
     </span>
