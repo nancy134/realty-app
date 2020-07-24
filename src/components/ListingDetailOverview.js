@@ -103,9 +103,6 @@ class ListingDetailOverview extends React.Component {
         </button>
         );
     }
-    //acceptMethods(uploadFiles){
-    //    this.upLoadFiles = uploadFiles;
-    //}
     getListing(){
         this.props.getListing();
     }

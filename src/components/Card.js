@@ -19,7 +19,7 @@ const style = {
   display: 'inline-block',
   height: '80px'
 }
-export const Card = ({ id, url, index, file, onMoveCard, onDeleteCard }) => {
+export const Card = ({ id, url, index, file, onMoveCard, onDeleteCard, isDraft }) => {
   const ref = useRef(null)
   function onClick(){
       onDeleteCard(index);
@@ -76,10 +76,14 @@ export const Card = ({ id, url, index, file, onMoveCard, onDeleteCard }) => {
   var src = "";
   if (file) src =  URL.createObjectURL(file);
   else src = url;
+
+  console.log("isDraft: "+isDraft);
   return (
     <span className="border" ref={ref} style={{ ...style, opacity }}>
     <span className="img-wrap">
+        {isDraft ?  
         <span onClick={onClick} className="close">&times;</span>
+        : null}
         <Image src={src} className="edit-image p-2"/>
     </span>
 

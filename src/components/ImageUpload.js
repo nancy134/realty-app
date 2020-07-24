@@ -25,12 +25,12 @@ class ImageUpload extends Component {
                 var card = {
                     id: image.id,
                     url: image.url,
+                    order: image.order,
                     file: null
                 }
                 cards.push(card);
             }
         }
-
         this.state = {
             cards: cards,
         };
@@ -48,12 +48,15 @@ class ImageUpload extends Component {
             for (var j=0; j<files.length; j++){
                 var file = files[j];
                 var card = {
-                    id: Math.floor(Math.random() * 101)+1,
+                    id: Math.floor(Math.random() * 1001)+1,
                     url: null,
                     file: file
                 };
                 cards.push(card);
             }
+        }
+        for (var i=0; i<cards.length; i++){
+            cards[i].order = i+1;
         }
         this.setState({
             cards: cards
@@ -71,9 +74,9 @@ class ImageUpload extends Component {
                     [hoverIndex, 0, dragCard]
                 ]
             }
-        }));
-        this.props.onImagesChanged(cards);
-
+        }), () => {
+            this.props.onImagesChanged(this.state.cards);
+        });
     }
     handleDeleteCard(index){
         var cards = this.state.cards;
@@ -109,6 +112,10 @@ class ImageUpload extends Component {
 
     }
     render(){
+        var isDraft = true;
+        if (this.props.listing && this.props.listing.publishStatus !== "Draft"){
+           isDraft = false;
+        }
         return (
         <div>
                     <DndProvider backend={HTML5Backend}>
@@ -120,12 +127,13 @@ class ImageUpload extends Component {
                             onDeleteCard={this.handleDeleteCard}
                         />
                     </DndProvider>
-           
+                    {isDraft ?   
                     <Dropzone
                         onFilesAdded={this.onFilesAdded}
                         disabled={this.props.uploading || this.props.successfullyUploaded}
 
                     />
+                    : null}
        </div>
 
     );

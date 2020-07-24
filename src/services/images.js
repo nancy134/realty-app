@@ -1,23 +1,25 @@
 var rp = require('request-promise');
 
 var uploadProgress = {};
-export function uploadFiles(files, table, id, progressCB) {
+export function uploadFiles(imagesToAdd, table, id, progressCB) {
     return new Promise((resolve, reject) => {
 
         const promises = [];
-        files.forEach(file => {
-            promises.push(sendRequest(file,table, id, progressCB));
+        imagesToAdd.forEach(imageToAdd => {
+            promises.push(sendRequest(imageToAdd.file, table, id, imageToAdd.order, progressCB));
         });
 
         Promise.all(promises).then(function(ret){
-            resolve(ret);
+            console.log(ret);
+            resolve("1");
         }).catch(function(err){
+            console.log(err);
             reject(err);
         });
     });
 }
 
-function sendRequest(file,table, id, progressCB){
+function sendRequest(file, table, id, order, progressCB){
     return new Promise((resolve, reject) => {
         const req = new XMLHttpRequest();
 
@@ -35,7 +37,7 @@ function sendRequest(file,table, id, progressCB){
         });
 
         req.upload.addEventListener("load", event => {
-            console.log("load copy");
+            console.log("load");
             //const copy = { ...uploadProgress };
             uploadProgress[file.name] = { state: "done", percentage: 100 };
             progressCB(uploadProgress);
@@ -53,15 +55,18 @@ function sendRequest(file,table, id, progressCB){
         const formData = new FormData();
         formData.append("image", file, file.name);
         formData.append("listing_id",id);
+        formData.append("order",order);
         var url = process.env.REACT_APP_LISTING_SERVICE+"upload";
         req.open("POST", url);
         req.onreadystatechange = function(){
+            console.log("req.readyState: "+req.readyState);
             if (req.readyState === 4){
                 if (req.status === 200) {
                     console.log("readyState=4");
-                    resolve(req.responseText);
+                    resolve(req.status);
                 } else {
-                    reject(req.responsetext);
+                    console.log(req.responsetext);
+                    reject(req.status);
                 }
             }
         };
@@ -69,7 +74,7 @@ function sendRequest(file,table, id, progressCB){
     });
 }
 
-export function updatePromise(data){
+export function update(data){
     return new Promise(function(resolve, reject){
         var options = {
             method: 'PUT',
@@ -103,6 +108,7 @@ export function deletePromise(id)
 
 const images = {
     uploadFiles,
-    deletePromise
+    deletePromise,
+    update
 };
 export default images;

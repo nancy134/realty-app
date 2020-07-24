@@ -140,72 +140,70 @@ class ListingDetail extends React.Component {
         });
     }
     handleOverviewUpdate(listing){
+        this.setState({overviewSaving: true});
         var listingProperties = Object.keys(listing).length;
         var imagesToDelete = this.checkForDeletedImages(this.props.listingDetail.listing.images, this.state.cards);
-
         var imagesToAdd = this.checkForAddedImages(this.state.overviewFiles, this.state.cards);
+        var imagesToUpdate = this.checkForUpdatedImages(this.state.cards);
 
         var promises = [];
         if (listingProperties > 1){
             promises.push(listingService.update(listing));
         }
+
         if (imagesToAdd.length > 0){
              var uploadFilesPromise = imageService.uploadFiles(
                 imagesToAdd,
                 "listing",
-                listing.id,
+                this.props.listingDetail.listing.id,
                 this.handleImageProgress
             );
             promises.push(uploadFilesPromise);
+        }
 
-        }
-        if (imagesToDelete.length > 0){
-            for (var i=0; i<imagesToDelete.length; i++){
-                var deleteImagePromise = imageService.deletePromise(imagesToDelete[i]);
-                promises.push(deleteImagePromise);
-            }
-        }
-        Promise.all(promises).then(function(values){
-            console.log(values);
-        }).catch(function(err){
-            console.log(err);
-        });
-        /*
-        var listingUpdatePromise = listingService.update(listing);
         var that = this;
-        listingUpdatePromise.then(function(data){
-            console.log("data: "+JSON.stringify(data));
-            if (that.state.overviewFiles.length > 0){
+        Promise.all(promises).then(function(values){
+            promises = [];
+            if (imagesToDelete.length > 0){
+               for (var i=0; i<imagesToDelete.length; i++){
+                    var deleteImagePromise = imageService.deletePromise(imagesToDelete[i]);
+                    promises.push(deleteImagePromise);
+                }
+            }
+            if (imagesToUpdate.length > 0){
+                for (i=0; i<imagesToUpdate.length; i++){
+                    var updateImagePromise = imageService.update(imagesToUpdate[i]);
+                    promises.push(updateImagePromise);
+                }
+            }
 
-                that.setState({
-                    uploadProgress :[],
-                    uploading: true
-                });
-                var uploadFilesPromise = imageService.uploadFiles(
-                    that.state.overviewFiles, 
-                    that.state.cards,
-                    "listing", 
-                    data.listing.id, 
-                    that.handleImageProgress
-                );
-                uploadFilesPromise.then(function(ret){
-                    that.setState({
-                        successfullyUploaded: true,
-                        uploading: false
+            if (promises.length > 0){
+                if (that.props.listingDetail.listing.publishStatus === "Draft"){
+                    Promise.all(promises).then(function(values){
+                        that.props.onFetchListing(that.props.listingDetail.listing.id);
+                        that.handleOverviewModalHide();
+
+                    }).catch(function(err){
+                        this.setState({
+                            overviewError: err.message,
+                            overviewSaving: false
+                        });
+                        console.log(err);
                     });
-                    that.handleOverviewModalHide(); 
-                    that.props.onFetchListing(data.ListingVersionId);
-                }).catch(function(err){
-                    console.log(err);
-                });
+                }
             } else {
-                that.props.onFetchListing(data.ListingVersionId);
+                that.props.onFetchListing(that.props.listingDetail.listing.id);
                 that.handleOverviewModalHide();
             }
+
         }).catch(function(err){
+            this.setState({
+                overviewError: err.message,
+                overviewSaving: false
+            });
             console.log(err);
         });
-        */
+
     }
     handleImageProgress(uploadProgress){
         this.setState({
@@ -237,12 +235,29 @@ class ListingDetail extends React.Component {
         for (var i=0; i<cards.length; i++){
             for(var j=0; j<files.length; j++){
                 if (cards[i].file === files[j]){
-                    imagesToAdd.push(files[j]);
+                    var imageToAdd = {
+                        file: files[j],
+                        order: i+1
+                    }
+                    imagesToAdd.push(imageToAdd);
                 }
             }
         }
         return imagesToAdd;
     }
+
+    checkForUpdatedImages(cards){
+        var imagesToUpdate = [];
+        for (var i=0; i<cards.length; i++){
+            var order = i+1;
+            if ((cards[i].file === null) && (cards[i].order !== order)){
+                cards[i].order = i+1;
+                imagesToUpdate.push(cards[i]);
+            }
+        }
+        return imagesToUpdate;
+    }
+
     // Space
 
     handleSpaceModalNew(){
@@ -607,6 +622,7 @@ class ListingDetail extends React.Component {
                     onOverviewModalHide={this.handleOverviewModalHide}
                     overviewUpdate={this.state.overviewUpdate}
                     onImagesChanged={this.handleImagesChanged}
+                    overviewSaving={this.state.overviewSaving}
 
                 />
                 { (editMode === "edit") || (listing && listing.spaces.length) > 0 ?

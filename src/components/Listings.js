@@ -65,7 +65,6 @@ function ListItem(props){
     // Listing Price
     var floatPrice = parseFloat(listing.listingPrice);
     var listingPrice = floatPrice.toLocaleString(undefined, {maximumFractionDigits:0});
-
     return(
         <ListGroup.Item>
             <Row>
@@ -149,7 +148,6 @@ class Listings extends React.Component {
     componentWillUnmount() {
     }
     handleDelete(e){
-        console.log("e.target.dataset.id: "+e.target.dataset.id);
         this.props.onDelete(e.target.dataset.id);
     };
 
