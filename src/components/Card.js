@@ -76,11 +76,12 @@ export const Card = ({ id, url, index, file, onMoveCard, onDeleteCard, isDraft }
   var src = "";
   if (file) src =  URL.createObjectURL(file);
   else src = url;
-
+  var order = index+1;
   console.log("isDraft: "+isDraft);
   return (
     <span className="border" ref={ref} style={{ ...style, opacity }}>
     <span className="img-wrap">
+        <span>{order}</span>
         {isDraft ?  
         <span onClick={onClick} className="close">&times;</span>
         : null}
