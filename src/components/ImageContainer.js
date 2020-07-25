@@ -39,10 +39,10 @@ class ImageContainer extends Component {
 
     render(){
         return(
-        <span className="image-container">
+            <span>
                 {this.props.cards.map((card, i) => this.renderCard(card, i))}
-        </span>
-        );
+            </span>
+        )
     }
 }
 

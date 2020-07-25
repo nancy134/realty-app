@@ -10,6 +10,7 @@ const style = {
 
 //  padding: '0.5rem 1rem',
   marginRight: '.5rem',
+  marginTop: '.5rem',
 //  marginBottom: '.5rem',
 
 //  backgroundColor: 'white',
