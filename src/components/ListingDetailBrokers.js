@@ -3,108 +3,89 @@ import {
     Row,
     Col,
     Image,
-    Button,
-    Modal
+    Spinner
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faPencilAlt
 } from '@fortawesome/free-solid-svg-icons';
+import ListingEditBrokers from './ListingEditBrokers';
 
-function ListingEditModal(props) {
-    return (
-        <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                   Edit Brokers 
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body >
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={props.onHide}>Close</Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
-
-function EditButton() {
+function EditButton(props) {
     const [modalShow, setModalShow] = React.useState(false);
-
     return (
         <span>
+            {props.showSpinner ?
+            <span
+                id="general_spinner"
+                className="edit-button align-top text-danger"
+            >
+                <Spinner animation="border" size="sm"/>
+            </span>
+            : 
             <span 
+                id="general_edit_button"
                 onClick={() => setModalShow(true)} 
                 className="edit-button align-top text-danger"
             >
                 <FontAwesomeIcon size="xs" icon={faPencilAlt} />
             </span>
-            <ListingEditModal
+            }
+            {modalShow ?
+            <ListingEditBrokers
+                listing={props.listing}
+                propertyTypes={props.propertyTypes}
                 show={modalShow}
+                getListing={props.getListing}
                 onHide={() => setModalShow(false)}
+                onSave={listing => props.onSave(listing)}
             />
+            : null}
         </span>
   );
 }
 
 class ListingDetailBrokers extends React.Component {
+    constructor(props){
+        super(props);
+        this.handleSave = this.handleSave.bind(this);
+        this.getListing = this.getListing.bind(this);
+    }
+    handleSave(listing){
+        this.props.onListingUpdate(listing);
+    }
+    getListing(){
+        this.props.getListing();
+    } 
     render() {
-        const viewType = this.props.viewType;
-        const content = this.props.content;
+        const editMode = this.props.editMode;
+        const listing = this.props.listing;
+
+        if (listing){
+        }
         return (
-            <div>
+            <React.Fragment>
                 <Row className="mt-3 border-bottom border-warning">
-                    <Col >
-                        <h2>Brokers {viewType === "owner" ? <EditButton /> : null}</h2>
+                    <Col>
+                        <h2>Brokers {editMode === "edit" ?
+                            <EditButton 
+                                listing={listing}
+                                onSave={this.handleSave}
+                                getListing={this.props.getListing}
+                            /> : null}</h2>
                     </Col>
                 </Row>
-                <Row>
+                <Row className="pt-2 pb-2">
                     <Col md={4}>
                         <Row>
                             <Col md={4}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
                             <Col md={8}>
-                                <Row>Paul Piedra</Row>
-                                <Row>Sabre Realty Group</Row>
-                                <Row>(203) 388-8030</Row>
-                                <Row><Button className="p-0" variant="link">Contact</Button></Row>
+                                <Row>{listing.owner}</Row>
                             </Col>
                         </Row>
                     </Col>
-                    { content !== "new" ?
-                    <Col>
-                        <Row>
-                            <Col md={4}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
-                            <Col md={8}>
-                                <Row>Paul Piedra</Row>
-                                <Row>Sabre Realty Group</Row>
-                                <Row>(203) 388-8030</Row>
-                                <Row><Button className="p-0" variant="link">Contact</Button></Row>
-                            </Col>
-                        </Row>
-
-                    </Col>
-                    : null}
-                    { content !== "new" ?
-                    <Col>
-                        <Row>
-                            <Col md={4}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
-                            <Col md={8}>
-                                <Row>Paul Piedra</Row>
-                                <Row>Sabre Realty Group</Row>
-                                <Row>(203) 388-8030</Row>
-                                <Row><Button className="p-0" variant="link">Contact</Button></Row>
-                            </Col>
-                        </Row>
-
-                    </Col>
-                    : null}
                 </Row>
-             </div>
+             </React.Fragment>
         );
     }
 }

@@ -1,5 +1,7 @@
 import React from 'react';
 import {
+    Row,
+    Col
 } from 'react-bootstrap';
 import ListingDetailHeader from './ListingDetailHeader';
 import ListingDetailOverview from './ListingDetailOverview';
@@ -19,6 +21,7 @@ import portfolios from '../services/portfolios';
 import { isOwner, getUserEmail } from '../helpers/authentication';
 import listingService from '../services/listings';
 import imageService from '../services/images';
+import {formatDateTime} from '../helpers/utilities';
 
 class ListingDetail extends React.Component {
     constructor(props) {
@@ -582,7 +585,9 @@ class ListingDetail extends React.Component {
         const owner = this.props.owner;
         const fullscreen = this.props.fullscreen;
         var listingType = "For Lease";
-        if (listing) listingType = listing.listingType;
+        if (listing){
+            listingType = listing.listingType;
+        }
 
         if (showDetail){
             return (
@@ -715,6 +720,17 @@ class ListingDetail extends React.Component {
                     listing={listing}
                     editMode={editMode}
                 />
+                { listing ?
+                <Row className="bg-light listing-footer">
+                    <Col>
+                    Created: {formatDateTime(listing.createdAt)}
+                    </Col>
+                    <Col>
+                    Updated: {formatDateTime(listing.updatedAt)}
+                    </Col> 
+                </Row>
+                : null }
+
             </div>
 //                {(editMode === "edit") ?
 //                <ListingDetailAttachments listing={listing} editMode={editMode} />
