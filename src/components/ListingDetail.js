@@ -581,6 +581,9 @@ class ListingDetail extends React.Component {
         }  
         const owner = this.props.owner;
         const fullscreen = this.props.fullscreen;
+        var listingType = "For Lease";
+        if (listing) listingType = listing.listingType;
+
         if (showDetail){
             return (
             <div>
@@ -625,7 +628,8 @@ class ListingDetail extends React.Component {
                     overviewSaving={this.state.overviewSaving}
 
                 />
-                { (editMode === "edit") || (listing && listing.spaces.length) > 0 ?
+                { (editMode === "edit" && listingType === "For Lease") || 
+                  (listing && listing.spaces.length) > 0 ?
                     <ListingDetailAvailableSpace 
                         listing={listing}
                         editMode={editMode}
@@ -648,7 +652,8 @@ class ListingDetail extends React.Component {
 
                     />
                 : null }
-                {(editMode === "edit") || (listing && (listing.units.length > 0)) ?
+                {(editMode === "edit" && listingType === "For Sale") || 
+                 (listing && (listing.units.length > 0)) ?
                     <ListingDetailUnits 
                         listing={listing} 
                         editMode={editMode} 
@@ -664,7 +669,8 @@ class ListingDetail extends React.Component {
                         getListing={this.props.onFetchListing}
                     />
                 : null }
-                {(editMode === "edit") || (listing && listing.tenants.length) > 0 ?
+                {(editMode === "edit") || 
+                 (listing && listing.tenants.length) > 0 ?
                     <ListingDetailTenants 
                         listing={listing}
                         editMode={editMode}
@@ -680,7 +686,8 @@ class ListingDetail extends React.Component {
                         getListing={this.props.onFetchListing}
                     />
                 : null }
-                {(editMode === "edit") || (listing && listing.portfolios.length) > 0 ?
+                {(editMode === "edit") || 
+                 (listing && listing.portfolios.length) > 0 ?
                     <ListingDetailPortfolio 
                         listing={listing} 
                         editMode={editMode} 
