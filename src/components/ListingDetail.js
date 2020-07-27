@@ -6,7 +6,7 @@ import ListingDetailOverview from './ListingDetailOverview';
 import ListingDetailAvailableSpace from './ListingDetailAvailableSpace';
 import ListingDetailGeneral from './ListingDetailGeneral';
 //import ListingDetailAmenities from './ListingDetailAmenities';
-//import ListingDetailBrokers from './ListingDetailBrokers';
+import ListingDetailBrokers from './ListingDetailBrokers';
 //import ListingDetailBuildingIncome from './ListingDetailBuildingIncome';
 import ListingDetailUnits from './ListingDetailUnits';
 import ListingDetailTenants from './ListingDetailTenants';
@@ -711,6 +711,10 @@ class ListingDetail extends React.Component {
                         getListing={this.props.onFetchListing}
                         propertyTypes={propertyTypes}
                 />
+                <ListingDetailBrokers
+                    listing={listing}
+                    editMode={editMode}
+                />
             </div>
 //                {(editMode === "edit") ?
 //                <ListingDetailAttachments listing={listing} editMode={editMode} />
@@ -720,7 +724,6 @@ class ListingDetail extends React.Component {
                 //<ListingDetailAmenities listing={listing} editMode={editMode}  allAmenities={allAmenities}/>
                 //: null }
 //                <ListingDetailBuildingIncome listing={listing} editMode={editMode} />
-//                <ListingDetailBrokers listing={listing} editMode={editMode} />
 
             );
         } else {
