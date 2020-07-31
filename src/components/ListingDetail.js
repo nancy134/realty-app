@@ -7,7 +7,7 @@ import ListingDetailHeader from './ListingDetailHeader';
 import ListingDetailOverview from './ListingDetailOverview';
 import ListingDetailAvailableSpace from './ListingDetailAvailableSpace';
 import ListingDetailGeneral from './ListingDetailGeneral';
-//import ListingDetailAmenities from './ListingDetailAmenities';
+import ListingDetailAmenities from './ListingDetailAmenities';
 import ListingDetailBrokers from './ListingDetailBrokers';
 //import ListingDetailBuildingIncome from './ListingDetailBuildingIncome';
 import ListingDetailUnits from './ListingDetailUnits';
@@ -57,8 +57,12 @@ class ListingDetail extends React.Component {
             // Portfolio
             portfolioNew: false,
             portfolioUpdate: false,
-            portfolioSaving: false
+            portfolioSaving: false,
 
+            // Amenities
+            amenityUpdate: false,
+            amenitySaving: false,
+            amenityError: null
         };
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
@@ -97,6 +101,10 @@ class ListingDetail extends React.Component {
         this.handleTenantModalUpdate = this.handleTenantModalUpdate.bind(this);
         this.handleTenantModalHide = this.handleTenantModalHide.bind(this);
 
+        // Amenities
+        this.handleAmenityModalUpdate = this.handleAmenityModalUpdate.bind(this);
+        this.handleAmenityModalHide = this.handleAmenityModalHide.bind(this);
+        this.handleAmenityUpdate = this.handleAmenityUpdate.bind(this);
     }
 
     handleShowDetailChange() {
@@ -543,7 +551,34 @@ class ListingDetail extends React.Component {
                 });
             }
         }
-    } 
+    }
+
+    // Amenity
+
+    handleAmenityModalUpdate(){
+        this.setState({
+            amenityUpdate: true
+        });
+    }
+
+    handleAmenityModalHide(){
+        this.setState({
+            amenityUpdate: false,
+            amenitySaving: false,
+            amenityError: null
+        });
+    }
+
+    handleAmenityUpdate(listing){
+        if (this.props.listingDetail && this.props.listingDetail.listing){
+            this.props.onUpdate(listing);
+            this.handleAmenityModalHide();
+        } else { // Create
+            this.props.onCreate(listing);
+            this.handleAmenityModalHide();
+        }
+    }
+
     componentDidMount(){
         if (this.props.listingDetail){
             var listingDetail = this.props.listingDetail;
@@ -716,6 +751,23 @@ class ListingDetail extends React.Component {
                         getListing={this.props.onFetchListing}
                         propertyTypes={propertyTypes}
                 />
+                {(editMode === "edit") || 
+                (listing && listing.amenities) ?
+                <ListingDetailAmenities
+                    listing={listing}
+                    editMode={editMode}
+                    allAmenities={this.props.allAmenities}
+
+                    onAmenityUpdate={this.handleAmenityUpdate}
+                    onAmenityModalUpdate={this.handleAmenityModalUpdate}
+                    onAmenityModalHide={this.handleAmenityModalHide}
+                    amenityUpdate={this.state.amenityUpdate}
+                    amenityError={this.state.amenityError}
+                    amenitySaving={this.state.amenitySaving}
+                    
+                />
+                : null }
+
                 <ListingDetailBrokers
                     listing={listing}
                     editMode={editMode}
@@ -736,9 +788,6 @@ class ListingDetail extends React.Component {
 //                <ListingDetailAttachments listing={listing} editMode={editMode} />
 //                : null }
 
-                //{(editMode === "edit") || (listing && listing.amenities) ?
-                //<ListingDetailAmenities listing={listing} editMode={editMode}  allAmenities={allAmenities}/>
-                //: null }
 //                <ListingDetailBuildingIncome listing={listing} editMode={editMode} />
 
             );

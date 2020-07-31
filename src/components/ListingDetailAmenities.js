@@ -10,23 +10,26 @@ import {
 import ListingEditAmenities from './ListingEditAmenities';
 
 function EditButton(props) {
-    const [modalShow, setModalShow] = React.useState(false);
 
     return (
         <span>
             <span 
-                onClick={() => setModalShow(true)} 
+                onClick={() => {props.onShow()}}
                 className="edit-button align-top text-danger"
             >
                 <FontAwesomeIcon size="xs" icon={faPencilAlt} />
             </span>
+            { props.show ?
             <ListingEditAmenities
                 listing={props.listing}
                 allAmenities={props.allAmenities}
-                show={modalShow}
-                onHide={() => setModalShow(false)}
+                show={props.show}
+                onHide={props.onHide}
                 onSave={listing => props.onSave(listing)}
+                errorMessage={props.errorMessage}
+                saving={props.saving}
             />
+            : null}
         </span>
   );
 }
@@ -38,7 +41,7 @@ class ListingDetailAmenities extends React.Component {
         this.getListing = this.getListing.bind(this);
     }
     handleSave(listing){
-        this.props.onListingUpdate(listing);
+        this.props.onAmenityUpdate(listing);
     }
     getListing(){
         this.props.getListing();
@@ -49,13 +52,28 @@ class ListingDetailAmenities extends React.Component {
         return (
         <React.Fragment>
             <Row className="mt-3 border-bottom border-warning">
-                <Col><h2>Amenities {editMode === "edit" ? <EditButton listing={listing} onSave={this.handleSave} getListing={this.props.getListing} allAmenities={this.props.allAmenities}/> : null}</h2></Col>
+                <Col>
+                    <h2>Amenities {editMode === "edit" ? 
+                        <EditButton
+                            listing={listing}
+                            getListing={this.props.getListing}
+                            allAmenities={this.props.allAmenities}
+                            onSave={this.handleSave}
+                            onShow={this.props.onAmenityModalUpdate}
+                            onHide={this.props.onAmenityModalHide}
+                            show={this.props.amenityUpdate}
+                            saving={this.props.amenitySaving}
+                            errorMessage={this.props.amenityError}
+                        /> 
+                        : null}
+                    </h2>
+                </Col>
             </Row>
             <ul>
             {listing && listing.amenities ?
              (
-             listing.amenities.map(amenity =>
-                 <li>{amenity}</li>
+             listing.amenities.map((amenity, index) =>
+                 <li key={index}>{amenity}</li>
              ))
                 : <Row></Row> }
             </ul>

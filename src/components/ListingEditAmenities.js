@@ -10,39 +10,43 @@ class ListingEditAmenities extends React.Component {
         super(props);
         this.handleSave = this.handleSave.bind(this);
         this.toggleCheckbox = this.toggleCheckbox.bind(this);
-        var checkboxes = [];
-        if (this.props.allAmenities){
-            this.props.allAmenities.map(amenity =>
-                checkboxes.push({
-                    checked: false,
-                    label: amenity
-                })
-            );
-        }
-        if (this.props.listing){
-            this.state = {
-                id: this.props.listing.id,
-                checkboxes: checkboxes
-            };
-        } else {
-            this.state = {
-                id: null,
-                checkboxes: checkboxes
-            };
-        }
+        var checkedAmenities = [];
+        for (var i=0; i<this.props.allAmenities.length; i++){
+            var checkedAmenity = false;
+            if (this.props.listing && this.props.listing.amenities){
+                for (var j=0; j<this.props.listing.amenities.length; j++){
+                    if (this.props.listing.amenities[j] === this.props.allAmenities[i])
+                        checkedAmenity = true;
+                }
+            }    
+            checkedAmenities.push(checkedAmenity);
+        }   
+        this.state = {
+            checkedAmenities: checkedAmenities
+        };
+
     }
     toggleCheckbox(index) {
-        const {checkboxes} = this.state;
-
-        checkboxes[index].checked = !checkboxes[index].checked;
-
-        //this.setState({
-        //    checkboxes
-        //});
+        const { checkedAmenities } = this.state;
+        checkedAmenities[index] = !checkedAmenities[index];
     }
 
     handleSave(){
-        console.log("handleSave()");
+        var amenities = [];
+        for (var i=0; i<this.state.checkedAmenities.length; i++){
+            if (this.state.checkedAmenities[i] === true){
+                amenities.push(this.props.allAmenities[i]);
+            }
+        }
+        var listing = {
+            "amenities" : amenities
+        };
+        if (this.props.listing){
+            listing.ListingId = this.props.listing.ListingId;
+        } else {
+            listing.ListingId = this.state.ListingId;
+        }
+        this.props.onSave(listing);
     }
     render(){
     return(
@@ -59,16 +63,16 @@ class ListingEditAmenities extends React.Component {
         </Modal.Header>
         <Modal.Body>
             <Form>
-    {this.state.checkboxes.map((checkbox, index) =>
-            <div key={checkbox.label}>
-                <Form.Check
-                    type="checkbox"
-                    id={checkbox.label}
-                    label={checkbox.label}
-                    onChange={this.toggleCheckbox(index)}
-                />
-            </div>
-        )}
+                {this.props.allAmenities.map((amenity, index) =>
+                <div key={index}>
+                    <Form.Check
+                        type="checkbox"
+                        label={amenity}
+                        defaultChecked={this.state.checkedAmenities[index]}
+                        onChange={() => this.toggleCheckbox(index)}
+                    />
+                </div>
+            )}
             </Form>
         </Modal.Body>
         <Modal.Footer>

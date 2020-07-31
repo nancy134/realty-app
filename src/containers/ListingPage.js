@@ -15,7 +15,7 @@ import ListingDetail from '../components/ListingDetail';
 import ListingAddType from '../components/ListingAddType';
 import ListingAddAddress from '../components/ListingAddAddress';
 import ListingAddOverview from '../components/ListingAddOverview';
-import listings from '../services/listings';
+import listingService from '../services/listings';
 import spaceService from '../services/spaces';
 import {getUserEmail} from '../helpers/authentication';
 import { isOwner } from '../helpers/authentication';
@@ -111,6 +111,7 @@ export class ListingPage extends Component {
             index: index,
             owner: false,
             listingDetail: null,
+            allAmenities: [],
 
             // Spaces
             spaceAccordionText: [],
@@ -200,7 +201,7 @@ export class ListingPage extends Component {
     }
     handleListingOverviewNext(listing){
         listing.owner = getUserEmail();
-        var createPromise = listings.create(listing);
+        var createPromise = listingService.create(listing);
         var that = this;
         createPromise.then(function(data) {
             var localState = {
@@ -213,7 +214,7 @@ export class ListingPage extends Component {
             that.fetchListing(localState);
             that.fetchListings("myListings",that.state.page);
         }).catch(function(err){
-            console.log("err: "+JSON.stringify(err));
+            console.log(err);
         });
     }
     handleCancelAddType(){
@@ -276,7 +277,7 @@ export class ListingPage extends Component {
         this.fetchListings(this.state.listingMode, this.state.page);
     }
     handleUpdate(listing){
-        var updatePromise = listings.update(listing);
+        var updatePromise = listingService.update(listing);
         var that = this;
         updatePromise.then(function(data){
             that.setState({
@@ -292,12 +293,12 @@ export class ListingPage extends Component {
                transitionModalTitle: "Oops!",
                transitionModalMessage: errMessage 
             });
-            console.log("err: "+err);
+            console.log(err);
         });
     }
     handleCreate(listing){
         listing.owner = getUserEmail();
-        var createPromise = listings.create(listing);
+        var createPromise = listingService.create(listing);
         createPromise(function(data){
             this.setState({
                 listingDetail: data,
@@ -328,7 +329,7 @@ export class ListingPage extends Component {
         });
     }
     handlePublish(id){
-        var publishPromise = listings.publish(id);
+        var publishPromise = listingService.publish(id);
         this.setState({transitionSaving: true});
         var that = this;
         publishPromise.then(function(data){
@@ -343,7 +344,7 @@ export class ListingPage extends Component {
 
     }
     handleUnpublish(id){
-        var unpublishPromise = listings.unpublish(id);
+        var unpublishPromise = listingService.unpublish(id);
         this.setState({transitionSaving: true});
         var that = this;
         unpublishPromise.then(function(data){
@@ -373,7 +374,7 @@ export class ListingPage extends Component {
     fetchListing(localState){
         if (localState.index){
             var that = this;
-            var getPromise = listings.get(localState.index);
+            var getPromise = listingService.get(localState.index);
             getPromise.then(function(data){
                 var owner = false;
                 if (isOwner(data.listing.owner)){
@@ -400,10 +401,10 @@ export class ListingPage extends Component {
                     that.handleListUpdate();
                 });
             }).catch(function(err){
-                console.log("err: "+err);
+                console.log(err);
             });
         } else {
-            listings.getEnums((data) => {
+            listingService.getEnums((data) => {
                 var listingDetail = {
                     listing: null,
                     states: data.states,
@@ -454,17 +455,24 @@ export class ListingPage extends Component {
             query += locationQuery;
         }
         var that = this;
-        var getAllPromise = listings.getAll(query);
+        var getAllPromise = listingService.getAll(query);
         getAllPromise.then(function(listings){
-           that.setState({
-               listingMode: listingMode,
-               listings: listings.listings.rows,
-               page: listings.page,
-               perPage: listings.perPage,
-               count: listings.listings.count
+           var enumPromise = listingService.getEnumsPromise();
+           enumPromise.then(function(enums){
+          
+               that.setState({
+                   allAmenities: enums.amenities,
+                   listingMode: listingMode,
+                   listings: listings.listings.rows,
+                   page: listings.page,
+                   perPage: listings.perPage,
+                   count: listings.listings.count
+               });
+           }).catch(function(err){
+               console.log(err);
            });
         }).catch(function(err){
-            console.log("err: "+JSON.stringify(err));
+            console.log(err);
         }); 
 
     }
@@ -515,7 +523,7 @@ export class ListingPage extends Component {
             that.fetchListings("myListings",that.state.page);
             that.handleDeleteHide();
         }).catch(function(err){
-            console.log("err: "+err);
+            console.log(err);
         });
     }
     handleDeleteHide(){
@@ -534,13 +542,13 @@ export class ListingPage extends Component {
     }
     handleDeleteListingConfirm(){
         var that = this;
-        var deleteListingPromise = listings.deleteListing(this.state.deleteListingId);
+        var deleteListingPromise = listingService.deleteListing(this.state.deleteListingId);
         deleteListingPromise.then(function(result){
             that.fetchListings(that.state.listingMode, that.state.page);
             that.handleFetchListing();
             that.handleDeleteListingHide();
         }).catch(function(err){
-            console.log("err: "+err);
+            console.log(err);
         });
     }
     handleDeleteListingHide(){
@@ -633,6 +641,8 @@ export class ListingPage extends Component {
                          spaceAccordionText={this.state.spaceAccordionText}
                          onAccordionChange={this.handleAccordionChange}
                          onDeleteSpace={this.handleDeleteSpace}
+                         // Amenities
+                         allAmenities={this.state.allAmenities}
                      />
                 </Container>)
 
@@ -703,6 +713,8 @@ export class ListingPage extends Component {
                                 spaceAccordionText={this.state.spaceAccordionText}
                                 onAccordionChange={this.handleAccordionChange}
                                 onDeleteSpace={this.handleDeleteSpace}
+                                // Enums
+                                allAmenities={this.state.allAmenities}
                             />
                         </CSSTransition>
                     {!showDetail ?
