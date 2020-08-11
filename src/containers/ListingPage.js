@@ -664,12 +664,14 @@ export class ListingPage extends Component {
                         onNext={this.handleListingTypeNext}
                         onCancel={this.handleCancelAddType}
                     />
+                    { this.state.addListingAddress ?
                     <ListingAddAddress
                         show={this.state.addListingAddress}
                         onNext={this.handleListingAddressNext}
                         listing={this.state.newListing}
                         onCancel={this.handleCancelAddAddress}
                     />
+                    : null }
                     <ListingAddOverview
                         show={this.state.addListingOverview}
                         onNext={this.handleListingOverviewNext}
