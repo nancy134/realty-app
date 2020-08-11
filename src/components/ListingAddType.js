@@ -10,15 +10,26 @@ class ListingAddType extends React.Component{
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.handleNext = this.handleNext.bind(this);
+        this.handleListingTypeChange = this.handleListingTypeChange.bind(this);
         this.state = {
             listingType: "For Lease"
         };
     }
     handleChange(e){
+        console.log("handleChange: e:");
+        console.log(e);
+        //this.setState({
+        //    listingType: e.target.value
+        //});
+    }
+
+    handleListingTypeChange(listingType){
+        console.log("handleListingTypeChange: "+listingType);
         this.setState({
-            listingType: e.target.value
+            listingType: listingType
         });
     }
+
     handleNext(){
         var listing = {};
         listing.listingType = this.state.listingType;
@@ -40,19 +51,34 @@ class ListingAddType extends React.Component{
             <Modal.Body>
                 <Form>
                     <Form.Check
-                        type="radio"
-                        label="For Lease"
-                        value="For Lease"
-                        checked={this.state.listingType === "For Lease"}
-                        onChange={this.handleChange}
-                    />
+                    >
+                        <Form.Check.Input
+                            type="radio"
+                            checked={this.state.listingType === "For Lease"}
+                            onChange={this.handleChange}
+                            onClick={() => this.handleListingTypeChange("For Lease")}
+                        />
+                        <Form.Check.Label
+                            onClick={() => this.handleListingTypeChange("For Lease")}
+                        >
+                            For Lease
+                        </Form.Check.Label> 
+                    </Form.Check>
                     <Form.Check
-                        type="radio"
-                        label="For Sale"
-                        value="For Sale"
-                        checked={this.state.listingType === "For Sale"}
-                        onChange={this.handleChange}
-                    />
+                    >
+                        <Form.Check.Input
+                            type="radio"
+                            checked={this.state.listingType === "For Sale"}
+                            onChange={this.handleChange}
+                            onClick={() => this.handleListingTypeChange("For Sale")}
+                        />
+                        <Form.Check.Label
+                            onClick={() => this.handleListingTypeChange("For Sale")}
+                        >
+                            For Sale
+                        </Form.Check.Label>
+                    </Form.Check>
+
                 </Form>
             </Modal.Body>
             <Modal.Footer>
