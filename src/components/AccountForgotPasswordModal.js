@@ -14,42 +14,34 @@ function SavingAlert(){
     </div>
     );
 }
-class AccountRegisterModal extends React.Component {
+class AccountForgotPasswordModal extends React.Component {
     constructor(props){
         super(props);
         this.onEmailChange = this.onEmailChange.bind(this);
-        this.onPasswordChange = this.onPasswordChange.bind(this);
-        this.handleRegister = this.handleRegister.bind(this);
+        this.handleForgotPassword = this.handleForgotPassword.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
         this.emailRef = React.createRef();
         this.state = {
-            email: "",
-            password: ""
+            email: ""
         };
     }
-    handleRegister(){
-        this.props.onRegister(this.state.email, this.state.password);
+    handleForgotPassword(){
+        this.props.onForgotPassword(this.state.email);
     }
     onEmailChange(event){
         this.setState({
             email: event.target.value.toLowerCase()
         });
     }
-    onPasswordChange(event){
-        this.setState({
-            password: event.target.value
-        });
-    }
-
     handleKeyPress(target){
         if (target.charCode === 13){
-            this.handleRegister();
+            this.handleForgotPassword();
         }
     }
-    componentDidMount(){
+    componentDidMount() {
         setTimeout(() => {
             this.emailRef.current.focus();
-        }, 500)
+        }, 1)
     }
     render(){
         return(
@@ -61,44 +53,40 @@ class AccountRegisterModal extends React.Component {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Register
-                </Modal.Title> 
+                    Forgot Password 
+                </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {this.props.loginProgress ?
+                {this.props.forotPasswordProgress ?
                 <SavingAlert/>
                 : null}
-                {this.props.registerMessage ?
+                {this.props.forgotPasswordMessage ?
                 <Alert variant="danger">
-                {this.props.registerMessage}
+                {this.props.forgotPasswrodMessage}
                 </Alert>
-                : null }
+                : null}
+                <Alert variant="primary">
+                Enter your email address and you will receive a code to allow you to change your password.
+                </Alert>
                 <Form.Label>Email</Form.Label>
-                <Form.Control
+                <Form.Control 
+                    id="login_email_input" 
                     onChange={this.onEmailChange}
                     ref={this.emailRef}
                 />
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                    type="password"
-                    onChange={this.onPasswordChange}
-                    onKeyPress={this.handleKeyPress}
-                />
-                <div>Password must be at least 8 characters and contain at least one of each below:</div>
-                <ul>
-                    <li>Lowercase letter</li>
-                    <li>Uppercase letter</li>
-                    <li>One number</li>
-                    <li>One special charater: ^  $  *  .  ?  - </li>
-                </ul>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={this.props.onCancel}>Cancel</Button>
-                <Button onClick={this.handleRegister}>Register</Button>
+                <Button 
+                    id="login_button"
+                    onClick={this.handleForgotPassword}
+                >
+                    Submit 
+                </Button>
             </Modal.Footer>
         </Modal>
         );
     }
 }
 
-export default AccountRegisterModal;
+export default AccountForgotPasswordModal;
