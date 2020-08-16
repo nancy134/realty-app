@@ -55,6 +55,7 @@ class ListingToolbar extends React.Component {
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.handleSearchSelect = this.handleSearchSelect.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
+        this.handleSearchFocus = this.handleSearchFocus.bind(this);
         var address = "";
         if (this.props.formatted_address) address = this.props.formatted_address;
         this.state = {
@@ -80,6 +81,8 @@ class ListingToolbar extends React.Component {
                 lng0: lng0,
                 lat1: lat1,
                 lng1: lng1
+            }, () => {
+                this.handleSearch();
             });
         }).catch(error => {
             console.error('Error', error);
@@ -96,6 +99,9 @@ class ListingToolbar extends React.Component {
             "&lng1="+this.state.lng1;
         }
         window.location.href = url; 
+    }
+    handleSearchFocus(e){
+        e.target.select();
     }
     onAddListing(e){
         this.props.onAddListing();
@@ -134,6 +140,7 @@ class ListingToolbar extends React.Component {
                                 <div>
                                     <InputGroup>                
                                         <Form.Control
+                                            onFocus={this.handleSearchFocus}
                                             {...getInputProps({
                                                 placeholder: address,
                                             })}

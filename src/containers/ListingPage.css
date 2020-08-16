@@ -110,7 +110,7 @@
 #stickyHeader{
     position: sticky;
     top: 0;
-    z-index: 999;
+    z-index: 998;
 }
 .autocomplete-dropdown-container{
     position:absolute;
@@ -165,4 +165,7 @@
 }
 .smallFont {
     font-size: 80%;
+}
+.autocomplete-dropdown-container{
+    z-index: 999;
 }
