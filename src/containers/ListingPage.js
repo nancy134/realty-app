@@ -50,6 +50,7 @@ export class ListingPage extends Component {
         this.handleAddListing = this.handleAddListing.bind(this);
         this.handleListingTypeNext = this.handleListingTypeNext.bind(this);
         this.handleListingAddressNext = this.handleListingAddressNext.bind(this);
+        this.handleGoToListing = this.handleGoToListing.bind(this);
         this.handleListingOverviewNext = this.handleListingOverviewNext.bind(this);
         this.handleCancelAddType = this.handleCancelAddType.bind(this);
         this.handleCancelAddAddress = this.handleCancelAddAddress.bind(this);
@@ -146,6 +147,38 @@ export class ListingPage extends Component {
             lat1: lat1,
             lng1: lng1
         };
+    }
+    handleGoToListing(result){
+        var listing = null;
+        var editMode = "view";
+        var listingMode = "allListings";
+
+        if (result.length > 1){
+            for (var i=0; i<result.length; i++){
+                if (result[i].publishStatus === "Draft"){
+                    listing = result[i];
+                }
+            }
+        } else {
+            listing = result[0];
+        }
+
+        if (listing.publishStatus === "Draft"){
+            editMode = "edit";
+            listingMode = "myListings";
+        } else {
+            editMode = "view";
+            listingMode = "allListings";
+        }
+        var localState = {
+            addListingAddress: false,
+            listingMode: listingMode,
+            index: listing.id,
+            showDetail: true,
+            editMode: editMode,
+        };
+        this.fetchListing(localState);
+
     }
     handleShowDetailChange(showDetail, index, arrayIndex){
         var editMode = "view";
@@ -391,6 +424,7 @@ export class ListingPage extends Component {
                 that.setState({
                     listingMode: localState.listingMode,
                     addListingOverview: localState.addListingOverview,
+                    addListingAddress: localState.addListingAddress,
                     listingDetail: data,
                     showDetail: localState.showDetail,
                     editMode: localState.editMode,
@@ -670,6 +704,7 @@ export class ListingPage extends Component {
                         onNext={this.handleListingAddressNext}
                         listing={this.state.newListing}
                         onCancel={this.handleCancelAddAddress}
+                        onGoToListing={this.handleGoToListing}
                     />
                     : null }
                     <ListingAddOverview

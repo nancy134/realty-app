@@ -141,6 +141,22 @@ export function deleteListing(id){
     });
 }
 
+export function findAddress(address, city, state, owner){
+    var url = process.env.REACT_APP_LISTING_SERVICE+"addresses?address="+address+"&city="+city+"&state="+state+"&owner="+owner;
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'GET',
+            uri: url,
+            json: true
+        };
+        rp(options).then(function(parsedBody){
+            resolve(parsedBody);
+        }).catch(function(err){
+            reject(err.error);
+        });
+    });
+}
+
 export function getSpaceTypes(cb){
     var url = process.env.REACT_APP_LISTING_SERVICE+"spaceUses";
     fetch(url, {
@@ -180,7 +196,8 @@ const listings = {
     unpublish, 
     getSpaceTypes, 
     getListingTypes,
-    deleteListing
+    deleteListing,
+    findAddress
 };
 export default listings;
 
