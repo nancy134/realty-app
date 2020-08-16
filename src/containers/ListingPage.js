@@ -193,7 +193,6 @@ export class ListingPage extends Component {
 
         var localState = {
             addListingAddress: false,
-            listingMode: this.state.listingMode,
             index: index,
             showDetail: showDetail,
             editMode: editMode,
@@ -397,10 +396,7 @@ export class ListingPage extends Component {
         if (index) fetchIndex = index;
         var localState = {
             addListingAddress: false,
-            listingMode: this.state.listingMode,
             index: fetchIndex,
-            showDetail: this.state.showDetail,
-            editMode: this.state.editMode,
         };
         this.fetchListing(localState);
     }
@@ -421,17 +417,10 @@ export class ListingPage extends Component {
                         accordionText.push(more);
                     }
                 }
-                that.setState({
-                    listingMode: localState.listingMode,
-                    addListingOverview: localState.addListingOverview,
-                    addListingAddress: localState.addListingAddress,
-                    listingDetail: data,
-                    showDetail: localState.showDetail,
-                    editMode: localState.editMode,
-                    index: localState.index,
-                    owner: owner,
-                    spaceAccordionText: accordionText
-                }, () => {
+                localState.listingDetail = data;
+                localState.owner = owner;
+                localState.spaceAccordionText = accordionText;
+                that.setState(localState, () => {
                     that.handleListUpdate();
                 });
             }).catch(function(err){
