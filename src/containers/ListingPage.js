@@ -581,6 +581,7 @@ export class ListingPage extends Component {
     }
 
     handleBoundsChange(bounds){
+        console.log("handleBoundsChange");
         if (bounds.lat0){
             this.setState({
                 lat0: bounds.lat0,
@@ -704,7 +705,7 @@ export class ListingPage extends Component {
                     />
                 </Row>
                 <Row>
-                    <Col xs={7} className={showDetail? "rightcol" : "leftcol"}>
+                    <Col xs={8} className={showDetail? "rightcol" : "leftcol"}>
                         <CSSTransition
                             in={showDetail}
                             appear={false}
@@ -755,7 +756,7 @@ export class ListingPage extends Component {
                             />
                     : null}
                     </Col>
-                    <Col xs={5} className="rightcol" >
+                    <Col xs={4} className="rightcol" >
                         <ListingPagination 
                             page={this.state.page} 
                             count={this.state.count} 

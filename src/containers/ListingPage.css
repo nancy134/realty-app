@@ -26,10 +26,6 @@
     width: 60px;
 }
 
-.listing-title {
-    cursor: pointer;
-}
-
 .modal-90w {
     max-width: 90% !important;
 }
@@ -168,4 +164,9 @@
 }
 .autocomplete-dropdown-container{
     z-index: 999;
+}
+
+.list-image{
+    width: auto;
+    height: 100px;
 }

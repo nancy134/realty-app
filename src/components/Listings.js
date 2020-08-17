@@ -3,10 +3,13 @@ import {
     ListGroup,
     Row, Col,
     Card,
-    Image,
-    Button
+    Image
 } from 'react-bootstrap';
 import {getUserEmail} from '../helpers/authentication';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faTrash
+} from '@fortawesome/free-solid-svg-icons';
 
 function getMinSize(array){
     return array.reduce((min, p) => p.size < min ? p.size : min, array[0].size);
@@ -66,34 +69,43 @@ function ListItem(props){
     var floatPrice = parseFloat(listing.listingPrice);
     var listingPrice = floatPrice.toLocaleString(undefined, {maximumFractionDigits:0});
     return(
-        <ListGroup.Item>
+        <ListGroup.Item 
+            className="border p-1 addPointer list-item" 
+            onClick={() => props.onItemClick(listing.id, props.index)}
+        >
             <Row>
-                <Col>
+                <Col xs={4}>
                     { listing.images.length > 0 ?
                     <Image 
                         src={listing.images[0].url} 
-                        className="border-0" 
+                        className="border-0 list-image" 
                         thumbnail
                     />
                     :
                     <Image 
                         src="/default.jpg" 
-                        className="border-0" 
+                        className="border-0 list-image" 
                         thumbnail 
                     />
                     }
                 </Col>
-                <Col>
+                <Col xs={8}>
                     <Card className="border-0">
-                        <Card.Body >
+                        <Card.Body className="p-1">
                             <Card.Title 
                                 id="listing_title"
                                 className="listing-title text-danger"  
-                                data-index={listing.id}
-                                data-arrayindex={props.index}
-                                onClick={props.onShowDetailChange}
                             >
-                                {address}
+                                <span>{address}</span>
+                                { listing.owner === getUserEmail() && props.listingMode === "myListings" ?
+                                <span 
+                                    data-id={listing.ListingId} 
+                                    onClick={(e) => props.onDelete(e, listing.ListingId)}
+                                    className="float-right"
+                                >
+                                    <FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} />
+                                </span>
+                                : null }
                             </Card.Title>
                             
                             { listing.city ?
@@ -124,9 +136,6 @@ function ListItem(props){
                             <div>For Sale ${listingPrice}</div>
                             : null }
                             <div>{listing.shortDescription}</div>
-                            { listing.owner === getUserEmail() && props.listingMode === "myListings" ?
-                            <Button data-id={listing.ListingId} variant="light" size="sm" onClick={props.onDelete}>Delete</Button>
-                            : null}
 
                         </Card.Body>
                     </Card>
@@ -147,12 +156,12 @@ class Listings extends React.Component {
     }
     componentWillUnmount() {
     }
-    handleDelete(e){
-        this.props.onDelete(e.target.dataset.id);
+    handleDelete(e, id){
+        e.stopPropagation();
+        this.props.onDelete(id);
     };
-
-    showDetailChange(e){
-        this.props.onShowDetailChange(true, e.target.dataset.index, e.target.dataset.arrayindex);
+    showDetailChange(id, arrayIndex){
+        this.props.onShowDetailChange(true, id, arrayIndex);
     }
  
     render() {
@@ -168,9 +177,9 @@ class Listings extends React.Component {
                     index={index}
                     key={listing.id}
                     listing={listing} 
-                    onShowDetailChange={this.showDetailChange}
                     onDelete={this.handleDelete}
                     listingMode={this.props.listingMode}
+                    onItemClick={this.showDetailChange}
                 />
                 ))}
             </ListGroup>
