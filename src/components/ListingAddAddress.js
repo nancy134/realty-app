@@ -33,12 +33,17 @@ class ListingAddAddress extends React.Component{
         this.goNext = this.goNext.bind(this);
         this.handleVerifyAddress = this.handleVerifyAddress.bind(this);
         this.handleSelectAddress = this.handleSelectAddress.bind(this);
+        this.addressRef = React.createRef();
+        this.cityRef = React.createRef();
+        this.stateRef = React.createRef();
+        this.zipRef = React.createRef();
         this.state = {
             states: null,
             address: '',
             geocoded: false,
             verifiedAddresses: false,
-            addressInUse: false
+            addressInUse: false,
+            showVerifyAddressModal: false
         };
     }
     handleNext(initialValues, values){
@@ -127,18 +132,35 @@ class ListingAddAddress extends React.Component{
                 address: addr,
                 geocoded: true,
                 verifiedAddresses: null,
-                addressInUse: addressInUse
+                addressInUse: addressInUse,
+                showVerifyAddressModal: false
+            }, () => {
+        that.addressRef.current.blur();
+        that.cityRef.current.focus();
+        that.stateRef.current.focus();
+        that.zipRef.current.focus();
+
             });
         }).catch(function(err){
             console.log(err);
+            that.setState({
+                showVerifyAddressModal: false
+            });
         });
     }
 
     handleSelectAddress(address, values){
+            console.log("handleSelectAddress");
             var that = this;
+            this.setState({
+                showVerifyAddressModal: true
+            });
             geolocationService.geocodeByAddr(address, values).then(function(results){
                 that.updateValues(results, values);
             }).catch(function(err){
+                this.setState({
+                    showVerifyAddressModal: false
+                });
                 console.log("err: "+err);
             });
     }
@@ -155,6 +177,9 @@ class ListingAddAddress extends React.Component{
     }
     handleSelect = (address, values) => {
         var that = this;
+        this.setState({
+            showVerifyAddressModal: true
+        });
         geolocationService.geocodeByAddr(address, values).then(function(results){
             that.updateValues(results, values);
         }).catch(function(err){
@@ -194,6 +219,17 @@ class ListingAddAddress extends React.Component{
 
        if (this.props.show){
        return(
+       <React.Fragment>
+       <Modal
+           show={this.state.showVerifyAddressModal}
+           backdrop='static'
+           size='sm'
+           animation={false}
+       >
+           <Modal.Body className="bg-info text-white">
+               Verifying address...
+           </Modal.Body>
+       </Modal>
        <Formik
             initialValues={initialValues}
             validationSchema={AddressSchema}
@@ -250,7 +286,8 @@ class ListingAddAddress extends React.Component{
                                                     onBlur: handleBlur,
                                                     isInvalid: !!errors.address,
                                                     isValid: touched.address && !errors.address && values.address !== "",
-                                                    disabled: isSubmitting
+                                                    disabled: isSubmitting,
+                                                    ref: this.addressRef
                                                 })}
                                             />
                                             <Form.Control.Feedback type="invalid">
@@ -351,6 +388,7 @@ class ListingAddAddress extends React.Component{
                                         isInvalid={touched.city && !!errors.city}
                                         isValid={touched.city && !errors.city && values.city !== ""}
                                         disabled={isSubmitting}
+                                        ref={this.cityRef}
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         {errors.city}
@@ -367,6 +405,7 @@ class ListingAddAddress extends React.Component{
                                         isValid={touched.state && !errors.state && values.state !== ""}
                                         isInvalid={!!errors.state}
                                         disabled={isSubmitting}
+                                        ref={this.stateRef}
                                     >
                                     {states}
                                     </Form.Control>
@@ -385,6 +424,7 @@ class ListingAddAddress extends React.Component{
                                         isInvalid={touched.zip && !!errors.zip}
                                         isValid={touched.zip && !errors.zip && values.zip !== ""}
                                         disabled={isSubmitting}
+                                        ref={this.zipRef}
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         {errors.zip}
@@ -431,6 +471,7 @@ class ListingAddAddress extends React.Component{
        </Modal>
        )}
        </Formik>
+       </React.Fragment>
        );
        } else {
        return(null);

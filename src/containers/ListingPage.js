@@ -244,7 +244,7 @@ export class ListingPage extends Component {
                 editMode: "edit",
             };
             that.fetchListing(localState);
-            that.fetchListings("myListings",that.state.page);
+            that.fetchListings("myListings",1);
         }).catch(function(err){
             console.log(err);
         });
@@ -449,6 +449,7 @@ export class ListingPage extends Component {
         }
     }
     fetchListings(listingMode, page){
+        console.log("page: "+page);
         var lMode = "allListings";
         if (listingMode){
             lMode = listingMode;
@@ -480,6 +481,8 @@ export class ListingPage extends Component {
         var that = this;
         var getAllPromise = listingService.getAll(query);
         getAllPromise.then(function(listings){
+           console.log("listings:");
+           console.log(listings);
            var enumPromise = listingService.getEnumsPromise();
            enumPromise.then(function(enums){
           
@@ -564,10 +567,18 @@ export class ListingPage extends Component {
         });
     }
     handleDeleteListingConfirm(){
+        console.log("handleDeleteListingConfirm");
+        console.log(this.state.listings);
         var that = this;
         var deleteListingPromise = listingService.deleteListing(this.state.deleteListingId);
         deleteListingPromise.then(function(result){
-            that.fetchListings(that.state.listingMode, that.state.page);
+
+            // If deleting the last item on the last page
+            var page = that.state.page;
+            if (that.state.listings.length === 1 && that.state.page > 1){
+                page = that.state.page-1;
+            }
+            that.fetchListings(that.state.listingMode, page);
             that.handleFetchListing();
             that.handleDeleteListingHide();
         }).catch(function(err){

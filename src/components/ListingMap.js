@@ -24,6 +24,13 @@ class ListingMap extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleZoomChanged = this.handleZoomChanged.bind(this);
         this.handleDragEnd = this.handleDragEnd.bind(this);
+        this.initialZoom = true;
+        this.actualBounds = {
+            lat0: null,
+            lng0: null,
+            lat1: null,
+            lng1: null
+        };
     }
 
     handleChange(e) {
@@ -102,6 +109,7 @@ class ListingMap extends React.Component {
         bounds.extend(nePoint);
         bounds.extend(swPoint);
         map.fitBounds(bounds);
+
         this.setState({
             bounds: bounds
         });
@@ -121,7 +129,22 @@ class ListingMap extends React.Component {
             lat1: sw.lat(),
             lng1: sw.lng()
         };
-        this.props.onBoundsChange(bounds);
+        if (this.initialZoom){
+             this.initialZoom = false;
+             this.actualBounds.lat0 = ne.lat();
+             this.actualBounds.lng0 = ne.lng();
+             this.actualBounds.lat1 = sw.lat();
+             this.actualBounds.lng1 = sw.lng(); 
+             bounds = {
+                 lat0: this.props.lat0,
+                 lng0: this.props.lng0,
+                 lat1: this.props.lat1,
+                 lng1: this.props.lng1
+             }
+             this.props.onBoundsChange(bounds);
+        } else {
+            this.props.onBoundsChange(bounds);
+        }
 
     }
     handleDragEnd(props, map){
@@ -169,7 +192,7 @@ class ListingMap extends React.Component {
                        <p>{this.state.selectedPlace.name}</p>
                    </div>
                </InfoWindow>
-               { false ?
+               { true ?
                <Polygon
                    paths={polygon}
                    strokeColor="#0000FF"
