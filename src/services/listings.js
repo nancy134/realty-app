@@ -22,6 +22,29 @@ export function getAll(query,cb){
     });
 }
 
+export function getMarkers(query){
+    var url = "";
+    if (query) {
+        url = process.env.REACT_APP_LISTING_SERVICE+"listingMarkers?"+query;
+    } else {
+        url = process.env.REACT_APP_LISTING_SERVICE+"listingMarkers";
+    }
+
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'GET',
+            uri: url,
+            json: true
+        };
+        rp(options).then(function(parsedBody){
+            resolve(parsedBody);
+        }).catch(function(err){
+            reject(err.error);
+        });
+    });
+
+}
+
 export function get(index){
     var url = process.env.REACT_APP_LISTING_SERVICE+"listings/"+index;
     return new Promise(function(resolve, reject){
@@ -188,6 +211,7 @@ function parseJSON(response){
 const listings = {
     get, 
     getAll,
+    getMarkers,
     create, 
     update, 
     getEnums, 

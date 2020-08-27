@@ -22,8 +22,24 @@ export function getVerifiedAddresses(address){
     });
 }
 
+export function calculateBounds(maps, bounds, markers){
+    if (markers){
+        var len = markers.length;
+        for (var i=0; i<len; i++){
+            var marker = markers[i];
+            if (marker.location){
+                var point = new maps.LatLng(marker.location.coordinates[0],marker.location.coordinates[1]);
+                bounds.extend(point);
+            }
+        }
+    }
+
+    return bounds;
+}
+
 const geolocation = {
     geocodeByAddr,
-    getVerifiedAddresses
+    getVerifiedAddresses,
+    calculateBounds
 };
 export default geolocation;

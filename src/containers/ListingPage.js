@@ -242,6 +242,10 @@ export class ListingPage extends Component {
                 index: data.listing.id,
                 showDetail: true,
                 editMode: "edit",
+                lat0: null,
+                lng0: null,
+                lat1: null,
+                lng1: null
             };
             that.fetchListing(localState);
             that.fetchListings("myListings",1);
@@ -267,7 +271,11 @@ export class ListingPage extends Component {
     handleListingToggle(value){
         this.setState({
             showDetail: false,
-            listingMode: value
+            listingMode: value,
+            lat0: null,
+            lng0: null,
+            lat1: null,
+            lng1: null
         }, () => { 
             this.fetchListings(value, 1);
         });
@@ -449,7 +457,6 @@ export class ListingPage extends Component {
         }
     }
     fetchListings(listingMode, page){
-        console.log("page: "+page);
         var lMode = "allListings";
         if (listingMode){
             lMode = listingMode;
@@ -457,16 +464,21 @@ export class ListingPage extends Component {
             lMode = this.state.listingMode;
         }
         var query = "";
+        var markerQuery = "";
         if (lMode === "myListings" ){
            query = "perPage=20&page="+page+"&owner="+getUserEmail();
+           markerQuery = "perPage=250&page=1&owner="+getUserEmail();
         } else {
            query = 'perPage=20&page='+page;
+           markerQuery = "perPage=250&page=1";
         }
         if (this.state.spaceUseFilter){
             query += this.state.spaceUseFilter;
+            markerQuery += this.state.spaceUseFilter;
         }
         if (this.state.moreQuery){
             query += this.state.moreQuery;
+            markerQuery += this.state.moreQuery;
         }
 
         // Location query 
@@ -477,23 +489,27 @@ export class ListingPage extends Component {
             locationQuery += "&lat1="+this.state.lat1;
             locationQuery += "&lng1="+this.state.lng1;
             query += locationQuery;
+            markerQuery += locationQuery;
         }
         var that = this;
         var getAllPromise = listingService.getAll(query);
         getAllPromise.then(function(listings){
-           console.log("listings:");
-           console.log(listings);
            var enumPromise = listingService.getEnumsPromise();
            enumPromise.then(function(enums){
-          
-               that.setState({
-                   allAmenities: enums.amenities,
-                   listingMode: listingMode,
-                   listings: listings.listings.rows,
-                   page: listings.page,
-                   perPage: listings.perPage,
-                   count: listings.listings.count
-               });
+               var getMarkersPromise = listingService.getMarkers(markerQuery);
+               getMarkersPromise.then(function(markers){
+                   that.setState({
+                       allAmenities: enums.amenities,
+                       listingMode: listingMode,
+                       listings: listings.listings.rows,
+                       page: listings.page,
+                       perPage: listings.perPage,
+                       count: listings.listings.count,
+                       markers: markers.markers.rows
+                   });
+              }).catch(function(err){
+                  console.log(err);
+              });
            }).catch(function(err){
                console.log(err);
            });
@@ -567,8 +583,6 @@ export class ListingPage extends Component {
         });
     }
     handleDeleteListingConfirm(){
-        console.log("handleDeleteListingConfirm");
-        console.log(this.state.listings);
         var that = this;
         var deleteListingPromise = listingService.deleteListing(this.state.deleteListingId);
         deleteListingPromise.then(function(result){
@@ -758,7 +772,8 @@ export class ListingPage extends Component {
                     {!showDetail ?
                             <ListingMap 
                                 listings={this.state.listings}
-                                showDetail={showDetail} 
+                                showDetail={showDetail}
+                                markers={this.state.markers}
                                 lat0={this.state.lat0}
                                 lng0={this.state.lng0}
                                 lat1={this.state.lat1}

@@ -6,9 +6,11 @@ import {
     InfoWindow,
     Polygon
 } from 'google-maps-react';
+import geolocationService from '../helpers/geolocation';
 
 class ListingMap extends React.Component {
     constructor(props) {
+        console.log("constructor");
         super(props);
         this.state = {
             stores: [
@@ -53,24 +55,26 @@ class ListingMap extends React.Component {
     }
 
     onMapClicked = () => {
-        if (this.state.showingInfoWindow)
+        if (this.state.showingInfoWindow){
             this.setState({
                 activeMarker: null,
                 showingInfoWindow: false
             });
+        } 
     };
 
     displayMarkers = () => {
-        if (this.props.listings){
-            var listings = this.props.listings;
+        console.log("displayMarkers");
+        if (this.props.markers){
+            var markers = this.props.markers;
             
-            return listings.map((listing, index) => {
-                if (listing.location){
+            return markers.map((marker, index) => {
+                if (marker.location){
                 return <Marker
                     key={index}
-                    name={listing.address}
+                    name={marker.address}
                     onClick={this.onMarkerClick}
-                    position={{ lat: listing.location.coordinates[0], lng: listing.location.coordinates[1] }}
+                    position={{ lat: marker.location.coordinates[0], lng: marker.location.coordinates[1] }}
                 />
                 } else {
                 return null;
@@ -82,44 +86,11 @@ class ListingMap extends React.Component {
         }
     }
 
-    makeBounds = (map) => {
-        var bounds = new this.props.google.maps.LatLngBounds();
-        var nePoint = {};
-        var swPoint = {};
-
-        if (this.props.lat0){
-            nePoint = {
-                lat: parseFloat(this.props.lat0),
-                lng: parseFloat(this.props.lng0)
-            };
-            swPoint = {
-                lat: parseFloat(this.props.lat1),
-                lng: parseFloat(this.props.lng1)
-            };
-        } else {
-            nePoint = {
-                lat: 42.424226,
-                lng: -71.1938809
-            };
-            swPoint = {
-                lat: 42.353715,
-                lng: -71.285501
-            };
-        }
-        bounds.extend(nePoint);
-        bounds.extend(swPoint);
-        map.fitBounds(bounds);
-
-        this.setState({
-            bounds: bounds
-        });
-
-    }
-
     onReady = (mapProps, map) => {
-        this.makeBounds(map);
+        console.log("onReady");
     }
     handleZoomChanged(props, map){
+        console.log("handleZoomChanged");
         var mapBounds = map.getBounds();
         var ne = mapBounds.getNorthEast();
         var sw = mapBounds.getSouthWest();
@@ -141,13 +112,15 @@ class ListingMap extends React.Component {
                  lat1: this.props.lat1,
                  lng1: this.props.lng1
              }
-             this.props.onBoundsChange(bounds);
+             //this.props.onBoundsChange(bounds);
         } else {
+            this.handlingZoom = true;
             this.props.onBoundsChange(bounds);
         }
 
     }
     handleDragEnd(props, map){
+        console.log("handleDragEnd");
         var mapBounds = map.getBounds();
         var ne = mapBounds.getNorthEast();
         var sw = mapBounds.getSouthWest();
@@ -159,7 +132,31 @@ class ListingMap extends React.Component {
         };
         this.props.onBoundsChange(bounds);
     }
+    componentDidUpdate(){
+        console.log("componentDidUpdate");
+        this.initialZoom = true;
+        var bounds = new this.props.google.maps.LatLngBounds();
+        if (!this.props.lat0){
+            geolocationService.calculateBounds(this.props.google.maps, bounds, this.props.markers);
+        } else {
+            var nePoint = {
+                lat: parseFloat(this.props.lat0),
+                lng: parseFloat(this.props.lng0)
+            };
+            var swPoint = {
+                lat: parseFloat(this.props.lat1),
+                lng: parseFloat(this.props.lng1)
+            };
+            bounds.extend(nePoint);
+            bounds.extend(swPoint);
+        }
+        if (!this.handlingZoom){
+            this.refs.resultMap.map.fitBounds(bounds);
+            this.handlingZoom = false;
+        } 
+    }
     render(){
+        console.log("render");
         const showDetail = this.props.showDetail;
 
         const polygon = [
@@ -180,6 +177,7 @@ class ListingMap extends React.Component {
                 style={{ height: '100%', position: 'relative', width: '100%' }}
                 onZoomChanged={this.handleZoomChanged}
                 onDragend={this.handleDragEnd}
+                ref="resultMap"
             >
                 {this.displayMarkers()}
 
@@ -192,7 +190,7 @@ class ListingMap extends React.Component {
                        <p>{this.state.selectedPlace.name}</p>
                    </div>
                </InfoWindow>
-               { true ?
+               { false ?
                <Polygon
                    paths={polygon}
                    strokeColor="#0000FF"
