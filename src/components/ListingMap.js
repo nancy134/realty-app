@@ -6,19 +6,12 @@ import {
     InfoWindow,
     Polygon
 } from 'google-maps-react';
-import geolocationService from '../helpers/geolocation';
+//import geolocationService from '../helpers/geolocation';
 
 class ListingMap extends React.Component {
     constructor(props) {
-        console.log("constructor");
         super(props);
         this.state = {
-            stores: [
-                {latitude: 42.372376, longitude: -71.236423},
-                {latitude: 42.397269, longitude: -71.255798},
-                {latitude: 42.377510, longitude: -71.225547},
-                {latitude: 42.371878, longitude: -71.237794}
-            ],
             activeMarker: {},
             selectedPlace: {},
             showingInfoWindow: false
@@ -26,13 +19,6 @@ class ListingMap extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleZoomChanged = this.handleZoomChanged.bind(this);
         this.handleDragEnd = this.handleDragEnd.bind(this);
-        this.initialZoom = true;
-        this.actualBounds = {
-            lat0: null,
-            lng0: null,
-            lat1: null,
-            lng1: null
-        };
     }
 
     handleChange(e) {
@@ -64,7 +50,6 @@ class ListingMap extends React.Component {
     };
 
     displayMarkers = () => {
-        console.log("displayMarkers");
         if (this.props.markers){
             var markers = this.props.markers;
             
@@ -87,10 +72,9 @@ class ListingMap extends React.Component {
     }
 
     onReady = (mapProps, map) => {
-        console.log("onReady");
     }
     handleZoomChanged(props, map){
-        console.log("handleZoomChanged");
+
         var mapBounds = map.getBounds();
         var ne = mapBounds.getNorthEast();
         var sw = mapBounds.getSouthWest();
@@ -100,27 +84,11 @@ class ListingMap extends React.Component {
             lat1: sw.lat(),
             lng1: sw.lng()
         };
-        if (this.initialZoom){
-             this.initialZoom = false;
-             this.actualBounds.lat0 = ne.lat();
-             this.actualBounds.lng0 = ne.lng();
-             this.actualBounds.lat1 = sw.lat();
-             this.actualBounds.lng1 = sw.lng(); 
-             bounds = {
-                 lat0: this.props.lat0,
-                 lng0: this.props.lng0,
-                 lat1: this.props.lat1,
-                 lng1: this.props.lng1
-             }
-             //this.props.onBoundsChange(bounds);
-        } else {
-            this.handlingZoom = true;
-            this.props.onBoundsChange(bounds);
-        }
-
+        var center = map.getCenter();
+        var zoomLevel = map.getZoom();
+        this.props.onBoundsChange(bounds, center, zoomLevel);  // new
     }
     handleDragEnd(props, map){
-        console.log("handleDragEnd");
         var mapBounds = map.getBounds();
         var ne = mapBounds.getNorthEast();
         var sw = mapBounds.getSouthWest();
@@ -130,44 +98,42 @@ class ListingMap extends React.Component {
             lat1: sw.lat(),
             lng1: sw.lng()
         };
-        this.props.onBoundsChange(bounds);
+        var center = map.getCenter();
+        var zoomLevel = map.getZoom();
+        this.props.onBoundsChange(bounds, center, zoomLevel);
     }
     componentDidUpdate(){
-        console.log("componentDidUpdate");
-        this.initialZoom = true;
         var bounds = new this.props.google.maps.LatLngBounds();
-        if (!this.props.lat0){
-            geolocationService.calculateBounds(this.props.google.maps, bounds, this.props.markers);
-        } else {
-            var nePoint = {
-                lat: parseFloat(this.props.lat0),
-                lng: parseFloat(this.props.lng0)
-            };
-            var swPoint = {
-                lat: parseFloat(this.props.lat1),
-                lng: parseFloat(this.props.lng1)
-            };
-            bounds.extend(nePoint);
-            bounds.extend(swPoint);
+        var nePoint = {
+            lat: parseFloat(this.props.bounds.lat0),
+            lng: parseFloat(this.props.bounds.lng0)
+        };
+        var swPoint = {
+            lat: parseFloat(this.props.bounds.lat1),
+            lng: parseFloat(this.props.bounds.lng1)
+        };
+        bounds.extend(nePoint);
+        bounds.extend(swPoint);
+        if (this.refs.resultMap && this.props.updateBounds){
+            if (!this.props.center){
+                this.refs.resultMap.map.fitBounds(bounds);
+            } else {
+                this.refs.resultMap.map.setCenter(this.props.center);
+                this.refs.resultMap.map.setZoom(this.props.zoomLevel);
+            }
         }
-        if (!this.handlingZoom){
-            this.refs.resultMap.map.fitBounds(bounds);
-            this.handlingZoom = false;
-        } 
     }
     render(){
-        console.log("render");
         const showDetail = this.props.showDetail;
 
         const polygon = [
-           {lat: parseFloat(this.props.lat0), lng: parseFloat(this.props.lng0)},
-           {lat: parseFloat(this.props.lat1), lng: parseFloat(this.props.lng0)},
-           {lat: parseFloat(this.props.lat1), lng: parseFloat(this.props.lng1)},
-           {lat: parseFloat(this.props.lat0), lng: parseFloat(this.props.lng1)},
-           {lat: parseFloat(this.props.lat0), lng: parseFloat(this.props.lng0)}
+           {lat: parseFloat(this.props.bounds.lat0), lng: parseFloat(this.props.bounds.lng0)},
+           {lat: parseFloat(this.props.bounds.lat1), lng: parseFloat(this.props.bounds.lng0)},
+           {lat: parseFloat(this.props.bounds.lat1), lng: parseFloat(this.props.bounds.lng1)},
+           {lat: parseFloat(this.props.bounds.lat0), lng: parseFloat(this.props.bounds.lng1)},
+           {lat: parseFloat(this.props.bounds.lat0), lng: parseFloat(this.props.bounds.lng0)}
         ];
-
-        if (!showDetail) {
+        if (!showDetail && this.props.listings) {
             return (
             <Map
                 className="map"
@@ -203,7 +169,7 @@ class ListingMap extends React.Component {
             </Map>
             );
         } else {
-             return null;
+             return <p>Loading map...</p>;
         }
     } 
 }

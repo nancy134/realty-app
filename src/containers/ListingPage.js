@@ -23,6 +23,7 @@ import { CSSTransition } from 'react-transition-group';
 import DeleteModal from '../components/DeleteModal';
 import DeleteListingModal from '../components/DeleteListingModal';
 import { GoogleApiWrapper } from 'google-maps-react';
+import geolocationService from '../helpers/geolocation';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -68,7 +69,6 @@ export class ListingPage extends Component {
         // Listing
         this.handleUpdate = this.handleUpdate.bind(this);
         this.handleCreate = this.handleCreate.bind(this);
-        this.fetchListing = this.fetchListing.bind(this);
         this.handleFetchListing = this.handleFetchListing.bind(this);
 
         // Transition
@@ -142,10 +142,10 @@ export class ListingPage extends Component {
 
             // Search
             formatted_address: formatted_address,
-            lat0: lat0,
-            lng0: lng0,
-            lat1: lat1,
-            lng1: lng1
+            bounds: {lat0:lat0, lng0:lng0, lat1:lat1, lng1:lng1},
+            updateBounds: true,
+            center: null,
+            zoomLevel: null
         };
     }
     handleGoToListing(result){
@@ -177,7 +177,12 @@ export class ListingPage extends Component {
             showDetail: true,
             editMode: editMode,
         };
-        this.fetchListing(localState);
+        var that = this;
+        this.fetchListingPromise(localState).then(function(localState){
+            that.setState(localState);
+        }).catch(function(err){
+            console.log(err);
+        });
 
     }
     handleShowDetailChange(showDetail, index, arrayIndex){
@@ -196,9 +201,15 @@ export class ListingPage extends Component {
             index: index,
             showDetail: showDetail,
             editMode: editMode,
+            updateBounds:true 
         };
         if (showDetail){
-            this.fetchListing(localState);
+            var that = this;
+            that.fetchListingPromise(localState).then(function(localState){
+                that.setState(localState);
+            }).catch(function(err){
+                console.log(err);
+            });
         } else {
             this.setState(localState);
         }
@@ -236,19 +247,35 @@ export class ListingPage extends Component {
         var createPromise = listingService.create(listing);
         var that = this;
         createPromise.then(function(data) {
+            // increase bounds by newly added item at [0]
+            var bounds = that.state.bounds;
+            var point = data.listing.location;
+            var newBounds = geolocationService.addPoint(bounds,point);
+            var ne = newBounds.getNorthEast();
+            var sw = newBounds.getSouthWest();
+            
             var localState = {
                 addListingOverview: false,
                 listingMode: "myListings",
                 index: data.listing.id,
                 showDetail: true,
                 editMode: "edit",
-                lat0: null,
-                lng0: null,
-                lat1: null,
-                lng1: null
+                bounds: {lat0:ne.lat(),lng0:ne.lng(),lat1:sw.lat(),lng1:sw.lng()},
+                center: null,
+                zoomLevel: null,
+                page: 1
             };
-            that.fetchListing(localState);
-            that.fetchListings("myListings",1);
+
+            that.fetchListingPromise(localState).then(function(localState){
+                that.fetchListingsPromise(localState).then(function(localState){
+                    that.setState(localState);
+                }).catch(function(err){
+                    console.log(err);
+                });
+            }).catch(function(err){
+                console.log(err);
+            });
+
         }).catch(function(err){
             console.log(err);
         });
@@ -269,15 +296,27 @@ export class ListingPage extends Component {
         });
     }
     handleListingToggle(value){
-        this.setState({
-            showDetail: false,
+        var localState = {
             listingMode: value,
-            lat0: null,
-            lng0: null,
-            lat1: null,
-            lng1: null
-        }, () => { 
-            this.fetchListings(value, 1);
+            page: 1,
+            showDetail: false,
+            bounds: {lat0:null,lng0:null,lat1:null,lng1:null},
+            center: null,
+            zoomLevel: null,
+            updateBounds: true
+        };
+        var that = this;
+        this.fetchListingsPromise(localState).then(function(localState){
+            var bounds = geolocationService.calculateBounds(localState.markers);
+            var ne = bounds.getNorthEast();
+            var sw = bounds.getSouthWest();
+            localState.bounds.lat0 = ne.lat();
+            localState.bounds.lng0 = ne.lng();
+            localState.bounds.lat1 = sw.lat();
+            localState.bounds.lng1 = sw.lng();
+            that.setState(localState);
+        }).catch(function(err){
+            console.log(err);
         });
     }
     handleOwnerChange(value){
@@ -291,41 +330,69 @@ export class ListingPage extends Component {
             spaceUseFilter += "&spaceUse[]="+filter;
         });
 
-        this.setState({
-            spaceUseFilter: spaceUseFilter 
-        }, () => {
-            this.handleListUpdate();
+        var localState = {
+           spaceUseFilter: spaceUseFilter,
+           page: 1
+        };
+        var that = this;
+        this.fetchListingsPromise(localState).then(function(localState){
+            that.setState(localState);
+        }).catch(function(err){
+            console.log(err);
         });
     }
     handleMoreFilterChange(moreFilters){
         var moreQuery = "";
+
         if (moreFilters.minSize) moreQuery += "&minSize="+moreFilters.minSize; 
         if (moreFilters.maxSize) moreQuery += "&maxSize="+moreFilters.maxSize;
         if (moreFilters.minRate) moreQuery += "&minRate="+moreFilters.minRate;
         if (moreFilters.maxRate) moreQuery += "&maxRate="+moreFilters.maxRate;
         if (moreFilters.listingType)  moreQuery += "&ListingType="+moreFilters.listingType;
-        this.setState({moreQuery: moreQuery}, () => {
-            this.handleListUpdate();
-        })
-            
+
+        var localState = {
+            moreQuery: moreQuery,
+            page: 1
+        };
+        var that = this;
+        this.fetchListingsPromise(localState).then(function(localState){
+            that.setState(localState);
+        }).catch(function(err){
+            console.log(err);
+        });
     }
 
     handleNewPage(goToPage){
-        this.fetchListings(this.state.listingMode, goToPage);
+        var localState = {
+            listingMode: this.state.listingMode,
+            page: goToPage
+         };
+        this.fetchListings(localState);
     }
     handleListUpdate(){
-        this.fetchListings(this.state.listingMode, this.state.page);
+        var localState = {
+            listingMode: this.state.listingMode,
+            page: this.state.page
+        };
+        this.fetchListings(localState);
     }
     handleUpdate(listing){
         var updatePromise = listingService.update(listing);
         var that = this;
         updatePromise.then(function(data){
-            that.setState({
+            var localState = {
                 listingDetail: data,
                 index: data.listing.id
+            };
+            that.fetchListingPromise(localState).then(function(localState){
+                that.fetchListingsPromise(localState).then(function(localState){
+                    that.setState(localState);
+                }).catch(function(err){
+                    console.log(err);
+                });
+            }).catch(function(err){
+                console.log(err);
             });
-            that.handleFetchListing(data.listing.id);
-            that.handleListUpdate();
         }).catch(function(err){
             var errMessage = "An error occurred while trying to save your listing";
             that.setState({
@@ -405,12 +472,23 @@ export class ListingPage extends Component {
         var localState = {
             addListingAddress: false,
             index: fetchIndex,
+            page: 1 
         };
-        this.fetchListing(localState);
+        var that=this;
+
+        this.fetchListingPromise(localState).then(function(localState){
+            that.fetchListingsPromise(localState).then(function(localState){
+                that.setState(localState);
+            }).catch(function(err){
+                console.log(err);
+            });
+        }).catch(function(err){
+            console.log(err);
+        });
+
     }
-    fetchListing(localState){
-        if (localState.index){
-            var that = this;
+    fetchListingPromise(localState){
+        return new Promise(function(resolve, reject){
             var getPromise = listingService.get(localState.index);
             getPromise.then(function(data){
                 var owner = false;
@@ -428,102 +506,100 @@ export class ListingPage extends Component {
                 localState.listingDetail = data;
                 localState.owner = owner;
                 localState.spaceAccordionText = accordionText;
-                that.setState(localState, () => {
-                    that.handleListUpdate();
+                resolve(localState);
+            }).catch(function(err){
+                reject(err);
+            });
+        });
+    }
+    fetchListingsPromise(localState){
+        var that = this;
+        return new Promise(function(resolve, reject){
+            var lMode = "allListings";
+            if (localState.listingMode){
+                lMode = localState.listingMode;
+            } else {
+                lMode = that.state.listingMode;
+            }
+            var query = "";
+            var markerQuery = "";
+            if (lMode === "myListings" ){
+                query = "perPage=20&page="+localState.page+"&owner="+getUserEmail();
+                markerQuery = "perPage=250&page=1&owner="+getUserEmail();
+            } else {
+                query = 'perPage=20&page='+localState.page;
+                markerQuery = "perPage=250&page=1";
+            }
+
+            var spaceUseFilter = localState.spaceUseFilter ? localState.spaceUseFilter : that.state.spaceUseFilter;
+            if (spaceUseFilter){
+                query += spaceUseFilter;
+                markerQuery += spaceUseFilter;
+            }
+
+            var moreQuery = localState.moreQuery ? localState.moreQuery : that.state.moreQuery;
+            if (moreQuery){
+                query += moreQuery;
+                markerQuery += moreQuery;
+            }
+
+            // Location query 
+            var locationQuery = "";
+            var lat0 = localState.bounds ? localState.bounds.lat0 : null;
+            var lng0 = localState.bounds ? localState.bounds.lng0 : null;
+            var lat1 = localState.bounds ? localState.bounds.lat1 : null;
+            var lng1 = localState.bounds ? localState.bounds.lng1 : null;
+            if (lat0){
+                locationQuery += "&lat0="+lat0;
+                locationQuery += "&lng0="+lng0;
+                locationQuery += "&lat1="+lat1;
+                locationQuery += "&lng1="+lng1;
+                query += locationQuery;
+                markerQuery += locationQuery;
+            }
+            var getAllPromise = listingService.getAll(query);
+            getAllPromise.then(function(listings){
+                var enumPromise = listingService.getEnumsPromise();
+                enumPromise.then(function(enums){
+                    var getMarkersPromise = listingService.getMarkers(markerQuery);
+                    getMarkersPromise.then(function(markers){
+                        localState.allAmenities = enums.amenities;
+                        localState.listings = listings.listings.rows;
+                        localState.page = listings.page;
+                        localState.perPage = listings.perPage;
+                        localState.count = listings.listings.count;
+                        localState.markers = markers.markers.rows;
+                        resolve(localState);
+                    }).catch(function(err){
+                        reject(err);
+                    });
+                }).catch(function(err){
+                    reject(err);
                 });
             }).catch(function(err){
-                console.log(err);
-            });
-        } else {
-            listingService.getEnums((data) => {
-                var listingDetail = {
-                    listing: null,
-                    states: data.states,
-                    listingTypes: data.listingTypes,
-                    propertyTypes: data.propertyTypes,
-                    spaceUses: data.spaceUses,
-                    spaceTypes: data.spaceTypes,
-                    spaceDivisibles: data.spaceDivisibles,
-                    portfolioTypes: data.portfolioTypes
-                }
-                this.setState({
-                    listingDetail: listingDetail,
-                    showDetail: localState.showDetail,
-                    editMode: localState.editMode,
-                    index: localState.index,
-                    owner: true,
-                });
-            });
-        }
-    }
-    fetchListings(listingMode, page){
-        var lMode = "allListings";
-        if (listingMode){
-            lMode = listingMode;
-        } else {
-            lMode = this.state.listingMode;
-        }
-        var query = "";
-        var markerQuery = "";
-        if (lMode === "myListings" ){
-           query = "perPage=20&page="+page+"&owner="+getUserEmail();
-           markerQuery = "perPage=250&page=1&owner="+getUserEmail();
-        } else {
-           query = 'perPage=20&page='+page;
-           markerQuery = "perPage=250&page=1";
-        }
-        if (this.state.spaceUseFilter){
-            query += this.state.spaceUseFilter;
-            markerQuery += this.state.spaceUseFilter;
-        }
-        if (this.state.moreQuery){
-            query += this.state.moreQuery;
-            markerQuery += this.state.moreQuery;
-        }
-
-        // Location query 
-        var locationQuery = "";
-        if (this.state.lat0){
-            locationQuery += "&lat0="+this.state.lat0;
-            locationQuery += "&lng0="+this.state.lng0;
-            locationQuery += "&lat1="+this.state.lat1;
-            locationQuery += "&lng1="+this.state.lng1;
-            query += locationQuery;
-            markerQuery += locationQuery;
-        }
-        var that = this;
-        var getAllPromise = listingService.getAll(query);
-        getAllPromise.then(function(listings){
-           var enumPromise = listingService.getEnumsPromise();
-           enumPromise.then(function(enums){
-               var getMarkersPromise = listingService.getMarkers(markerQuery);
-               getMarkersPromise.then(function(markers){
-                   that.setState({
-                       allAmenities: enums.amenities,
-                       listingMode: listingMode,
-                       listings: listings.listings.rows,
-                       page: listings.page,
-                       perPage: listings.perPage,
-                       count: listings.listings.count,
-                       markers: markers.markers.rows
-                   });
-              }).catch(function(err){
-                  console.log(err);
-              });
-           }).catch(function(err){
-               console.log(err);
-           });
-        }).catch(function(err){
-            console.log(err);
-        }); 
-
+                reject(err);
+            }); 
+        });
     }
 
     componentDidMount(){
         if (this.state.fullscreen){
             this.handleFetchListing();
         }
-        this.fetchListings(this.state.listingMode, this.state.page);
+        var localState = {
+            listingMode: this.state.listingMode,
+            page: this.state.page,
+            bounds: {
+                lat0: this.state.bounds.lat0,
+                lng0: this.state.bounds.lng0,
+                lat1: this.state.bounds.lat1,
+                lng1: this.state.bounds.lng1
+            }
+        };
+        var that = this;
+        this.fetchListingsPromise(localState).then(function(localState){
+            that.setState(localState);
+        });
     }
     componentWillUnmount(){
     }
@@ -562,8 +638,17 @@ export class ListingPage extends Component {
         var deleteSpace = spaceService.deletePromise(this.state.deleteId);
         deleteSpace.then(function(result){
             that.handleFetchListing(result.latestDraftId);
-            that.fetchListings("myListings",that.state.page);
-            that.handleDeleteHide();
+            var localState = {
+                listingMode: "myListings",
+                page: that.state.page
+            };
+            that.fetchListingsPromise(localState).then(function(localState){
+                that.setState(localState);
+                that.handleDeleteHide();
+            }).catch(function(err){
+                console.log(err);
+            });
+
         }).catch(function(err){
             console.log(err);
         });
@@ -592,9 +677,18 @@ export class ListingPage extends Component {
             if (that.state.listings.length === 1 && that.state.page > 1){
                 page = that.state.page-1;
             }
-            that.fetchListings(that.state.listingMode, page);
-            that.handleFetchListing();
-            that.handleDeleteListingHide();
+            var localState = {
+                listingMode: that.state.listingMode,
+                page: page
+            };
+
+            that.fetchListingsPromise(localState).then(function(localState){
+                that.setState(localState);
+                that.handleDeleteListingHide();
+            }).catch(function(err){
+                console.log(err);
+            });
+
         }).catch(function(err){
             console.log(err);
         });
@@ -605,19 +699,21 @@ export class ListingPage extends Component {
         });
     }
 
-    handleBoundsChange(bounds){
-        console.log("handleBoundsChange");
-        if (bounds.lat0){
-            this.setState({
-                lat0: bounds.lat0,
-                lng0: bounds.lng0,
-                lat1: bounds.lat1,
-                lng1: bounds.lng1
-            }, () => {
-                this.fetchListings(this.state.listingMode,this.state.page);
-            });
-        }
-
+    handleBoundsChange(bounds, center, zoomLevel){
+        var localState = {
+            bounds: bounds,
+            listingMode: this.state.listingMode,
+            page: this.state.page,
+            updateBounds: false,
+            center: center,
+            zoomLevel: zoomLevel
+        };
+        var that = this;
+        this.fetchListingsPromise(localState).then(function(localState){
+            that.setState(localState);
+        }).catch(function(err){
+            console.log(err);
+        });
     }
     render() {
         var showDetail = this.state.showDetail;
@@ -769,18 +865,16 @@ export class ListingPage extends Component {
                                 allAmenities={this.state.allAmenities}
                             />
                         </CSSTransition>
-                    {!showDetail ?
-                            <ListingMap 
-                                listings={this.state.listings}
-                                showDetail={showDetail}
-                                markers={this.state.markers}
-                                lat0={this.state.lat0}
-                                lng0={this.state.lng0}
-                                lat1={this.state.lat1}
-                                lng1={this.state.lng1}
-                                onBoundsChange={this.handleBoundsChange}
-                            />
-                    : null}
+                        <ListingMap 
+                            listings={this.state.listings}
+                            showDetail={showDetail}
+                            markers={this.state.markers}
+                            bounds={this.state.bounds}
+                            onBoundsChange={this.handleBoundsChange}
+                            updateBounds={this.state.updateBounds}
+                            center={this.state.center}
+                            zoomLevel={this.state.zoomLevel}
+                        />
                     </Col>
                     <Col xs={4} className="rightcol" >
                         <ListingPagination 

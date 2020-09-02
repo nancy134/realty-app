@@ -24,7 +24,6 @@ class FilterSpaceType extends React.Component {
                filters.splice( index, 1 );
            }
        }
-       console.log("filters: "+JSON.stringify(filters));
        this.props.onFilterChange(filters);
        this.setState({
            filters: filters
@@ -32,7 +31,6 @@ class FilterSpaceType extends React.Component {
     }
     componentDidMount(){
         listings.getSpaceTypes((spaceTypes) => {
-           console.log("spaceTypes: "+JSON.stringify(spaceTypes));
            this.setState({
                spaceTypes: spaceTypes
            })

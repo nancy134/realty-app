@@ -22,13 +22,15 @@ export function getVerifiedAddresses(address){
     });
 }
 
-export function calculateBounds(maps, bounds, markers){
+export function calculateBounds(markers){
+    var bounds = new window.google.maps.LatLngBounds();
     if (markers){
         var len = markers.length;
         for (var i=0; i<len; i++){
             var marker = markers[i];
             if (marker.location){
-                var point = new maps.LatLng(marker.location.coordinates[0],marker.location.coordinates[1]);
+                //var point = new maps.LatLng(marker.location.coordinates[0],marker.location.coordinates[1]);
+                var point = new window.google.maps.LatLng(marker.location.coordinates[0],marker.location.coordinates[1]);
                 bounds.extend(point);
             }
         }
@@ -37,9 +39,19 @@ export function calculateBounds(maps, bounds, markers){
     return bounds;
 }
 
+export function addPoint(bounds, point){
+    var ne = new window.google.maps.LatLng(bounds.lat0, bounds.lng0);
+    var sw = new window.google.maps.LatLng(bounds.lat1, bounds.lng1);
+    var newBounds = new window.google.maps.LatLngBounds(sw, ne);
+    var newPoint = new window.google.maps.LatLng(point.coordinates[0], point.coordinates[1]);
+    newBounds.extend(newPoint);
+    return newBounds;
+}
+
 const geolocation = {
     geocodeByAddr,
     getVerifiedAddresses,
-    calculateBounds
+    calculateBounds,
+    addPoint
 };
 export default geolocation;
