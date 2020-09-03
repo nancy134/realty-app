@@ -92,6 +92,9 @@ class ListingDetailHeader extends React.Component {
         var url = window.location.protocol + "//" + window.location.hostname + "/listing/"+this.props.listing.id;
         window.location.href = url;
     }
+    handleGoToListingByIndex(index, publishStatus){
+        this.props.onGoToListingByIndex(index, publishStatus);
+    }
     render() {
         const listingMode = this.props.listingMode;
         const editMode = this.props.editMode;
@@ -143,6 +146,18 @@ class ListingDetailHeader extends React.Component {
             }
         }
 
+        var hasLiveVersion = false;
+        if (listing && listing.listing){
+            if (listing.publishStatus === "Draft" && listing.listing.latestApprovedId){
+               hasLiveVersion = true;
+            }
+        }
+        var hasDraftVersion = false;
+        if (listing && listing.listing){
+            if (listing.publishStatus === "On Market" && listing.listing.latestDraftId){
+                hasDraftVersion = true;
+            }
+        }
         // View button
         var viewButton = "View";
         if (listing){
@@ -152,6 +167,7 @@ class ListingDetailHeader extends React.Component {
         }
         var fullscreen = this.props.fullscreen;
         return(
+            <React.Fragment>
             <Row className="align-items-center bg-info">
 	        <Col md={6}className="text-white">
                     <div>{title} {editMode === "edit" ? 
@@ -219,6 +235,26 @@ class ListingDetailHeader extends React.Component {
                     : null }
                 </Col>
             </Row>
+            {hasLiveVersion ?
+            <Row className="bg-light">
+                <Col>
+                These are unpublished updates to a Live version of the listing. <span 
+                    onClick={() => this.handleGoToListingByIndex(listing.listing.latestApprovedId,"On Market")}
+                    className="text-danger addPointer">Click here</span> to view the live version. 
+                </Col>
+            </Row>
+            : null}
+            {hasDraftVersion ?
+            <Row className="bg-light">
+                <Col>
+                You have unpublished updates for this listing.  <span 
+                    onClick={() => this.handleGoToListingByIndex(listing.listing.latestDraftId,"Draft")}
+                    className="text-danger addPointer">Click here</span> to view the updates
+                </Col>
+            </Row>
+            : null}
+
+            </React.Fragment>
         );
     }
 }

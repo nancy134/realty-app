@@ -645,6 +645,8 @@ class ListingDetail extends React.Component {
                     onTransitionHide={this.props.onTransitionHide}
                     transitionStart={this.props.transitionStart}
                     transitionSaving={this.props.transitionSaving}
+
+                    onGoToListingByIndex={this.props.onGoToListingByIndex}
                 />
                 </div>
                 <ListingDetailOverview 

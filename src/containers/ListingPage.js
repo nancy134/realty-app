@@ -70,6 +70,7 @@ export class ListingPage extends Component {
         this.handleUpdate = this.handleUpdate.bind(this);
         this.handleCreate = this.handleCreate.bind(this);
         this.handleFetchListing = this.handleFetchListing.bind(this);
+        this.handleGoToListingByIndex = this.handleGoToListingByIndex.bind(this);
 
         // Transition
         this.handleTransitionStart = this.handleTransitionStart.bind(this);
@@ -93,6 +94,7 @@ export class ListingPage extends Component {
 
         // Map
         this.handleBoundsChange = this.handleBoundsChange.bind(this);
+
         this.state = {
 
             // Add listing
@@ -148,6 +150,38 @@ export class ListingPage extends Component {
             zoomLevel: null
         };
     }
+    handleGoToListingByIndex(index, publishStatus){
+        var editMode = "view";
+        var listingMode = "allListings";
+
+        if (publishStatus === "Draft"){
+            editMode = "edit";
+            listingMode = "myListings";
+        } else {
+            editMode = "view";
+            listingMode = "allListings";
+        }
+        var localState = {
+            addListingAddress: false,
+            listingMode: listingMode,
+            index: index,
+            showDetail: true,
+            editMode: editMode,
+            page: 1
+        };
+        var that = this;
+        this.fetchListingPromise(localState).then(function(localState){
+            that.fetchListingsPromise(localState).then(function(localState){
+                that.setState(localState);
+            }).catch(function(err){
+                console.log(err);
+            });
+        }).catch(function(err){
+            console.log(err);
+        });
+
+    }
+
     handleGoToListing(result){
         var listing = null;
         var editMode = "view";
@@ -367,14 +401,25 @@ export class ListingPage extends Component {
             listingMode: this.state.listingMode,
             page: goToPage
          };
-        this.fetchListings(localState);
+         var that = this;
+         that.fetchListingsPromise(localState).then(function(localState){
+             that.setState(localState);
+         }).catch(function(err){
+             console.log(err);
+         });
+
     }
     handleListUpdate(){
         var localState = {
             listingMode: this.state.listingMode,
             page: this.state.page
         };
-        this.fetchListings(localState);
+         var that = this;
+         that.fetchListingsPromise(localState).then(function(localState){
+             that.setState(localState);
+         }).catch(function(err){
+             console.log(err);
+         });
     }
     handleUpdate(listing){
         var updatePromise = listingService.update(listing);
@@ -715,6 +760,7 @@ export class ListingPage extends Component {
             console.log(err);
         });
     }
+
     render() {
         var showDetail = this.state.showDetail;
         var index = this.state.index;
@@ -788,6 +834,8 @@ export class ListingPage extends Component {
                          onDeleteSpace={this.handleDeleteSpace}
                          // Amenities
                          allAmenities={this.state.allAmenities}
+
+                         onGoToListingByIndex={this.handleGoToListingByIndex}
                      />
                 </Container>)
 
@@ -863,6 +911,8 @@ export class ListingPage extends Component {
                                 onDeleteSpace={this.handleDeleteSpace}
                                 // Enums
                                 allAmenities={this.state.allAmenities}
+
+                                onGoToListingByIndex={this.handleGoToListingByIndex}
                             />
                         </CSSTransition>
                         <ListingMap 
