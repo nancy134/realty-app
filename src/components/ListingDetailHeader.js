@@ -13,6 +13,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import ListingEditHeader from './ListingEditHeader';
 import TransitionModal from './TransitionModal';
+import {getUserEmail} from '../helpers/authentication';
 
 function EditButton(props) {
   const [modalShow, setModalShow] = React.useState(false);
@@ -147,13 +148,13 @@ class ListingDetailHeader extends React.Component {
         }
 
         var hasLiveVersion = false;
-        if (listing && listing.listing){
+        if (listing && listing.listing &&  listing.owner === getUserEmail()){
             if (listing.publishStatus === "Draft" && listing.listing.latestApprovedId){
                hasLiveVersion = true;
             }
         }
         var hasDraftVersion = false;
-        if (listing && listing.listing){
+        if (listing && listing.listing &&  listing.owner === getUserEmail()){
             if (listing.publishStatus === "On Market" && listing.listing.latestDraftId){
                 hasDraftVersion = true;
             }

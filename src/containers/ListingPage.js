@@ -144,10 +144,13 @@ export class ListingPage extends Component {
 
             // Search
             formatted_address: formatted_address,
+
+            // Map
             bounds: {lat0:lat0, lng0:lng0, lat1:lat1, lng1:lng1},
             updateBounds: true,
             center: null,
-            zoomLevel: null
+            zoomLevel: null,
+            readyForMap: false
         };
     }
     handleGoToListingByIndex(index, publishStatus){
@@ -643,6 +646,16 @@ export class ListingPage extends Component {
         };
         var that = this;
         this.fetchListingsPromise(localState).then(function(localState){
+            if (localState.bounds.lat0 === null){
+                var bounds = geolocationService.calculateBounds(localState.markers);
+                var ne = bounds.getNorthEast();
+                var sw = bounds.getSouthWest();
+                localState.bounds.lat0 = ne.lat();
+                localState.bounds.lng0 = ne.lng();
+                localState.bounds.lat1 = sw.lat();
+                localState.bounds.lng1 = sw.lng();
+            }
+            localState.readyForMap = true;
             that.setState(localState);
         });
     }
@@ -915,6 +928,7 @@ export class ListingPage extends Component {
                                 onGoToListingByIndex={this.handleGoToListingByIndex}
                             />
                         </CSSTransition>
+                        { this.state.readyForMap ?
                         <ListingMap 
                             listings={this.state.listings}
                             showDetail={showDetail}
@@ -925,6 +939,7 @@ export class ListingPage extends Component {
                             center={this.state.center}
                             zoomLevel={this.state.zoomLevel}
                         />
+                        : null }
                     </Col>
                     <Col xs={4} className="rightcol" >
                         <ListingPagination 

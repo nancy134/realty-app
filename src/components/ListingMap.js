@@ -123,6 +123,28 @@ class ListingMap extends React.Component {
             }
         }
     }
+    componentDidMount(){
+        var bounds = new this.props.google.maps.LatLngBounds();
+        var nePoint = {
+            lat: parseFloat(this.props.bounds.lat0),
+            lng: parseFloat(this.props.bounds.lng0)
+        };
+        var swPoint = {
+            lat: parseFloat(this.props.bounds.lat1),
+            lng: parseFloat(this.props.bounds.lng1)
+        };
+        bounds.extend(nePoint);
+        bounds.extend(swPoint);
+        if (this.refs.resultMap && this.props.updateBounds){
+            if (!this.props.center){
+                this.refs.resultMap.map.fitBounds(bounds);
+            } else {
+                this.refs.resultMap.map.setCenter(this.props.center);
+                this.refs.resultMap.map.setZoom(this.props.zoomLevel);
+            }
+        }
+
+    }
     render(){
         const showDetail = this.props.showDetail;
 

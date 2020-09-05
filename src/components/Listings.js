@@ -31,7 +31,7 @@ function ListItem(props){
         if (listing.listing.latestApprovedId === null){
             publishStatus = "Unpublished";
         } else {
-            publishStatus = "Unpublished update";
+            publishStatus = "Live with unpublished updates";
         } 
     }
 
