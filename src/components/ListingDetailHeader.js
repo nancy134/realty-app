@@ -9,7 +9,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faTimes,
     faExpand,
-    faPencilAlt
+    faPencilAlt,
+    faAddressBook
 } from '@fortawesome/free-solid-svg-icons';
 import ListingEditHeader from './ListingEditHeader';
 import TransitionModal from './TransitionModal';
@@ -44,7 +45,8 @@ function TransitionButton(props) {
       <span>
           <Button 
               id="header_transition_button"
-              variant="info" 
+              variant="primary" 
+              className="m-1"
               onClick={() => {props.onShow()}}
           >
               {props.buttonText}
@@ -64,6 +66,21 @@ function TransitionButton(props) {
       </span>
   );
 }
+function ContactButton(props) {
+  return (
+      <span>
+          <Button
+              id="header_transition_button"
+              variant="primary"
+              className="m-1"
+              onClick={() => {props.onContact()}}
+          >
+             <span><FontAwesomeIcon icon={faAddressBook} /> Contact</span>
+          </Button>
+      </span>
+  );
+}
+
 class ListingDetailHeader extends React.Component {
     constructor(props){
         super(props);
@@ -177,6 +194,9 @@ class ListingDetailHeader extends React.Component {
                             states={states} 
                             onSave={this.handleSave}
                         /> : null}
+                        <ContactButton
+                            onContact={this.props.onContact} 
+                        />
                     </div>
                 </Col>
                 <Col md={6} className="text-right">

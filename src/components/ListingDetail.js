@@ -22,6 +22,7 @@ import { isOwner, getUserEmail } from '../helpers/authentication';
 import listingService from '../services/listings';
 import imageService from '../services/images';
 import {formatDateTime} from '../helpers/utilities';
+import ContactModal from './ContactModal';
 
 class ListingDetail extends React.Component {
     constructor(props) {
@@ -62,7 +63,10 @@ class ListingDetail extends React.Component {
             // Amenities
             amenityUpdate: false,
             amenitySaving: false,
-            amenityError: null
+            amenityError: null,
+
+            // Contact
+            showContactModal: false
         };
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
@@ -105,6 +109,11 @@ class ListingDetail extends React.Component {
         this.handleAmenityModalUpdate = this.handleAmenityModalUpdate.bind(this);
         this.handleAmenityModalHide = this.handleAmenityModalHide.bind(this);
         this.handleAmenityUpdate = this.handleAmenityUpdate.bind(this);
+
+        // Contact
+        this.handleContact = this.handleContact.bind(this);
+        this.handleContactHide = this.handleContactHide.bind(this);
+        this.handleSendMessage = this.handleSendMessage.bind(this);
     }
 
     handleShowDetailChange() {
@@ -592,6 +601,22 @@ class ListingDetail extends React.Component {
         }
 
     }
+    // Contact
+    handleContact(){
+        this.setState({
+            showContactModal: true
+        });
+    }
+    handleContactHide(){
+        this.setState({
+            showContactModal: false
+        });
+    }
+    handleSendMessage(){
+        this.setState({
+            showContactModal: false
+        });
+    }
     componentWillUnmount(){
     }
     render(){
@@ -627,6 +652,11 @@ class ListingDetail extends React.Component {
         if (showDetail){
             return (
             <div>
+                <ContactModal
+                    show={this.state.showContactModal}
+                    onHide={this.handleContactHide}
+                    onSendMessage={this.handleSendMessage}
+                />
                 <div id="stickyHeader">
                 <ListingDetailHeader 
                     fullscreen={fullscreen}
@@ -647,6 +677,7 @@ class ListingDetail extends React.Component {
                     transitionSaving={this.props.transitionSaving}
 
                     onGoToListingByIndex={this.props.onGoToListingByIndex}
+                    onContact={this.handleContact}
                 />
                 </div>
                 <ListingDetailOverview 
