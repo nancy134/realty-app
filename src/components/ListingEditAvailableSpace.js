@@ -18,9 +18,10 @@ import {formatDate} from '../helpers/utilities';
 import ImageUpload from './ImageUpload';
 
 const SpaceSchema = Yup.object().shape({
-    unit: Yup.string().required('Unit Name is required'),
-    size: Yup.number().integer().typeError('Must be an integer'),
-    price: Yup.number().typeError('Must be a number'),
+    unit: Yup.string(),
+    size: Yup.number().integer().required('Must be an integer'),
+    price: Yup.number().required('Must be a number'),
+    use: Yup.string().required("Must select a Use Type"),
     driveInDoors: Yup.number().integer().typeError('Must be an integer'),
     floors: Yup.number().integer().typeError('Must be an integer'),
     divisible: Yup.string(),
@@ -209,7 +210,7 @@ class ListingEditAvailableSpace extends React.Component {
                     <Form>
                         <Form.Row>
                             <Form.Group as={Col} >
-                                <Form.Label>Unit Name</Form.Label>
+                                <Form.Label className="font-weight-bold">Unit Name <span className="font-weight-light">(optional)</span></Form.Label>
                                 <Form.Control 
                                     id="space_edit_unit"
                                     name="unit"
@@ -226,7 +227,7 @@ class ListingEditAvailableSpace extends React.Component {
                                 </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group as={Col} >
-                                <Form.Label>Size</Form.Label>
+                                <Form.Label className="font-weight-bold">Size</Form.Label>
                                 <InputGroup>
                                     <Form.Control 
                                         id="space_edit_size"
@@ -248,7 +249,7 @@ class ListingEditAvailableSpace extends React.Component {
                                 </InputGroup>
                             </Form.Group>
                             <Form.Group as={Col}>
-                                <Form.Label>Price</Form.Label>
+                                <Form.Label className="font-weight-bold">Price</Form.Label>
                                 <InputGroup>
                                     <InputGroup.Prepend>
                                         <InputGroup.Text>$</InputGroup.Text>
@@ -275,7 +276,31 @@ class ListingEditAvailableSpace extends React.Component {
                         </Form.Row>
                         <Form.Row>
                             <Form.Group as={Col} >
-                                <Form.Label>Lease Type</Form.Label>
+                                <Form.Label className="font-weight-bold">Use</Form.Label>
+                                <Form.Control
+                                    id="space_edit_use"
+                                    name="use"
+                                    as="select"
+                                    value={values.use}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.use}
+                                    isValid={touched.use && !errors.use && values.use !== ""}
+                                    disabled={isSubmitting}
+
+                                >
+                                    <option key="-1"></option>
+                                    {this.props.spaceUses.map((spaceUse, index) =>(
+                                    <option key={index}>{spaceUse}</option>
+                                    ))}
+                                </Form.Control>
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.use}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+
+                            <Form.Group as={Col} >
+                                <Form.Label className="font-weight-bold">Lease Type <span className="font-weight-light">(optional)</span></Form.Label>
                                 <Form.Control 
                                     id="space_edit_type"
                                     name="type"
@@ -292,26 +317,10 @@ class ListingEditAvailableSpace extends React.Component {
                                     ))}
                                 </Form.Control> 
                             </Form.Group>
-                            <Form.Group as={Col} >
-                                <Form.Label>Use</Form.Label>
-                                <Form.Control 
-                                    id="space_edit_use"
-                                    name="use"
-                                    as="select" 
-                                    value={values.use} 
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                >
-                                    <option key="-1"></option>
-                                    {this.props.spaceUses.map((spaceUse, index) =>(
-                                    <option key={index}>{spaceUse}</option>
-                                    ))}
-                                </Form.Control>
-                            </Form.Group>
                         </Form.Row>
                         <Form.Row>
                             <Form.Group as={Col}>
-                                <Form.Label>Description</Form.Label>
+                                <Form.Label className="font-weight-bold">Description <span className="font-weight-light">(optional)</span></Form.Label>
                                 <Form.Control 
                                     id="space_edit_description"
                                     name="description"
@@ -334,7 +343,7 @@ class ListingEditAvailableSpace extends React.Component {
                                 <Card>
                                     <Card.Header>
                                         <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                                            Additional Parameters 
+                                            Click here to see Additional Parameters 
                                         </Accordion.Toggle>
                                     </Card.Header>
                                     <Accordion.Collapse eventKey="1">
@@ -345,7 +354,7 @@ class ListingEditAvailableSpace extends React.Component {
                                             </Form.Row>
                                             <Form.Row>
                                                 <Form.Group as={Col}>
-                                                    <Form.Label>Drive in Doors</Form.Label>
+                                                    <Form.Label className="font-weight-bold">Drive in Doors <span className="font-weight-light">(optional)</span></Form.Label>
                                                     <Form.Control
                                                         id="space_edit_driveInDoors"
                                                         name="driveInDoors"
@@ -362,7 +371,7 @@ class ListingEditAvailableSpace extends React.Component {
                                                     </Form.Control.Feedback>
                                                 </Form.Group>
                                                 <Form.Group as={Col}>
-                                                    <Form.Label>Floors</Form.Label>
+                                                    <Form.Label className="font-weight-bold">Floors <span className="font-weight-light">(optional)</span></Form.Label>
                                                     <Form.Control
                                                         id="space_edit_floors"
                                                         name="floors"
@@ -379,7 +388,7 @@ class ListingEditAvailableSpace extends React.Component {
                                                     </Form.Control.Feedback>
                                                 </Form.Group>
                                                 <Form.Group as={Col}>
-                                                    <Form.Label>Divisible</Form.Label>
+                                                    <Form.Label className="font-weight-bold">Divisible <span className="font-weight-light">(optional)</span></Form.Label>
                                                     <Form.Control
                                                         id="space_edit_divisible"
                                                         name="divisible"
@@ -400,7 +409,7 @@ class ListingEditAvailableSpace extends React.Component {
                                             </Form.Row>
                                             <Form.Row>
                                                 <Form.Group as={Col}>
-                                                    <Form.Label>Loading Docks</Form.Label>
+                                                    <Form.Label className="font-weight-bold">Loading Docks <span className="font-weight-light">(optional)</span></Form.Label>
                                                     <Form.Control
                                                         id="space_edit_loadingDocks"
                                                         name="loadingDocks"
@@ -418,7 +427,7 @@ class ListingEditAvailableSpace extends React.Component {
 
                                                 </Form.Group>
                                                 <Form.Group as={Col}>
-                                                    <Form.Label>Lease Term</Form.Label>
+                                                    <Form.Label className="font-weight-bold">Lease Term <span className="font-weight-light">(optional)</span></Form.Label>
                                                     <Form.Control
                                                         id="space_edit_leaseTerm"
                                                         name="leaseTerm"
@@ -436,7 +445,7 @@ class ListingEditAvailableSpace extends React.Component {
 
                                                 </Form.Group>
                                                 <Form.Group as={Col}>
-                                                    <Form.Label>Ceiling Height</Form.Label>
+                                                    <Form.Label className="font-weight-bold">Ceiling Height <span className="font-weight-light">(optional)</span></Form.Label>
                                                     <Form.Control
                                                         id="space_edit_ceilingHeight"
                                                         name="ceilingHeight"
@@ -455,7 +464,7 @@ class ListingEditAvailableSpace extends React.Component {
                                             </Form.Row>
                                             <Form.Row>
                                                 <Form.Group as={Col}>
-                                                    <Form.Label>Available Date</Form.Label>
+                                                    <Form.Label className="font-weight-bold">Available Date <span className="font-weight-light">(optional)</span></Form.Label>
                                                     <Form.Control
                                                         id="space_edit_availableDate"
                                                         name="availableDate"
@@ -472,7 +481,7 @@ class ListingEditAvailableSpace extends React.Component {
                                                     </Form.Control.Feedback>
                                                 </Form.Group>
                                                 <Form.Group as={Col}>
-                                                    <Form.Label>Nets</Form.Label>
+                                                    <Form.Label className="font-weight-bold">Nets <span className="font-weight-light">(optional)</span></Form.Label>
                                                     <Form.Control
                                                         id="space_edit_nets"
                                                         name="nets"
@@ -489,7 +498,7 @@ class ListingEditAvailableSpace extends React.Component {
                                                     </Form.Control.Feedback>
                                                 </Form.Group>
                                                 <Form.Group as={Col}>
-                                                    <Form.Label>Class</Form.Label>
+                                                    <Form.Label className="font-weight-bold">Class <span className="font-weight-light">(optional)</span></Form.Label>
                                                     <Form.Control
                                                         id="space_edit_class"
                                                         name="class"
@@ -540,6 +549,10 @@ class ListingEditAvailableSpace extends React.Component {
                                             <Row>
                                                 {imgs}
                                             </Row>
+                                        </div>
+                                        <div
+                                            style={{ float:"left", clear: "both" }}
+                                            ref={(el) => { this.messagesEnd = el; }}>
                                         </div>
                                     </Accordion.Collapse>
                                 </Card>

@@ -58,8 +58,8 @@ function SpaceItem(props){
             <Col md={2}>${space.price} sf/yr</Col>
             <Col md={3}>
                 <Row>
-                    <Col >{space.type}</Col>
                     <Col >{space.use}</Col>
+                    <Col >{space.type}</Col>
                 </Row>
             </Col> 
             <Col md={3}>
@@ -215,8 +215,8 @@ function SpaceItem(props){
             <Col md={2}>${space.price} sf/yr</Col>
             <Col md={3}>
                 <Row>
-                    <Col >{space.type}</Col>
                     <Col >{space.use}</Col>
+                    <Col >{space.type}</Col>
                 </Row>
             </Col>
             <Col md={3}>
@@ -379,13 +379,13 @@ class ListingDetailAvailableSpace extends React.Component {
                     </Col>
                 </Row>
                 <Row className="bg-light shadow">
-                    <Col md={2} className="font-weight-bold">Unit</Col>
+                    <Col md={2} className="font-weight-bold">Unit Name</Col>
                     <Col md={2}  className="font-weight-bold">Size</Col>
                     <Col md={2} className="font-weight-bold">Price</Col>
                     <Col md={3}>
                         <Row>
-                            <Col className="font-weight-bold">Type</Col>
-                             <Col className="font-weight-bold">Use</Col>
+                            <Col className="font-weight-bold">Use</Col>
+                            <Col className="font-weight-bold">Lease Type</Col>
                         </Row>
                     </Col>
                     <Col md={3}></Col>
