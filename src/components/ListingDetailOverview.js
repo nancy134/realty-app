@@ -29,10 +29,10 @@ function EditButton(props) {
             <span
                 id="overview_edit_button"
                 onClick={() => props.onShow()}
-                className="edit-button align-top text-danger"
+                className="edit-button text-danger"
             >
 
-                <FontAwesomeIcon size="xs" icon={faPencilAlt} />
+                <FontAwesomeIcon size="xs" icon={faPencilAlt} />&nbsp;Edit Overview & Image
             </span>
             : null}
             {props.show ?
@@ -130,10 +130,12 @@ class ListingDetailOverview extends React.Component {
             var floatPrice = parseFloat(this.props.listing.listingPrice);
             listingPrice = floatPrice.toLocaleString(undefined, {maximumFractionDigits:0});
         }
+        var hasImages = true;
         if (galleryImages.length === 0){
+            hasImages = false;
             galleryImages.push(defaultImage);
         }
-
+        console.log("hasImages: "+hasImages);
         const listing = this.props.listing;
         const editMode = this.props.editMode;
         const listingTypes = this.props.listingTypes;
@@ -178,19 +180,30 @@ class ListingDetailOverview extends React.Component {
                     </Col>
                     }
                 </Row>
-                <Row>
-                    <Col md={6}>
-                        <p>{shortDescription}</p>
-                        <p>{longDescription}</p>
-                    </Col>
-                    <Col md={6}>
-                        <ImageGallery 
+                <Row className="pt-2">
+                    <Col md={12}>
+
+                        <span className="float-right">
+                        { hasImages ?
+                        <ImageGallery
                           showThumbnails={false}
                           items={galleryImages}
                           renderLeftNav={this.renderLeftNav}
                           renderRightNav={this.renderRightNav}/>
-                    </Col>
+                        :
+                        <ImageGallery
+                          showThumbnails={false}
+                          items={galleryImages}
+                          showPlayButton={false}
+                          showFullscreenButton={false}/>
+                        }
+                        </span>
+                        <div>
+                            <div className="font-weight-bold">{shortDescription}</div>
+                            <div className="preLine">{longDescription}</div>
+                        </div>
 
+                    </Col>
                 </Row>
             </div>
         );

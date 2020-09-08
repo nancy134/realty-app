@@ -264,13 +264,13 @@ function AddButton(props) {
     return (
         <span id="span_space_add_button">
             <span
-                className="edit-button align-top text-danger"
+                className="edit-button text-danger"
             >
                 <FontAwesomeIcon
                     id="space_add_button"
                     onClick={() => {props.onShow()}}
                     size="xs" 
-                    icon={faPlus} />
+                    icon={faPlus} />&nbsp;Add Space
             </span>
             {props.show ?
             <ListingEditAvailableSpace
@@ -301,7 +301,7 @@ function EditButton(props) {
           <span
               id="space_edit_button"
               onClick={() => {props.onShow(props.index)}}
-              className="edit-button alight-top text-danger"
+              className="edit-button text-danger"
           >
               <FontAwesomeIcon icon={faPencilAlt} />
           </span>

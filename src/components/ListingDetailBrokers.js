@@ -60,14 +60,14 @@ class ListingDetailBrokers extends React.Component {
     render() {
         const editMode = this.props.editMode;
         const listing = this.props.listing;
-
+        const enableEdit = false;
         if (listing){
         }
         return (
             <React.Fragment>
                 <Row className="mt-3 border-bottom border-warning">
                     <Col>
-                        <h2>Brokers {editMode === "edit" ?
+                        <h2>Brokers { enableEdit && editMode === "edit" ?
                             <EditButton 
                                 listing={listing}
                                 onSave={this.handleSave}

@@ -191,7 +191,7 @@ class ListingMap extends React.Component {
             </Map>
             );
         } else {
-             return <p>Loading map...</p>;
+             return null;
         }
     } 
 }

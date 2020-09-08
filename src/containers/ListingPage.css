@@ -31,7 +31,7 @@
 }
 
 .edit-button {
-   font-size: 80%;
+   font-size: 60%;
    cursor: pointer;
 }
 
@@ -169,4 +169,7 @@
 .list-image{
     width: auto;
     height: 100px;
+}
+.preLine {
+    white-space: pre-line;
 }

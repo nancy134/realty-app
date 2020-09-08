@@ -18,7 +18,7 @@ function EditButton(props) {
             {props.showSpinner ?
             <span
                 id="general_spinner"
-                className="edit-button align-top text-danger"
+                className="edit-button text-danger"
             >
                 <Spinner animation="border" size="sm"/>
             </span>
@@ -26,9 +26,9 @@ function EditButton(props) {
             <span 
                 id="general_edit_button"
                 onClick={() => setModalShow(true)} 
-                className="edit-button align-top text-danger"
+                className="edit-button text-danger"
             >
-                <FontAwesomeIcon size="xs" icon={faPencilAlt} />
+                <FontAwesomeIcon size="xs" icon={faPencilAlt} />&nbsp;Edit Building Detail
             </span>
             }
             {modalShow ?

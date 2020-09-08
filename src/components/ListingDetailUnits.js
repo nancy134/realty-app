@@ -18,9 +18,9 @@ function AddButton(props) {
             <span
                 id="unit_add_button"
                 onClick={() => {props.onShow()}}
-                className="edit-button align-top text-danger"
+                className="edit-button text-danger"
             >
-                <FontAwesomeIcon size="xs" icon={faPlus} />
+                <FontAwesomeIcon size="xs" icon={faPlus} />&nbsp;Add Unit
             </span>
             {props.show ?
             <ListingEditUnit
@@ -84,7 +84,7 @@ class ListingDetailUnits extends React.Component {
         <React.Fragment>
             <Row className="mt-2 border-bottom border-warning">
                 <Col>
-                    <h2>Unit Detail 
+                    <h2>Units&nbsp;
                     {editMode === "edit" ?
                     <AddButton 
                         listing={listing}

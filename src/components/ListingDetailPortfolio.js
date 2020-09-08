@@ -18,9 +18,9 @@ function AddButton(props) {
             <span
                 id="portfolio_add_button"
                 onClick={() => {props.onShow()}}
-                className="edit-button align-top text-danger"
+                className="edit-button text-danger"
             >
-                <FontAwesomeIcon size="xs" icon={faPlus} />
+                <FontAwesomeIcon size="xs" icon={faPlus} />&nbsp;Add to Portfolio
             </span>
             {props.show ?
             <ListingEditPortfolio
@@ -89,7 +89,7 @@ class ListingDetailPortfolio extends React.Component {
         <React.Fragment>
             <Row className="mt-2 border-bottom border-warning">
                 <Col>
-                    <h2>Portfolio 
+                    <h2>Portfolio&nbsp; 
                         {editMode === "edit" ? 
                         <AddButton
                             listing={listing}

@@ -118,6 +118,7 @@ class ListingDetailHeader extends React.Component {
         const editMode = this.props.editMode;
         const listing = this.props.listing;
         const states = this.props.states;
+        const enableAddressEdit = false;
         var owner = this.props.owner;
         var address = "<Address>";
         var city = "<City>"; 
@@ -188,7 +189,7 @@ class ListingDetailHeader extends React.Component {
             <React.Fragment>
             <Row className="align-items-center bg-info">
 	        <Col md={6}className="text-white">
-                    <div>{title} {editMode === "edit" ? 
+                    <div>{title} {enableAddressEdit && editMode === "edit" ? 
                         <EditButton 
                             listing={listing} 
                             states={states} 

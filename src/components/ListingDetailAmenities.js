@@ -15,9 +15,9 @@ function EditButton(props) {
         <span>
             <span 
                 onClick={() => {props.onShow()}}
-                className="edit-button align-top text-danger"
+                className="edit-button text-danger"
             >
-                <FontAwesomeIcon size="xs" icon={faPencilAlt} />
+                <FontAwesomeIcon size="xs" icon={faPencilAlt} />&nbsp;Edit Amenities
             </span>
             { props.show ?
             <ListingEditAmenities
@@ -53,7 +53,7 @@ class ListingDetailAmenities extends React.Component {
         <React.Fragment>
             <Row className="mt-3 border-bottom border-warning">
                 <Col>
-                    <h2>Amenities {editMode === "edit" ? 
+                    <h2>Amenities&nbsp;{editMode === "edit" ? 
                         <EditButton
                             listing={listing}
                             getListing={this.props.getListing}

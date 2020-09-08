@@ -759,7 +759,7 @@ class ListingDetail extends React.Component {
                         getListing={this.props.onFetchListing}
                     />
                 : null }
-                {(editMode === "edit") || 
+                {(editMode === "edit" && listingType === "For Sale") || 
                  (listing && listing.portfolios.length) > 0 ?
                     <ListingDetailPortfolio 
                         listing={listing} 

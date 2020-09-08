@@ -956,7 +956,7 @@ export class ListingPage extends Component {
                         />
                     </Col>
                 </Row>
-                <Row className="bg-secondary">footer</Row>
+                <Row className="bg-secondary"></Row>
                 </div>
                 ) }
             </React.Fragment>

@@ -59,9 +59,9 @@ function AddButton(props) {
             <span
                 id="tenant_add_button"
                 onClick={() => {props.onShow()}}
-                className="edit-button align-top text-danger"
+                className="edit-button text-danger"
             >
-                <FontAwesomeIcon size="xs" icon={faPlus} />
+                <FontAwesomeIcon size="xs" icon={faPlus} />&nbsp;Add Tenant
             </span>
             {props.show ?
             <ListingEditTenant
@@ -90,7 +90,7 @@ function EditButton(props){
             <span
                 id="tenant_edit_button"
                 onClick={() => {props.onShow(props.index)}}
-                className="edit-button align-top text-danger"
+                className="edit-button text-danger"
             >
                 <FontAwesomeIcon icon={faPencilAlt} />
             </span>
@@ -126,7 +126,7 @@ class ListingDetailTenants extends React.Component {
         <React.Fragment>
             <Row className="mt-2 border-bottom border-warning">
                 <Col>
-                    <h2>Tenants 
+                    <h2>Tenants&nbsp; 
                         {editMode === "edit" ? 
                         <AddButton 
                             listing={listing} 
