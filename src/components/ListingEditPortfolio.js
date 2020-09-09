@@ -210,7 +210,7 @@ class ListingEditPortfolio extends React.Component {
                 { dirty ?
                 <Button onClick={this.props.onHide}>Discard Changes</Button>
                 :
-                <Button onClick={this.props.onHide}>Close</Button>
+                <Button onClick={this.props.onHide}>Cancel</Button>
                 }
                 <Button 
                     disabled={!(isValid && dirty) || isSubmitting}

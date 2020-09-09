@@ -241,7 +241,7 @@ class ListingEditOverview extends React.Component {
                     id="overview_edit_cancel_button"
                     onClick={this.props.onHide}
                 >
-                    Close
+                    Cancel
                 </Button>
                 }
                 <Button

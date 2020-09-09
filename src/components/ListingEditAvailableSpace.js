@@ -571,7 +571,7 @@ class ListingEditAvailableSpace extends React.Component {
                     { dirty ?
                     <Button onClick={this.props.onHide}>Discard Changes</Button>
                     : 
-                    <Button onClick={this.props.onHide}>Close</Button>
+                    <Button onClick={this.props.onHide}>Cancel</Button>
                     }
                     <Button 
                         id="space_button_save"

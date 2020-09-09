@@ -472,7 +472,7 @@ class ListingEditGeneral extends React.Component {
                 id="general_edit_cancel_button"
                 onClick={this.props.onHide}
             >
-                Close
+                Cancel
             </Button>
             }
             <Button

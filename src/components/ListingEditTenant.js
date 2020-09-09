@@ -228,7 +228,7 @@ class ListingEditTenant extends React.Component {
                 :
                 <Button
                     onClick={this.props.onHide}
-                >Cancel</Button>
+                >Close</Button>
                 }
   
                 <Button

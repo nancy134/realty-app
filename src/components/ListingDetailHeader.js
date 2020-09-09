@@ -166,16 +166,22 @@ class ListingDetailHeader extends React.Component {
         }
 
         var hasLiveVersion = false;
+        var hasDraftVersion = false;
+        var onlyDraft = false;
+        var onlyLive = false; 
         if (listing && listing.listing &&  listing.owner === getUserEmail()){
             if (listing.publishStatus === "Draft" && listing.listing.latestApprovedId){
                hasLiveVersion = true;
             }
-        }
-        var hasDraftVersion = false;
-        if (listing && listing.listing &&  listing.owner === getUserEmail()){
             if (listing.publishStatus === "On Market" && listing.listing.latestDraftId){
                 hasDraftVersion = true;
             }
+            if (listing.publishStatus === "Draft" && !listing.listing.latestApprovedId){
+                onlyDraft = true;
+            }
+            if (listing.publishStatus === "On Market" && !listing.listing.latestDraftId){
+                onlyLive = true;
+            } 
         }
         // View button
         var viewButton = "View";
@@ -189,7 +195,7 @@ class ListingDetailHeader extends React.Component {
             <React.Fragment>
             <Row className="align-items-center bg-info">
 	        <Col md={6}className="text-white">
-                    <div>{title} {enableAddressEdit && editMode === "edit" ? 
+                    <div className=" address-title font-weight-bold">{title} {enableAddressEdit && editMode === "edit" ? 
                         <EditButton 
                             listing={listing} 
                             states={states} 
@@ -275,7 +281,13 @@ class ListingDetailHeader extends React.Component {
                 </Col>
             </Row>
             : null}
-
+            {onlyDraft ?
+            <Row className="bg-light">
+                <Col>
+                This listing is a draft and is not available to the public.  Select Publish to make it public.
+                </Col>
+            </Row>
+            : null}
             </React.Fragment>
         );
     }
