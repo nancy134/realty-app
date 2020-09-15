@@ -135,7 +135,6 @@ class ListingDetailOverview extends React.Component {
             hasImages = false;
             galleryImages.push(defaultImage);
         }
-        console.log("hasImages: "+hasImages);
         const listing = this.props.listing;
         const editMode = this.props.editMode;
         const listingTypes = this.props.listingTypes;
@@ -144,7 +143,7 @@ class ListingDetailOverview extends React.Component {
             <div>
                 <Row className="mt-2 border-bottom border-warning">
                     <Col>
-	                <h2>Overview {editMode === "edit" ? 
+	                <h3>Overview {editMode === "edit" ? 
                             <EditButton 
                                 listing={listing} 
                                 listingTypes={listingTypes} 
@@ -164,7 +163,7 @@ class ListingDetailOverview extends React.Component {
                                 errorMessage={this.props.errorMessage}
                                 onImagesChanged={this.props.onImagesChanged}
                             /> 
-                            : null}</h2>
+                            : null}</h3>
                     </Col>
                     {listing && listing.listingPrice ?
                     <Col>
@@ -174,16 +173,16 @@ class ListingDetailOverview extends React.Component {
                     </Col>
                     :
                     <Col>
-                        <div className="text-right">
+                        <span className="text-right">
                             <h4>{listingType}</h4>
-                        </div>
+                        </span>
                     </Col>
                     }
                 </Row>
                 <Row className="pt-2">
                     <Col md={12}>
 
-                        <span className="float-right">
+                        <span className="image-container float-right">
                         { hasImages ?
                         <ImageGallery
                           showThumbnails={false}

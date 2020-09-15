@@ -89,7 +89,7 @@ class ListingDetailPortfolio extends React.Component {
         <React.Fragment>
             <Row className="mt-2 border-bottom border-warning">
                 <Col>
-                    <h2>Portfolio&nbsp; 
+                    <h3>Portfolio&nbsp; 
                         {editMode === "edit" ? 
                         <AddButton
                             listing={listing}
@@ -102,7 +102,7 @@ class ListingDetailPortfolio extends React.Component {
                             show={this.props.portfolioNew}
                             saving={this.props.portfolioSaving}
                         />
-                        : null}</h2>
+                        : null}</h3>
                 </Col>
             </Row>
             <Row className="bg-light shadow">

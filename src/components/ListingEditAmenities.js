@@ -76,7 +76,7 @@ class ListingEditAmenities extends React.Component {
             </Form>
         </Modal.Body>
         <Modal.Footer>
-            <Button onClick={this.props.onHide}>Close</Button>
+            <Button onClick={this.props.onHide}>Cancel</Button>
             <Button onClick={this.handleSave}>Save</Button>
         </Modal.Footer>
     </Modal>

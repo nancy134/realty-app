@@ -71,6 +71,7 @@ export class ListingPage extends Component {
         this.handleCreate = this.handleCreate.bind(this);
         this.handleFetchListing = this.handleFetchListing.bind(this);
         this.handleGoToListingByIndex = this.handleGoToListingByIndex.bind(this);
+        this.handleGoToMyListing = this.handleGoToMyListing.bind(this);
 
         // Transition
         this.handleTransitionStart = this.handleTransitionStart.bind(this);
@@ -185,6 +186,30 @@ export class ListingPage extends Component {
 
     }
 
+    handleGoToMyListing(id){
+        var editMode = "edit";
+        var listingMode = "myListings";
+        var index = id;
+
+        var localState = {
+            editMode: editMode,
+            listingMode: listingMode,
+            index: index,
+            page: 1
+        };
+        var that = this;
+        this.fetchListingPromise(localState).then(function(localState){
+            that.fetchListingsPromise(localState).then(function(localState){
+                that.setState(localState);
+            }).catch(function(err){
+                console.log(err);
+            });
+        }).catch(function(err){
+            console.log(err);
+        });
+
+    }
+
     handleGoToListing(result){
         var listing = null;
         var editMode = "view";
@@ -284,20 +309,14 @@ export class ListingPage extends Component {
         var createPromise = listingService.create(listing);
         var that = this;
         createPromise.then(function(data) {
-            // increase bounds by newly added item at [0]
-            var bounds = that.state.bounds;
-            var point = data.listing.location;
-            var newBounds = geolocationService.addPoint(bounds,point);
-            var ne = newBounds.getNorthEast();
-            var sw = newBounds.getSouthWest();
-            
+            var bounds = {lat0:null,lng0:null,lat1:null,lng1:null}; 
             var localState = {
                 addListingOverview: false,
                 listingMode: "myListings",
                 index: data.listing.id,
                 showDetail: true,
                 editMode: "edit",
-                bounds: {lat0:ne.lat(),lng0:ne.lng(),lat1:sw.lat(),lng1:sw.lng()},
+                bounds: bounds,
                 center: null,
                 zoomLevel: null,
                 page: 1
@@ -305,6 +324,15 @@ export class ListingPage extends Component {
 
             that.fetchListingPromise(localState).then(function(localState){
                 that.fetchListingsPromise(localState).then(function(localState){
+                    if (localState.bounds.lat0 === null){
+                        var bounds = geolocationService.calculateBounds(localState.markers);
+                        var ne = bounds.getNorthEast();
+                        var sw = bounds.getSouthWest();
+                        localState.bounds.lat0 = ne.lat();
+                        localState.bounds.lng0 = ne.lng();
+                        localState.bounds.lat1 = sw.lat();
+                        localState.bounds.lng1 = sw.lng();
+                    }
                     that.setState(localState);
                 }).catch(function(err){
                     console.log(err);
@@ -605,6 +633,7 @@ export class ListingPage extends Component {
                 query += locationQuery;
                 markerQuery += locationQuery;
             }
+            console.log("query: "+query);
             var getAllPromise = listingService.getAll(query);
             getAllPromise.then(function(listings){
                 var enumPromise = listingService.getEnumsPromise();
@@ -849,52 +878,53 @@ export class ListingPage extends Component {
                          allAmenities={this.state.allAmenities}
 
                          onGoToListingByIndex={this.handleGoToListingByIndex}
-                     />
-                </Container>)
+		 onGoToMyListing={this.handleGoToMyListing}
+	     />
+	</Container>)
 
-                :
-                ( 
-                <div>
-                <Row className="bg-success">
-                    <ListingToolbar 
-                        loggedIn={loggedIn} 
-                        listingMode={listingMode}
-                        onAddListing={this.handleAddListing} 
-                        onListingToggle={this.handleListingToggle}
-                        onFilterChange={this.handleFilterChange}
-                        onMoreFilterChange={this.handleMoreFilterChange}
-                        formatted_address={this.state.formatted_address}
-                    />
-                    <ListingAddType
-                        show={this.state.addListingType}
-                        onNext={this.handleListingTypeNext}
-                        onCancel={this.handleCancelAddType}
-                    />
-                    { this.state.addListingAddress ?
-                    <ListingAddAddress
-                        show={this.state.addListingAddress}
-                        onNext={this.handleListingAddressNext}
-                        listing={this.state.newListing}
-                        onCancel={this.handleCancelAddAddress}
-                        onGoToListing={this.handleGoToListing}
-                    />
-                    : null }
-                    <ListingAddOverview
-                        show={this.state.addListingOverview}
-                        onNext={this.handleListingOverviewNext}
-                        listing={this.state.newListing}
-                        onCancel={this.handleCancelAddOverview}
-                    />
-                </Row>
-                <Row>
-                    <Col xs={8} className={showDetail? "rightcol" : "leftcol"}>
-                        <CSSTransition
-                            in={showDetail}
-                            appear={false}
-                            timeout={900}
-                            classNames="slide"
-                        >
-                            <ListingDetail 
+	:
+	( 
+	<div>
+	<Row className="bg-success">
+	    <ListingToolbar 
+		loggedIn={loggedIn} 
+		listingMode={listingMode}
+		onAddListing={this.handleAddListing} 
+		onListingToggle={this.handleListingToggle}
+		onFilterChange={this.handleFilterChange}
+		onMoreFilterChange={this.handleMoreFilterChange}
+		formatted_address={this.state.formatted_address}
+	    />
+	    <ListingAddType
+		show={this.state.addListingType}
+		onNext={this.handleListingTypeNext}
+		onCancel={this.handleCancelAddType}
+	    />
+	    { this.state.addListingAddress ?
+	    <ListingAddAddress
+		show={this.state.addListingAddress}
+		onNext={this.handleListingAddressNext}
+		listing={this.state.newListing}
+		onCancel={this.handleCancelAddAddress}
+		onGoToListing={this.handleGoToListing}
+	    />
+	    : null }
+	    <ListingAddOverview
+		show={this.state.addListingOverview}
+		onNext={this.handleListingOverviewNext}
+		listing={this.state.newListing}
+		onCancel={this.handleCancelAddOverview}
+	    />
+	</Row>
+	<Row>
+	    <Col xs={8} className={showDetail? "rightcol" : "leftcol"}>
+		<CSSTransition
+		    in={showDetail}
+		    appear={false}
+		    timeout={900}
+		    classNames="slide"
+		>
+		    <ListingDetail 
                                 fullscreen={fullscreen}
                                 editMode={editMode} 
                                 index={index} 
@@ -926,6 +956,8 @@ export class ListingPage extends Component {
                                 allAmenities={this.state.allAmenities}
 
                                 onGoToListingByIndex={this.handleGoToListingByIndex}
+                                 onGoToMyListing={this.handleGoToMyListing}
+
                             />
                         </CSSTransition>
                         { this.state.readyForMap ?
@@ -956,7 +988,11 @@ export class ListingPage extends Component {
                         />
                     </Col>
                 </Row>
-                <Row className="bg-secondary"></Row>
+                <Row className="bg-light">
+                    <Col md={12} className="text-right">
+                        <div className="text-right" >About</div>
+                    </Col>
+                </Row>
                 </div>
                 ) }
             </React.Fragment>

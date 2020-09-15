@@ -179,7 +179,7 @@ class ListingDetailHeader extends React.Component {
             if (listing.publishStatus === "Draft" && !listing.listing.latestApprovedId){
                 onlyDraft = true;
             }
-            if (listing.publishStatus === "On Market" && !listing.listing.latestDraftId){
+            if (listing.publishStatus === "On Market" && !listing.listing.latestDraftId && listingMode === "allListings"){
                 onlyLive = true;
             } 
         }
@@ -288,6 +288,16 @@ class ListingDetailHeader extends React.Component {
                 </Col>
             </Row>
             : null}
+            {onlyLive ?
+            <Row className="bg-light">
+                <Col>
+                This listing is Live.  Select <span
+                    onClick={() => this.props.onGoToMyListing(listing.id)} 
+                    className="text-danger addPointer">My Listings </span> if you would lie to update this listing.
+                </Col>
+            </Row>
+            : null}
+
             </React.Fragment>
         );
     }

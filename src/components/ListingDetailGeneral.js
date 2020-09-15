@@ -138,13 +138,13 @@ class ListingDetailGeneral extends React.Component {
             <React.Fragment>
                 <Row className="mt-3 border-bottom border-warning">
                     <Col>
-                        <h2>Building Detail {editMode === "edit" ?
+                        <h3>Building Detail {editMode === "edit" ?
                             <EditButton 
                                 listing={listing}
                                 propertyTypes={propertyTypes}
                                 onSave={this.handleSave}
                                 getListing={this.props.getListing}
-                            /> : null}</h2>
+                            /> : null}</h3>
                     </Col>
                 </Row>
                 <Row>

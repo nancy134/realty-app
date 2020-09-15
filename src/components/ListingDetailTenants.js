@@ -126,7 +126,7 @@ class ListingDetailTenants extends React.Component {
         <React.Fragment>
             <Row className="mt-2 border-bottom border-warning">
                 <Col>
-                    <h2>Tenants&nbsp; 
+                    <h3>Tenants&nbsp; 
                         {editMode === "edit" ? 
                         <AddButton 
                             listing={listing} 
@@ -139,7 +139,7 @@ class ListingDetailTenants extends React.Component {
                             saving={this.props.tenantSaving}
                         /> 
                         : null}
-                    </h2>
+                    </h3>
                 </Col>
             </Row>
             <Row className="bg-light shadow">

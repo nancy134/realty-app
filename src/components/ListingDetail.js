@@ -678,6 +678,7 @@ class ListingDetail extends React.Component {
 
                     onGoToListingByIndex={this.props.onGoToListingByIndex}
                     onContact={this.handleContact}
+                    onGoToMyListing={this.props.onGoToMyListing}
                 />
                 </div>
                 <ListingDetailOverview 
@@ -807,10 +808,10 @@ class ListingDetail extends React.Component {
                 />
                 { listing ?
                 <Row className="bg-light listing-footer">
-                    <Col>
+                    <Col className="border-bottom">
                     Created: {formatDateTime(listing.createdAt)}
                     </Col>
-                    <Col>
+                    <Col className="border-bottom">
                     Updated: {formatDateTime(listing.updatedAt)}
                     </Col> 
                 </Row>

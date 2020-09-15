@@ -53,7 +53,7 @@ class ListingDetailAmenities extends React.Component {
         <React.Fragment>
             <Row className="mt-3 border-bottom border-warning">
                 <Col>
-                    <h2>Amenities&nbsp;{editMode === "edit" ? 
+                    <h3>Amenities&nbsp;{editMode === "edit" ? 
                         <EditButton
                             listing={listing}
                             getListing={this.props.getListing}
@@ -66,7 +66,7 @@ class ListingDetailAmenities extends React.Component {
                             errorMessage={this.props.amenityError}
                         /> 
                         : null}
-                    </h2>
+                    </h3>
                 </Col>
             </Row>
             <ul>

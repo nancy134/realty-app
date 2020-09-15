@@ -176,3 +176,7 @@
 .address-title {
     font-size: 110%;
 }
+
+.image-container {
+    max-width: 50%;
+}

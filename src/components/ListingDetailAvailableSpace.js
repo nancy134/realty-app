@@ -361,7 +361,7 @@ class ListingDetailAvailableSpace extends React.Component {
             <div>
                 <Row className="mt-3 border-bottom border-warning">
                     <Col>
-                        <h2>Available Space {editMode === "edit" ? 
+                        <h3>Available Space {editMode === "edit" ? 
                             <AddButton 
                             listing={listing} 
                             space={newSpace}
@@ -375,7 +375,7 @@ class ListingDetailAvailableSpace extends React.Component {
                             show={this.props.spaceNew}
                             saving={this.props.spaceSaving}
                             /> 
-                            : null}</h2>
+                            : null}</h3>
                     </Col>
                 </Row>
                 <Row className="bg-light shadow">

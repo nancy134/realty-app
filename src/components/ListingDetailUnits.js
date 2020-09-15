@@ -84,7 +84,7 @@ class ListingDetailUnits extends React.Component {
         <React.Fragment>
             <Row className="mt-2 border-bottom border-warning">
                 <Col>
-                    <h2>Units&nbsp;
+                    <h3>Units&nbsp;
                     {editMode === "edit" ?
                     <AddButton 
                         listing={listing}
@@ -96,7 +96,7 @@ class ListingDetailUnits extends React.Component {
                         show={this.props.unitNew}
                         saving={this.props.unitSaving}
                     /> 
-                    : null}</h2>
+                    : null}</h3>
                 </Col>
             </Row>
             <Row className="bg-light shadow">

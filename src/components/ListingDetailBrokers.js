@@ -67,12 +67,12 @@ class ListingDetailBrokers extends React.Component {
             <React.Fragment>
                 <Row className="mt-3 border-bottom border-warning">
                     <Col>
-                        <h2>Brokers { enableEdit && editMode === "edit" ?
+                        <h3>Brokers { enableEdit && editMode === "edit" ?
                             <EditButton 
                                 listing={listing}
                                 onSave={this.handleSave}
                                 getListing={this.props.getListing}
-                            /> : null}</h2>
+                            /> : null}</h3>
                     </Col>
                 </Row>
                 <Row className="pt-2 pb-2">
