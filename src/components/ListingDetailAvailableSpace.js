@@ -265,10 +265,10 @@ function AddButton(props) {
         <span id="span_space_add_button">
             <span
                 className="edit-button text-danger"
+                onClick={() => {props.onShow()}}
             >
                 <FontAwesomeIcon
                     id="space_add_button"
-                    onClick={() => {props.onShow()}}
                     size="xs" 
                     icon={faPlus} />&nbsp;Add Space
             </span>
