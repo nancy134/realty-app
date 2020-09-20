@@ -325,13 +325,7 @@ export class ListingPage extends Component {
             that.fetchListingPromise(localState).then(function(localState){
                 that.fetchListingsPromise(localState).then(function(localState){
                     if (localState.bounds.lat0 === null){
-                        var bounds = geolocationService.calculateBounds(localState.markers);
-                        var ne = bounds.getNorthEast();
-                        var sw = bounds.getSouthWest();
-                        localState.bounds.lat0 = ne.lat();
-                        localState.bounds.lng0 = ne.lng();
-                        localState.bounds.lat1 = sw.lat();
-                        localState.bounds.lng1 = sw.lng();
+                        localState.bounds = geolocationService.calculateBounds(localState.markers);
                     }
                     that.setState(localState);
                 }).catch(function(err){
@@ -372,13 +366,7 @@ export class ListingPage extends Component {
         };
         var that = this;
         this.fetchListingsPromise(localState).then(function(localState){
-            var bounds = geolocationService.calculateBounds(localState.markers);
-            var ne = bounds.getNorthEast();
-            var sw = bounds.getSouthWest();
-            localState.bounds.lat0 = ne.lat();
-            localState.bounds.lng0 = ne.lng();
-            localState.bounds.lat1 = sw.lat();
-            localState.bounds.lng1 = sw.lng();
+            localState.bounds = geolocationService.calculateBounds(localState.markers);
             that.setState(localState);
         }).catch(function(err){
             console.log(err);
@@ -676,13 +664,7 @@ export class ListingPage extends Component {
         var that = this;
         this.fetchListingsPromise(localState).then(function(localState){
             if (localState.bounds.lat0 === null){
-                var bounds = geolocationService.calculateBounds(localState.markers);
-                var ne = bounds.getNorthEast();
-                var sw = bounds.getSouthWest();
-                localState.bounds.lat0 = ne.lat();
-                localState.bounds.lng0 = ne.lng();
-                localState.bounds.lat1 = sw.lat();
-                localState.bounds.lng1 = sw.lng();
+                localState.bounds = geolocationService.calculateBounds(localState.markers);
             }
             localState.readyForMap = true;
             that.setState(localState);
@@ -804,6 +786,8 @@ export class ListingPage extends Component {
     }
 
     render() {
+        console.log("this.state.markers");
+        console.log(this.state.markers);
         var showDetail = this.state.showDetail;
         var index = this.state.index;
         var editMode = this.state.editMode;
@@ -962,7 +946,6 @@ export class ListingPage extends Component {
                         </CSSTransition>
                         { this.state.readyForMap ?
                         <ListingMap 
-                            listings={this.state.listings}
                             showDetail={showDetail}
                             markers={this.state.markers}
                             bounds={this.state.bounds}

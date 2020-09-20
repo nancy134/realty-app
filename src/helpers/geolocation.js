@@ -22,6 +22,17 @@ export function getVerifiedAddresses(address){
     });
 }
 
+// Given a set of markers, calculate the bounds
+// Markers:
+// [{
+//     id: 1,
+//     location: {
+//         coordinates: [lat, lng],
+//         type: "Point"
+//     }
+// }]
+// Return bounds:
+
 export function calculateBounds(markers){
     var bounds = new window.google.maps.LatLngBounds();
     if (markers){
@@ -35,8 +46,16 @@ export function calculateBounds(markers){
             }
         }
     }
-
-    return bounds;
+    // Convert to correct format
+    var ne = bounds.getNorthEast();
+    var sw = bounds.getSouthWest();
+    var retBounds = {
+        lat0: ne.lat(),
+        lng0: ne.lng(),
+        lat1: sw.lat(),
+        lng1: sw.lng()
+    };
+    return retBounds;
 }
 
 export function addPoint(bounds, point){

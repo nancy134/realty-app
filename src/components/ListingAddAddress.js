@@ -10,6 +10,7 @@ import {
 } from 'react-bootstrap';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import ListingMap from '../components/ListingMap';
 import listingService from '../services/listings';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import geolocationService from '../helpers/geolocation';
@@ -43,7 +44,19 @@ class ListingAddAddress extends React.Component{
             geocoded: false,
             verifiedAddresses: false,
             addressInUse: false,
-            showVerifyAddressModal: false
+            showVerifyAddressModal: false,
+            // Map
+            bounds: {
+                lat0: null,
+                lng0: null,
+                lat1: null,
+                lng1: null
+            },
+            markers: null,
+            center: null,
+            zoomLevel: 18,
+            updateBounds: false,
+            updateZoomLevel: false
         };
     }
     handleNext(initialValues, values){
@@ -101,56 +114,65 @@ class ListingAddAddress extends React.Component{
                 type: 'Point',
                 coordinates: [lat, lng]
             };
-        });
-        for (var i=0; i<len; i++){
-            var len2 = results[0].address_components[i].types.length;
-            for (var j=0; j<len2; j++){
-                if (results[0].address_components[i].types[j] === "route"){
-                street_address = results[0].address_components[i].long_name;
-                } else if (results[0].address_components[i].types[j] === "street_number"){
-                    street_number = results[0].address_components[i].long_name;
-                } else if (results[0].address_components[i].types[j] === "locality"){
-                    city = results[0].address_components[i].long_name;
-                } else if (results[0].address_components[i].types[j] === "sublocality_level_1"){
-                    city = results[0].address_components[i].long_name;
-                } else if (results[0].address_components[i].types[j] === "administrative_area_level_1"){
-                    state = results[0].address_components[i].long_name;
-                } else if (results[0].address_components[i].types[j] === "postal_code"){
-                    zip = results[0].address_components[i].long_name;
+            for (var i=0; i<len; i++){
+                var len2 = results[0].address_components[i].types.length;
+                for (var j=0; j<len2; j++){
+                    if (results[0].address_components[i].types[j] === "route"){
+                        street_address = results[0].address_components[i].long_name;
+                    } else if (results[0].address_components[i].types[j] === "street_number"){
+                        street_number = results[0].address_components[i].long_name;
+                    } else if (results[0].address_components[i].types[j] === "locality"){
+                        city = results[0].address_components[i].long_name;
+                    } else if (results[0].address_components[i].types[j] === "sublocality_level_1"){
+                        city = results[0].address_components[i].long_name;
+                    } else if (results[0].address_components[i].types[j] === "administrative_area_level_1"){
+                        state = results[0].address_components[i].long_name;
+                    } else if (results[0].address_components[i].types[j] === "postal_code"){
+                        zip = results[0].address_components[i].long_name;
+                    }
                 }
             }
-        }
-        var addr = street_number + " " + street_address;
-        values.city = city;
-        values.state = state;
-        values.zip = zip;
-        var owner = getUserEmail();
-        listingService.findAddress(addr, city, state, owner).then(function(result){
-            var addressInUse = null;
-            if (result.length > 0) addressInUse = result;
-            that.setState({
-                address: addr,
-                geocoded: true,
-                verifiedAddresses: null,
-                addressInUse: addressInUse,
-                showVerifyAddressModal: false
-            }, () => {
-        that.addressRef.current.blur();
-        that.cityRef.current.focus();
-        that.stateRef.current.focus();
-        that.zipRef.current.focus();
-
-            });
-        }).catch(function(err){
-            console.log(err);
-            that.setState({
-                showVerifyAddressModal: false
+            var addr = street_number + " " + street_address;
+            values.city = city;
+            values.state = state;
+            values.zip = zip;
+            var owner = getUserEmail();
+            var markers = [{
+                id: 0,
+                location: values.location
+            }];
+            listingService.findAddress(addr, city, state, owner).then(function(result){
+                var addressInUse = null;
+                if (result.length > 0) addressInUse = result;
+                var bounds = geolocationService.calculateBounds(markers);
+                that.setState({
+                    address: addr,
+                    geocoded: true,
+                    verifiedAddresses: null,
+                    addressInUse: addressInUse,
+                    showVerifyAddressModal: false,
+                    markers: markers,
+                    updateBounds: true,
+                    updateZoomLevel: true,
+                    bounds: bounds
+                }, () => {
+                    that.addressRef.current.blur();
+                    that.cityRef.current.focus();
+                    that.stateRef.current.focus();
+                    that.zipRef.current.focus();
+                });
+            }).catch(function(err){
+                console.log(err);
+                that.setState({
+                    showVerifyAddressModal: false
+                });
+            }).catch(function(err){
+                console.log(err)
             });
         });
     }
 
     handleSelectAddress(address, values){
-            console.log("handleSelectAddress");
             var that = this;
             this.setState({
                 showVerifyAddressModal: true
@@ -216,7 +238,7 @@ class ListingAddAddress extends React.Component{
            zip: "",
            displayAddress: ""
        };
-
+       var showDetail = false;
        if (this.props.show){
        return(
        <React.Fragment>
@@ -256,6 +278,7 @@ class ListingAddAddress extends React.Component{
           onHide={this.props.onHide}
           aria-labelledby="contained-modal-title-vcenter"
           backdrop='static'
+          dialogClassName="modal-80w"
         >
             <Modal.Header>
                 <Modal.Title id="contained-modal-title-vcenter">
@@ -450,6 +473,18 @@ class ListingAddAddress extends React.Component{
                                 </Col>
                             </Form.Row>
                         </Form>
+                    </Col>
+                    <Col>
+                        <ListingMap
+                            showDetail={showDetail}
+                            markers={this.state.markers}
+                            bounds={this.state.bounds}
+                            updateBounds={this.state.updateBounds}
+                            updateZoomLevel={this.state.updateZoomLevel}
+                            center={this.state.center}
+                            zoomLevel={this.state.zoomLevel}
+                            style={{width: '90%'}}
+                        />
                     </Col>
                 </Row>
             </Modal.Body>

@@ -86,7 +86,7 @@ class ListingMap extends React.Component {
         };
         var center = map.getCenter();
         var zoomLevel = map.getZoom();
-        this.props.onBoundsChange(bounds, center, zoomLevel);  // new
+        if (this.props.onBoundsChange) this.props.onBoundsChange(bounds, center, zoomLevel);  // new
     }
     handleDragEnd(props, map){
         var mapBounds = map.getBounds();
@@ -100,7 +100,7 @@ class ListingMap extends React.Component {
         };
         var center = map.getCenter();
         var zoomLevel = map.getZoom();
-        this.props.onBoundsChange(bounds, center, zoomLevel);
+        if (this.props.onBoundsChange) this.props.onBoundsChange(bounds, center, zoomLevel);
     }
     componentDidUpdate(){
         var bounds = new this.props.google.maps.LatLngBounds();
@@ -121,6 +121,9 @@ class ListingMap extends React.Component {
                 this.refs.resultMap.map.setCenter(this.props.center);
                 this.refs.resultMap.map.setZoom(this.props.zoomLevel);
             }
+        }
+        if (this.props.updateZoomLevel){
+            this.refs.resultMap.map.setZoom(this.props.zoomLevel);
         }
     }
     componentDidMount(){
@@ -155,16 +158,16 @@ class ListingMap extends React.Component {
            {lat: parseFloat(this.props.bounds.lat0), lng: parseFloat(this.props.bounds.lng1)},
            {lat: parseFloat(this.props.bounds.lat0), lng: parseFloat(this.props.bounds.lng0)}
         ];
-        if (!showDetail && this.props.listings) {
+        if (!showDetail) {
             return (
             <Map
                 className="map"
                 google={this.props.google}
                 onReady={this.onReady}
                 onClick={this.onMapClicked}
-                style={{ height: '100%', position: 'relative', width: '100%' }}
                 onZoomChanged={this.handleZoomChanged}
                 onDragend={this.handleDragEnd}
+                style={this.props.style}
                 ref="resultMap"
             >
                 {this.displayMarkers()}
