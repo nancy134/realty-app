@@ -167,7 +167,7 @@ class ListingMap extends React.Component {
                 onClick={this.onMapClicked}
                 onZoomChanged={this.handleZoomChanged}
                 onDragend={this.handleDragEnd}
-                style={this.props.style}
+                containerStyle={this.props.style}
                 ref="resultMap"
             >
                 {this.displayMarkers()}

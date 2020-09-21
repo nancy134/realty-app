@@ -151,7 +151,11 @@ export class ListingPage extends Component {
             updateBounds: true,
             center: null,
             zoomLevel: null,
-            readyForMap: false
+            readyForMap: false,
+
+            // Detail Map
+            detailBounds: {lat0:lat0, lng0:lng0, lat1:lat1, lng1:lng1},
+            detailMarkers: null
         };
     }
     handleGoToListingByIndex(index, publishStatus){
@@ -570,6 +574,16 @@ export class ListingPage extends Component {
                 localState.listingDetail = data;
                 localState.owner = owner;
                 localState.spaceAccordionText = accordionText;
+
+                // Detail Map
+                var markers = [{
+                    id: data.listing.id,
+                    location: data.listing.location
+                }];
+                var bounds = geolocationService.calculateBounds(markers);
+                localState.detailMarkers = markers;
+                localState.detailBounds = bounds;
+
                 resolve(localState);
             }).catch(function(err){
                 reject(err);
@@ -621,7 +635,6 @@ export class ListingPage extends Component {
                 query += locationQuery;
                 markerQuery += locationQuery;
             }
-            console.log("query: "+query);
             var getAllPromise = listingService.getAll(query);
             getAllPromise.then(function(listings){
                 var enumPromise = listingService.getEnumsPromise();
@@ -786,8 +799,6 @@ export class ListingPage extends Component {
     }
 
     render() {
-        console.log("this.state.markers");
-        console.log(this.state.markers);
         var showDetail = this.state.showDetail;
         var index = this.state.index;
         var editMode = this.state.editMode;
@@ -862,7 +873,10 @@ export class ListingPage extends Component {
                          allAmenities={this.state.allAmenities}
 
                          onGoToListingByIndex={this.handleGoToListingByIndex}
-		 onGoToMyListing={this.handleGoToMyListing}
+                         // Map
+                         markers={this.state.detailMarkers}
+                         bounds={this.state.detailBounds}
+		         onGoToMyListing={this.handleGoToMyListing}
 	     />
 	</Container>)
 
@@ -941,6 +955,10 @@ export class ListingPage extends Component {
 
                                 onGoToListingByIndex={this.handleGoToListingByIndex}
                                  onGoToMyListing={this.handleGoToMyListing}
+                                // Map
+                                markers={this.state.detailMarkers}
+                                bounds={this.state.detailBounds}
+
 
                             />
                         </CSSTransition>

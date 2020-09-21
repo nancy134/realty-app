@@ -14,6 +14,7 @@ import ListingDetailUnits from './ListingDetailUnits';
 import ListingDetailTenants from './ListingDetailTenants';
 import ListingDetailPortfolio from './ListingDetailPortfolio';
 //import ListingDetailAttachments from './ListingDetailAttachments';
+import ListingDetailMap from './ListingDetailMap';
 import spaces from '../services/spaces';
 import units from '../services/units';
 import tenants from '../services/tenants';
@@ -66,7 +67,8 @@ class ListingDetail extends React.Component {
             amenityError: null,
 
             // Contact
-            showContactModal: false
+            showContactModal: false,
+
         };
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
@@ -648,7 +650,7 @@ class ListingDetail extends React.Component {
         if (listing){
             listingType = listing.listingType;
         }
-
+        
         if (showDetail){
             return (
             <div>
@@ -806,6 +808,10 @@ class ListingDetail extends React.Component {
                     listing={listing}
                     editMode={editMode}
                 />
+                <ListingDetailMap
+                    markers={this.props.markers}
+                    bounds={this.props.bounds}
+                />
                 { listing ?
                 <Row className="bg-light listing-footer">
                     <Col className="border-bottom">
@@ -816,7 +822,6 @@ class ListingDetail extends React.Component {
                     </Col> 
                 </Row>
                 : null }
-
             </div>
 //                {(editMode === "edit") ?
 //                <ListingDetailAttachments listing={listing} editMode={editMode} />
