@@ -4,7 +4,8 @@ import {
     Form,
     Button,
     Alert,
-    Spinner
+    Spinner,
+    InputGroup
 } from 'react-bootstrap';
 
 function SavingAlert(){
@@ -22,10 +23,17 @@ class AccountLoginModal extends React.Component {
         this.handleLogin = this.handleLogin.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
         this.emailRef = React.createRef();
+        this.toggleShow = this.toggleShow.bind(this);
         this.state = {
             email: "",
-            password: ""
+            password: "",
+            hidden: true
         };
+    }
+    toggleShow(){
+        this.setState({
+            hidden: !this.state.hidden
+        });
     }
     handleLogin(){
         this.props.onLogin(this.state.email, this.state.password);
@@ -79,12 +87,20 @@ class AccountLoginModal extends React.Component {
                     ref={this.emailRef}
                 />
                 <Form.Label>Password</Form.Label>
-                <Form.Control
-                    id="login_password_input" 
-                    type="password" 
-                    onChange={this.onPasswordChange}
-                    onKeyPress={this.handleKeyPress}
-                />
+                <InputGroup>
+                    <Form.Control
+                        id="login_password_input" 
+                        type={this.state.hidden ? 'password' : 'text'} 
+                        onChange={this.onPasswordChange}
+                        onKeyPress={this.handleKeyPress}
+                    />
+                    <InputGroup.Append>
+                        <Button
+                            variant="secondary"
+                            onClick={this.toggleShow}
+                        >{this.state.hidden ? 'Show' : 'Hide'}</Button>
+                    </InputGroup.Append>
+                </InputGroup>
                 <Button
                     onClick={this.props.onForgotPassword}
                     variant="link">Forgot password?</Button>
