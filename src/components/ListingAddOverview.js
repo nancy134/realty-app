@@ -26,6 +26,9 @@ class ListingAddOverview extends React.Component{
     constructor(props){
         super(props);
         this.handleNext = this.handleNext.bind(this);
+
+        this.shortDescriptionRef = React.createRef();
+        this.listingPriceRef = React.createRef();
     }
     handleNext(initialValues, values){
         var listing = this.props.listing;
@@ -36,6 +39,17 @@ class ListingAddOverview extends React.Component{
         this.props.onNext(listing);
     }
     componentDidMount(){
+        if (this.props.show){
+        setTimeout(() => {
+            if (this.props.listing.listingType === "For Lease"){
+                console.log("set focus to short description");
+                this.shortDescriptionRef.current.focus();
+            }else{
+                console.log("set focus to listing price");
+                this.listingPriceRef.current.focus();
+            }
+        }, 1);
+        }
     }
     render()
     {
@@ -107,6 +121,7 @@ class ListingAddOverview extends React.Component{
                                             isInvalid={touched.listingPrice && !!errors.listingPrice}
                                             isValid={touched.listingPrice && !errors.listingPrice && values.listingPrice !== ""}
                                             disabled={isSubmitting}
+                                            ref={this.listingPriceRef}
                                         />
                                         <Form.Control.Feedback type="invalid">
                                             {errors.listingPrice}
@@ -128,6 +143,7 @@ class ListingAddOverview extends React.Component{
                                         isInvalid={touched.shortDescription && !!errors.shortDescription}
                                         isValid={touched.shortDescription && !errors.shortDescription && values.shortDescription !== ""}
                                         disabled={isSubmitting}
+                                        ref={this.shortDescriptionRef}
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         {errors.shortDescription}

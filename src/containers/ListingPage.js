@@ -907,12 +907,14 @@ export class ListingPage extends Component {
 		onGoToListing={this.handleGoToListing}
 	    />
 	    : null }
+            { this.state.addListingOverview ?
 	    <ListingAddOverview
 		show={this.state.addListingOverview}
 		onNext={this.handleListingOverviewNext}
 		listing={this.state.newListing}
 		onCancel={this.handleCancelAddOverview}
 	    />
+            : null }
 	</Row>
 	<Row>
 	    <Col xs={8} className={showDetail? "rightcol" : "leftcol"}>
