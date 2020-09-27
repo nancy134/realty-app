@@ -634,6 +634,7 @@ class ListingDetail extends React.Component {
         var spaceDivisibles = null;
         var portfolioTypes = null;
         var propertyTypes = null;
+        var priceUnits = null;
         if (this.props.listingDetail){
            listing = this.props.listingDetail.listing;
            states = this.props.listingDetail.states;
@@ -643,6 +644,7 @@ class ListingDetail extends React.Component {
            spaceDivisibles = this.props.listingDetail.spaceDivisibles;
            portfolioTypes = this.props.listingDetail.portfolioTypes;
            propertyTypes = this.props.listingDetail.propertyTypes;
+           priceUnits = this.props.listingDetail.priceUnits;
         }  
         const owner = this.props.owner;
         const fullscreen = this.props.fullscreen;
@@ -711,6 +713,7 @@ class ListingDetail extends React.Component {
                         editMode={editMode}
                         spaceUses={spaceUses}
                         spaceTypes={spaceTypes}
+                        priceUnits={priceUnits}
                         spaceDivisibles={spaceDivisibles}
                         spaceNew={this.state.spaceNew}
                         spaceUpdate={this.state.spaceUpdate}

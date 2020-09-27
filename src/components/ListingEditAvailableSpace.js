@@ -10,7 +10,9 @@ import {
     Button,
     Accordion,
     Card,
-    Image
+    Image,
+    Dropdown,
+    DropdownButton
 } from 'react-bootstrap';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -67,6 +69,16 @@ class ListingEditAvailableSpace extends React.Component {
     constructor(props){
         super(props);
         this.handleSave = this.handleSave.bind(this);
+        this.handlePriceUnitChange =this.handlePriceUnitChange.bind(this);
+        this.state = {
+            priceUnit: this.props.priceUnits[0]
+        };
+    }
+    handlePriceUnitChange(e, values){
+        values.priceUnit = e;
+        this.setState({
+            priceUnit: values.priceUnit
+        });
     }
     handleSave(initialValues, values){
         var space = {};
@@ -118,7 +130,7 @@ class ListingEditAvailableSpace extends React.Component {
         if (initialValues.class !== values.class){
             space.class = values.class;
         }
-
+        space.priceUnit = values.priceUnit;
         this.props.onSave(space);
     }
     render(){
@@ -139,7 +151,8 @@ class ListingEditAvailableSpace extends React.Component {
             ceilingHeight: "",
             availableDate: "",
             nets: "",
-            class: ""
+            class: "",
+            priceUnit: this.props.priceUnits[0] 
         };
         if (space){
             if (space.unit) initialValues.unit = space.unit;
@@ -157,6 +170,7 @@ class ListingEditAvailableSpace extends React.Component {
             if (space.availableDate) initialValues.availableDate = space.availableDate;
             if (space.nets) initialValues.nets = space.nets;
             if (space.class) initialValues.class = space.class;
+            if (space.priceUnit) initialValues.priceUnit = space.priceUnit;
         }
         var images = [];
         if (space && space.images) images = space.images;
@@ -265,9 +279,21 @@ class ListingEditAvailableSpace extends React.Component {
                                         isValid={touched.price && !errors.price && values.price !== ""}
                                         disabled={isSubmitting}
                                     />
-                                    <InputGroup.Append>
-                                        <InputGroup.Text>sf/yr</InputGroup.Text>
-                                    </InputGroup.Append>
+                                    <DropdownButton
+                                        as={InputGroup.Append}
+                                        variant="light"
+                                        title={values.priceUnit}
+                                        onSelect={(e) => this.handlePriceUnitChange(e, values)}
+                                    >
+                                        {this.props.priceUnits.map((priceUnit, index) => (
+                                            <Dropdown.Item
+                                                key={index}
+                                                eventKey={priceUnit}
+                                            >
+                                                {priceUnit}
+                                            </Dropdown.Item>
+                                        ))}
+                                    </DropdownButton>
                                     <Form.Control.Feedback type="invalid">
                                         {errors.price}
                                     </Form.Control.Feedback>

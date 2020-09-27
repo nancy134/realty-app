@@ -55,7 +55,7 @@ function SpaceItem(props){
         <Row className="border-bottom align-items-center" >
             <Col md={2}>{space.unit}</Col>
             <Col md={2}>{space.size} sf</Col>
-            <Col md={2}>${space.price} sf/yr</Col>
+            <Col md={2}>${space.price} {space.priceUnit}</Col>
             <Col md={3}>
                 <Row>
                     <Col >{space.use}</Col>
@@ -75,6 +75,7 @@ function SpaceItem(props){
                              spaceUses={props.spaceUses}
                              spaceTypes={props.spaceTypes} 
                              spaceDivisibles={props.spaceDivisibles}
+                             priceUnits={props.priceUnits}
                              onSave={props.onSave}
                              onShow={props.onShow}
                              onHide={props.onHide}
@@ -232,6 +233,7 @@ function SpaceItem(props){
                              spaceUses={props.spaceUses}
                              spaceTypes={props.spaceTypes}
                              spaceDivisibles={props.spaceDivisibles}
+                             priceUnits={props.priceUnits}
                              onSave={props.onSave}
                              onShow={props.onShow}
                              onHide={props.onHide}
@@ -281,6 +283,7 @@ function AddButton(props) {
                 spaceTypes={props.spaceTypes}
                 spaceUses={props.spaceUses}
                 spaceDivisibles={props.spaceDivisibles}
+                priceUnits={props.priceUnits}
                 show={props.show}
                 onHide={props.onHide}
                 onSave={listing => props.onSave(listing)}
@@ -313,6 +316,7 @@ function EditButton(props) {
               spaceTypes={props.spaceTypes}
               spaceUses={props.spaceUses}
               spaceDivisibles={props.spaceDivisibles}
+              priceUnits={props.priceUnits}
               show={props.show}
               onHide={props.onHide}
               onSave={listing => props.onSave(listing)}
@@ -356,6 +360,7 @@ class ListingDetailAvailableSpace extends React.Component {
         var spaceUses = this.props.spaceUses;
         var spaceTypes = this.props.spaceTypes;
         var spaceDivisibles = this.props.spaceDivisibles;
+        var priceUnits = this.props.priceUnits;
         var newSpace = {}; 
         return (
             <div>
@@ -368,6 +373,7 @@ class ListingDetailAvailableSpace extends React.Component {
                             spaceUses={spaceUses} 
                             spaceTypes={spaceTypes}
                             spaceDivisibles={spaceDivisibles}
+                            priceUnits={priceUnits}
                             onSave={this.handleSave} 
                             onShow={this.props.onSpaceModalNew}
                             onHide={this.props.onSpaceModalHide}
@@ -403,6 +409,7 @@ class ListingDetailAvailableSpace extends React.Component {
                     spaceUses={spaceUses}
                     spaceTypes={spaceTypes}
                     spaceDivisibles={spaceDivisibles}
+                    priceUnits={priceUnits}
                     onSave={this.handleSave}
                     onShow={this.props.onSpaceModalUpdate}
                     onHide={this.props.onSpaceModalHide}
