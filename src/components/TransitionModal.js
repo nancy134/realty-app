@@ -8,14 +8,18 @@ import {
 class TransitionModal extends React.Component {
     constructor(props){
         super(props);
-        this.onPublish = this.onPublish.bind(this);
-        this.onUnpublish = this.onUnpublish.bind(this);
+        this.handlePublish = this.handlePublish.bind(this);
+        this.handleUnpublish = this.handleUnpublish.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
     }
-    onPublish(){
+    handlePublish(){
         this.props.onPublish();
     }
-    onUnpublish(){
+    handleUnpublish(){
         this.props.onUnpublish();
+    }
+    handleCancel(){
+        this.props.onCancel();
     }
     render(){
         var publish = false;
@@ -47,17 +51,17 @@ class TransitionModal extends React.Component {
                 <div>{this.props.transitionMessage}</div>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={this.props.onHide}>Cancel</Button>
+                <Button onClick={this.handleCancel}>Cancel</Button>
                 { publish ?
                 <Button 
                     id="transition_publish_button"
-                    onClick={this.onPublish}
+                    onClick={this.handlePublish}
                 >
                     Publish
                 </Button>
                 : null}
                 { unpublish ?
-                <Button onClick={this.onUnpublish}>Take off market</Button>
+                <Button onClick={this.handleUnpublish}>Take off market</Button>
                 : null}
             </Modal.Footer>
         </Modal>

@@ -78,6 +78,8 @@ export class ListingPage extends Component {
         this.handlePublish = this.handlePublish.bind(this);
         this.handleUnpublish = this.handleUnpublish.bind(this);
         this.handleTransitionHide = this.handleTransitionHide.bind(this);
+        this.handleTransitionAccept = this.handleTransitionAccept.bind(this);
+        this.handleTransitionCancel = this.handleTransitionCancel.bind(this);
         this.handleClose = this.handleClose.bind(this);
 
         // Space
@@ -503,6 +505,25 @@ export class ListingPage extends Component {
             this.handleListUpdate();
         });
     }
+    handleTransitionAccept(data, title, message){
+        this.setState({
+            transitionStart: false,
+            transitionSaving: false,
+            listingDetail: data,
+            showDetail: false,
+            showModal: true,
+            transitionModalTitle: title,
+            transitionModalMessage: message
+        }, () => {
+            this.handleListUpdate();
+        });
+    }
+    handleTransitionCancel(){
+        console.log("handleTransitionCancel()");
+        this.setState({
+            transitionStart: false
+        });
+    }
     handlePublish(id){
         var publishPromise = listingService.publish(id);
         this.setState({transitionSaving: true});
@@ -860,6 +881,7 @@ export class ListingPage extends Component {
                          showSpinner={this.state.showSpinner}
                          // Transition
                          onTransitionStart={this.handleTransitionStart}
+                         onTransitionCancel={this.handleTransitionCancel}
                          onPublish={this.handlePublish}
                          onUnpublish={this.handleUnpublish}
                          onTransitionHide={this.handleTransitionHide}
@@ -943,6 +965,7 @@ export class ListingPage extends Component {
 
                                 // Transition
                                 onTransitionStart={this.handleTransitionStart}
+                                onTransitionCancel={this.handleTransitionCancel}
                                 onPublish={this.handlePublish}
                                 onUnpublish={this.handleUnpublish}
                                 onTransitionHide={this.handleTransitionHide}

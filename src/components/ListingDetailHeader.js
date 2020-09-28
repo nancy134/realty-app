@@ -43,6 +43,7 @@ function EditButton(props) {
 function TransitionButton(props) {
   return (
       <span>
+          { props.type === "button" ?
           <Button 
               id="header_transition_button"
               variant="primary" 
@@ -51,13 +52,19 @@ function TransitionButton(props) {
           >
               {props.buttonText}
           </Button>
-
+          : null}
+          { props.type === "link" ? 
+              <span
+                  className="text-danger addPointer"
+                  onClick={() => props.onShow()}
+              >{props.buttonText}</span>
+          : null}
           <TransitionModal
               show={props.show}
               message={props.message}
               states={props.states}
               transition={props.buttonText}
-              onHide={props.onHide}
+              onCancel={props.onCancel}
               onPublish={props.onPublish}
               onUnpublish={props.onUnpublish}
               saving={props.saving}
@@ -231,12 +238,13 @@ class ListingDetailHeader extends React.Component {
                     : null }
                     { owner ?
                     <TransitionButton 
+                        type="button"
                         message={message} 
                         buttonText={transitionButton} 
                         onPublish={this.handlePublish}
                         onUnpublish={this.handleUnpublish}
                         onShow={this.props.onTransitionStart}
-                        onHide={this.props.onTransitionHide}
+                        onCancel={this.props.onTransitionCancel}
                         show={this.props.transitionStart}
                         saving={this.props.transitionSaving}
                         transitionMessage={this.props.transitionMessage}
@@ -284,7 +292,19 @@ class ListingDetailHeader extends React.Component {
             {onlyDraft ?
             <Row className="bg-light">
                 <Col>
-                This listing is a draft and is not available to the public.  Select Publish to make it public.
+                This is a Draft Listing and not available to the public.  Select&nbsp; 
+                <TransitionButton
+                    type="link"
+                    message={message}
+                    buttonText={transitionButton}
+                    onPublish={this.handlePublish}
+                    onUnpublish={this.handleUnpublish}
+                    onShow={this.props.onTransitionStart}
+                    onCancel={this.props.onTransitionCancel}
+                    show={this.props.transitionStart}
+                    saving={this.props.transitionSaving}
+                    transitionMessage={this.props.transitionMessage}
+                /> to make it public. Select Delete to delete this draft.
                 </Col>
             </Row>
             : null}
