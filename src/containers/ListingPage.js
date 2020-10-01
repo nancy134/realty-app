@@ -95,6 +95,11 @@ export class ListingPage extends Component {
         this.handleDeleteListingConfirm = this.handleDeleteListingConfirm.bind(this);
         this.handleDeleteListingHide = this.handleDeleteListingHide.bind(this);
 
+        // DeleteDraftListing
+        this.handleDeleteDraftListing = this.handleDeleteDraftListing.bind(this);
+        this.handleDeleteDraftListingConfirm = this.handleDeleteDraftListingConfirm.bind(this);
+        this.handleDeleteDraftListingHide = this.handleDeleteDraftListingHide.bind(this);
+
         // Map
         this.handleBoundsChange = this.handleBoundsChange.bind(this);
 
@@ -144,6 +149,11 @@ export class ListingPage extends Component {
             deleteListingId: null,
             showDeleteListingModal: false,
             deleteListingSaving: false,
+
+            // Delete Draft Listing
+            deleteDraftListingId: null,
+            showDeleteDraftListingModal: false,
+            deleteDraftListingSaving: false,
 
             // Search
             formatted_address: formatted_address,
@@ -519,7 +529,6 @@ export class ListingPage extends Component {
         });
     }
     handleTransitionCancel(){
-        console.log("handleTransitionCancel()");
         this.setState({
             transitionStart: false
         });
@@ -554,7 +563,39 @@ export class ListingPage extends Component {
         });
     }
 
+    handleDeleteDraftListing(listingId){
+        var message = "Are you sure you want to delete this draft listing?";
+        this.setState({
+            deleteDraftListingId: listingId,
+            showDeleteDraftListingModal: true,
+            deleteDraftListingSaving: false,
+            deleteDraftListingMessage: message
+        });
+    }
 
+    handleDeleteDraftListingConfirm(){
+        var deleteDraftPromise = listingService.deleteDraftListing(this.state.deleteDraftListingId);
+        var that = this;
+        var localState = {
+            showDetail: false,
+            page: 1,
+            showDeleteDraftListingModal: false
+        };
+        deleteDraftPromise.then(function(result){
+            that.fetchListingsPromise(localState).then(function(localState){
+                that.setState(localState);
+            }).catch(function(err){
+                console.log(err);
+            });
+        }).catch(function(err){
+            console.log(err);
+        });
+    }
+    handleDeleteDraftListingHide(){
+        this.setState({
+            showDeleteDraftListingModal: false
+        });
+    }
     handleFetchListing(index){
         var fetchIndex = this.state.index;
         if (index) fetchIndex = index;
@@ -847,6 +888,14 @@ export class ListingPage extends Component {
                     saving={this.state.deleteListingSaving}
                     onDelete={this.handleDeleteListingConfirm}
                 />
+                <DeleteListingModal
+                    id={this.state.deleteDraftListingId}
+                    show={this.state.showDeleteDraftListingModal}
+                    message={this.state.deleteDraftListingMessage}
+                    onHide={this.handleDeleteDraftListingHide}
+                    saving={this.state.deleteDraftListingSaving}
+                    onDelete={this.handleDeleteDraftListingConfirm}
+                />
                 <Modal show={this.state.showModal}>
                     <Modal.Header>
                         <Modal.Title>{this.state.transitionModalTitle}</Modal.Title>
@@ -884,6 +933,7 @@ export class ListingPage extends Component {
                          onTransitionCancel={this.handleTransitionCancel}
                          onPublish={this.handlePublish}
                          onUnpublish={this.handleUnpublish}
+                         onDeleteDraft={this.handleDeleteDraftListing}
                          onTransitionHide={this.handleTransitionHide}
                          transitionStart={this.state.transitionStart}
                          transitionSaving={this.state.transitionSaving}
@@ -968,6 +1018,7 @@ export class ListingPage extends Component {
                                 onTransitionCancel={this.handleTransitionCancel}
                                 onPublish={this.handlePublish}
                                 onUnpublish={this.handleUnpublish}
+                                onDeleteDraft={this.handleDeleteDraftListing}
                                 onTransitionHide={this.handleTransitionHide}
                                 transitionStart={this.state.transitionStart}
                                 transitionSaving={this.state.transitionSaving}

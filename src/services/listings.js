@@ -164,6 +164,22 @@ export function deleteListing(id){
     });
 }
 
+export function deleteDraftListing(id){
+    var url = process.env.REACT_APP_LISTING_SERVICE+"listingVersions/"+id;
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'delete',
+            uri: url,
+            json: true
+        };
+        rp(options).then(function(parsedBody){
+           resolve(parsedBody);
+        }).catch(function(err){
+           reject(err.error);
+        });
+    });
+}
+
 export function findAddress(address, city, state, owner){
     var url = process.env.REACT_APP_LISTING_SERVICE+"addresses?address="+address+"&city="+city+"&state="+state+"&owner="+owner;
     return new Promise(function(resolve, reject){
@@ -221,6 +237,7 @@ const listings = {
     getSpaceTypes, 
     getListingTypes,
     deleteListing,
+    deleteDraftListing,
     findAddress
 };
 export default listings;

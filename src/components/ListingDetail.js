@@ -676,6 +676,7 @@ class ListingDetail extends React.Component {
                     onTransitionStart={this.props.onTransitionStart}
                     onPublish={this.props.onPublish}
                     onUnpublish={this.props.onUnpublish}
+                    onDeleteDraft={this.props.onDeleteDraft}
                     onTransitionHide={this.props.onTransitionHide}
                     onTransitionCancel={this.props.onTransitionCancel}
                     transitionStart={this.props.transitionStart}

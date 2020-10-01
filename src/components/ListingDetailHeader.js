@@ -97,6 +97,7 @@ class ListingDetailHeader extends React.Component {
         this.handlePublish = this.handlePublish.bind(this);
         this.handleUnpublish = this.handleUnpublish.bind(this);
         this.handleExpand = this.handleExpand.bind(this);
+        this.handleDeleteDraft = this.handleDeleteDraft.bind(this);
     }
     handleClose(){
         this.props.onShowDetailChange(false);
@@ -119,6 +120,9 @@ class ListingDetailHeader extends React.Component {
     }
     handleGoToListingByIndex(index, publishStatus){
         this.props.onGoToListingByIndex(index, publishStatus);
+    }
+    handleDeleteDraft(){
+        this.props.onDeleteDraft(this.props.listing.id);
     }
     render() {
         const listingMode = this.props.listingMode;
@@ -304,7 +308,11 @@ class ListingDetailHeader extends React.Component {
                     show={this.props.transitionStart}
                     saving={this.props.transitionSaving}
                     transitionMessage={this.props.transitionMessage}
-                /> to make it public. Select Delete to delete this draft.
+                /> to make it public. Select&nbsp; 
+                <span 
+                    onClick={this.handleDeleteDraft}
+                    className="text-danger addPointer"
+                 >Delete</span> to delete this draft.
                 </Col>
             </Row>
             : null}
