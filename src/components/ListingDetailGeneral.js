@@ -107,15 +107,15 @@ class ListingDetailGeneral extends React.Component {
 
             lotSize = listing.lotSize;
             if (listing.lotSize){
-                lotSize = listing.lotSize+" Acre";
+                lotSize = listing.lotSize;
             }
             taxes = listing.taxes; 
             if (listing.taxes){
-                taxes = "$"+listing.taxes;
+                taxes = listing.taxes;
             }
             parking = listing.parking; 
             if (listing.parking){
-                parking = listing.parking+" spaces";
+                parking = listing.parking;
             }
             floors = listing.floors;
             totalNumberOfUnits = listing.totalNumberOfUnits;
@@ -127,11 +127,11 @@ class ListingDetailGeneral extends React.Component {
             zone = listing.zone;
             totalAvailableSpace = listing.totalAvailableSpace;
             if (listing.totalAvailableSpace){
-                totalAvailableSpace = listing.totalAvailableSpace+" sf";
+                totalAvailableSpace = listing.totalAvailableSpace;
             }
             nets = listing.nets;
             if (listing.nets){
-                nets = "$"+listing.nets+" / sq ft";
+                nets = listing.nets;
             }
         }
         return (
@@ -158,37 +158,37 @@ class ListingDetailGeneral extends React.Component {
                         {editMode === "edit" || (editMode === "view" && totalBuildingSize) ?
                         <Row>
                         <Col>Total Building Size</Col>
-                        <Col className="font-weight-bold">{totalBuildingSize}</Col>
+                        <Col className="font-weight-bold">{totalBuildingSize} sq ft</Col>
                         </Row>
                         : null}
                         {editMode === "edit" || (editMode === "view" && lotSize) ?
                         <Row>
                         <Col>Lot Size</Col>
-                        <Col className="font-weight-bold">{lotSize}</Col>
+                        <Col className="font-weight-bold">{lotSize} acres</Col>
                         </Row>
                         : null}
                         {editMode === "edit" || (editMode === "view" && taxes) ?
                         <Row>
                         <Col>Taxes</Col>
-                        <Col className="font-weight-bold">{taxes}</Col>
+                        <Col className="font-weight-bold">${taxes} / yr</Col>
                         </Row>
                         : null}
                         {editMode === "edit" || (editMode === "view" && parking) ?
                         <Row>
                         <Col>Parking</Col>
-                        <Col className="font-weight-bold">{parking}</Col>
+                        <Col className="font-weight-bold">{parking} space(s)</Col>
                         </Row>
                         : null}
                         {editMode === "edit" || (editMode === "view" && floors) ?
                         <Row>
                         <Col>Floors</Col>
-                        <Col className="font-weight-bold">{floors}</Col>
+                        <Col className="font-weight-bold">{floors} floor(s)</Col>
                         </Row>
                         : null}
                         {editMode === "edit" || (editMode === "view" && totalNumberOfUnits) ?
                         <Row>
                         <Col>Total Number of Units</Col>
-                        <Col className="font-weight-bold">{totalNumberOfUnits}</Col>
+                        <Col className="font-weight-bold">{totalNumberOfUnits} unit(s)</Col>
                         </Row>
                         : null}
                         {editMode === "edit" || (editMode === "view" && buildingClass) ?
@@ -202,19 +202,19 @@ class ListingDetailGeneral extends React.Component {
                         {editMode === "edit" || (editMode === "view" && ceilingHeight) ?
                         <Row>
                         <Col>Ceiling Height</Col>
-                        <Col className="font-weight-bold">{ceilingHeight}</Col>
+                        <Col className="font-weight-bold">{ceilingHeight} ft</Col>
                         </Row>
                         : null}
                         {editMode === "edit" || (editMode === "view" && driveInDoors) ?
                         <Row>
                         <Col>Drive In Doors</Col>
-                        <Col className="font-weight-bold">{driveInDoors}</Col>
+                        <Col className="font-weight-bold">{driveInDoors} door(s)</Col>
                         </Row>
                         : null}
                         {editMode === "edit" || (editMode === "view" && loadingDocks) ?
                         <Row>
                         <Col>Loading Docks</Col>
-                        <Col className="font-weight-bold">{loadingDocks}</Col>
+                        <Col className="font-weight-bold">{loadingDocks} dock(s)</Col>
                         </Row>
                         : null}
                         {editMode === "edit" || (editMode === "view" && yearBuilt) ?
@@ -232,13 +232,13 @@ class ListingDetailGeneral extends React.Component {
                         {editMode === "edit" || (editMode === "view" && totalAvailableSpace) ?
                         <Row>
                         <Col>Total Available Space</Col>
-                        <Col className="font-weight-bold">{totalAvailableSpace}</Col>
+                        <Col className="font-weight-bold">{totalAvailableSpace} sq ft</Col>
                         </Row>
                         : null}
                         {editMode === "edit" || (editMode === "view" && nets) ?
                         <Row>
                         <Col>Nets</Col>
-                        <Col className="font-weight-bold">{nets}</Col>
+                        <Col className="font-weight-bold">${nets} / mo</Col>
                         </Row>
                         : null}
 

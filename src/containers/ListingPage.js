@@ -462,7 +462,8 @@ export class ListingPage extends Component {
         updatePromise.then(function(data){
             var localState = {
                 listingDetail: data,
-                index: data.listing.id
+                index: data.listing.id,
+                page: 1
             };
             that.fetchListingPromise(localState).then(function(localState){
                 that.fetchListingsPromise(localState).then(function(localState){

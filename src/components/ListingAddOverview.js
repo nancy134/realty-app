@@ -134,7 +134,7 @@ class ListingAddOverview extends React.Component{
                                 <Col md={12}>
                                     <Form.Label className="font-weight-bold">Short Description</Form.Label>
                                     <Form.Control
-                                        id="header_edit_short_description_input" 
+                                        id="overview_edit_short_description_input" 
                                         name="shortDescription"
                                         type="text"
                                         value={values.shortDescription} 
@@ -184,7 +184,7 @@ class ListingAddOverview extends React.Component{
                 </Button>
                 <Button 
                     disabled={!(isValid && dirty) || isSubmitting}
-                    id="overview_edit_next_button"
+                    id="overview_create_listing_button"
                     onClick={handleSubmit}
                 >
                     Create New Listing 

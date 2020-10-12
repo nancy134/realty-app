@@ -225,7 +225,7 @@ class ListingEditGeneral extends React.Component {
                             isValid={touched.totalBuildingSize && !errors.totalBuildingSize && values.totalBuildingSize !== ""}
                         />
                         <InputGroup.Append>
-                            <InputGroup.Text id="basic-addon2">sf</InputGroup.Text>
+                            <InputGroup.Text id="basic-addon2">sq ft</InputGroup.Text>
                         </InputGroup.Append> 
                         <Form.Control.Feedback type="invalid">
                             {errors.totalBuildingSize}
@@ -247,7 +247,7 @@ class ListingEditGeneral extends React.Component {
                             disabled={isSubmitting}
                         />
                         <InputGroup.Append>
-                            <InputGroup.Text id="basic-addon2">sf</InputGroup.Text>
+                            <InputGroup.Text id="basic-addon2">sq ft</InputGroup.Text>
                         </InputGroup.Append>
                         <Form.Control.Feedback type="invalid">
                             {errors.totalAvailableSpace}
@@ -423,7 +423,7 @@ class ListingEditGeneral extends React.Component {
                             disabled={isSubmitting}
                         />
                         <InputGroup.Append>
-                            <InputGroup.Text>mo</InputGroup.Text>
+                            <InputGroup.Text>/ yr</InputGroup.Text>
                         </InputGroup.Append>
                         <Form.Control.Feedback type="invalid">
                             {errors.taxes}
@@ -448,7 +448,7 @@ class ListingEditGeneral extends React.Component {
                             disabled={isSubmitting}
                         />
                         <InputGroup.Append>
-                            <InputGroup.Text>mo</InputGroup.Text>
+                            <InputGroup.Text>/ mo</InputGroup.Text>
                         </InputGroup.Append>
                         <Form.Control.Feedback type="invalid">
                             {errors.nets}

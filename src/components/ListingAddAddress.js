@@ -497,7 +497,7 @@ class ListingAddAddress extends React.Component{
                 </Button>
                 <Button 
                     disabled={!(isValid && dirty) || isSubmitting}
-                    id="overview_edit_next_button"
+                    id="add_address_next_button"
                     onClick={handleSubmit}
                 >
                     Next 
