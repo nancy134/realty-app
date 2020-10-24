@@ -19,13 +19,13 @@ class ListingDetailMap extends React.Component {
     render(){
         var showDetail = false;
         return(
-        <React.Fragment>
-            <Row className="mt-3 border-bottom border-warning">
+        <div className="mb-2 shadow border">
+            <Row className="mt-2 ml-0 mr-0 border-bottom border-warning">
                 <Col>
                     <h3>Map</h3>
                 </Col>
             </Row>
-            <Row>
+            <Row className="pt-2 ml-0 mr-0">
                 <Col style={{margin: '10px', height: '300px'}}>
                     <ListingMap
                         showDetail={showDetail}
@@ -39,7 +39,7 @@ class ListingDetailMap extends React.Component {
                     />
                 </Col>
             </Row>
-        </React.Fragment>
+        </div>
         )
     }
 }

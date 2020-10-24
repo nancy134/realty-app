@@ -135,8 +135,8 @@ class ListingDetailGeneral extends React.Component {
             }
         }
         return (
-            <React.Fragment>
-                <Row className="mt-3 border-bottom border-warning">
+            <div className="mb-2 shadow border">
+                <Row className="mt-2 ml-0 mr-0 border-bottom border-warning">
                     <Col>
                         <h3>Building Detail {editMode === "edit" ?
                             <EditButton 
@@ -147,7 +147,7 @@ class ListingDetailGeneral extends React.Component {
                             /> : null}</h3>
                     </Col>
                 </Row>
-                <Row>
+                <Row className="pt-2 ml-0 mr-0">
                     <Col>
                         {editMode === "edit" || (editMode === "view" && propertyType) ?
                         <Row>
@@ -244,7 +244,7 @@ class ListingDetailGeneral extends React.Component {
 
                     </Col>
                 </Row>
-             </React.Fragment>
+             </div>
 
         );
     }

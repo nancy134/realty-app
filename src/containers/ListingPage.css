@@ -183,3 +183,11 @@
 .image-container {
     max-width: 50%;
 }
+.listing-tabs > .nav-item.nav-link.active {
+    background-color: #6e9fa5;
+    color: white;
+}
+.custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}

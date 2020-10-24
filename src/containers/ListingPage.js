@@ -10,7 +10,6 @@ import './ListingPage.css';
 import ListingMap from '../components/ListingMap';
 import Listings from '../components/Listings';
 import ListingToolbar from '../components/ListingToolbar';
-import ListingPagination from '../components/ListingPagination';
 import ListingDetail from '../components/ListingDetail';
 import ListingAddType from '../components/ListingAddType';
 import ListingAddAddress from '../components/ListingAddAddress';
@@ -665,7 +664,7 @@ export class ListingPage extends Component {
             var query = "";
             var markerQuery = "";
             if (lMode === "myListings" ){
-                query = "perPage=20&page="+localState.page+"&owner="+getUserEmail();
+                query = "perPage=5&page="+localState.page+"&owner="+getUserEmail();
                 markerQuery = "perPage=250&page=1&owner="+getUserEmail();
             } else {
                 query = 'perPage=20&page='+localState.page;
@@ -870,6 +869,7 @@ export class ListingPage extends Component {
         var owner = this.state.owner;
         var listingDetail = this.state.listingDetail;
         var fullscreen = this.state.fullscreen;
+        console.log("listingMode: "+listingMode);
         return (
             <React.Fragment>
                 <DeleteModal
@@ -990,7 +990,7 @@ export class ListingPage extends Component {
             : null }
 	</Row>
 	<Row>
-	    <Col xs={8} className={showDetail? "rightcol" : "leftcol"}>
+	    <Col xs={8} className={showDetail? "p-0 rightcol" : "p-0 leftcol"}>
 		<CSSTransition
 		    in={showDetail}
 		    appear={false}
@@ -1052,18 +1052,19 @@ export class ListingPage extends Component {
                         : null }
                     </Col>
                     <Col xs={4} className="rightcol" >
-                        <ListingPagination 
-                            page={this.state.page} 
-                            count={this.state.count} 
-                            perPage={this.state.perPage} 
-                            onNewPage={this.handleNewPage}
-                        />
                         <Listings 
+                            loggedIn={loggedIn}
                             listingMode={listingMode} 
                             onShowDetailChange={this.handleShowDetailChange} 
+                            onListingModeChange={this.handleListingToggle}
                             onDelete={this.handleDeleteListing}
                             listings={this.state.listings}
+                            page={this.state.page}
+                            count={this.state.count}
+                            perPage={this.state.perPage}
+                            onNewPage={this.handleNewPage}
                         />
+
                     </Col>
                 </Row>
                 <Row className="bg-light">

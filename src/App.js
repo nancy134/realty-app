@@ -43,8 +43,8 @@ class App extends React.Component {
   }
   render(){
   return (
-      <Container fluid className="d-flex flex-column vh-100 vw-100">
-          <Navbar>
+      <Container fluid className="app d-flex flex-column vh-100 vw-100">
+          <Navbar className="p-0">
               <Navbar.Brand href="./home">
                   <img
                   alt="logo" 
@@ -55,6 +55,9 @@ class App extends React.Component {
                   />{' '}Sabre Realty</Navbar.Brand>
               <Navbar.Toggle />
               <Navbar.Collapse className="justify-content-end">
+                 <Nav.Item>
+                     <Nav.Link>Add a Listing</Nav.Link>
+                 </Nav.Item>
                  <Nav.Item>
                       <Nav.Link eventKey="link-1">
                           <AccountButton 

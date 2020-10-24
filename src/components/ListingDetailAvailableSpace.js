@@ -52,9 +52,9 @@ function SpaceItem(props){
     if (accordionNeeded){
     return(
     <Accordion key={space.unit}> 
-        <Row className="border-bottom align-items-center" >
+        <Row className="ml-0 mr-0 border-bottom align-items-center" >
             <Col md={2}>{space.unit}</Col>
-            <Col md={2}>{space.size} sf</Col>
+            <Col md={1}>{space.size} sf</Col>
             <Col md={2}>${space.price} {space.priceUnit}</Col>
             <Col md={3}>
                 <Row>
@@ -62,7 +62,7 @@ function SpaceItem(props){
                     <Col >{space.type}</Col>
                 </Row>
             </Col> 
-            <Col md={3}>
+            <Col md={4}>
                 <Row>
                     { editMode === "edit" ?
                     <Col>
@@ -363,8 +363,8 @@ class ListingDetailAvailableSpace extends React.Component {
         var priceUnits = this.props.priceUnits;
         var newSpace = {}; 
         return (
-            <div>
-                <Row className="mt-3 border-bottom border-warning">
+            <div className="mb-2 shadow border">
+                <Row className="mt-2 ml-0 mr-0 border-bottom border-warning">
                     <Col>
                         <h3>Available Space {editMode === "edit" ? 
                             <AddButton 
@@ -384,7 +384,7 @@ class ListingDetailAvailableSpace extends React.Component {
                             : null}</h3>
                     </Col>
                 </Row>
-                <Row className="bg-light shadow">
+                <Row className="ml-0 mr-0 bg-light">
                     <Col md={2} className="font-weight-bold">Unit Name</Col>
                     <Col md={2}  className="font-weight-bold">Size</Col>
                     <Col md={2} className="font-weight-bold">Price</Col>

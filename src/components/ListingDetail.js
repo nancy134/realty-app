@@ -4,6 +4,7 @@ import {
     Col
 } from 'react-bootstrap';
 import ListingDetailHeader from './ListingDetailHeader';
+import ListingDetailToolbar from './ListingDetailToolbar';
 import ListingDetailOverview from './ListingDetailOverview';
 import ListingDetailAvailableSpace from './ListingDetailAvailableSpace';
 import ListingDetailGeneral from './ListingDetailGeneral';
@@ -685,6 +686,11 @@ class ListingDetail extends React.Component {
                     onGoToListingByIndex={this.props.onGoToListingByIndex}
                     onContact={this.handleContact}
                     onGoToMyListing={this.props.onGoToMyListing}
+                />
+                <ListingDetailToolbar 
+                    editMode={editMode}
+                    onEditModeChange={this.handleEditToggle}
+                    listingMode={listingMode}
                 />
                 </div>
                 <ListingDetailOverview 

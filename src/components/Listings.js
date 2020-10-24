@@ -3,13 +3,24 @@ import {
     ListGroup,
     Row, Col,
     Card,
-    Image
+    Image,
+    Tabs,
+    Tab,
+    Dropdown,
+    Button
 } from 'react-bootstrap';
 import {getUserEmail} from '../helpers/authentication';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faTrash
+    faTrash,
+    faStar as faStarFilled,
+    faPlus
 } from '@fortawesome/free-solid-svg-icons';
+import {
+    faStar,
+    faFilePdf
+} from '@fortawesome/free-regular-svg-icons';
+import ListingPagination from '../components/ListingPagination';
 
 function getMinSize(array){
     return array.reduce((min, p) => p.size < min ? p.size : min, array[0].size);
@@ -172,6 +183,25 @@ function ListItem(props){
                                     <FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} />
                                 </span>
                                 : null }
+                                { props.listingMode === "allListings" ?
+                                <span
+                                    data-id={listing.ListingId}
+                                    onClick={(e) => props.handleSelectFavorite(e, listing.ListingId)}
+                                    className="float-right"
+                                >
+                                    <FontAwesomeIcon className="text-danger" size="xs" icon={faStar} />
+                                </span>
+                                : null }
+                                { props.listingMode === "myFavorites" ?
+                                <span
+                                    data-id={listing.ListingId}
+                                    onClick={(e) => props.handleSelectFavorite(e, listing.ListingId)}
+                                    className="float-right"
+                                >
+                                    <FontAwesomeIcon className="text-danger" size="xs" icon={faStarFilled} />
+                                </span>
+                                : null }
+                               
                             </Card.Title>
                             
                             { listing.city ?
@@ -211,12 +241,60 @@ function ListItem(props){
     );
 }
 
+function Toolbar(props){
+    return(
+    <div>
+        <Row>
+            <Col>
+                <Dropdown>
+                    <Dropdown.Toggle
+                        variant="warning"
+                        size="sm"
+                    >
+                        Sort: By Date
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu
+                    >
+                        <Dropdown.Item>By Date</Dropdown.Item>
+                        <Dropdown.Item>By Price</Dropdown.Item>
+                        <Dropdown.Item>By Size</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+            </Col>
+            { (props.listingMode === "myFavorites") ?
+            <Col>
+                <Button size="sm" variant="warning">
+                    <FontAwesomeIcon icon={faFilePdf} />&nbsp;Report
+                </Button>
+            </Col>
+            : null }
+            { (props.listingMode === "myListings") ?
+            <Col>
+                <Button size="sm" variant="warning">
+                    <FontAwesomeIcon icon={faPlus} />&nbsp;New Listing
+                </Button>
+            </Col>
+            : null }
+            <Col>
+                <ListingPagination
+                    page={props.page}
+                    count={props.count}
+                    perPage={props.perPage}
+                    onNewPage={props.onNewPage}
+                />
+            </Col>
+        </Row>
+    </div>
+    );
+}
+
 class Listings extends React.Component {
    
     constructor(props) {
         super(props);
         this.showDetailChange = this.showDetailChange.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
+        this.handleListingModeChange = this.handleListingModeChange.bind(this);
     }
     componentDidMount() {
     }
@@ -229,26 +307,98 @@ class Listings extends React.Component {
     showDetailChange(id, arrayIndex){
         this.props.onShowDetailChange(true, id, arrayIndex);
     }
- 
+    handleListingModeChange(listingMode){
+        this.props.onListingModeChange(listingMode);
+    } 
     render() {
 
         if (this.props.listings && this.props.listings.length){
             
         var listings = this.props.listings;
-        return ( 
-            <ListGroup>
-                {listings.map((listing, index) => 
-                (
-                <ListItem
-                    index={index}
-                    key={listing.id}
-                    listing={listing} 
-                    onDelete={this.handleDelete}
-                    listingMode={this.props.listingMode}
-                    onItemClick={this.showDetailChange}
-                />
-                ))}
-            </ListGroup>
+        return (
+        <div>
+            { this.props.loggedIn ?
+            <div id="stickyHeader" className="bg-white">
+            <Tab.Container>
+            <Tabs
+                variant="pills"
+                className="listing-tabs pt-1 pb-1 border-0"
+                id="listing-tabs"
+                activeKey={this.props.listingMode}
+                onSelect={listingMode => this.handleListingModeChange(listingMode)}
+            >
+                <Tab 
+                    title="All Listings"
+                    eventKey="allListings"
+                >
+                    <Tab.Content className="border">
+                        <Toolbar
+                            page={this.props.page}
+                            count={this.props.count}
+                            perPage={this.props.perPage}
+                            onNewPage={this.props.onNewPage}
+                            listingMode={this.props.listingMode}
+                        />
+                    </Tab.Content>
+                </Tab>
+                <Tab
+                    title="My Listings"
+                    eventKey="myListings"
+                >
+                    <Tab.Content className="border">
+                        <Toolbar
+                            page={this.props.page}
+                            count={this.props.count}
+                            perPage={this.props.perPage}
+                            onNewPage={this.props.onNewPage}
+                            listingMode={this.props.listingMode}
+                        />
+                    </Tab.Content>
+                </Tab>
+                <Tab
+                    title="Favorites"
+                    eventKey="myFavorites"
+                >
+                    <Tab.Content className="border">
+                        <Toolbar
+                            page={this.props.page}
+                            count={this.props.count}
+                            perPage={this.props.perPage}
+                            onNewPage={this.props.onNewPage}
+                            listingMode={this.props.listingMode}
+                        />
+                    </Tab.Content>
+
+                </Tab>
+            </Tabs>
+            </Tab.Container>
+            </div>
+            :
+                        <Toolbar
+                            page={this.props.page}
+                            count={this.props.count}
+                            perPage={this.props.perPage}
+                            onNewPage={this.props.onNewPage}
+                            listingMode={this.props.listingMode}
+                        />
+
+            }
+            <div>
+                <ListGroup>
+                    {listings.map((listing, index) =>
+                    (
+                        <ListItem
+                            index={index}
+                            key={listing.id}
+                            listing={listing}
+                            onDelete={this.handleDelete}
+                            listingMode={this.props.listingMode}
+                            onItemClick={this.showDetailChange}
+                        />
+                    ))}
+                </ListGroup>
+            </div>
+        </div>
 
        ); 
        } else {

@@ -1,11 +1,11 @@
 import React from 'react';
 import {
     Form,
-    Row,Col,
+    Col,
     Button,
     Dropdown,
-    ButtonGroup,
-    InputGroup
+    InputGroup,
+    Badge
 } from 'react-bootstrap';
 import FilterSpaceType from "./FilterSpaceType";
 import FilterMore from "./FilterMore";
@@ -120,17 +120,11 @@ class ListingToolbar extends React.Component {
         this.props.onMoreFilterChange(moreFilters);
     }
     render(){
-        var allListingsStatus = "p-1";
-        var myListingsStatus = "p-1";
-        if (this.props.listingMode === "allListings") allListingsStatus = "active p-1";
-        if (this.props.listingMode === "myListings") myListingsStatus = "active p-1"
         var address = this.state.address;
         return (
             <Form className="toolbar-form m-2">
                 <Form.Row>
                     <Col xs={4}>
-                        <Row>
-                            <Col xs={8}>
                                 <PlacesAutocomplete
                                     value={address}
                                     onChange={this.handleSearchChange}
@@ -173,24 +167,15 @@ class ListingToolbar extends React.Component {
                                 </div>
                                 )}
                                 </PlacesAutocomplete>
-                            </Col>
-                            <Col xs={2} className="pl-0">
-                                <Button
-                                    variant="light"
-                                    onClick={this.handleSearch}
-                                >
-                                    Search
-                                </Button>
-                            </Col>
-                        </Row>
                     </Col>
-                    <Col xs={1}>
+                    <Col xs="auto"> 
                         <Dropdown>
                             <Dropdown.Toggle 
                                 variant="secondary" 
                                 id="toolbar_dropdown_space_type"
                             >
-                                Space Type 
+                                Space Type <Badge variant="light">3</Badge>
+                                
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu 
@@ -199,7 +184,7 @@ class ListingToolbar extends React.Component {
                             />
                         </Dropdown>
                     </Col>
-                    <Col xs={1}>
+                    <Col xs="auto">
                         <Dropdown>
                             <Dropdown.Toggle 
                                 variant="secondary" 
@@ -215,42 +200,11 @@ class ListingToolbar extends React.Component {
                             </Dropdown.Menu>
                         </Dropdown>
                     </Col >
-                    <Col xs={4} className="text-right">
-                       { this.props.loggedIn ?
-                       <ButtonGroup className="border">
-                           <Button
-                               id="toolbar_all_listings"
-                               type="radio"
-                               value="allListings"
-                               onClick={this.handleListingToggle}
-                               className={allListingsStatus}
-                               variant="light"
-                           >
-                               All Listings
-                           </Button>
-                           <Button
-                               id="toolbar_my_listings"
-                               type="radio"
-                               value="myListings"
-                               onClick={this.handleListingToggle}
-                               className={myListingsStatus}
-                               variant="light"
-                           >
-                               MyListings 
-                           </Button>
-                       </ButtonGroup>
-                       : null }
+                    <Col xs="auto">
+                        <Button>Clear Filters</Button>
                     </Col>
-                    <Col xs={2} className="text-right">
-                        { this.props.loggedIn ?
-                        <Button 
-                            id="add_a_listing_button"
-                            onClick={this.onAddListing} 
-                            variant="light"
-                        >
-                            Add a Listing
-                        </Button>
-                        : null }
+                    <Col xs="auto">
+                        <Button variant="warning">Search</Button>
                     </Col>
 
                 </Form.Row>

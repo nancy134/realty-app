@@ -20,7 +20,7 @@ function TenantItem(props){
         leaseEnds = formatDate(tenant.leaseEnds);
     }
     return(
-            <Row key={tenant.id}>
+            <Row className="ml-0 mr-0" key={tenant.id}>
                 <Col md={3}>{tenant.tenant}</Col>
                 <Col md={2}>{tenant.space} sf</Col>
                 <Col md={2}>${tenant.baseRent}/mo</Col>
@@ -123,8 +123,8 @@ class ListingDetailTenants extends React.Component {
        var newTenant = {};
        
         return(
-        <React.Fragment>
-            <Row className="mt-2 border-bottom border-warning">
+        <div className="mb-2 shadow border">
+            <Row className="mt-2 ml-0 mr-0 border-bottom border-warning">
                 <Col>
                     <h3>Tenants&nbsp; 
                         {editMode === "edit" ? 
@@ -142,7 +142,7 @@ class ListingDetailTenants extends React.Component {
                     </h3>
                 </Col>
             </Row>
-            <Row className="bg-light shadow">
+            <Row className="ml-0 mr-0 bg-light">
                 <Col md={3} className="font-weight-bold">Tenant</Col>
                 <Col md={2} className="font-weight-bold">Square Feet</Col>
                 <Col md={2} className="font-weight-bold">Base Rent</Col>
@@ -167,7 +167,7 @@ class ListingDetailTenants extends React.Component {
                 editMode={editMode}
             />
             ))}
-        </React.Fragment>
+        </div>
         );
     }
 }

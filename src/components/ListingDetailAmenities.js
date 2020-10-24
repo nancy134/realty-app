@@ -50,8 +50,8 @@ class ListingDetailAmenities extends React.Component {
         const editMode = this.props.editMode;
         const listing = this.props.listing;
         return (
-        <React.Fragment>
-            <Row className="mt-3 border-bottom border-warning">
+        <div className="mb-2 shadow border">
+            <Row className="mt-2 ml-0 mr-0 border-bottom border-warning">
                 <Col>
                     <h3>Amenities&nbsp;{editMode === "edit" ? 
                         <EditButton
@@ -77,7 +77,7 @@ class ListingDetailAmenities extends React.Component {
              ))
                 : <Row></Row> }
             </ul>
-        </React.Fragment>
+        </div>
         );
     }
 }

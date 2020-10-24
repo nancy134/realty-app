@@ -10,7 +10,8 @@ import {
     faTimes,
     faExpand,
     faPencilAlt,
-    faAddressBook
+    faAddressBook,
+    faFilePdf
 } from '@fortawesome/free-solid-svg-icons';
 import ListingEditHeader from './ListingEditHeader';
 import TransitionModal from './TransitionModal';
@@ -46,7 +47,6 @@ function TransitionButton(props) {
           { props.type === "button" ?
           <Button 
               id="header_transition_button"
-              variant="primary" 
               className="m-1"
               onClick={() => {props.onShow()}}
           >
@@ -55,7 +55,7 @@ function TransitionButton(props) {
           : null}
           { props.type === "link" ? 
               <span
-                  className="text-danger addPointer"
+                  className="text-info addPointer"
                   onClick={() => props.onShow()}
               >{props.buttonText}</span>
           : null}
@@ -77,15 +77,30 @@ function ContactButton(props) {
   return (
       <span>
           <Button
-              id="header_transition_button"
-              variant="primary"
-              className="m-1"
+              id="header_contact_button"
+              variant="info"
+              className="p-0 ml-3"
               onClick={() => {props.onContact()}}
           >
              <span><FontAwesomeIcon icon={faAddressBook} /> Contact</span>
           </Button>
       </span>
   );
+}
+
+function ReportButton(props){
+    return(
+        <span>
+            <Button
+                id="header_report_button"
+                variant="info"
+                className="p-0 ml-1"
+                onClick={() => {props.onReport()}}
+            >
+                <span><FontAwesomeIcon icon={faFilePdf} /> Report</span>
+            </Button>
+        </span>
+    );
 }
 
 class ListingDetailHeader extends React.Component {
@@ -134,6 +149,7 @@ class ListingDetailHeader extends React.Component {
         var address = "<Address>";
         var city = "<City>"; 
         var zip = "<Zip>";
+        var show = false;
         if (listing){
 
             if (listing.address){
@@ -203,9 +219,9 @@ class ListingDetailHeader extends React.Component {
         }
         var fullscreen = this.props.fullscreen;
         return(
-            <React.Fragment>
+            <div className="pb-1">
             <Row className="align-items-center bg-info">
-	        <Col md={6}className="text-white">
+	        <Col md={8}className="text-white">
                     <div className=" address-title font-weight-bold">{title} {enableAddressEdit && editMode === "edit" ? 
                         <EditButton 
                             listing={listing} 
@@ -213,12 +229,15 @@ class ListingDetailHeader extends React.Component {
                             onSave={this.handleSave}
                         /> : null}
                         <ContactButton
-                            onContact={this.props.onContact} 
+                            onContact={this.props.onContact}
+                        />
+                        <ReportButton
+                            onReport={this.props.onReport}
                         />
                     </div>
                 </Col>
-                <Col md={6} className="text-right">
-                    {(owner && listingMode === "myListings") ?
+                <Col md={4} className="text-right">
+                    {(show && owner && listingMode === "myListings") ?
                     <ButtonGroup className="border">
                         <Button
                             id="header_edit_toggle" 
@@ -240,7 +259,7 @@ class ListingDetailHeader extends React.Component {
                         </Button>
                     </ButtonGroup>
                     : null }
-                    { owner ?
+                    { show && owner ?
                     <TransitionButton 
                         type="button"
                         message={message} 
@@ -260,22 +279,22 @@ class ListingDetailHeader extends React.Component {
                         className="expandButton p-0" 
                         variant="info"
                     >
-                        <FontAwesomeIcon icon={faExpand} />
+                        <FontAwesomeIcon icon={faExpand} /> Expand
                     </Button>
                     : null}
                     {!fullscreen ?
                     <Button
                         id="header_close_detail"
-                        className="closeButton p-0" 
+                        className="closeButton p-0 ml-3" 
                         variant="info" 
                         onClick={this.handleClose}
                     >
-                        <FontAwesomeIcon icon={faTimes}/>
+                        <FontAwesomeIcon icon={faTimes}/> Close
                     </Button>
                     : null }
                 </Col>
             </Row>
-            {hasLiveVersion ?
+            {show && hasLiveVersion ?
             <Row className="bg-light">
                 <Col>
                 These are unpublished updates to a Live version of the listing. <span 
@@ -284,7 +303,7 @@ class ListingDetailHeader extends React.Component {
                 </Col>
             </Row>
             : null}
-            {hasDraftVersion ?
+            {show && hasDraftVersion ?
             <Row className="bg-light">
                 <Col>
                 You have unpublished updates for this listing.  <span 
@@ -293,7 +312,7 @@ class ListingDetailHeader extends React.Component {
                 </Col>
             </Row>
             : null}
-            {onlyDraft ?
+            {show && onlyDraft ?
             <Row className="bg-light">
                 <Col>
                 This is a Draft Listing and not available to the public.  Select&nbsp; 
@@ -316,7 +335,7 @@ class ListingDetailHeader extends React.Component {
                 </Col>
             </Row>
             : null}
-            {onlyLive ?
+            {show && onlyLive ?
             <Row className="bg-light">
                 <Col>
                 This listing is Live.  Select <span
@@ -326,7 +345,7 @@ class ListingDetailHeader extends React.Component {
             </Row>
             : null}
 
-            </React.Fragment>
+            </div>
         );
     }
 }

@@ -6,4 +6,7 @@
     margin-left: 15%;
     margin-right: 15%
 }
-
+.app {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}

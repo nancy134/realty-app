@@ -64,8 +64,8 @@ class ListingDetailBrokers extends React.Component {
         if (listing){
         }
         return (
-            <React.Fragment>
-                <Row className="mt-3 border-bottom border-warning">
+            <div className="mb-2 shadow border">
+                <Row className="mt-2 ml-0 mr-0 border-bottom border-warning">
                     <Col>
                         <h3>Brokers { enableEdit && editMode === "edit" ?
                             <EditButton 
@@ -75,7 +75,7 @@ class ListingDetailBrokers extends React.Component {
                             /> : null}</h3>
                     </Col>
                 </Row>
-                <Row className="pt-2 pb-2">
+                <Row className="pt-2 pb-2 ml-0 mr-0">
                     <Col md={4}>
                         <Row>
                             <Col md={4}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
@@ -85,7 +85,7 @@ class ListingDetailBrokers extends React.Component {
                         </Row>
                     </Col>
                 </Row>
-             </React.Fragment>
+             </div>
         );
     }
 }

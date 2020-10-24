@@ -140,8 +140,8 @@ class ListingDetailOverview extends React.Component {
         const listingTypes = this.props.listingTypes;
 
         return (
-            <div>
-                <Row className="mt-2 border-bottom border-warning">
+            <div className="mb-2 shadow border">
+                <Row className="mt-2 ml-0 mr-0 border-bottom border-warning">
                     <Col>
 	                <h3>Overview {editMode === "edit" ? 
                             <EditButton 
@@ -179,7 +179,7 @@ class ListingDetailOverview extends React.Component {
                     </Col>
                     }
                 </Row>
-                <Row className="pt-2">
+                <Row className="pt-2 ml-0 mr-0">
                     <Col md={12}>
 
                         <span className="image-container float-right">
