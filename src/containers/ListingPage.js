@@ -46,6 +46,8 @@ export class ListingPage extends Component {
         var lng0 = params.get('lng0');
         var lat1 = params.get('lat1');
         var lng1 = params.get('lng1');
+        // Toolbar
+        this.handleSearch = this.handleSearch.bind(this);
         // Add Listing
         this.handleAddListing = this.handleAddListing.bind(this);
         this.handleListingTypeNext = this.handleListingTypeNext.bind(this);
@@ -62,8 +64,6 @@ export class ListingPage extends Component {
         this.handleOwnerChange = this.handleOwnerChange.bind(this);
         this.handleListUpdate = this.handleListUpdate.bind(this);
         this.handleNewPage = this.handleNewPage.bind(this);
-        this.handleFilterChange = this.handleFilterChange.bind(this);
-        this.handleMoreFilterChange = this.handleMoreFilterChange.bind(this);
 
         // Listing
         this.handleUpdate = this.handleUpdate.bind(this);
@@ -392,34 +392,37 @@ export class ListingPage extends Component {
             owner: value
         });
     }
-    handleFilterChange(filters){
-        var spaceUseFilter = "";
-        filters.forEach(filter => {
-            spaceUseFilter += "&spaceUse[]="+filter;
-        });
 
-        var localState = {
-           spaceUseFilter: spaceUseFilter,
-           page: 1
-        };
-        var that = this;
-        this.fetchListingsPromise(localState).then(function(localState){
-            that.setState(localState);
-        }).catch(function(err){
-            console.log(err);
-        });
-    }
-    handleMoreFilterChange(moreFilters){
+    handleSearch(state){
+
+        var spaceTypeFilter = "";
         var moreQuery = "";
+        if (state.spaceTypeFilters){
+            state.spaceTypeFilters.forEach(filter => {
+                spaceTypeFilter += "&spaceUse[]="+filter;
+            });
+        }
+        var moreFilters = state.moreFilters;
+        if (moreFilters){
+            if (moreFilters.minSize) moreQuery += "&minSize="+moreFilters.minSize; 
+            if (moreFilters.maxSize) moreQuery += "&maxSize="+moreFilters.maxSize;
+            if (moreFilters.minRate) moreQuery += "&minRate="+moreFilters.minRate;
+            if (moreFilters.maxRate) moreQuery += "&maxRate="+moreFilters.maxRate;
+        }
 
-        if (moreFilters.minSize) moreQuery += "&minSize="+moreFilters.minSize; 
-        if (moreFilters.maxSize) moreQuery += "&maxSize="+moreFilters.maxSize;
-        if (moreFilters.minRate) moreQuery += "&minRate="+moreFilters.minRate;
-        if (moreFilters.maxRate) moreQuery += "&maxRate="+moreFilters.maxRate;
-        if (moreFilters.listingType)  moreQuery += "&ListingType="+moreFilters.listingType;
+        moreQuery += "&ListingType="+state.listingType;
+
+        var bounds = null;
+        if (state.bounds){
+            bounds = state.bounds;
+        } else {
+            bounds = this.state.bounds;
+        }
 
         var localState = {
+            spaceUseFilter: spaceTypeFilter,
             moreQuery: moreQuery,
+            bounds: bounds,
             page: 1
         };
         var that = this;
@@ -427,7 +430,7 @@ export class ListingPage extends Component {
             that.setState(localState);
         }).catch(function(err){
             console.log(err);
-        });
+        })
     }
 
     handleNewPage(goToPage){
@@ -671,7 +674,12 @@ export class ListingPage extends Component {
                 markerQuery = "perPage=250&page=1";
             }
 
-            var spaceUseFilter = localState.spaceUseFilter ? localState.spaceUseFilter : that.state.spaceUseFilter;
+            var spaceUseFilter = null;
+            if (localState.spaceUseFilter){
+                spaceUseFilter = localState.spaceUseFilter;
+            } else if (that.state.spaceUserFilter){
+                spaceUseFilter = that.state.spaceUseFilter;
+            }
             if (spaceUseFilter){
                 query += spaceUseFilter;
                 markerQuery += spaceUseFilter;
@@ -697,6 +705,7 @@ export class ListingPage extends Component {
                 query += locationQuery;
                 markerQuery += locationQuery;
             }
+            console.log('query: '+query);
             var getAllPromise = listingService.getAll(query);
             getAllPromise.then(function(listings){
                 var enumPromise = listingService.getEnumsPromise();
@@ -869,7 +878,6 @@ export class ListingPage extends Component {
         var owner = this.state.owner;
         var listingDetail = this.state.listingDetail;
         var fullscreen = this.state.fullscreen;
-        console.log("listingMode: "+listingMode);
         return (
             <React.Fragment>
                 <DeleteModal
@@ -957,14 +965,17 @@ export class ListingPage extends Component {
 	( 
 	<div>
 	<Row className="bg-success">
-	    <ListingToolbar 
+	    <ListingToolbar
+                // No longer needed
 		loggedIn={loggedIn} 
 		listingMode={listingMode}
 		onAddListing={this.handleAddListing} 
 		onListingToggle={this.handleListingToggle}
 		onFilterChange={this.handleFilterChange}
 		onMoreFilterChange={this.handleMoreFilterChange}
+                // needed
 		formatted_address={this.state.formatted_address}
+                onSearch={this.handleSearch}
 	    />
 	    <ListingAddType
 		show={this.state.addListingType}

@@ -15,7 +15,7 @@ import {
 } from 'react-places-autocomplete';
 
 const SpaceTypeMenu = React.forwardRef(
-    ({style, className, 'aria-labelledby': labeledBy , onFilterChange}, ref) => {
+    ({style, className, spaceTypeFilters, 'aria-labelledby': labeledBy , onFilterChange}, ref) => {
     return (
       <div
         ref={ref}
@@ -23,14 +23,17 @@ const SpaceTypeMenu = React.forwardRef(
         className={className}
         aria-labelledby={labeledBy}
       >
-          <FilterSpaceType onFilterChange={(filters) => onFilterChange(filters)}/>
+          <FilterSpaceType
+              onFilterChange={(filters) => onFilterChange(filters)}
+              spaceTypeFilters={spaceTypeFilters}
+          />
       </div>
     );
     }
 );
 
-const CustomMenu = React.forwardRef(
-  ({ style, className, 'aria-labelledby': labeledBy, onMoreFilterChange }, ref) => {
+const MoreMenu = React.forwardRef(
+  ({ style, className, moreFilters, 'aria-labelledby': labeledBy, onMoreFilterChange }, ref) => {
 
     return (
       <div
@@ -39,7 +42,10 @@ const CustomMenu = React.forwardRef(
         className={className}
         aria-labelledby={labeledBy}
       >
-          <FilterMore onMoreFilterChange={(filters) => onMoreFilterChange(filters)}/>
+          <FilterMore
+              onMoreFilterChange={(filters) => onMoreFilterChange(filters)}
+              moreFilters={moreFilters}
+          />
       </div>
     );
   },
@@ -48,25 +54,30 @@ const CustomMenu = React.forwardRef(
 class ListingToolbar extends React.Component {
     constructor(props){
         super(props);
-        this.onAddListing = this.onAddListing.bind(this);
-        this.handleListingToggle = this.handleListingToggle.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.handleMoreFilterChange = this.handleMoreFilterChange.bind(this);
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.handleSearchSelect = this.handleSearchSelect.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleSearchFocus = this.handleSearchFocus.bind(this);
+        this.handleListingTypeChange = this.handleListingTypeChange.bind(this);
+        this.handleClearFilters = this.handleClearFilters.bind(this);
         var address = "";
         if (this.props.formatted_address) address = this.props.formatted_address;
         this.state = {
-            address: address 
+            listingType: "For Lease",
+            address: address,
+            numSpaceTypeFilters: 0,
+            spaceTypeFilters: [],
+            numMoreFilters: 0,
+            moreFilters: {minSize:"",maxSize:"",minPrice:"",maxPrice:""},
+            bounds: null
         };
     }
     handleSearchChange = address => {
         this.setState({address});
     };
     handleSearchSelect = address => {
-        console.log('address: '+address);
 
         geocodeByAddress(address).then(results => { 
             var formatted_address = results[0].formatted_address;
@@ -77,96 +88,122 @@ class ListingToolbar extends React.Component {
             this.setState({
                 address: address,
                 formatted_address: formatted_address,
-                lat0: lat0,
-                lng0: lng0,
-                lat1: lat1,
-                lng1: lng1
-            }, () => {
-                this.handleSearch();
+                bounds: {lat0:lat0, lng0:lng0, lat1:lat1, lng1:lng1}
             });
         }).catch(error => {
             console.error('Error', error);
         });
     };
     handleSearch(){
-        var url = "";
-        url = window.location.protocol + "//" + window.location.hostname + "/listing";
-        if (this.state.formatted_address){
-            url += "?formatted_address="+this.state.formatted_address+
-            "&lat0="+this.state.lat0+
-            "&lng0="+this.state.lng0+
-            "&lat1="+this.state.lat1+
-            "&lng1="+this.state.lng1;
-        }
-        window.location.href = url; 
+        this.props.onSearch(this.state);
     }
     handleSearchFocus(e){
         e.target.select();
     }
-    onAddListing(e){
-        this.props.onAddListing();
-    }
-
-    handleListingToggle(e){
-        e.preventDefault();
-        this.props.onListingToggle(e.target.value);
-    }
 
     handleFilterChange(filters){
-        this.props.onFilterChange(filters);
+        this.setState({
+            numSpaceTypeFilters: filters.length,
+            spaceTypeFilters: filters
+        });
     }
     handleMoreFilterChange(moreFilters){
-        console.log("moreFilters: "+JSON.stringify(moreFilters));
-        this.props.onMoreFilterChange(moreFilters);
+
+        var numMoreFilters = 0;
+        if (moreFilters.minSize !== "") ++numMoreFilters;
+        if (moreFilters.maxSize !== "") ++numMoreFilters;
+        if (moreFilters.minPrice !== "") ++numMoreFilters;
+        if (moreFilters.maxPrice !== "") ++numMoreFilters;
+
+        if (numMoreFilters > 0){
+            this.setState({
+                numMoreFilters: numMoreFilters,
+                moreFilters: moreFilters
+            });
+        } 
+    }
+    handleListingTypeChange(e, type){
+        e.preventDefault();
+        this.setState({
+            listingType: type
+        });
+    }
+    handleClearFilters(){
+        this.setState({
+            numSpaceTypeFilters: 0,
+            spaceTypeFilters: [],
+            numMoreFilters: 0,
+            moreFilters: {minSize:"", maxSize:"", minPrice:"", maxPrice:""} 
+        });
     }
     render(){
         var address = this.state.address;
         return (
             <Form className="toolbar-form m-2">
                 <Form.Row>
+                    <Col xs="auto">
+                        <Dropdown>
+                            <Dropdown.Toggle
+                                variant="secondary"
+                            >
+                                {this.state.listingType} 
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item
+                                    as="button"
+                                    onClick={(e) => this.handleListingTypeChange(e,"For Lease")}
+                                >For Lease</Dropdown.Item>
+                                <Dropdown.Item
+                                    as="button"
+                                    onClick={(e) => this.handleListingTypeChange(e,"For Sale")}
+                                >For Sale</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </Col>
+
                     <Col xs={4}>
-                                <PlacesAutocomplete
-                                    value={address}
-                                    onChange={this.handleSearchChange}
-                                    onSelect={this.handleSearchSelect}
-                                >
-                                {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                                <div>
-                                    <InputGroup>                
-                                        <Form.Control
-                                            onFocus={this.handleSearchFocus}
-                                            {...getInputProps({
-                                                placeholder: address,
-                                            })}
-                                        />
-                                    </InputGroup>
-                                    <InputGroup>
-                                        <div className="autocomplete-dropdown-container">
-                                            {loading && <div></div>}
-                                            {suggestions.map(suggestion => {
-                                                const className = suggestion.active
-                                                    ? 'suggestion-item--active'
-                                                    : 'suggestion-item';
-                                                // inline style for demonstration purpose
-                                                const style = suggestion.active
-                                                    ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                                                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                                                return (
-                                                    <div
-                                                        {...getSuggestionItemProps(suggestion, {
-                                                            className,
-                                                            style,
-                                                        })}
-                                                    >
-                                                        <span className="ml-3">{suggestion.description}</span>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </InputGroup>
+                        <PlacesAutocomplete
+                            value={address}
+                            onChange={this.handleSearchChange}
+                            onSelect={this.handleSearchSelect}
+                        >
+                        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                        <div>
+                            <InputGroup>                
+                                <Form.Control
+                                    onFocus={this.handleSearchFocus}
+                                    {...getInputProps({
+                                        placeholder: address,
+                                    })}
+                                />
+                            </InputGroup>
+                            <InputGroup>
+                                <div className="autocomplete-dropdown-container">
+                                    {loading && <div></div>}
+                                    {suggestions.map(suggestion => {
+                                        const className = suggestion.active
+                                            ? 'suggestion-item--active'
+                                            : 'suggestion-item';
+                                        // inline style for demonstration purpose
+                                        const style = suggestion.active
+                                            ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                            : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                        return (
+                                            <div
+                                                {...getSuggestionItemProps(suggestion, {
+                                                    className,
+                                                    style,
+                                                })}
+                                            >
+                                                <span className="ml-3">{suggestion.description}</span>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
-                                )}
-                                </PlacesAutocomplete>
+                            </InputGroup>
+                        </div>
+                        )}
+                        </PlacesAutocomplete>
                     </Col>
                     <Col xs="auto"> 
                         <Dropdown>
@@ -174,13 +211,16 @@ class ListingToolbar extends React.Component {
                                 variant="secondary" 
                                 id="toolbar_dropdown_space_type"
                             >
-                                Space Type <Badge variant="light">3</Badge>
+                                Space Type {this.state.numSpaceTypeFilters ?
+                                    <Badge variant="light">{this.state.numSpaceTypeFilters}</Badge>
+                                : null}
                                 
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu 
                                 onFilterChange={(filters) => this.handleFilterChange(filters)} 
                                 as={SpaceTypeMenu}
+                                spaceTypeFilters={this.state.spaceTypeFilters}
                             />
                         </Dropdown>
                     </Col>
@@ -190,21 +230,29 @@ class ListingToolbar extends React.Component {
                                 variant="secondary" 
                                 id="toolbar_dropdown_more_filters"
                             >
-                                More Filters
+                                More Filters {this.state.numMoreFilters ?
+                                    <Badge variant="light">{this.state.numMoreFilters}</Badge>
+                                : null }
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu 
-                                onMoreFilterChange={(filters) => this.handleMoreFilterChange(filters)} 
-                                as={CustomMenu} 
+                                onMoreFilterChange={(filters) => this.handleMoreFilterChange(filters)}
+                                as={MoreMenu}
+                                moreFilters={this.state.moreFilters}
                                 className="filter">
                             </Dropdown.Menu>
                         </Dropdown>
                     </Col >
                     <Col xs="auto">
-                        <Button>Clear Filters</Button>
+                        <Button
+                            onClick={this.handleClearFilters}
+                        >Clear Filters</Button>
                     </Col>
                     <Col xs="auto">
-                        <Button variant="warning">Search</Button>
+                        <Button
+                            variant="warning"
+                            onClick={this.handleSearch}
+                        >Search</Button>
                     </Col>
 
                 </Form.Row>

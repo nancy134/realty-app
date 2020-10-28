@@ -12,6 +12,7 @@
 
 .rightcol {
    overflow-y: scroll;
+   overflow-x: hidden;
    height: 81vh;
 }
 .filter {

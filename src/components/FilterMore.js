@@ -4,76 +4,58 @@ import {
     Col,
     Row
 } from 'react-bootstrap';
-import listings from '../services/listings';
-import _ from 'lodash';
 
 class FilterMore extends React.Component {
     constructor(props){
         super(props);
-        this.handleListingTypeChange = this.handleListingTypeChange.bind(this);
         this.handleMinSizeChange = this.handleMinSizeChange.bind(this);
         this.handleMaxSizeChange = this.handleMaxSizeChange.bind(this);
         this.handleMinRateChange = this.handleMinRateChange.bind(this);
         this.handleMaxRateChange = this.handleMaxRateChange.bind(this);
-        this.state = {
-            minSize: "", 
-            maxSize: "",
-            minRate: "",
-            maxRate: "",
-            listingTypes: null,
-            listingType: "All"
-        };
-        this.onMoreFilterChange = _.debounce(this.onMoreFilterChange, 2000);
     }
 
-    handleListingTypeChange(e){
-        this.setState({
-            listingType: e.target.value
-        }, () => {
-            this.onMoreFilterChange(this.state);
-        }); 
-    }
     handleMinSizeChange(e){
-        this.setState({
-            minSize: e.target.value
-        }, () => {
-            this.onMoreFilterChange(this.state);
-        });
+        var moreFilters = {
+            minSize: e.target.value,
+            maxSize: this.props.moreFilters.maxSize,
+            minPrice: this.props.moreFilters.minPrice,
+            maxPrice: this.props.moreFilters.maxPrice            
+        }
+        this.props.onMoreFilterChange(moreFilters);
     }
+
     handleMaxSizeChange(e){
-        this.setState({
-            maxSize: e.target.value
-        }, () => {
-            this.onMoreFilterChange(this.state);
-        });
+        var moreFilters = {
+            minSize: this.props.moreFilters.minSize,
+            maxSize: e.target.value, 
+            minPrice: this.props.moreFilters.minPrice,
+            maxPrice: this.props.moreFilters.maxPrice
+        }
+        this.props.onMoreFilterChange(moreFilters);
     }
+
     handleMinRateChange(e){
-        this.setState({
-            minRate: e.target.value
-        }, () => {
-            this.onMoreFilterChange(this.state);
-        });
+        var moreFilters = {
+            minSize: this.props.moreFilters.minSize,
+            maxSize: this.props.moreFilters.maxSize,
+            minPrice: e.target.value,
+            maxPrice: this.props.moreFilters.maxPrice
+        }
+        this.props.onMoreFilterChange(moreFilters);
     }
     handleMaxRateChange(e){
-        this.setState({
-            maxRate: e.target.value
-        }, () => {
-            this.onMoreFilterChange(this.state);
-        });
-    }
-    onMoreFilterChange(){
-        this.props.onMoreFilterChange(this.state);
+        var moreFilters = {
+            minSize: this.props.moreFilters.minSize,
+            maxSize: this.props.moreFilters.maxSize,
+            minPrice: this.props.moreFilters.minPrice,
+            maxPrice: e.target.value 
+        }
+        this.props.onMoreFilterChange(moreFilters);
     }
     componentDidMount(){
-        listings.getListingTypes((listingTypes) => {
-            this.setState({
-                listingTypes: listingTypes
-            });
-        });
     }
     
     render(){
-        if (this.state.listingTypes){
         return(
         <div>
             <Form.Group as={Row} className="mr-1 ml-1">
@@ -82,14 +64,14 @@ class FilterMore extends React.Component {
                     <Form.Control 
                         id="filter_min_size"
                         placeholder="Min" 
-                        value={this.state.minSize}
+                        value={this.props.moreFilters.minSize}
                         onChange={this.handleMinSizeChange} />
                 </Col>
                 <Col sm="4">
                     <Form.Control
                         id="filter_max_size"
                         placeholder="Max"
-                        value={this.state.maxSize}
+                        value={this.props.moreFilters.maxSize}
                         onChange={this.handleMaxSizeChange} />
                 </Col>
             </Form.Group>
@@ -99,37 +81,19 @@ class FilterMore extends React.Component {
                     <Form.Control
                         id="filter_min_rate"
                         placeholder="Min"
-                        value={this.state.minRate}
+                        value={this.props.moreFilters.minRate}
                         onChange={this.handleMinRateChange}/>
                 </Col>
                 <Col sm="4">
                     <Form.Control 
                         id="filter_max_rate"
                         placeholder="Max"
-                        value={this.state.maxRate}
+                        value={this.props.moreFilters.maxRate}
                         onChange={this.handleMaxRateChange}/>
-                </Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mr-1 ml-1">
-                <Form.Label column sm="4">Listing Type</Form.Label>
-                <Col sm="4">
-                    <Form.Control 
-                        id="filter_more_listing_type"
-                        as="select"
-                        value={this.state.listingType}
-                        onChange={this.handleListingTypeChange}>
-                        <option key="-1">All</option>
-                        {this.state.listingTypes.listingTypes.map((listingType, key) => (
-                            <option key={key}>{listingType}</option>
-                        ))}
-                    </Form.Control>
                 </Col>
             </Form.Group>
         </div>
         );
-        } else {
-            return(<div>Loading...</div>);
-        }
     }
 
 }

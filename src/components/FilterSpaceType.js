@@ -4,18 +4,35 @@ import {
 } from 'react-bootstrap';
 import listings from '../services/listings';
 
+function SpaceTypeItem(props){
+    var checked=false;
+    for (var i=0; i<props.spaceTypeFilters.length; i++){
+        if (props.spaceTypeFilters[i] === props.label){
+            checked = true;
+        }
+    }
+    return(
+        <Form.Check
+            onChange={props.onChange}
+            value={props.value}
+            key={props.value}
+            type="checkbox"
+            label={props.label}
+            checked={checked}
+        />
+    );
+}
 class FilterSpaceType extends React.Component {
     constructor(props){
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.state = {
-            spaceTypes: null,
-            filters: [] 
+            spaceTypes: null
         };
     }
     handleChange(evt){
        var spaceTypes = this.state.spaceTypes.spaceUses;
-       var filters = this.state.filters;
+       var filters = this.props.spaceTypeFilters;
        if (evt.target.checked){
           filters.push(spaceTypes[parseInt(evt.target.value)]);
        } else {
@@ -25,9 +42,6 @@ class FilterSpaceType extends React.Component {
            }
        }
        this.props.onFilterChange(filters);
-       this.setState({
-           filters: filters
-       });
     }
     componentDidMount(){
         listings.getSpaceTypes((spaceTypes) => {
@@ -41,7 +55,14 @@ class FilterSpaceType extends React.Component {
             return(
             <div className="m-2">
                 {this.state.spaceTypes.spaceUses.map((spaceType,key) => (
-                    <Form.Check onChange={this.handleChange} value={key} key={key} type="checkbox" label={spaceType} />
+                    <SpaceTypeItem
+                        spaceTypeFilters={this.props.spaceTypeFilters}
+                        onChange={this.handleChange}
+                        value={key}
+                        key={key}
+                        type="checkbox"
+                        label={spaceType}
+                    />
                 ))}
             </div>
 

@@ -220,7 +220,7 @@ class ListingDetailHeader extends React.Component {
         var fullscreen = this.props.fullscreen;
         return(
             <div className="pb-1">
-            <Row className="align-items-center bg-info">
+            <Row className="align-items-center bg-info m-0">
 	        <Col md={8}className="text-white">
                     <div className=" address-title font-weight-bold">{title} {enableAddressEdit && editMode === "edit" ? 
                         <EditButton 
