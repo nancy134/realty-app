@@ -186,7 +186,7 @@ function ListItem(props){
                                 { props.listingMode === "allListings" ?
                                 <span
                                     data-id={listing.ListingId}
-                                    onClick={(e) => props.handleSelectFavorite(e, listing.ListingId)}
+                                    onClick={(e) => props.onSelectFavorite(e, listing.ListingId)}
                                     className="float-right"
                                 >
                                     <FontAwesomeIcon className="text-danger" size="xs" icon={faStar} />
@@ -195,7 +195,7 @@ function ListItem(props){
                                 { props.listingMode === "myFavorites" ?
                                 <span
                                     data-id={listing.ListingId}
-                                    onClick={(e) => props.handleSelectFavorite(e, listing.ListingId)}
+                                    onClick={(e) => props.onSelectFavorite(e, listing.ListingId)}
                                     className="float-right"
                                 >
                                     <FontAwesomeIcon className="text-danger" size="xs" icon={faStarFilled} />
@@ -300,6 +300,7 @@ class Listings extends React.Component {
         this.handleDelete = this.handleDelete.bind(this);
         this.handleListingModeChange = this.handleListingModeChange.bind(this);
         this.handleNewListing = this.handleNewListing.bind(this);
+        this.handleSelectFavorite = this.handleSelectFavorite.bind(this);
     }
     componentDidMount() {
     }
@@ -317,6 +318,10 @@ class Listings extends React.Component {
     }
     handleNewListing(){
         this.props.onNewListing();
+    }
+    handleSelectFavorite(e, id){
+        console.log("handleSelectFavorite");
+        e.stopPropagation();
     }
     render() {
 
@@ -383,14 +388,13 @@ class Listings extends React.Component {
             </Tab.Container>
             </div>
             :
-                        <Toolbar
-                            page={this.props.page}
-                            count={this.props.count}
-                            perPage={this.props.perPage}
-                            onNewPage={this.props.onNewPage}
-                            listingMode={this.props.listingMode}
-                        />
-
+            <Toolbar
+                page={this.props.page}
+                count={this.props.count}
+                perPage={this.props.perPage}
+                onNewPage={this.props.onNewPage}
+                listingMode={this.props.listingMode}
+            />
             }
             <div>
                 <ListGroup>
@@ -403,6 +407,7 @@ class Listings extends React.Component {
                             onDelete={this.handleDelete}
                             listingMode={this.props.listingMode}
                             onItemClick={this.showDetailChange}
+                            onSelectFavorite={this.handleSelectFavorite}
                         />
                     ))}
                 </ListGroup>

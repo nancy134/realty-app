@@ -513,7 +513,8 @@ export class ListingPage extends Component {
             showDetail: false,
             showModal: true,
             transitionModalTitle: title,
-            transitionModalMessage: message
+            transitionModalMessage: message,
+            updateBounds: true
         }, () => {
             this.handleListUpdate();
         });
@@ -878,6 +879,7 @@ export class ListingPage extends Component {
         var owner = this.state.owner;
         var listingDetail = this.state.listingDetail;
         var fullscreen = this.state.fullscreen;
+        console.log("updateBounds: "+this.state.updateBounds);
         return (
             <React.Fragment>
                 <DeleteModal

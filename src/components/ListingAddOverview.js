@@ -42,10 +42,8 @@ class ListingAddOverview extends React.Component{
         if (this.props.show){
         setTimeout(() => {
             if (this.props.listing.listingType === "For Lease"){
-                console.log("set focus to short description");
                 this.shortDescriptionRef.current.focus();
             }else{
-                console.log("set focus to listing price");
                 this.listingPriceRef.current.focus();
             }
         }, 1);
