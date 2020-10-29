@@ -270,7 +270,11 @@ function Toolbar(props){
             : null }
             { (props.listingMode === "myListings") ?
             <Col>
-                <Button size="sm" variant="warning">
+                <Button
+                    size="sm"
+                    variant="warning"
+                    onClick={props.onNewListing}
+                 >
                     <FontAwesomeIcon icon={faPlus} />&nbsp;New Listing
                 </Button>
             </Col>
@@ -295,6 +299,7 @@ class Listings extends React.Component {
         this.showDetailChange = this.showDetailChange.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleListingModeChange = this.handleListingModeChange.bind(this);
+        this.handleNewListing = this.handleNewListing.bind(this);
     }
     componentDidMount() {
     }
@@ -309,7 +314,10 @@ class Listings extends React.Component {
     }
     handleListingModeChange(listingMode){
         this.props.onListingModeChange(listingMode);
-    } 
+    }
+    handleNewListing(){
+        this.props.onNewListing();
+    }
     render() {
 
         if (this.props.listings && this.props.listings.length){
@@ -352,6 +360,7 @@ class Listings extends React.Component {
                             perPage={this.props.perPage}
                             onNewPage={this.props.onNewPage}
                             listingMode={this.props.listingMode}
+                            onNewListing={this.handleNewListing}
                         />
                     </Tab.Content>
                 </Tab>

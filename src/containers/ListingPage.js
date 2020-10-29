@@ -1074,6 +1074,7 @@ export class ListingPage extends Component {
                             count={this.state.count}
                             perPage={this.state.perPage}
                             onNewPage={this.handleNewPage}
+                            onNewListing={this.handleAddListing}
                         />
 
                     </Col>

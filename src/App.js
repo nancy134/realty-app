@@ -56,9 +56,6 @@ class App extends React.Component {
               <Navbar.Toggle />
               <Navbar.Collapse className="justify-content-end">
                  <Nav.Item>
-                     <Nav.Link>Add a Listing</Nav.Link>
-                 </Nav.Item>
-                 <Nav.Item>
                       <Nav.Link eventKey="link-1">
                           <AccountButton 
                               onLogin={this.handleLogin} 
