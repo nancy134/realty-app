@@ -674,23 +674,24 @@ class ListingDetail extends React.Component {
                     onEditToggle={this.handleEditToggle} 
                     onListingUpdate={this.handleListingUpdate} 
 
-                    onTransitionStart={this.props.onTransitionStart}
+                    onGoToListingByIndex={this.props.onGoToListingByIndex}
+                    onContact={this.handleContact}
+                    onGoToMyListing={this.props.onGoToMyListing}
+                />
+                <ListingDetailToolbar 
+                    listing={listing}
+                    editMode={editMode}
+                    onEditModeChange={this.handleEditToggle}
+                    listingMode={listingMode}
                     onPublish={this.props.onPublish}
                     onUnpublish={this.props.onUnpublish}
+                    onTransitionStart={this.props.onTransitionStart}
                     onDeleteDraft={this.props.onDeleteDraft}
                     onTransitionHide={this.props.onTransitionHide}
                     onTransitionCancel={this.props.onTransitionCancel}
                     transitionStart={this.props.transitionStart}
                     transitionSaving={this.props.transitionSaving}
 
-                    onGoToListingByIndex={this.props.onGoToListingByIndex}
-                    onContact={this.handleContact}
-                    onGoToMyListing={this.props.onGoToMyListing}
-                />
-                <ListingDetailToolbar 
-                    editMode={editMode}
-                    onEditModeChange={this.handleEditToggle}
-                    listingMode={listingMode}
                 />
                 </div>
                 <ListingDetailOverview 
