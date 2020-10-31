@@ -243,12 +243,11 @@ function ListItem(props){
 
 function Toolbar(props){
     return(
-    <div>
+    <div className="pt-1">
         <Row>
             <Col>
                 <Dropdown>
                     <Dropdown.Toggle
-                        variant="warning"
                         size="sm"
                     >
                         Sort: By Date
@@ -263,7 +262,7 @@ function Toolbar(props){
             </Col>
             { (props.listingMode === "myFavorites") ?
             <Col>
-                <Button size="sm" variant="warning">
+                <Button size="sm">
                     <FontAwesomeIcon icon={faFilePdf} />&nbsp;Report
                 </Button>
             </Col>
@@ -272,7 +271,6 @@ function Toolbar(props){
             <Col>
                 <Button
                     size="sm"
-                    variant="warning"
                     onClick={props.onNewListing}
                  >
                     <FontAwesomeIcon icon={faPlus} />&nbsp;New Listing
@@ -332,60 +330,44 @@ class Listings extends React.Component {
         <div>
             { this.props.loggedIn ?
             <div id="stickyHeader" className="bg-white">
-            <Tab.Container>
-            <Tabs
-                variant="pills"
-                className="listing-tabs pt-1 pb-1 border-0"
-                id="listing-tabs"
-                activeKey={this.props.listingMode}
-                onSelect={listingMode => this.handleListingModeChange(listingMode)}
-            >
-                <Tab 
-                    title="All Listings"
-                    eventKey="allListings"
-                >
-                    <Tab.Content className="border">
-                        <Toolbar
-                            page={this.props.page}
-                            count={this.props.count}
-                            perPage={this.props.perPage}
-                            onNewPage={this.props.onNewPage}
-                            listingMode={this.props.listingMode}
-                        />
-                    </Tab.Content>
-                </Tab>
-                <Tab
-                    title="My Listings"
-                    eventKey="myListings"
-                >
-                    <Tab.Content className="border">
-                        <Toolbar
-                            page={this.props.page}
-                            count={this.props.count}
-                            perPage={this.props.perPage}
-                            onNewPage={this.props.onNewPage}
-                            listingMode={this.props.listingMode}
-                            onNewListing={this.handleNewListing}
-                        />
-                    </Tab.Content>
-                </Tab>
-                <Tab
-                    title="Favorites"
-                    eventKey="myFavorites"
-                >
-                    <Tab.Content className="border">
-                        <Toolbar
-                            page={this.props.page}
-                            count={this.props.count}
-                            perPage={this.props.perPage}
-                            onNewPage={this.props.onNewPage}
-                            listingMode={this.props.listingMode}
-                        />
-                    </Tab.Content>
-
-                </Tab>
-            </Tabs>
-            </Tab.Container>
+                <Toolbar
+                    page={this.props.page}
+                    count={this.props.count}
+                    perPage={this.props.perPage}
+                    onNewPage={this.props.onNewPage}
+                    listingMode={this.props.listingMode}
+                    onNewListing={this.handleNewListing}
+                />
+                <Tab.Container>
+                    <Tabs
+                        className="listing-tabs pt-1 border-0"
+                        id="listing-tabs"
+                        activeKey={this.props.listingMode}
+                        onSelect={listingMode => this.handleListingModeChange(listingMode)}
+                    >
+                        <Tab 
+                            title="All Listings"
+                            eventKey="allListings"
+                        >
+                            <Tab.Content>
+                            </Tab.Content>
+                        </Tab>
+                        <Tab
+                            title="My Listings"
+                            eventKey="myListings"
+                        >
+                            <Tab.Content>
+                            </Tab.Content>
+                        </Tab>
+                        <Tab
+                            title="Favorites"
+                            eventKey="myFavorites"
+                        >
+                            <Tab.Content>
+                            </Tab.Content>
+                        </Tab>
+                    </Tabs>
+                </Tab.Container>
             </div>
             :
             <Toolbar

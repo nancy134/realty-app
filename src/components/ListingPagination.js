@@ -94,7 +94,7 @@ class ListingPagination extends React.Component {
         }
         return (
         <React.Fragment>
-             <Pagination size="sm" className="m-0 pt-1 pb-1 justify-content-end">
+             <Pagination size="sm" className="m-0 justify-content-end">
                  {paginationItems}
              </Pagination>
         </React.Fragment>

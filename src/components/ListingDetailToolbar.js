@@ -15,7 +15,6 @@ function TransitionButton(props) {
           <Button
               id="header_transition_button"
               className="m-1"
-              variant="warning"
               onClick={() => {props.onShow()}}
           >
               {props.buttonText}
