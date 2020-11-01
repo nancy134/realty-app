@@ -4,7 +4,6 @@ import update from 'immutability-helper'
 const style = {
 }
 export const Container = () => {
-  {
     const [cards, setCards] = useState([
       {
         id: 1,
@@ -66,6 +65,5 @@ export const Container = () => {
         <div style={style}>{cards.map((card, i) => renderCard(card, i))}</div>
       </>
     )
-  }
 }
 
