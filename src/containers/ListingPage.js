@@ -706,7 +706,6 @@ export class ListingPage extends Component {
                 query += locationQuery;
                 markerQuery += locationQuery;
             }
-            console.log('query: '+query);
             var getAllPromise = listingService.getAll(query);
             getAllPromise.then(function(listings){
                 var enumPromise = listingService.getEnumsPromise();
@@ -879,7 +878,6 @@ export class ListingPage extends Component {
         var owner = this.state.owner;
         var listingDetail = this.state.listingDetail;
         var fullscreen = this.state.fullscreen;
-        console.log("updateBounds: "+this.state.updateBounds);
         return (
             <React.Fragment>
                 <DeleteModal

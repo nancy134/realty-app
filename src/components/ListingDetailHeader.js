@@ -74,6 +74,7 @@ class ListingDetailHeader extends React.Component {
         this.handleClose = this.handleClose.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.handleExpand = this.handleExpand.bind(this);
+        this.handleReport = this.handleReport.bind(this);
     }
     handleClose(){
         this.props.onShowDetailChange(false);
@@ -84,6 +85,10 @@ class ListingDetailHeader extends React.Component {
     handleExpand(){
         var url = window.location.protocol + "//" + window.location.hostname + "/listing/"+this.props.listing.id;
         window.location.href = url;
+    }
+    handleReport(){
+        var id = this.props.listing.id;
+        window.open("https://sabre.phowma.com/report/"+id,"_blank");
     }
     render() {
         const editMode = this.props.editMode;
@@ -128,7 +133,7 @@ class ListingDetailHeader extends React.Component {
                             onContact={this.props.onContact}
                         />
                         <ReportButton
-                            onReport={this.props.onReport}
+                            onReport={this.handleReport}
                         />
                     </div>
                 </Col>

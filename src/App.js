@@ -28,6 +28,7 @@ class App extends React.Component {
       }
   }
   handleLogin(){
+      console.log("handleLogin()");
       this.setState({loggedIn: true});
   }
   handleLogout(){
@@ -55,7 +56,7 @@ class App extends React.Component {
                   />{' '}Sabre Realty</Navbar.Brand>
               <Navbar.Toggle />
               <Navbar.Collapse className="justify-content-end">
-                 <Nav.Item>
+                  <Nav.Item>
                       <Nav.Link eventKey="link-1">
                           <AccountButton 
                               onLogin={this.handleLogin} 
@@ -65,7 +66,6 @@ class App extends React.Component {
                           />
                       </Nav.Link>
                   </Nav.Item>
-
               </Navbar.Collapse>
           </Navbar>
           <Routes loggedIn={this.state.loggedIn}></Routes>
