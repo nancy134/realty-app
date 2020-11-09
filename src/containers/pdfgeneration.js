@@ -6,13 +6,24 @@ import {
     Document,
     StyleSheet,
     PDFViewer,
-    Image
+    Image,
+    Font
 } from '@react-pdf/renderer';
+import {generalNameValuePairs} from '../helpers/utilities';
+
+Font.register({
+family: 'Open Sans',
+fonts: [
+{ src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf' },
+{ src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-700.ttf', fontWeight: 700 }
+]
+});
 
 const BORDER_COLOR = '#bfbfbf'
 const BORDER_STYLE = 'solid'
 const COL1_WIDTH = 20
-const COLN_WIDTH = (100 - COL1_WIDTH) / 3
+//const COLN_WIDTH = (100 - COL1_WIDTH) / 3
+const COLN_WIDTH = 100/4
 
 // Create styles
 const styles = StyleSheet.create({
@@ -31,6 +42,12 @@ const styles = StyleSheet.create({
     //marginLeft: 20,
     marginRight: 20
   }, 
+  tableNoBorder: {
+      display: "table",
+      width: "auto",
+      marginTop: 10,
+      marginRight: 20
+  },
   tableRow: { 
     margin: 'auto',
     flexDirection: "row" 
@@ -68,12 +85,18 @@ const styles = StyleSheet.create({
     borderWidth: 1, 
     borderLeftWidth: 0, 
     borderTopWidth: 0 
-  }, 
+  },
+  tableColNoBorder: {
+    width: COLN_WIDTH + "%"
+  },
   tableCellHeader: {
     margin: 5, 
     fontSize: 12,
     fontWeight: 500
   },  
+  tableCellNoBorder: {
+    fontSize: 10
+  },
   tableCell: { 
     margin: 5, 
     fontSize: 10 
@@ -129,7 +152,6 @@ function Overview(props){
                 marginLeft: 20,
                 marginRight: 20,
                 fontSize: 10,
-                fontWeight: 'bold'
             }}
         >
             {listing.shortDescription}
@@ -226,7 +248,7 @@ function Spaces(props){
             </Text>
             <View style={styles.table}> 
                 <View style={styles.tableRow}> 
-                    <View style={styles.tableCol1Header}> 
+                    <View style={styles.tableColHeader}> 
                         <Text style={styles.tableCellHeader}>Name</Text> 
                     </View> 
                     <View style={styles.tableColHeader}> 
@@ -241,7 +263,7 @@ function Spaces(props){
                 </View>
                 {spaces.map((space, index) => (
                     <View key={index} style={styles.tableRow}> 
-                        <View style={styles.tableCol1}> 
+                        <View style={styles.tableCol}> 
                             <Text style={styles.tableCell}>{space.unit}</Text> 
                         </View> 
                        <View style={styles.tableCol}> 
@@ -259,12 +281,121 @@ function Spaces(props){
       </View>
       );
 }
+function NameValueRows(props){
+
+    var nvps = props.nvps;
+    var length = props.nvps.length;
+    var rows = Math.ceil(length/2);
+    var tableRows = [];
+    for (var i=0; i<rows; i++){
+
+        var colValue1 = "";
+        var prefix1 = nvps[i*2].prefix ? nvps[i*2].prefix : "";
+        var unit1 = nvps[i*2].unit ? nvps[i*2].unit : "";
+        var value1 = nvps[i*2].value;
+
+        colValue1 = prefix1+value1+" "+unit1;
+
+        var label2 = "";
+        var prefix2 = "";
+        var unit2 = "";
+        var value2 = "";
+        var colValue2 = "";
+        var index = i*2+1;
+        if (index < length){
+            label2 = nvps[index].label;
+            prefix2 = nvps[index].prefix ? nvps[index].prefix : "";
+            unit2 = nvps[index].unit ? nvps[index].unit : "";
+            value2 = nvps[index].value;
+            colValue2 = prefix2+value2+" "+unit2; 
+        } 
+        var row = {
+            col1: nvps[i*2].label,
+            col2: colValue1,
+            col3: label2,
+            col4: colValue2
+        };
+        tableRows.push(row);
+    }
+    console.log(tableRows);
+
+    return(
+        <View>
+        {tableRows.map((row, index) => (
+
+            <View key={index} style={styles.tableRow}>
+                <View
+                    style={{
+                        width: COLN_WIDTH + "%"
+                    }}
+                >
+                    <Text style={styles.tableCellNoBorder}>{row.col1}</Text>
+                </View>
+                <View
+                    style={{
+                        width: COLN_WIDTH + "%",
+                        fontWeight: "bold" 
+                    }}
+                >
+                    <Text style={styles.tableCellNoBorder}>{row.col2}</Text>
+                </View>
+                <View
+                    style={{
+                        width: COLN_WIDTH + "%"
+                    }}>
+                    <Text style={styles.tableCellNoBorder}>{row.col3}</Text>
+                </View>
+                <View
+                    style={{
+                        width: COLN_WIDTH + "%",
+                        fontWeight: "bold"
+                    }}
+                >
+                    <Text style={styles.tableCellNoBorder}>{row.col4}</Text>
+                </View>
+            </View>
+        ))}
+        </View>
+    );
+}
+function General(props){
+    var nvps = generalNameValuePairs(props.listing);
+    console.log("nvps:");
+    console.log(nvps);
+    console.log("length/2: "+Math.ceil(nvps.length/2));
+    return(
+    <View
+        style={{
+            flexDirection: 'column',
+            marginLeft: 20
+        }}
+    >
+        <Text
+            style={{
+                marginTop: 10,
+                marginRight: 20,
+                fontSize: 14,
+                backgroundColor: '#e4e4e4'
+            }}
+        >
+            Building Detail 
+        </Text>
+   
+        <View style={styles.tableNoBorder}>
+            <NameValueRows
+                nvps={props.nvps}
+            />
+        </View>
+    </View>
+    );
+}
 
 function Broker(props){
     var listing = props.listing;
     return(
         <View
             style={{
+                marginTop: 20,
                 flexDirection: 'column'
             }}
         >
@@ -284,7 +415,6 @@ function Broker(props){
                 marginLeft: 20,
                 marginRight: 20,
                 fontSize: 10,
-                fontWeight: 'bold'
             }}
         >
             {listing.owner}
@@ -317,6 +447,7 @@ export class PDF extends React.Component{
 */
     render(){
         var listing = this.props.listing;
+        var generalNvps = generalNameValuePairs(listing);
 
         return(
         <PDFViewer
@@ -332,6 +463,7 @@ export class PDF extends React.Component{
                 >
                     <View
                         style={{
+                            fontFamily: "Open Sans",
                             margin: 10,
                             fontSize: 12,
                             flexDirection: 'column'
@@ -351,6 +483,12 @@ export class PDF extends React.Component{
                         {listing.spaces.length ?
                         <Spaces
                             spaces={listing.spaces}
+                        />
+                        : null}
+                        {generalNvps.length ?
+                        <General
+                            listing={listing}
+                            nvps={generalNvps}
                         />
                         : null}
                         <Broker

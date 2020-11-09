@@ -150,7 +150,7 @@ class ListingMap extends React.Component {
     }
     render(){
         const showDetail = this.props.showDetail;
-
+        
         const polygon = [
            {lat: parseFloat(this.props.bounds.lat0), lng: parseFloat(this.props.bounds.lng0)},
            {lat: parseFloat(this.props.bounds.lat1), lng: parseFloat(this.props.bounds.lng0)},
@@ -168,6 +168,7 @@ class ListingMap extends React.Component {
                 onZoomChanged={this.handleZoomChanged}
                 onDragend={this.handleDragEnd}
                 containerStyle={this.props.style}
+                gestureHandling={this.props.gestureHandling}
                 ref="resultMap"
             >
                 {this.displayMarkers()}
