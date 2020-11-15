@@ -13,7 +13,7 @@ class App extends React.Component {
   constructor(props){
       super(props);
       this.state = {
-          loggedIn: false
+          loggedIn: false,
       };
       this.handleLogin = this.handleLogin.bind(this);
       this.handleLogout = this.handleLogout.bind(this);
@@ -68,7 +68,10 @@ class App extends React.Component {
                   </Nav.Item>
               </Navbar.Collapse>
           </Navbar>
-          <Routes loggedIn={this.state.loggedIn}></Routes>
+          <Routes
+              // Logged in
+              loggedIn={this.state.loggedIn}
+          ></Routes>
     </Container>
   );
 }

@@ -4,7 +4,6 @@ import {
     Row, Col,
     Tabs,
     Tab,
-    Dropdown,
     Button
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,43 +15,23 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import ListingPagination from '../components/ListingPagination';
 import ListingItem from '../components/ListingItem';
+import listService from '../services/lists';
+import listItemService from '../services/listItems';
 
 function Toolbar(props){
     return(
     <div className="pt-1">
         <Row>
             <Col>
-                <Dropdown>
-                    <Dropdown.Toggle
-                        size="sm"
-                    >
-                        Sort: By Date
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu
-                    >
-                        <Dropdown.Item>By Date</Dropdown.Item>
-                        <Dropdown.Item>By Price</Dropdown.Item>
-                        <Dropdown.Item>By Size</Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
+                <Button size="sm">
+                    <FontAwesomeIcon icon={faFilePdf} />&nbsp;Summary Report
+                </Button>
             </Col>
-            { (props.listingMode === "myFavorites" && !this.props.reporting) ?
             <Col>
                 <Button size="sm">
-                    <FontAwesomeIcon icon={faFilePdf} />&nbsp;Report
+                    <FontAwesomeIcon icon={faFilePdf} />&nbsp;Detail Report
                 </Button>
             </Col>
-            : null }
-            { (props.listingMode === "myListings") ?
-            <Col>
-                <Button
-                    size="sm"
-                    onClick={props.onNewListing}
-                 >
-                    <FontAwesomeIcon icon={faPlus} />&nbsp;New Listing
-                </Button>
-            </Col>
-            : null }
             <Col>
                 <ListingPagination
                     page={props.page}
@@ -66,17 +45,41 @@ function Toolbar(props){
     );
 }
 
-class Listings extends React.Component {
+class ReportListings extends React.Component {
    
     constructor(props) {
         super(props);
         this.showDetailChange = this.showDetailChange.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
-        this.handleListingModeChange = this.handleListingModeChange.bind(this);
+        this.handleListChange = this.handleListChange.bind(this);
         this.handleNewListing = this.handleNewListing.bind(this);
         this.handleSelectFavorite = this.handleSelectFavorite.bind(this);
+        this.state = {
+            lists: [],
+            listItems: [],
+            listItemIndex: 0
+        };
     }
     componentDidMount() {
+        var that = this;
+        listService.getAll().then(function(lists){
+            if (lists.lists.rows){
+                var listId = lists.lists.rows[0].id; 
+                var query = "perPage=10&page=1&ListId="+listId;
+                listItemService.getAll(query).then(function(listItems){
+                    that.setState({
+                        lists: lists.lists.rows,
+                        listItems: listItems.listItems.rows,
+                        listId: listId 
+                    });
+                }).catch(function(err){
+                    console.log(err);
+                });
+            } else {
+            }
+        }).catch(function(err){
+            console.log(err);
+        });
     }
     componentWillUnmount() {
     }
@@ -87,24 +90,32 @@ class Listings extends React.Component {
     showDetailChange(id, arrayIndex){
         this.props.onShowDetailChange(true, id, arrayIndex);
     }
-    handleListingModeChange(listingMode){
-        this.props.onListingModeChange(listingMode);
+    handleListChange(listTab){
+        var that = this;
+        var query = "perPage=10&page=1&ListId="+listTab;
+        listItemService.getAll(query).then(function(listItems){
+            that.setState({
+                listItems: listItems.listItems.rows,
+                listId: listTab
+            });
+        }).catch(function(err){
+            console.log(err);
+        });
+        //this.props.onReportListChange(listingMode);
     }
     handleNewListing(){
         this.props.onNewListing();
     }
     handleSelectFavorite(e, id){
-        console.log("handleSelectFavorite");
         e.stopPropagation();
     }
     render() {
+        if (this.state.lists.length > 0){
 
-        if (this.props.listings && this.props.listings.length){
-            
-        var listings = this.props.listings;
-
-        var showImage = true;
-        var showShortDescription = true;
+        var listings = this.state.listItems;
+        var activeKey = this.state.listId;
+        var showImage = false;
+        var showShortDescription = false;
 
         return (
         <div>
@@ -122,26 +133,23 @@ class Listings extends React.Component {
                     <Tabs
                         className="listing-tabs pt-1 border-0"
                         id="listing-tabs"
-                        activeKey={this.props.listingMode}
-                        onSelect={listingMode => this.handleListingModeChange(listingMode)}
+                        activeKey={activeKey}
+                        onSelect={tab => this.handleListChange(tab)}
                     >
-                        <Tab 
-                            title="All Listings"
-                            eventKey="allListings"
+                        {this.state.lists.map((list, index) =>
+                        <Tab
+                            title={list.name}
+                            eventKey={list.id}
+                            key={index}
                         >
                             <Tab.Content>
                             </Tab.Content>
                         </Tab>
+                        )}
+
                         <Tab
-                            title="My Listings"
-                            eventKey="myListings"
-                        >
-                            <Tab.Content>
-                            </Tab.Content>
-                        </Tab>
-                        <Tab
-                            title="Favorites"
-                            eventKey="myFavorites"
+                            title={<FontAwesomeIcon icon={faPlus}/>}
+                            eventKey="add"
                         >
                             <Tab.Content>
                             </Tab.Content>
@@ -165,12 +173,11 @@ class Listings extends React.Component {
                         <ListingItem
                             index={index}
                             key={listing.id}
-                            listing={listing}
+                            listing={listing.listing.versions[0]}
                             onDelete={this.handleDelete}
                             listingMode={this.props.listingMode}
                             onItemClick={this.showDetailChange}
                             onSelectFavorite={this.handleSelectFavorite}
-                            reporting={this.props.reporting}
                             showImage={showImage}
                             showShortDescription={showShortDescription}
                         />
@@ -187,4 +194,4 @@ class Listings extends React.Component {
        }
     }
 }
-export default Listings;
+export default ReportListings;

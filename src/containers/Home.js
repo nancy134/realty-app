@@ -13,11 +13,12 @@ import {
 } from 'react-places-autocomplete';
 import { GoogleApiWrapper } from 'google-maps-react';
 import Geocode from 'react-geocode';
+import geolocationService from '../helpers/geolocation';
 
 export class Home extends Component { 
   constructor(props, context) {
     super(props, context);
-    this.handleClick = this.handleClick.bind(this);
+    this.handleFindSpace = this.handleFindSpace.bind(this);
     this.state = {
         address: ''
     };
@@ -45,16 +46,18 @@ export class Home extends Component {
           console.error('Error', error);
       });
   };
-  handleClick(){
+  handleFindSpace(){
     var url = "";
     url = window.location.protocol + "//" + window.location.hostname + "/listing";
-    if (this.state.formatted_address){
-        url += "?formatted_address="+this.state.formatted_address+
-        "&lat0="+this.state.lat0+
-        "&lng0="+this.state.lng0+
-        "&lat1="+this.state.lat1+
-        "&lng1="+this.state.lng1;
-    }
+    var defaultLocation = { 
+        formatted_address: this.state.formatted_address,
+        lat0: this.state.lat0,
+        lng0: this.state.lng0,
+        lat1: this.state.lat1,
+        lng1: this.state.lng1
+    };
+    console.log(defaultLocation);
+    geolocationService.saveDefaultLocation(defaultLocation);
     window.location.href = url; 
   }
 
@@ -125,7 +128,10 @@ export class Home extends Component {
                   })}
                 />
                 <InputGroup.Append>
-                <Button variant="outline-secondary" onClick={this.handleClick}>Find Space</Button>
+                <Button
+                    variant="outline-secondary"
+                    onClick={this.handleFindSpace}
+                >Find Space</Button>
                 </InputGroup.Append>
               </InputGroup>
               <InputGroup>

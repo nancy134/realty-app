@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-    Container,
     Row,
     Col,
     Modal,
@@ -9,6 +8,7 @@ import {
 import './ListingPage.css';
 import ListingMap from '../components/ListingMap';
 import Listings from '../components/Listings';
+import ReportListings from '../components/ReportListings';
 import ListingToolbar from '../components/ListingToolbar';
 import ListingDetail from '../components/ListingDetail';
 import ListingAddType from '../components/ListingAddType';
@@ -27,13 +27,13 @@ import geolocationService from '../helpers/geolocation';
 export class ListingPage extends Component {
     constructor(props){
         super(props);
+
         var fullscreen = false;
         var index = null;
         if (props.match.params.id){
            fullscreen = true;
            index = props.match.params.id;
         }
-
         const params = new URLSearchParams(props.location.search);
         var listingModeParam = params.get('listingMode');
         var listingMode = "allListings";
@@ -41,11 +41,13 @@ export class ListingPage extends Component {
            listingMode = listingModeParam;
         }
 
-        var formatted_address = params.get('formatted_address');
-        var lat0 = params.get('lat0');
-        var lng0 = params.get('lng0');
-        var lat1 = params.get('lat1');
-        var lng1 = params.get('lng1');
+        var defaultLocation = geolocationService.getDefaultLocation();
+        var formatted_address = defaultLocation.formatted_address;
+        var lat0 = defaultLocation.lat0;
+        var lng0 = defaultLocation.lng0;
+        var lat1 = defaultLocation.lat1;
+        var lng1 = defaultLocation.lng1;
+
         // Toolbar
         this.handleSearch = this.handleSearch.bind(this);
         // Add Listing
@@ -166,7 +168,7 @@ export class ListingPage extends Component {
 
             // Detail Map
             detailBounds: {lat0:lat0, lng0:lng0, lat1:lat1, lng1:lng1},
-            detailMarkers: null
+            detailMarkers: null,
         };
     }
     handleGoToListingByIndex(index, publishStatus){
@@ -387,6 +389,7 @@ export class ListingPage extends Component {
             console.log(err);
         });
     }
+
     handleOwnerChange(value){
         this.setState({
             owner: value
@@ -732,27 +735,38 @@ export class ListingPage extends Component {
     }
 
     componentDidMount(){
-        if (this.state.fullscreen){
-            this.handleFetchListing();
-        }
-        var localState = {
-            listingMode: this.state.listingMode,
-            page: this.state.page,
-            bounds: {
-                lat0: this.state.bounds.lat0,
-                lng0: this.state.bounds.lng0,
-                lat1: this.state.bounds.lat1,
-                lng1: this.state.bounds.lng1
-            }
-        };
+        var localState = {};
         var that = this;
-        this.fetchListingsPromise(localState).then(function(localState){
-            if (localState.bounds.lat0 === null){
-                localState.bounds = geolocationService.calculateBounds(localState.markers);
+        if (this.state.fullscreen){
+            localState = {
+                index: this.state.index,
+                showDetail: true
             }
-            localState.readyForMap = true;
-            that.setState(localState);
-        });
+            this.fetchListingPromise(localState).then(function(localState){
+                that.setState(localState);
+            }).catch(function(err){
+                console.log(err);
+            });
+    
+        } else {
+            localState = {
+                listingMode: this.state.listingMode,
+                page: this.state.page,
+                bounds: {
+                    lat0: this.state.bounds.lat0,
+                    lng0: this.state.bounds.lng0,
+                    lat1: this.state.bounds.lat1,
+                    lng1: this.state.bounds.lng1
+                }
+            };
+            this.fetchListingsPromise(localState).then(function(localState){
+                if (localState.bounds.lat0 === null){
+                    localState.bounds = geolocationService.calculateBounds(localState.markers);
+                }
+                localState.readyForMap = true;
+                that.setState(localState);
+            });
+        }
     }
     componentWillUnmount(){
     }
@@ -878,215 +892,210 @@ export class ListingPage extends Component {
         var owner = this.state.owner;
         var listingDetail = this.state.listingDetail;
         var fullscreen = this.state.fullscreen;
+        var reporting = this.props.reporting;
+        // Layouts
+        var leftColumnClassName = "p-0 leftcol";
+        var leftColumnSize = 8;
+
+
+        // Fullscreen
+        if (fullscreen){
+            leftColumnClassName = "p-0 rightcol";
+            leftColumnSize = 12;
+        } 
+
+        // Listing
+        if (showDetail && !fullscreen){
+            leftColumnClassName = "p-0 rightcol";
+        }
+
+        // Reporting
+        if (reporting){
+            leftColumnSize = 5;
+            var rightColSize = 4;
+            var reportColSize = 3;
+        }
+        
         return (
-            <React.Fragment>
-                <DeleteModal
-                    id={this.state.deleteId}
-                    show={this.state.showDeleteModal}
-                    title={this.state.deleteTitle}
-                    message={this.state.deleteMessage}
-                    onHide={this.handleDeleteHide}
-                    saving={this.state.deleteSaving}
-                    onDelete={this.handleDeleteConfirm}
-                />
-                <DeleteListingModal
-                    id={this.state.deleteListingId}
-                    show={this.state.showDeleteListingModal}
-                    message={this.state.deleteListingMessage}
-                    onHide={this.handleDeleteListingHide}
-                    saving={this.state.deleteListingSaving}
-                    onDelete={this.handleDeleteListingConfirm}
-                />
-                <DeleteListingModal
-                    id={this.state.deleteDraftListingId}
-                    show={this.state.showDeleteDraftListingModal}
-                    message={this.state.deleteDraftListingMessage}
-                    onHide={this.handleDeleteDraftListingHide}
-                    saving={this.state.deleteDraftListingSaving}
-                    onDelete={this.handleDeleteDraftListingConfirm}
-                />
-                <Modal show={this.state.showModal}>
-                    <Modal.Header>
-                        <Modal.Title>{this.state.transitionModalTitle}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>{this.state.transitionModalMessage}</Modal.Body>
-                    <Modal.Footer>
-                        <Button
-                            id="alert_modal_close"
-                            variant="secondary" 
-                            onClick={this.handleClose}>
-                        Close
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-                {fullscreen ?
-                (<Container>
-                     <ListingDetail
-                         fullscreen={fullscreen}
-                         editMode={editMode}
-                         index={index}
-                         listingDetail={listingDetail}
-                         showDetail={true}
-                         owner={owner}
-                         listingMode={listingMode}
-                         onShowDetailChange={this.handleShowDetailChange}
-                         onEditToggle={this.handleEditToggle}
-                         onOwnerChange={this.handleOwnerChange}
-                         onListUpdate={this.handleListUpdate}
-                         onUpdate={this.handleUpdate}
-                         onCreate={this.handleCreate}
-                         onFetchListing={this.handleFetchListing}
-                         showSpinner={this.state.showSpinner}
-                         // Transition
-                         onTransitionStart={this.handleTransitionStart}
-                         onTransitionCancel={this.handleTransitionCancel}
-                         onPublish={this.handlePublish}
-                         onUnpublish={this.handleUnpublish}
-                         onDeleteDraft={this.handleDeleteDraftListing}
-                         onTransitionHide={this.handleTransitionHide}
-                         transitionStart={this.state.transitionStart}
-                         transitionSaving={this.state.transitionSaving}
-                         // Space
-                         spaceAccordionText={this.state.spaceAccordionText}
-                         onAccordionChange={this.handleAccordionChange}
-                         onDeleteSpace={this.handleDeleteSpace}
-                         // Amenities
-                         allAmenities={this.state.allAmenities}
+        <React.Fragment>
 
-                         onGoToListingByIndex={this.handleGoToListingByIndex}
-                         // Map
-                         markers={this.state.detailMarkers}
-                         bounds={this.state.detailBounds}
-		         onGoToMyListing={this.handleGoToMyListing}
-	     />
-	</Container>)
-
-	:
-	( 
-	<div>
-	<Row className="bg-success">
-	    <ListingToolbar
-                // No longer needed
-		loggedIn={loggedIn} 
-		listingMode={listingMode}
-		onAddListing={this.handleAddListing} 
-		onListingToggle={this.handleListingToggle}
-		onFilterChange={this.handleFilterChange}
-		onMoreFilterChange={this.handleMoreFilterChange}
-                // needed
-		formatted_address={this.state.formatted_address}
-                onSearch={this.handleSearch}
-	    />
-	    <ListingAddType
-		show={this.state.addListingType}
-		onNext={this.handleListingTypeNext}
-		onCancel={this.handleCancelAddType}
-	    />
-	    { this.state.addListingAddress ?
-	    <ListingAddAddress
-		show={this.state.addListingAddress}
-		onNext={this.handleListingAddressNext}
-		listing={this.state.newListing}
-		onCancel={this.handleCancelAddAddress}
-		onGoToListing={this.handleGoToListing}
-	    />
-	    : null }
-            { this.state.addListingOverview ?
-	    <ListingAddOverview
-		show={this.state.addListingOverview}
-		onNext={this.handleListingOverviewNext}
-		listing={this.state.newListing}
-		onCancel={this.handleCancelAddOverview}
-	    />
+            <DeleteModal
+                id={this.state.deleteId}
+                show={this.state.showDeleteModal}
+                title={this.state.deleteTitle}
+                message={this.state.deleteMessage}
+                onHide={this.handleDeleteHide}
+                saving={this.state.deleteSaving}
+                onDelete={this.handleDeleteConfirm}
+            />
+            <DeleteListingModal
+                id={this.state.deleteListingId}
+                show={this.state.showDeleteListingModal}
+                message={this.state.deleteListingMessage}
+                onHide={this.handleDeleteListingHide}
+                saving={this.state.deleteListingSaving}
+                onDelete={this.handleDeleteListingConfirm}
+            />
+            <DeleteListingModal
+                id={this.state.deleteDraftListingId}
+                show={this.state.showDeleteDraftListingModal}
+                message={this.state.deleteDraftListingMessage}
+                onHide={this.handleDeleteDraftListingHide}
+                saving={this.state.deleteDraftListingSaving}
+                onDelete={this.handleDeleteDraftListingConfirm}
+            />
+            <Modal show={this.state.showModal}>
+                <Modal.Header>
+                    <Modal.Title>{this.state.transitionModalTitle}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>{this.state.transitionModalMessage}</Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        id="alert_modal_close"
+                        variant="secondary" 
+                        onClick={this.handleClose}>
+                    Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            <ListingAddType
+                show={this.state.addListingType}
+                onNext={this.handleListingTypeNext}
+                onCancel={this.handleCancelAddType}
+            />
+            { this.state.addListingAddress ?
+            <ListingAddAddress
+                show={this.state.addListingAddress}
+                onNext={this.handleListingAddressNext}
+                listing={this.state.newListing}
+                onCancel={this.handleCancelAddAddress}
+                onGoToListing={this.handleGoToListing}
+            />
             : null }
-	</Row>
-	<Row>
-	    <Col xs={8} className={showDetail? "p-0 rightcol" : "p-0 leftcol"}>
-		<CSSTransition
-		    in={showDetail}
-		    appear={false}
-		    timeout={900}
-		    classNames="slide"
-		>
-		    <ListingDetail 
-                                fullscreen={fullscreen}
-                                editMode={editMode} 
-                                index={index} 
-                                listingDetail={listingDetail} 
-                                showDetail={showDetail} 
-                                owner={owner} 
-                                listingMode={listingMode}
-                                onShowDetailChange={this.handleShowDetailChange} 
-                                onEditToggle={this.handleEditToggle} 
-                                onOwnerChange={this.handleOwnerChange} 
-                                onListUpdate={this.handleListUpdate} 
-                                onUpdate={this.handleUpdate}
-                                onCreate={this.handleCreate}
-                                onFetchListing={this.handleFetchListing}
-                                showSpinner={this.state.showSpinner}
+            { this.state.addListingOverview ?
+                <ListingAddOverview
+                    show={this.state.addListingOverview}
+                    onNext={this.handleListingOverviewNext}
+                    listing={this.state.newListing}
+                    onCancel={this.handleCancelAddOverview}
+                />
+            : null }
 
-                                // Transition
-                                onTransitionStart={this.handleTransitionStart}
-                                onTransitionCancel={this.handleTransitionCancel}
-                                onPublish={this.handlePublish}
-                                onUnpublish={this.handleUnpublish}
-                                onDeleteDraft={this.handleDeleteDraftListing}
-                                onTransitionHide={this.handleTransitionHide}
-                                transitionStart={this.state.transitionStart}
-                                transitionSaving={this.state.transitionSaving}
-                                // Space
-                                spaceAccordionText={this.state.spaceAccordionText}
-                                onAccordionChange={this.handleAccordionChange}
-                                onDeleteSpace={this.handleDeleteSpace}
-                                // Enums
-                                allAmenities={this.state.allAmenities}
-
-                                onGoToListingByIndex={this.handleGoToListingByIndex}
-                                 onGoToMyListing={this.handleGoToMyListing}
-                                // Map
-                                markers={this.state.detailMarkers}
-                                bounds={this.state.detailBounds}
-
-
-                            />
-                        </CSSTransition>
-                        { this.state.readyForMap ?
-                        <ListingMap 
-                            showDetail={showDetail}
-                            markers={this.state.markers}
-                            bounds={this.state.bounds}
-                            onBoundsChange={this.handleBoundsChange}
-                            updateBounds={this.state.updateBounds}
-                            center={this.state.center}
-                            zoomLevel={this.state.zoomLevel}
-                        />
-                        : null }
-                    </Col>
-                    <Col xs={4} className="rightcol" >
-                        <Listings 
-                            loggedIn={loggedIn}
-                            listingMode={listingMode} 
+            { !fullscreen ?
+	    <Row className="bg-success">
+	        <ListingToolbar
+                    // No longer needed
+                    loggedIn={loggedIn} 
+		    listingMode={listingMode}
+		    onAddListing={this.handleAddListing} 
+		    onListingToggle={this.handleListingToggle}
+		    onFilterChange={this.handleFilterChange}
+		    onMoreFilterChange={this.handleMoreFilterChange}
+                    // needed
+		    formatted_address={this.state.formatted_address}
+                    onSearch={this.handleSearch}
+                />
+	    </Row>
+            : null }
+	    <Row>
+	        <Col xs={leftColumnSize} className={leftColumnClassName}>
+                    <CSSTransition
+		        in={showDetail}
+		        appear={false}
+		        timeout={900}
+		        classNames="slide"
+		    >
+		        <ListingDetail 
+                            fullscreen={fullscreen}
+                            editMode={editMode} 
+                            index={index} 
+                            listingDetail={listingDetail} 
+                            showDetail={showDetail} 
+                            owner={owner} 
+                            listingMode={listingMode}
                             onShowDetailChange={this.handleShowDetailChange} 
-                            onListingModeChange={this.handleListingToggle}
-                            onDelete={this.handleDeleteListing}
-                            listings={this.state.listings}
-                            page={this.state.page}
-                            count={this.state.count}
-                            perPage={this.state.perPage}
-                            onNewPage={this.handleNewPage}
-                            onNewListing={this.handleAddListing}
-                        />
+                            onEditToggle={this.handleEditToggle} 
+                            onOwnerChange={this.handleOwnerChange} 
+                            onListUpdate={this.handleListUpdate} 
+                            onUpdate={this.handleUpdate}
+                            onCreate={this.handleCreate}
+                            onFetchListing={this.handleFetchListing}
+                            showSpinner={this.state.showSpinner}
 
-                    </Col>
-                </Row>
-                <Row className="bg-light">
-                    <Col md={12} className="text-right">
-                        <div className="text-right" >About</div>
-                    </Col>
-                </Row>
-                </div>
-                ) }
-            </React.Fragment>
+                            // Transition
+                            onTransitionStart={this.handleTransitionStart}
+                            onTransitionCancel={this.handleTransitionCancel}
+                            onPublish={this.handlePublish}
+                            onUnpublish={this.handleUnpublish}
+                            onDeleteDraft={this.handleDeleteDraftListing}
+                            onTransitionHide={this.handleTransitionHide}
+                            transitionStart={this.state.transitionStart}
+                            transitionSaving={this.state.transitionSaving}
+                            // Space
+                            spaceAccordionText={this.state.spaceAccordionText}
+                            onAccordionChange={this.handleAccordionChange}
+                            onDeleteSpace={this.handleDeleteSpace}
+                            // Enums
+                            allAmenities={this.state.allAmenities}
+                            onGoToListingByIndex={this.handleGoToListingByIndex}
+                            onGoToMyListing={this.handleGoToMyListing}
+                            // Map
+                            markers={this.state.detailMarkers}
+                            bounds={this.state.detailBounds}
+                        />
+                    </CSSTransition>
+                    { (this.state.readyForMap && !fullscreen) ?
+                    <ListingMap 
+                        showDetail={showDetail}
+                        markers={this.state.markers}
+                        bounds={this.state.bounds}
+                        onBoundsChange={this.handleBoundsChange}
+                        updateBounds={this.state.updateBounds}
+                        center={this.state.center}
+                        zoomLevel={this.state.zoomLevel}
+                    />
+                    : null }
+                </Col>
+                { !fullscreen ?
+                <Col xs={rightColSize} className="rightcol" >
+                    <Listings 
+                        loggedIn={loggedIn}
+                        listingMode={listingMode} 
+                        onShowDetailChange={this.handleShowDetailChange} 
+                        onListingModeChange={this.handleListingToggle}
+                        onDelete={this.handleDeleteListing}
+                        listings={this.state.listings}
+                        page={this.state.page}
+                        count={this.state.count}
+                        perPage={this.state.perPage}
+                        onNewPage={this.handleNewPage}
+                        onNewListing={this.handleAddListing}
+                        reporting={reporting}
+                    />
+                </Col>
+                : null}
+                { reporting ?
+                <Col xs={reportColSize} className="rightcol" >
+                    <ReportListings
+                        loggedIn={loggedIn}
+                        onShowDetailChange={this.handleShowDetailChange}
+                        onDelete={this.handleDeleteListing}
+                        listings={this.state.listings}
+                        page={this.state.page}
+                        count={this.state.count}
+                        perPage={this.state.perPage}
+                        onNewPage={this.handleNewPage}
+                        onNewListing={this.handleAddListing}
+                    />
+                </Col>
+                : null}
+            </Row>
+            <Row className="bg-light">
+                <Col md={12} className="text-right">
+                    <div className="text-right" >About</div>
+                </Col>
+            </Row>
+        </React.Fragment>
         );
     }
 }

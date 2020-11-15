@@ -163,6 +163,10 @@ export class AccountButton extends Component{
         var url = window.location.protocol + "//" + window.location.hostname + "/listing?listingMode=myListings";
         window.location.href = url;
     }
+    onMyReports(){
+        var url = window.location.protocol + "//" + window.location.hostname + "/reporting";
+        window.location.href = url;
+    }
     handleRegisterCancel(){
         this.setState({
             modalShowRegister:false,
@@ -190,8 +194,9 @@ export class AccountButton extends Component{
             {this.state.authenticated ? 
                 ( 
                 <DropdownButton id="dropdown-item-button" title={userName}>
-                    <Dropdown.Item as="button" onClick={() => {this.onMyAccount()}}>My Account</Dropdown.Item>
                     <Dropdown.Item as="button" onClick={() => {this.onMyListings()}}>My Listings</Dropdown.Item>
+                    <Dropdown.Item as="button" onClick={() => {this.onMyReports()}}>My Reports</Dropdown.Item>
+                    <Dropdown.Item as="button" onClick={() => {this.onMyAccount()}}>My Account</Dropdown.Item>
                     <Dropdown.Item as="button" onClick={() => {this.onLogout()}}>Logout</Dropdown.Item>
                 </DropdownButton> 
                 )

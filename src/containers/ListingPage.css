@@ -15,6 +15,11 @@
    overflow-x: hidden;
    height: 81vh;
 }
+
+.fullcol {
+    overflow: scroll;
+}
+
 .filter {
     width: 500px !important
 }

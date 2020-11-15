@@ -1,6 +1,45 @@
 import {
     geocodeByAddress
 } from 'react-places-autocomplete';
+import Cookies from 'universal-cookie';
+
+export function saveDefaultLocation(props){
+    const cookies = new Cookies();
+    cookies.set('formatted_address', props.formatted_address);
+    cookies.set('lat0', props.lat0);
+    cookies.set('lng0', props.lng0);
+    cookies.set('lat1', props.lat1);
+    cookies.set('lng1', props.lng1);
+}
+
+export function getDefaultLocation(){
+    const cookies = new Cookies();
+    var formatted_address = cookies.get('formatted_address');
+    var lat0 = cookies.get('lat0');
+    var lng0 = cookies.get('lng0');
+    var lat1 = cookies.get('lat1');
+    var lng1 = cookies.get('lng1'); 
+
+    var props = {};
+    if (formatted_address){
+        props = {
+            formatted_address: formatted_address,
+            lat0: lat0,
+            lng0: lng0,
+            lat1: lat1,
+            lng1: lng1
+        };
+    } else {
+        props = {
+            formatted_address: "Stamford, CT, USA",
+            lat0: 41.1796839,
+            lat1: 40.96346,
+            lng0: -73.495165,
+            lng1: -73.633827
+        };
+    }
+    return props; 
+}
 
 export function geocodeByAddr(address, values){
     return new Promise(function(resolve, reject){
@@ -71,6 +110,8 @@ const geolocation = {
     geocodeByAddr,
     getVerifiedAddresses,
     calculateBounds,
-    addPoint
+    addPoint,
+    getDefaultLocation,
+    saveDefaultLocation
 };
 export default geolocation;
