@@ -72,6 +72,7 @@ class ReportListings extends React.Component {
                         listItems: listItems.listItems.rows,
                         listId: listId 
                     });
+                    that.props.onReportListChange(listItems.listItems.rows);
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -98,10 +99,10 @@ class ReportListings extends React.Component {
                 listItems: listItems.listItems.rows,
                 listId: listTab
             });
+            that.props.onReportListChange(listItems.listItems.rows);
         }).catch(function(err){
             console.log(err);
         });
-        //this.props.onReportListChange(listingMode);
     }
     handleNewListing(){
         this.props.onNewListing();

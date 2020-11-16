@@ -104,6 +104,9 @@ export class ListingPage extends Component {
         // Map
         this.handleBoundsChange = this.handleBoundsChange.bind(this);
 
+        // Reports
+        this.handleReportListChange = this.handleReportListChange.bind(this);
+
         this.state = {
 
             // Add listing
@@ -169,6 +172,9 @@ export class ListingPage extends Component {
             // Detail Map
             detailBounds: {lat0:lat0, lng0:lng0, lat1:lat1, lng1:lng1},
             detailMarkers: null,
+
+            // Reports
+            reportListItems: null
         };
     }
     handleGoToListingByIndex(index, publishStatus){
@@ -883,6 +889,11 @@ export class ListingPage extends Component {
         });
     }
 
+    handleReportListChange(reportListItems){
+        this.setState({
+            reportListItems: reportListItems
+        });
+    }
     render() {
         var showDetail = this.state.showDetail;
         var index = this.state.index;
@@ -1071,6 +1082,7 @@ export class ListingPage extends Component {
                         onNewPage={this.handleNewPage}
                         onNewListing={this.handleAddListing}
                         reporting={reporting}
+                        reportListItems={this.state.reportListItems}
                     />
                 </Col>
                 : null}
@@ -1086,6 +1098,7 @@ export class ListingPage extends Component {
                         perPage={this.state.perPage}
                         onNewPage={this.handleNewPage}
                         onNewListing={this.handleAddListing}
+                        onReportListChange={this.handleReportListChange}
                     />
                 </Col>
                 : null}

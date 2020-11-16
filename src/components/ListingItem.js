@@ -141,6 +141,18 @@ class ListingItem extends React.Component {
     // Listing Price
     var floatPrice = parseFloat(listing.listingPrice);
     var listingPrice = floatPrice.toLocaleString(undefined, {maximumFractionDigits:0});
+
+    // Reports
+    var hideRightArrow = false;
+    if (this.props.reportListItems){
+        var reportListItems = this.props.reportListItems;
+        for (var i=0; i<reportListItems.length; i++){
+            if (listing.ListingId === reportListItems[i].ListingId){
+                hideRightArrow = true;
+                break;
+            }
+        }
+    }
     return(
         <ListGroup.Item 
             className="border p-1 addPointer list-item" 
@@ -199,7 +211,7 @@ class ListingItem extends React.Component {
                                     <FontAwesomeIcon className="text-danger" size="xs" icon={faStarFilled} />
                                 </span>
                                 : null }
-                                { this.props.reporting ?
+                                { this.props.reporting && !hideRightArrow ?
                                 <span
                                     data-id={listing.ListingId}
                                     onClick={(e) => this.props.onSelectFavorite(e, listing.ListingId)}

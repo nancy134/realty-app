@@ -173,6 +173,7 @@ class Listings extends React.Component {
                             reporting={this.props.reporting}
                             showImage={showImage}
                             showShortDescription={showShortDescription}
+                            reportListItems={this.props.reportListItems}
                         />
                     ))}
                 </ListGroup>
