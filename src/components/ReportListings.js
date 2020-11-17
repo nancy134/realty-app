@@ -15,8 +15,6 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import ListingPagination from '../components/ListingPagination';
 import ListingItem from '../components/ListingItem';
-import listService from '../services/lists';
-import listItemService from '../services/listItems';
 
 function Toolbar(props){
     return(
@@ -24,12 +22,12 @@ function Toolbar(props){
         <Row>
             <Col>
                 <Button size="sm">
-                    <FontAwesomeIcon icon={faFilePdf} />&nbsp;Summary Report
+                    <FontAwesomeIcon icon={faFilePdf} />&nbsp;Summary
                 </Button>
             </Col>
             <Col>
                 <Button size="sm">
-                    <FontAwesomeIcon icon={faFilePdf} />&nbsp;Detail Report
+                    <FontAwesomeIcon icon={faFilePdf} />&nbsp;Detail
                 </Button>
             </Col>
             <Col>
@@ -54,33 +52,10 @@ class ReportListings extends React.Component {
         this.handleListChange = this.handleListChange.bind(this);
         this.handleNewListing = this.handleNewListing.bind(this);
         this.handleSelectFavorite = this.handleSelectFavorite.bind(this);
-        this.state = {
-            lists: [],
-            listItems: [],
-            listItemIndex: 0
-        };
+        this.handleDeleteFromList = this.handleDeleteFromList.bind(this);
+
     }
     componentDidMount() {
-        var that = this;
-        listService.getAll().then(function(lists){
-            if (lists.lists.rows){
-                var listId = lists.lists.rows[0].id; 
-                var query = "perPage=10&page=1&ListId="+listId;
-                listItemService.getAll(query).then(function(listItems){
-                    that.setState({
-                        lists: lists.lists.rows,
-                        listItems: listItems.listItems.rows,
-                        listId: listId 
-                    });
-                    that.props.onReportListChange(listItems.listItems.rows);
-                }).catch(function(err){
-                    console.log(err);
-                });
-            } else {
-            }
-        }).catch(function(err){
-            console.log(err);
-        });
     }
     componentWillUnmount() {
     }
@@ -92,17 +67,7 @@ class ReportListings extends React.Component {
         this.props.onShowDetailChange(true, id, arrayIndex);
     }
     handleListChange(listTab){
-        var that = this;
-        var query = "perPage=10&page=1&ListId="+listTab;
-        listItemService.getAll(query).then(function(listItems){
-            that.setState({
-                listItems: listItems.listItems.rows,
-                listId: listTab
-            });
-            that.props.onReportListChange(listItems.listItems.rows);
-        }).catch(function(err){
-            console.log(err);
-        });
+        this.props.onReportListChange(listTab);
     }
     handleNewListing(){
         this.props.onNewListing();
@@ -110,13 +75,18 @@ class ReportListings extends React.Component {
     handleSelectFavorite(e, id){
         e.stopPropagation();
     }
+    handleDeleteFromList(e, id){
+        e.stopPropagation();
+        console.log("handleDeleteFromList: id: "+id);
+    }
     render() {
-        if (this.state.lists.length > 0){
+        if (this.props.lists.length > 0){
 
-        var listings = this.state.listItems;
-        var activeKey = this.state.listId;
+        var listings = this.props.listItems;
+        var activeKey = this.props.listId;
         var showImage = false;
         var showShortDescription = false;
+        var showDeleteFromList = true;
 
         return (
         <div>
@@ -137,7 +107,7 @@ class ReportListings extends React.Component {
                         activeKey={activeKey}
                         onSelect={tab => this.handleListChange(tab)}
                     >
-                        {this.state.lists.map((list, index) =>
+                        {this.props.lists.map((list, index) =>
                         <Tab
                             title={list.name}
                             eventKey={list.id}
@@ -181,6 +151,8 @@ class ReportListings extends React.Component {
                             onSelectFavorite={this.handleSelectFavorite}
                             showImage={showImage}
                             showShortDescription={showShortDescription}
+                            showDeleteFromList={showDeleteFromList}
+                            onDeleteFromList={this.handleDeleteFromList}
                         />
                     ))}
                 </ListGroup>

@@ -153,6 +153,12 @@ class ListingItem extends React.Component {
             }
         }
     }
+
+    var contentColSize = 8;
+    if (!this.props.showImage){
+        contentColSize = 12;
+    }
+
     return(
         <ListGroup.Item 
             className="border p-1 addPointer list-item" 
@@ -176,7 +182,7 @@ class ListingItem extends React.Component {
                     }
                 </Col>
                 : null}
-                <Col xs={8}>
+                <Col xs={contentColSize}>
                     <Card className="border-0">
                         <Card.Body className="p-1">
                             <Card.Title 
@@ -214,10 +220,20 @@ class ListingItem extends React.Component {
                                 { this.props.reporting && !hideRightArrow ?
                                 <span
                                     data-id={listing.ListingId}
-                                    onClick={(e) => this.props.onSelectFavorite(e, listing.ListingId)}
+                                    onClick={(e) => this.props.onAddToList(e, listing.ListingId)}
                                     className="float-right"
                                 >
                                     <FontAwesomeIcon className="text-danger" size="lg" icon={faArrowRight} />
+                                </span>
+
+                                : null }
+                               { this.props.showDeleteFromList ?
+                                <span
+                                    data-id={listing.ListingId}
+                                    onClick={(e) => this.props.onDeleteFromList(e, listing.ListingId)}
+                                    className="float-right"
+                                >
+                                    <FontAwesomeIcon className="text-danger" size="sm" icon={faTrash} />
                                 </span>
 
                                 : null }

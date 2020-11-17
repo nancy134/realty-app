@@ -23,6 +23,8 @@ import DeleteModal from '../components/DeleteModal';
 import DeleteListingModal from '../components/DeleteListingModal';
 import { GoogleApiWrapper } from 'google-maps-react';
 import geolocationService from '../helpers/geolocation';
+import listService from '../services/lists';
+import listItemService from '../services/listItems';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -106,6 +108,7 @@ export class ListingPage extends Component {
 
         // Reports
         this.handleReportListChange = this.handleReportListChange.bind(this);
+        this.handleAddToList = this.handleAddToList.bind(this);
 
         this.state = {
 
@@ -174,7 +177,9 @@ export class ListingPage extends Component {
             detailMarkers: null,
 
             // Reports
-            reportListItems: null
+            lists: [],
+            listItems: [],
+            listId: 0 
         };
     }
     handleGoToListingByIndex(index, publishStatus){
@@ -770,7 +775,23 @@ export class ListingPage extends Component {
                     localState.bounds = geolocationService.calculateBounds(localState.markers);
                 }
                 localState.readyForMap = true;
-                that.setState(localState);
+
+                listService.getAll().then(function(lists){
+                    if (lists.lists.rows){
+                        var listId = lists.lists.rows[0].id; 
+                        var query = "perPage=10&page=1&ListId="+listId;
+                        listItemService.getAll(query).then(function(listItems){
+                            localState.lists = lists.lists.rows;
+                            localState.listItems = listItems.listItems.rows;
+                            localState.listId = listId; 
+                            that.setState(localState);
+                        }).catch(function(err){
+                            console.log(err);
+                        });
+                    }
+                }).catch(function(err){
+                });
+            }).catch(function(err){
             });
         }
     }
@@ -889,10 +910,37 @@ export class ListingPage extends Component {
         });
     }
 
-    handleReportListChange(reportListItems){
-        this.setState({
-            reportListItems: reportListItems
+    handleReportListChange(listTab){
+        var query = "perPage=10&page=1&ListId="+listTab;
+        var that = this;
+        listItemService.getAll(query).then(function(listItems){
+            that.setState({
+                listItems: listItems.listItems.rows,
+                listId: listTab
+            });
+        }).catch(function(err){
+            console.log(err);
         });
+    }
+    handleAddToList(e, ListingId){
+        var that = this;
+        var body = {
+            ListingId: ListingId,
+            ListId: this.state.listId
+        }
+        listItemService.create(body).then(function(listItem){
+            var query = "perPage=10&page=1&ListId="+that.state.listId;
+            listItemService.getAll(query).then(function(listItems){
+                that.setState({
+                    listItems: listItems.listItems.rows
+                });
+            }).catch(function(err){
+                console.log(err);
+            });
+        }).catch(function(err){
+            console.log(err);
+        });
+        e.stopPropagation();
     }
     render() {
         var showDetail = this.state.showDetail;
@@ -1081,8 +1129,10 @@ export class ListingPage extends Component {
                         perPage={this.state.perPage}
                         onNewPage={this.handleNewPage}
                         onNewListing={this.handleAddListing}
+                        // Reports
                         reporting={reporting}
-                        reportListItems={this.state.reportListItems}
+                        reportListItems={this.state.listItems}
+                        onAddToList={this.handleAddToList}
                     />
                 </Col>
                 : null}
@@ -1098,7 +1148,11 @@ export class ListingPage extends Component {
                         perPage={this.state.perPage}
                         onNewPage={this.handleNewPage}
                         onNewListing={this.handleAddListing}
+                        // Reports
                         onReportListChange={this.handleReportListChange}
+                        lists={this.state.lists}
+                        listItems={this.state.listItems}
+                        listId={this.state.listId}
                     />
                 </Col>
                 : null}

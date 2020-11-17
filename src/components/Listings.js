@@ -174,6 +174,7 @@ class Listings extends React.Component {
                             showImage={showImage}
                             showShortDescription={showShortDescription}
                             reportListItems={this.props.reportListItems}
+                            onAddToList={this.props.onAddToList}
                         />
                     ))}
                 </ListGroup>
