@@ -109,6 +109,7 @@ export class ListingPage extends Component {
         // Reports
         this.handleReportListChange = this.handleReportListChange.bind(this);
         this.handleAddToList = this.handleAddToList.bind(this);
+        this.handleDeleteFromList = this.handleDeleteFromList.bind(this);
 
         this.state = {
 
@@ -910,6 +911,7 @@ export class ListingPage extends Component {
         });
     }
 
+    // Reports
     handleReportListChange(listTab){
         var query = "perPage=10&page=1&ListId="+listTab;
         var that = this;
@@ -940,6 +942,32 @@ export class ListingPage extends Component {
         }).catch(function(err){
             console.log(err);
         });
+        e.stopPropagation();
+    }
+    handleDeleteFromList(e, ListingId){
+        // Get id
+        var id = null;
+        var that = this;
+        for (var i=0; i<this.state.listItems.length; i++){
+            if (ListingId === this.state.listItems[i].ListingId){
+               id = this.state.listItems[i].id;
+               break;
+            }
+        }
+        if (id){
+            listItemService.deleteItem(id).then(function(result){
+                var query = "perPage=10&page=1&ListId="+that.state.listId;
+                listItemService.getAll(query).then(function(listItems){
+                    that.setState({
+                        listItems: listItems.listItems.rows
+                    });
+                }).catch(function(err){
+                    console.log(err);
+                });
+            }).catch(function(err){
+                console.log(err);
+            });
+        }
         e.stopPropagation();
     }
     render() {
@@ -1150,6 +1178,7 @@ export class ListingPage extends Component {
                         onNewListing={this.handleAddListing}
                         // Reports
                         onReportListChange={this.handleReportListChange}
+                        onDeleteFromList={this.handleDeleteFromList}
                         lists={this.state.lists}
                         listItems={this.state.listItems}
                         listId={this.state.listId}

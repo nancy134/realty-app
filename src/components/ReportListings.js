@@ -48,21 +48,15 @@ class ReportListings extends React.Component {
     constructor(props) {
         super(props);
         this.showDetailChange = this.showDetailChange.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
         this.handleListChange = this.handleListChange.bind(this);
         this.handleNewListing = this.handleNewListing.bind(this);
         this.handleSelectFavorite = this.handleSelectFavorite.bind(this);
-        this.handleDeleteFromList = this.handleDeleteFromList.bind(this);
 
     }
     componentDidMount() {
     }
     componentWillUnmount() {
     }
-    handleDelete(e, id){
-        e.stopPropagation();
-        this.props.onDelete(id);
-    };
     showDetailChange(id, arrayIndex){
         this.props.onShowDetailChange(true, id, arrayIndex);
     }
@@ -74,10 +68,6 @@ class ReportListings extends React.Component {
     }
     handleSelectFavorite(e, id){
         e.stopPropagation();
-    }
-    handleDeleteFromList(e, id){
-        e.stopPropagation();
-        console.log("handleDeleteFromList: id: "+id);
     }
     render() {
         if (this.props.lists.length > 0){
@@ -152,7 +142,7 @@ class ReportListings extends React.Component {
                             showImage={showImage}
                             showShortDescription={showShortDescription}
                             showDeleteFromList={showDeleteFromList}
-                            onDeleteFromList={this.handleDeleteFromList}
+                            onDeleteFromList={this.props.onDeleteFromList}
                         />
                     ))}
                 </ListGroup>

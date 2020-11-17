@@ -39,8 +39,24 @@ export function create(body){
     });
 }
 
+export function deleteItem(id){
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'DELETE',
+            uri: process.env.REACT_APP_LISTING_SERVICE+"listItems/"+id,
+            json: true
+        };
+        rp(options).then(function(result){
+            resolve(result);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
 const listItems = {
     getAll,
-    create
+    create,
+    deleteItem
 };
 export default listItems;
