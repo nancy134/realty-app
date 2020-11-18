@@ -49,7 +49,6 @@ class ReportListings extends React.Component {
         super(props);
         this.showDetailChange = this.showDetailChange.bind(this);
         this.handleListChange = this.handleListChange.bind(this);
-        this.handleNewListing = this.handleNewListing.bind(this);
         this.handleSelectFavorite = this.handleSelectFavorite.bind(this);
 
     }
@@ -62,9 +61,6 @@ class ReportListings extends React.Component {
     }
     handleListChange(listTab){
         this.props.onReportListChange(listTab);
-    }
-    handleNewListing(){
-        this.props.onNewListing();
     }
     handleSelectFavorite(e, id){
         e.stopPropagation();
@@ -88,7 +84,6 @@ class ReportListings extends React.Component {
                     perPage={this.props.perPage}
                     onNewPage={this.props.onNewPage}
                     listingMode={this.props.listingMode}
-                    onNewListing={this.handleNewListing}
                 />
                 <Tab.Container>
                     <Tabs

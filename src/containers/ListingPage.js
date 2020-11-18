@@ -110,7 +110,7 @@ export class ListingPage extends Component {
         this.handleReportListChange = this.handleReportListChange.bind(this);
         this.handleAddToList = this.handleAddToList.bind(this);
         this.handleDeleteFromList = this.handleDeleteFromList.bind(this);
-
+        this.handleNewPageReport = this.handleNewPageReport.bind(this);
         this.state = {
 
             // Add listing
@@ -780,11 +780,14 @@ export class ListingPage extends Component {
                 listService.getAll().then(function(lists){
                     if (lists.lists.rows){
                         var listId = lists.lists.rows[0].id; 
-                        var query = "perPage=10&page=1&ListId="+listId;
+                        var query = "perPage=5&page=1&ListId="+listId;
                         listItemService.getAll(query).then(function(listItems){
                             localState.lists = lists.lists.rows;
                             localState.listItems = listItems.listItems.rows;
                             localState.listId = listId; 
+                            localState.reportPage = listItems.page;
+                            localState.reportPerPage = listItems.perPage;
+                            localState.reportCount = listItems.listItems.count;
                             that.setState(localState);
                         }).catch(function(err){
                             console.log(err);
@@ -918,7 +921,10 @@ export class ListingPage extends Component {
         listItemService.getAll(query).then(function(listItems){
             that.setState({
                 listItems: listItems.listItems.rows,
-                listId: listTab
+                listId: listTab,
+                reportPage: listItems.page,
+                reportPerPage: listItems.perPage,
+                reportCount: listItems.listItems.count
             });
         }).catch(function(err){
             console.log(err);
@@ -931,10 +937,13 @@ export class ListingPage extends Component {
             ListId: this.state.listId
         }
         listItemService.create(body).then(function(listItem){
-            var query = "perPage=10&page=1&ListId="+that.state.listId;
+            var query = "perPage=5&page=1&ListId="+that.state.listId;
             listItemService.getAll(query).then(function(listItems){
                 that.setState({
-                    listItems: listItems.listItems.rows
+                    listItems: listItems.listItems.rows,
+                    reportPage: listItems.page,
+                    reportCount: listItems.listItems.count,
+                    reportPerPage: listItems.perPage
                 });
             }).catch(function(err){
                 console.log(err);
@@ -956,10 +965,13 @@ export class ListingPage extends Component {
         }
         if (id){
             listItemService.deleteItem(id).then(function(result){
-                var query = "perPage=10&page=1&ListId="+that.state.listId;
+                var query = "perPage=5&page=1&ListId="+that.state.listId;
                 listItemService.getAll(query).then(function(listItems){
                     that.setState({
-                        listItems: listItems.listItems.rows
+                        listItems: listItems.listItems.rows,
+                        reportPage: listItems.page,
+                        reportCount: listItems.listItems.count,
+                        reportPerPage: listItems.perPage
                     });
                 }).catch(function(err){
                     console.log(err);
@@ -970,6 +982,21 @@ export class ListingPage extends Component {
         }
         e.stopPropagation();
     }
+    handleNewPageReport(goToPage){
+         var that = this;
+         var query = "perPage=5&page="+goToPage+"&ListId="+this.state.listId;
+         listItemService.getAll(query).then(function(listItems){
+             that.setState({
+                 listItems: listItems.listItems.rows,
+                 reportPage: listItems.page,
+                 reportCount: listItems.listItems.count,
+                 reportPerPage: listItems.perPage
+             });
+         }).catch(function(err){
+             console.log(err);
+         });
+    }
+
     render() {
         var showDetail = this.state.showDetail;
         var index = this.state.index;
@@ -1169,13 +1196,11 @@ export class ListingPage extends Component {
                     <ReportListings
                         loggedIn={loggedIn}
                         onShowDetailChange={this.handleShowDetailChange}
-                        onDelete={this.handleDeleteListing}
-                        listings={this.state.listings}
-                        page={this.state.page}
-                        count={this.state.count}
-                        perPage={this.state.perPage}
-                        onNewPage={this.handleNewPage}
-                        onNewListing={this.handleAddListing}
+                        // Pagination
+                        page={this.state.reportPage}
+                        count={this.state.reportCount}
+                        perPage={this.state.reportPerPage}
+                        onNewPage={this.handleNewPageReport}
                         // Reports
                         onReportListChange={this.handleReportListChange}
                         onDeleteFromList={this.handleDeleteFromList}
