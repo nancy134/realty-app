@@ -111,6 +111,8 @@ export class ListingPage extends Component {
         this.handleAddToList = this.handleAddToList.bind(this);
         this.handleDeleteFromList = this.handleDeleteFromList.bind(this);
         this.handleNewPageReport = this.handleNewPageReport.bind(this);
+        this.handleAddNewList = this.handleAddNewList.bind(this);
+
         this.state = {
 
             // Add listing
@@ -997,6 +999,30 @@ export class ListingPage extends Component {
          });
     }
 
+    handleAddNewList(listName){
+        var that = this;
+        var body = {
+            name: listName
+        };
+        listService.create(body).then(function(list){
+            var query = "perPage=5&page=1&ListId="+list.id;
+            listService.getAll(query).then(function(lists){
+                that.setState({
+                    lists: lists.lists.rows,
+                    listId: list.id,
+                    listItems: [],
+                    reportPage: 1,
+                    reportCount: 0,
+                    reportPerPage: 5 
+                });
+            }).catch(function(err){
+                console.log(err);
+            });
+        }).catch(function(err){
+            console.log(err);
+        });
+    }
+
     render() {
         var showDetail = this.state.showDetail;
         var index = this.state.index;
@@ -1207,6 +1233,7 @@ export class ListingPage extends Component {
                         lists={this.state.lists}
                         listItems={this.state.listItems}
                         listId={this.state.listId}
+                        onAddNewList={this.handleAddNewList}
                     />
                 </Col>
                 : null}

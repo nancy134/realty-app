@@ -21,7 +21,25 @@ export function getAll(query){
     }); 
 }
 
+export function create(body){
+    var url = process.env.REACT_APP_LISTING_SERVICE+"lists";
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'POST',
+            uri: url,
+            json: true,
+            body: body
+        };
+        rp(options).then(function(parsedBody){
+            resolve(parsedBody);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
 const lists = {
-    getAll
+    getAll,
+    create
 };
 export default lists;
