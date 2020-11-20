@@ -4,7 +4,9 @@ import {
     Row, Col,
     Tabs,
     Tab,
-    Button
+    Button,
+    Modal,
+    Form
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -43,14 +45,57 @@ function Toolbar(props){
     );
 }
 
+function AddNewListModal(props){
+    return(
+    <Modal
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        show={props.show}
+    >
+        <Modal.Header>
+            <Modal.Title>Add New List</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            <Form>
+                <Form.Label>List Name</Form.Label>
+                <Form.Control
+                    id="list_name"
+                    name="name"
+                    type="text"
+                    onChange={props.onListNameChange}
+                /> 
+            </Form>
+        </Modal.Body>
+        <Modal.Footer>
+            <Button
+                onClick={props.onHide}
+            >
+                Cancel
+            </Button>
+            <Button
+                onClick={props.onAddNewList}
+            >
+                Create List
+            </Button>
+        </Modal.Footer>
+    </Modal>
+    );
+
+}
+
 class ReportListings extends React.Component {
    
     constructor(props) {
         super(props);
         this.showDetailChange = this.showDetailChange.bind(this);
         this.handleListChange = this.handleListChange.bind(this);
-        this.handleSelectFavorite = this.handleSelectFavorite.bind(this);
+        this.handleAddNewList = this.handleAddNewList.bind(this);
+        this.handleHideAddListModal = this.handleHideAddListModal.bind(this);
+        this.handleListNameChange = this.handleListNameChange.bind(this);
 
+        this.state = {
+            showAddListModal: false
+        };
     }
     componentDidMount() {
     }
@@ -60,10 +105,29 @@ class ReportListings extends React.Component {
         this.props.onShowDetailChange(true, id, arrayIndex);
     }
     handleListChange(listTab){
-        this.props.onReportListChange(listTab);
+        if (listTab === "add"){
+            this.setState({
+                showAddListModal: true
+            });
+        } else {
+            this.props.onReportListChange(listTab);
+        }
     }
-    handleSelectFavorite(e, id){
-        e.stopPropagation();
+    handleAddNewList(){
+        this.props.onAddNewList(this.state.listName);
+        this.setState({
+            showAddListModal: false
+        });
+    }
+    handleHideAddListModal(){
+        this.setState({
+            showAddListModal: false
+        });
+    }
+    handleListNameChange(event){
+        this.setState({
+            listName: event.target.value
+        });
     }
     render() {
         if (this.props.lists.length > 0){
@@ -76,6 +140,12 @@ class ReportListings extends React.Component {
 
         return (
         <div>
+            <AddNewListModal
+                show={this.state.showAddListModal}
+                onAddNewList={this.handleAddNewList}
+                onHide={this.handleHideAddListModal}
+                onListNameChange={this.handleListNameChange}
+            />
             { this.props.loggedIn ?
             <div id="stickyHeader" className="bg-white">
                 <Toolbar
@@ -133,7 +203,6 @@ class ReportListings extends React.Component {
                             onDelete={this.handleDelete}
                             listingMode={this.props.listingMode}
                             onItemClick={this.showDetailChange}
-                            onSelectFavorite={this.handleSelectFavorite}
                             showImage={showImage}
                             showShortDescription={showShortDescription}
                             showDeleteFromList={showDeleteFromList}
