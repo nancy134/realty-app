@@ -1,116 +1,104 @@
 import React from 'react';
 import {
-    Page,
     Text,
     View,
-    Document,
     StyleSheet,
-    PDFViewer,
     Image,
     Font
 } from '@react-pdf/renderer';
 import {generalNameValuePairs} from '../helpers/utilities';
 
 Font.register({
-family: 'Open Sans',
-fonts: [
-{ src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf' },
-{ src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-700.ttf', fontWeight: 700 }
-]
+    family: 'Open Sans',
+    fonts: [
+        { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf' },
+        { src: 'https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-700.ttf', fontWeight: 700 }
+    ]
 });
 
 const BORDER_COLOR = '#bfbfbf'
 const BORDER_STYLE = 'solid'
 const COL1_WIDTH = 20
-//const COLN_WIDTH = (100 - COL1_WIDTH) / 3
 const COLN_WIDTH = 100/4
 
-// Create styles
 const styles = StyleSheet.create({
-  body: {
-    padding: 10
-  },
-  table: { 
-    display: "table", 
-    width: "auto", 
-    borderStyle: BORDER_STYLE, 
-    borderColor: BORDER_COLOR,
-    borderWidth: 1, 
-    borderRightWidth: 0, 
-    borderBottomWidth: 0,
-    marginTop: 10,
-    //marginLeft: 20,
-    marginRight: 20
-  }, 
-  tableNoBorder: {
-      display: "table",
-      width: "auto",
-      marginTop: 10,
-      marginRight: 20
-  },
-  tableRow: { 
-    margin: 'auto',
-    flexDirection: "row" 
-  }, 
-  tableCol1Header: { 
-    width: COL1_WIDTH + '%', 
-    borderStyle: BORDER_STYLE, 
-    borderColor: BORDER_COLOR,
-    borderBottomColor: '#000',
-    borderWidth: 1, 
-    borderLeftWidth: 0, 
-    borderTopWidth: 0
-  },     
-  tableColHeader: { 
-    width: COLN_WIDTH + "%", 
-    borderStyle: BORDER_STYLE, 
-    borderColor: BORDER_COLOR,
-    borderBottomColor: '#000',
-    borderWidth: 1, 
-    borderLeftWidth: 0, 
-    borderTopWidth: 0
-  },   
-  tableCol1: { 
-    width: COL1_WIDTH + '%', 
-    borderStyle: BORDER_STYLE, 
-    borderColor: BORDER_COLOR,
-    borderWidth: 1, 
-    borderLeftWidth: 0, 
-    borderTopWidth: 0 
-  },   
-  tableCol: { 
-    width: COLN_WIDTH + "%", 
-    borderStyle: BORDER_STYLE, 
-    borderColor: BORDER_COLOR,
-    borderWidth: 1, 
-    borderLeftWidth: 0, 
-    borderTopWidth: 0 
-  },
-  tableColNoBorder: {
-    width: COLN_WIDTH + "%"
-  },
-  tableCellHeader: {
-    margin: 5, 
-    fontSize: 12,
-    fontWeight: 500
-  },  
-  tableCellNoBorder: {
-    fontSize: 10
-  },
-  tableCell: { 
-    margin: 5, 
-    fontSize: 10 
-  }
-
+    body: {
+        padding: 10
+    },
+    table: { 
+        display: "table", 
+        width: "auto", 
+        borderStyle: BORDER_STYLE, 
+        borderColor: BORDER_COLOR,
+        borderWidth: 1, 
+        borderRightWidth: 0, 
+        borderBottomWidth: 0,
+        marginTop: 10,
+        //marginLeft: 20,
+        marginRight: 20
+    }, 
+    tableNoBorder: {
+        display: "table",
+        width: "auto",
+        marginTop: 10,
+        marginRight: 20
+    },
+    tableRow: { 
+        margin: 'auto',
+        flexDirection: "row" 
+    }, 
+    tableCol1Header: { 
+        width: COL1_WIDTH + '%', 
+        borderStyle: BORDER_STYLE, 
+        borderColor: BORDER_COLOR,
+        borderBottomColor: '#000',
+        borderWidth: 1, 
+        borderLeftWidth: 0, 
+        borderTopWidth: 0
+    },     
+    tableColHeader: { 
+        width: COLN_WIDTH + "%", 
+        borderStyle: BORDER_STYLE, 
+        borderColor: BORDER_COLOR,
+        borderBottomColor: '#000',
+        borderWidth: 1, 
+        borderLeftWidth: 0, 
+        borderTopWidth: 0
+    },   
+    tableCol1: { 
+        width: COL1_WIDTH + '%', 
+        borderStyle: BORDER_STYLE, 
+        borderColor: BORDER_COLOR,
+        borderWidth: 1, 
+        borderLeftWidth: 0, 
+        borderTopWidth: 0 
+    },   
+    tableCol: { 
+        width: COLN_WIDTH + "%", 
+        borderStyle: BORDER_STYLE, 
+        borderColor: BORDER_COLOR,
+        borderWidth: 1, 
+        borderLeftWidth: 0, 
+        borderTopWidth: 0 
+    },
+    tableColNoBorder: {
+        width: COLN_WIDTH + "%"
+    },
+    tableCellHeader: {
+        margin: 5, 
+        fontSize: 12,
+        fontWeight: 500
+    },  
+    tableCellNoBorder: {
+        fontSize: 10
+    },
+    tableCell: { 
+        margin: 5, 
+        fontSize: 10 
+    }
 });
 
-//        <PDFDownloadLink document={MyDocument} fileName="somename.pdf">
-//          {({ blob, url, loading, error }) =>
-//            loading ? "Loading document..." : "Download now!"
-//          }
-//        </PDFDownloadLink>
-
-function Header(props){
+export function Header(props){
     var listing = props.listing;
     var title = listing.address + ", " + listing.city + ", " + listing.zip;
     return(
@@ -128,7 +116,7 @@ function Header(props){
     );
 }
 
-function Overview(props){
+export function Overview(props){
     var listing = props.listing;
     return(
         <View
@@ -170,7 +158,7 @@ function Overview(props){
     );
 }
 
-function SabreImage(props){
+export function SabreImage(props){
     var image = props.image;
     return(
         <Image
@@ -190,7 +178,7 @@ function SabreImage(props){
 
 }
 
-function SabreImages(props){
+export function SabreImages(props){
     var listing = props.listing;
     return(
         <View
@@ -227,7 +215,7 @@ function SabreImages(props){
     );
 }
 
-function Spaces(props){
+export function Spaces(props){
       var spaces = props.spaces;
       return(
       <View
@@ -281,7 +269,8 @@ function Spaces(props){
       </View>
       );
 }
-function NameValueRows(props){
+
+export function NameValueRows(props){
 
     var nvps = props.nvps;
     var length = props.nvps.length;
@@ -358,7 +347,8 @@ function NameValueRows(props){
         </View>
     );
 }
-function General(props){
+
+export function General(props){
     var nvps = generalNameValuePairs(props.listing);
     console.log("nvps:");
     console.log(nvps);
@@ -390,7 +380,7 @@ function General(props){
     );
 }
 
-function Broker(props){
+export function Broker(props){
     var listing = props.listing;
     return(
         <View
@@ -421,84 +411,38 @@ function Broker(props){
         </Text>
         </View>
     );
-
 }
 
-export class PDF extends React.Component{
-/*
-    render(){
-        return (
-        <div >
-            <PDFViewer style={newstyles.viewer}>
-                <Document>
-                    <Page size="A4" style={newstyles.page}>
-                        <View style={newstyles.section}>
-                            <Text>Section #1</Text>
-                        </View>
-                        <View style={newstyles.section}>
-                            <Text>Section #2</Text>
-                        </View>
-                    </Page>
-                </Document>
-            </PDFViewer>
-        </div>
-        );
-    }
-*/
-    render(){
-        var listing = this.props.listing;
-        var generalNvps = generalNameValuePairs(listing);
-
-        return(
-        <PDFViewer
+export function ListItems(props){
+    var listItems = props.listItems;
+    return(
+        <View
             style={{
-                position: 'absolute',
-                height: '100%',
-                width: '95%' 
+                flexDirection: 'column',
+                marginLeft: 20
             }}
         >
-            <Document>
-                <Page
-                    size="A4"
-                >
-                    <View
-                        style={{
-                            fontFamily: "Open Sans",
-                            margin: 10,
-                            fontSize: 12,
-                            flexDirection: 'column'
-                        }}
-                    >
-                        <Header
-                            listing={listing}
-                        />
-                        <Overview
-                            listing={listing}
-                        />
-                        {listing.images.length ?
-                        <SabreImages
-                            listing={listing}
-                        />
-                        : null}
-                        {listing.spaces.length ?
-                        <Spaces
-                            spaces={listing.spaces}
-                        />
-                        : null}
-                        {generalNvps.length ?
-                        <General
-                            listing={listing}
-                            nvps={generalNvps}
-                        />
-                        : null}
-                        <Broker
-                            listing={listing}
-                        />
-                    </View>
-                </Page>
-            </Document>
-        </PDFViewer>
-        );
-    }
+        {listItems.map((listItem, index) => (
+            <View key={index}>
+                <Text>
+                {listItem.listing.versions[0].address}
+                </Text>
+            </View>
+        ))}
+        </View>
+    );
+}
+
+const PDFHelper = {
+    Header,
+    Overview,
+    SabreImage,
+    SabreImages,
+    Spaces,
+    NameValueRows,
+    General,
+    Broker,
+    ListItems
 };
-export default PDF;
+
+export default PDFHelper;

@@ -5,6 +5,7 @@ import ListingPage from './containers/ListingPage';
 import AccountPage from './containers/AccountPage';
 import InstructionPage from './containers/InstructionPage';
 import ReportPage from './containers/ReportPage';
+import ReportListPage from './containers/ReportListPage';
 
 class Routes extends React.Component {
 
@@ -46,7 +47,14 @@ render(){
             )
         }
     />
-    <Route path="/report/:id" exact component={ReportPage} />
+    <Route
+        path="/report/:id"
+        exact component={ReportPage}
+    />
+    <Route
+        path="/report/list/:id"
+        exact component={ReportListPage}
+    />
     <Route path="/account" exact component={AccountPage} />
     <Route path="/instructions" exact component={InstructionPage} />
     <Route

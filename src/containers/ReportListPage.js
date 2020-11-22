@@ -1,8 +1,8 @@
 import React from 'react';
-import PDFSingleDetail from '../components/PDFSingleDetail';
-import listingService from '../services/listings';
+import PDFListDetail from '../components/PDFListDetail';
+import listItemService from '../services/listItems';
 
-export class ReportPage extends React.Component {
+export class ReportListPage extends React.Component {
     constructor(props){
         super(props);
         var id = null;
@@ -11,28 +11,29 @@ export class ReportPage extends React.Component {
         }
         this.state = {
             id: id,
-            listing: null
+            listItems: null
         }
     }
 
     componentDidMount(){
         var that = this;
-        listingService.get(this.state.id).then(function(data){
+        var query="perPage=20&page=1&ListId="+this.state.id;
+        listItemService.getAll(query).then(function(data){
             that.setState({
-                listing: data.listing
+                listItems: data.listItems.rows
             });
         }).catch(function(err){
-            console.log("err:");
             console.log(err);
         });
     }
 
     render() {
-        if (this.state.listing){
+        console.log(this.state.listItems);
+        if (this.state.listItems){
         return (
         <div>
-            <PDFSingleDetail
-                listing={this.state.listing}
+            <PDFListDetail
+                listItems={this.state.listItems}
             />
         </div>
         );
@@ -46,4 +47,4 @@ export class ReportPage extends React.Component {
     }
 }
 
-export default ReportPage;
+export default ReportListPage;
