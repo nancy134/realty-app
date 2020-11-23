@@ -1,5 +1,6 @@
 import React from 'react';
 import PDFListDetail from '../components/PDFListDetail';
+import PDFListSummary from '../components/PDFListSummary';
 import listItemService from '../services/listItems';
 
 export class ReportListPage extends React.Component {
@@ -9,9 +10,13 @@ export class ReportListPage extends React.Component {
         if (props.match.params.id){
             id = props.match.params.id;
         }
+        const params = new URLSearchParams(props.location.search);
+        var reportType = params.get('reportType');
+        console.log("reportType: "+reportType);
         this.state = {
             id: id,
-            listItems: null
+            listItems: null,
+            reportType: reportType
         }
     }
 
@@ -28,13 +33,19 @@ export class ReportListPage extends React.Component {
     }
 
     render() {
-        console.log(this.state.listItems);
         if (this.state.listItems){
         return (
         <div>
+            {this.state.reportType === "detail" ?
             <PDFListDetail
                 listItems={this.state.listItems}
             />
+            : null}
+            {this.state.reportType === "summary" ?
+            <PDFListSummary
+                listItems={this.state.listItems}
+            />
+            : null}
         </div>
         );
         } else {

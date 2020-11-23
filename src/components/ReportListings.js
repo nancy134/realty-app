@@ -23,12 +23,18 @@ function Toolbar(props){
     <div className="pt-1">
         <Row>
             <Col>
-                <Button size="sm">
+                <Button
+                    size="sm"
+                    onClick={props.onReportListSummary}
+                >
                     <FontAwesomeIcon icon={faFilePdf} />&nbsp;Summary
                 </Button>
             </Col>
             <Col>
-                <Button size="sm">
+                <Button
+                    size="sm"
+                    onClick={props.onReportListDetail}
+                >
                     <FontAwesomeIcon icon={faFilePdf} />&nbsp;Detail
                 </Button>
             </Col>
@@ -92,6 +98,8 @@ class ReportListings extends React.Component {
         this.handleAddNewList = this.handleAddNewList.bind(this);
         this.handleHideAddListModal = this.handleHideAddListModal.bind(this);
         this.handleListNameChange = this.handleListNameChange.bind(this);
+        this.handleReportListDetail = this.handleReportListDetail.bind(this);
+        this.handleReportListSummary = this.handleReportListSummary.bind(this);
 
         this.state = {
             showAddListModal: false
@@ -129,6 +137,24 @@ class ReportListings extends React.Component {
             listName: event.target.value
         });
     }
+    handleReportListDetail(){
+        var id = this.props.listId;
+        var url = 
+            window.location.protocol + 
+            "//" + window.location.hostname + 
+            "/report/list/" + id +
+            "?reportType=detail";
+        window.open(url, "_blank");
+    }
+    handleReportListSummary(){
+        var id = this.props.listId;
+        var url =
+            window.location.protocol +
+            "//" + window.location.hostname +
+            "/report/list/" + id +
+            "?reportType=summary";
+        window.open(url, "_blank");
+    }
     render() {
         if (this.props.lists.length > 0){
 
@@ -154,6 +180,8 @@ class ReportListings extends React.Component {
                     perPage={this.props.perPage}
                     onNewPage={this.props.onNewPage}
                     listingMode={this.props.listingMode}
+                    onReportListDetail={this.handleReportListDetail}
+                    onReportListSummary={this.handleReportListSummary}
                 />
                 <Tab.Container>
                     <Tabs

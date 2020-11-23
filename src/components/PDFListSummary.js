@@ -5,7 +5,7 @@ import {
     Font
 } from '@react-pdf/renderer';
 import {
-    ListingDetail,
+    ListingSummary,
 } from '../helpers/PDF';
 
 Font.register({
@@ -16,10 +16,22 @@ fonts: [
 ]
 });
 
-export class PDFListDetail extends React.Component{
+export class PDFListSummary extends React.Component{
     render(){
         var listItems = this.props.listItems;
 
+        var perPage = 4;
+        var count = listItems.length;
+        var numPages = Math.floor(count/perPage);
+        numPages += 1;
+        var pages = [];
+        for (var i=0; i<numPages; i++){
+           var index1 = i*perPage;
+           var index2 = (i+1)*perPage;
+           var pageItems = listItems.slice(index1,index2); 
+           pages.push(pageItems);
+        }
+        
         return(
         <PDFViewer
             style={{
@@ -29,11 +41,11 @@ export class PDFListDetail extends React.Component{
             }}
         >
             <Document>
-                {listItems.map((listItem, index) =>
+                {pages.map((listItems, index) =>
                 ( 
-                <ListingDetail
+                <ListingSummary
                     key={index}
-                    listing={listItem.listing.versions[0]}
+                    listItems={listItems}
                 />
                 ))}
             </Document>
@@ -41,4 +53,4 @@ export class PDFListDetail extends React.Component{
         );
     }
 };
-export default PDFListDetail;
+export default PDFListSummary;

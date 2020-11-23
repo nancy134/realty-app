@@ -4,7 +4,8 @@ import {
     View,
     StyleSheet,
     Image,
-    Font
+    Font,
+    Page
 } from '@react-pdf/renderer';
 import {generalNameValuePairs} from '../helpers/utilities';
 
@@ -349,10 +350,7 @@ export function NameValueRows(props){
 }
 
 export function General(props){
-    var nvps = generalNameValuePairs(props.listing);
-    console.log("nvps:");
-    console.log(nvps);
-    console.log("length/2: "+Math.ceil(nvps.length/2));
+    //var nvps = generalNameValuePairs(props.listing);
     return(
     <View
         style={{
@@ -412,24 +410,142 @@ export function Broker(props){
         </View>
     );
 }
-
-export function ListItems(props){
+export function ListingSummary(props){
     var listItems = props.listItems;
+    var count = props.listItems.length;
     return(
-        <View
-            style={{
-                flexDirection: 'column',
-                marginLeft: 20
-            }}
+        <Page
+            size="A4"
         >
-        {listItems.map((listItem, index) => (
-            <View key={index}>
-                <Text>
-                {listItem.listing.versions[0].address}
-                </Text>
+            <View
+                style={{
+                    fontFamily: "Open Sans",
+                    margin: 10,
+                    fontSize: 12,
+                    flexDirection: 'column'
+                }}
+            >
+                <View>
+                    <Text
+                        style={{
+                            marginLeft: 20,
+                            marginRight: 20,
+                            fontSize: 14,
+                            backgroundColor: '#e4e4e4'
+                        }}
+                    >
+                    Summary Report
+                    </Text>
+                </View>
+                <View style={styles.table}>
+                    <View style={styles.tableRow}>
+                        {listItems.map((listItem, index) => (
+                            <View key={index} style={styles.tableCol}>
+                                <Text style={styles.tableCell}>{listItem.listing.versions[0].address}</Text>
+                            </View>
+                         ))}
+                         { count < 4 ?
+                            <View key={1} style={styles.tableCol}>
+                            </View>
+                         : null}
+                         { count < 3 ?
+                            <View key={1} style={styles.tableCol}>
+                            </View>
+                         : null} 
+                         { count < 2 ?
+                            <View key={1} style={styles.tableCol}>
+                            </View>
+                         : null} 
+                    </View>
+                    <View style={styles.tableRow}>
+                        {listItems.map((listItem, index) => (
+                            <View key={index} style={styles.tableCol}>
+                                <Text style={styles.tableCell}>{listItem.listing.versions[0].city}, {listItem.listing.versions[0].state}</Text>
+                            </View>
+                         ))}
+                         { count < 4 ?
+                            <View key={1} style={styles.tableCol}>
+                            </View>
+                         : null}
+                         { count < 3 ?
+                            <View key={1} style={styles.tableCol}>
+                            </View>
+                         : null}
+                         { count < 2 ?
+                            <View key={1} style={styles.tableCol}>
+                            </View>
+                         : null}
+                    </View>
+
+                    <View style={styles.tableRow}>
+                        {listItems.map((listItem, index) => (
+                            <View key={index} style={styles.tableCol}>
+                                <Text style={styles.tableCell}>{listItem.listing.versions[0].listingType}</Text>
+                            </View>
+                         ))}
+                         { count < 4 ?
+                            <View key={1} style={styles.tableCol}>
+                            </View>
+                         : null}
+                         { count < 3 ?
+                            <View key={1} style={styles.tableCol}>
+                            </View>
+                         : null}
+                         { count < 2 ?
+                            <View key={1} style={styles.tableCol}>
+                            </View>
+                         : null}
+                    </View>
+
+                </View>
             </View>
-        ))}
-        </View>
+        </Page>
+    );
+}
+export function ListingDetail(props){
+
+    var listing = props.listing;
+    var generalNvps = generalNameValuePairs(listing);
+
+    return(
+        <Page
+            size="A4"
+        >
+            <View
+                style={{
+                    fontFamily: "Open Sans",
+                    margin: 10,
+                    fontSize: 12,
+                    flexDirection: 'column'
+                }}
+            >
+                <Header
+                    listing={listing}
+                />
+                <Overview
+                    listing={listing}
+                />
+                {listing.images && listing.images.length ?
+                    <SabreImages
+                        listing={listing}
+                    />
+                : null}
+                {listing.spaces && listing.spaces.length ?
+                    <Spaces
+                        spaces={listing.spaces}
+                    />
+                : null}
+                {generalNvps.length ?
+                    <General
+                        listing={listing}
+                        nvps={generalNvps}
+                    />
+                : null}
+                <Broker
+                    listing={listing}
+                />
+            </View>
+        </Page>
     );
 }
 
@@ -442,7 +558,7 @@ const PDFHelper = {
     NameValueRows,
     General,
     Broker,
-    ListItems
+    ListingSummary
 };
 
 export default PDFHelper;

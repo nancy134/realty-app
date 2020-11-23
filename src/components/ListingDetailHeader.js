@@ -88,7 +88,13 @@ class ListingDetailHeader extends React.Component {
     }
     handleReport(){
         var id = this.props.listing.id;
-        window.open("https://sabre.phowma.com/report/"+id,"_blank");
+        var url =
+            window.location.protocol +
+            "//" +
+            window.location.hostname +
+            "/report/" +
+            id;
+        window.open(url, "_blank");
     }
     render() {
         const editMode = this.props.editMode;
