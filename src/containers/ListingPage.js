@@ -780,7 +780,7 @@ export class ListingPage extends Component {
                 localState.readyForMap = true;
 
                 listService.getAll().then(function(lists){
-                    if (lists.lists.rows){
+                    if (lists.lists.rows.length > 0){
                         var listId = lists.lists.rows[0].id; 
                         var query = "perPage=5&page=1&ListId="+listId;
                         listItemService.getAll(query).then(function(listItems){
@@ -794,10 +794,31 @@ export class ListingPage extends Component {
                         }).catch(function(err){
                             console.log(err);
                         });
+                    } else {
+                        var body = {
+                            name: "List 1"
+                        };
+                        listService.create(body).then(function(list){
+                            var query = "perPage=5&page=1&ListId="+list.id;
+                            listService.getAll(query).then(function(lists){
+                                localState.lists = lists.lists.rows;
+                                localState.listId = list.id;
+                                localState.reportPage = 1;
+                                localState.reportCount = 0;
+                                localState.reportPerPage = 5;
+                               that.setState(localState);
+                            }).catch(function(err){
+                                console.log(err);
+                            });
+                        }).catch(function(err){
+                            console.log(err);
+                        });
                     }
                 }).catch(function(err){
+                    console.log(err);
                 });
             }).catch(function(err){
+                console.log(err);
             });
         }
     }

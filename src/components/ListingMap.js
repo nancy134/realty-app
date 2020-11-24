@@ -50,7 +50,6 @@ class ListingMap extends React.Component {
     };
 
     displayMarkers = () => {
-        console.log("displayMarkers");
         if (this.props.markers){
             var markers = this.props.markers;
             
@@ -73,7 +72,6 @@ class ListingMap extends React.Component {
     }
 
     onReady = (mapProps, map) => {
-        console.log("onReady");
     }
     handleZoomChanged(props, map){
 
@@ -105,7 +103,6 @@ class ListingMap extends React.Component {
         if (this.props.onBoundsChange) this.props.onBoundsChange(bounds, center, zoomLevel);
     }
     componentDidUpdate(){
-        console.log("componentDidUpdate");
         var bounds = new this.props.google.maps.LatLngBounds();
         var nePoint = {
             lat: parseFloat(this.props.bounds.lat0),
@@ -130,7 +127,6 @@ class ListingMap extends React.Component {
         }
     }
     componentDidMount(){
-        console.log("componentDidMount");
         var bounds = new this.props.google.maps.LatLngBounds();
         var nePoint = {
             lat: parseFloat(this.props.bounds.lat0),
@@ -162,7 +158,6 @@ class ListingMap extends React.Component {
            {lat: parseFloat(this.props.bounds.lat0), lng: parseFloat(this.props.bounds.lng1)},
            {lat: parseFloat(this.props.bounds.lat0), lng: parseFloat(this.props.bounds.lng0)}
         ];
-        console.log("showDetail: "+showDetail);
         if (!showDetail) {
             return (
             <Map

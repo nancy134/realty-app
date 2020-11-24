@@ -1,5 +1,5 @@
 .bimage{
-  background: url("/office.jpg");
+  background: url("https://sabre-images.s3.amazonaws.com/office.jpg");
 }
 .jtron{
     opacity: 0.9;
