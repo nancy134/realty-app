@@ -5,16 +5,7 @@ import {
     Dropdown,
     DropdownButton
 } from 'react-bootstrap';
-import { isAuthenticated } from '../helpers/authentication';
-import { getUserName } from '../helpers/authentication';
-import { deleteUser } from '../helpers/authentication';
-import { 
-    loginResponse,
-    signupResponse,
-    confirmResponse,
-    forgotPasswordResponse,
-    confirmForgotPasswordResponse
-} from '../helpers/authentication';
+import authenticationService from '../helpers/authentication';
 import AccountLoginModal from './AccountLoginModal';
 import AccountRegisterModal from './AccountRegisterModal';
 import AccountConfirmModal from './AccountConfirmModal';
@@ -54,7 +45,7 @@ export class AccountButton extends Component{
         }
     }
     componentDidMount(){
-        if (isAuthenticated()){
+        if (authenticationService.isAuthenticated()){
             this.setState({authenticated: true});
         }
     }
@@ -63,8 +54,7 @@ export class AccountButton extends Component{
         this.setState({
             loginProgress: true
         });
-        var loginResponsePromise = loginResponse(email, password);
-        loginResponsePromise.then(function(result){
+        authenticationService.loginResponse(email, password).then(function(result){
             that.setState({
                 authenticated: true,
                 modalShowLogin: false,
@@ -81,8 +71,7 @@ export class AccountButton extends Component{
     }
     onRegister(email, password){
         var that = this;
-        var signupResponsePromise = signupResponse(email,password);
-        signupResponsePromise.then(function(result){
+        authenticationService.signupResponse(email, password).then(function(result){
             that.setState({
                 email:email,
                 modalShowRegister:false,
@@ -99,8 +88,7 @@ export class AccountButton extends Component{
     }
     onConfirm(email,code){
         var that = this;
-        var confirmResponsePromise = confirmResponse(email, code);
-        confirmResponsePromise.then(function(result){
+        authenticationService.confirmResponse(email, code).then(function(result){
             that.setState({
                 modalShowConfirm:false,
                 modalShowLogin:true,
@@ -123,8 +111,7 @@ export class AccountButton extends Component{
     }
     handleForgotPassword(email){
         var that=this;
-        var forgotPasswordResponsePromise = forgotPasswordResponse(email);
-        forgotPasswordResponsePromise.then(function(result){
+        authenticationService.forgotPasswordResponse(email).then(function(result){
             that.setState({
                 modalShowForgotPassword: false,
                 modalShowForgotConfirm: true,
@@ -138,8 +125,7 @@ export class AccountButton extends Component{
     }
     handleForgotConfirm(code, password){
         var that=this;
-        var confirmForgotPasswordResponsePromise = confirmForgotPasswordResponse(code, password, this.state.email);
-        confirmForgotPasswordResponsePromise.then(function(result){
+        authenticationService.confirmForgotPasswordResponse(code, password).then(function(result){
             that.setState({
                 modalShowForgotConfirm: false,
                 modalShowLogin: true
@@ -155,7 +141,7 @@ export class AccountButton extends Component{
         window.location.href = url;
     }
     onLogout(){
-       deleteUser();
+       authenticationService.deleteUser();
        this.setState({authenticated: false});
        this.props.onLogout();
     }
@@ -187,7 +173,7 @@ export class AccountButton extends Component{
         });
     }
     render(){
-        const userName = getUserName();
+        const userName = authenticationService.getUserName();
         return(
         <span>
             <span className="align-top text-danger">

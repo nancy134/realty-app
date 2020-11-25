@@ -16,8 +16,7 @@ import ListingAddAddress from '../components/ListingAddAddress';
 import ListingAddOverview from '../components/ListingAddOverview';
 import listingService from '../services/listings';
 import spaceService from '../services/spaces';
-import {getUserEmail} from '../helpers/authentication';
-import { isOwner } from '../helpers/authentication';
+import authenticationService from '../helpers/authentication';
 import { CSSTransition } from 'react-transition-group';
 import DeleteModal from '../components/DeleteModal';
 import DeleteListingModal from '../components/DeleteListingModal';
@@ -336,7 +335,7 @@ export class ListingPage extends Component {
         });
     }
     handleListingOverviewNext(listing){
-        listing.owner = getUserEmail();
+        listing.owner = authenticationService.getUserEmail();
         var createPromise = listingService.create(listing);
         var that = this;
         createPromise.then(function(data) {
@@ -504,7 +503,7 @@ export class ListingPage extends Component {
         });
     }
     handleCreate(listing){
-        listing.owner = getUserEmail();
+        listing.owner = authenticationService.getUserEmail();
         var createPromise = listingService.create(listing);
         createPromise(function(data){
             this.setState({
@@ -643,7 +642,7 @@ export class ListingPage extends Component {
             var getPromise = listingService.get(localState.index);
             getPromise.then(function(data){
                 var owner = false;
-                if (isOwner(data.listing.owner)){
+                if (authenticationService.isOwner(data.listing.owner)){
                     owner = true;
                 }
                 // Create accordion text
@@ -685,8 +684,8 @@ export class ListingPage extends Component {
             var query = "";
             var markerQuery = "";
             if (lMode === "myListings" ){
-                query = "perPage=5&page="+localState.page+"&owner="+getUserEmail();
-                markerQuery = "perPage=250&page=1&owner="+getUserEmail();
+                query = "perPage=5&page="+localState.page+"&owner="+authenticationService.getUserEmail();
+                markerQuery = "perPage=250&page=1&owner="+authenticationService.getUserEmail();
             } else {
                 query = 'perPage=20&page='+localState.page;
                 markerQuery = "perPage=250&page=1";

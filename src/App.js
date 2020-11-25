@@ -7,7 +7,7 @@ import {
 } from 'react-bootstrap';
 import Routes from './Routes';
 import AccountButton from './components/AccountButton';
-import { isAuthenticated } from './helpers/authentication';
+import authenticationService from './helpers/authentication';
 
 class App extends React.Component {
   constructor(props){
@@ -21,7 +21,7 @@ class App extends React.Component {
       this.handleConfirm = this.handleConfirm.bind(this);
   }
   componentDidMount(){
-      if (isAuthenticated()){
+      if (authenticationService.isAuthenticated()){
           this.setState({
               loggedIn: true
           });

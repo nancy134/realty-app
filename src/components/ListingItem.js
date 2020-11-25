@@ -15,7 +15,7 @@ import {
 import {
     faStar
 } from '@fortawesome/free-regular-svg-icons';
-import { getUserEmail } from '../helpers/authentication';
+import authenticationService from '../helpers/authentication';
 
 function getMinSize(array){
     return array.reduce((min, p) => p.size < min ? p.size : min, array[0].size);
@@ -190,7 +190,7 @@ class ListingItem extends React.Component {
                                 className="listing-title text-danger"  
                             >
                                 <span>{address}</span>
-                                { listing.owner === getUserEmail() && this.props.listingMode === "myListings" && !this.props.reporting ?
+                                { listing.owner === authenticationService.getUserEmail() && this.props.listingMode === "myListings" && !this.props.reporting ?
                                 <span 
                                     data-id={listing.ListingId} 
                                     onClick={(e) => this.props.onDelete(e, listing.ListingId)}
@@ -245,7 +245,7 @@ class ListingItem extends React.Component {
                                 {listing.city}, {listing.state} {listing.zip}
                             </Card.Subtitle>
                             : null }
-                            { listing.owner === getUserEmail() ?
+                            { listing.owner === authenticationService.getUserEmail() ?
                             <div 
                                 className="text-danger"
                             >

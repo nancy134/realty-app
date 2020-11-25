@@ -16,6 +16,12 @@ export function getUserName(){
     const cookies = new Cookies();
     return cookies.get('name');
 }
+
+export function getJwt(){
+    const cookies = new Cookies();
+    return cookies.get('jwt');
+}
+
 export function isOwner(owner){
   if (isAuthenticated()){
       if (owner === getUserEmail()){
@@ -111,3 +117,18 @@ export function confirmForgotPasswordResponse(code, password, email){
         });
     }); 
 }
+
+const authentication = {
+    isAuthenticated,
+    getUserEmail,
+    getUserName,
+    getJwt,
+    isOwner,
+    deleteUser,
+    loginResponse,
+    signupResponse,
+    confirmResponse,
+    forgotPasswordResponse,
+    confirmForgotPasswordResponse
+};
+export default authentication;

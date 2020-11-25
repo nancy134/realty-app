@@ -17,7 +17,7 @@ import geolocationService from '../helpers/geolocation';
 import {
     getLatLng
 } from 'react-places-autocomplete';
-import {getUserEmail} from '../helpers/authentication';
+import authenticationService from '../helpers/authentication';
 
 const AddressSchema = Yup.object().shape({
     city: Yup.string().required('City is required'),
@@ -136,7 +136,7 @@ class ListingAddAddress extends React.Component{
             values.city = city;
             values.state = state;
             values.zip = zip;
-            var owner = getUserEmail();
+            var owner = authenticationService.getUserEmail();
             var markers = [{
                 id: 0,
                 location: values.location

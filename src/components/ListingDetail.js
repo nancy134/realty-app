@@ -20,7 +20,7 @@ import spaces from '../services/spaces';
 import units from '../services/units';
 import tenants from '../services/tenants';
 import portfolios from '../services/portfolios';
-import { isOwner, getUserEmail } from '../helpers/authentication';
+import authenticationService from '../helpers/authentication';
 import listingService from '../services/listings';
 import imageService from '../services/images';
 import {formatDateTime} from '../helpers/utilities';
@@ -307,7 +307,7 @@ class ListingDetail extends React.Component {
         var that = this;
         this.setState({spaceSaving: true});
         if (!space.ListingVersionId){
-             var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
+             var listingBody = {publishStatus: 'Draft', owner: authenticationService.getUserEmail()};
              var createPromise = listingService.create(listingBody);
              createPromise.then(function(listingVersion){
                  space.ListingVersionId = listingVersion.listing.id;
@@ -378,7 +378,7 @@ class ListingDetail extends React.Component {
         var that = this;
         this.setState({unitSaving: true});
         if (!unit.ListingVersionId){
-             var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
+             var listingBody = {publishStatus: 'Draft', owner: authenticationService.getUserEmail()};
              var createPromise = listingService.create(listingBody);
              createPromise.then(function(listingVersion){
                  unit.ListingVersionId = listingVersion.listing.id;
@@ -449,7 +449,7 @@ class ListingDetail extends React.Component {
         var that = this;
         this.setState({tenantSaving: true});
         if (!tenant.ListingVersionId){
-             var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
+             var listingBody = {publishStatus: 'Draft', owner: authenticationService.getUserEmail()};
              var createPromise = listingService.create(listingBody);
              createPromise.then(function(listingVersion){
                  tenant.ListingVersionId = listingVersion.listing.id;
@@ -520,7 +520,7 @@ class ListingDetail extends React.Component {
         var that = this;
         this.setState({portfolioSaving: true});
         if (!portfolio.ListingVersionId){
-             var listingBody = {publishStatus: 'Draft', owner: getUserEmail()};
+             var listingBody = {publishStatus: 'Draft', owner: authenticationService.getUserEmail()};
              var createPromise = listingService.create(listingBody);
              createPromise.then(function(listingVersion){
                  portfolio.ListingVersionId = listingVersion.listing.id;
@@ -595,7 +595,7 @@ class ListingDetail extends React.Component {
         if (this.props.listingDetail){
             var listingDetail = this.props.listingDetail;
             if (this.props.listingDetail.listing){
-                if (isOwner(listingDetail.listing.owner)){
+                if (authenticationService.isOwner(listingDetail.listing.owner)){
                     this.props.onOwnerChange(true);
                 } else {
                     this.props.onOwnerChange(false);
