@@ -777,11 +777,11 @@ export class ListingPage extends Component {
                     localState.bounds = geolocationService.calculateBounds(localState.markers);
                 }
                 localState.readyForMap = true;
-
-                listService.getAll().then(function(lists){
+                var query = "owner="+authenticationService.getUserEmail();
+                listService.getAll(query).then(function(lists){
                     if (lists.lists.rows.length > 0){
                         var listId = lists.lists.rows[0].id; 
-                        var query = "perPage=5&page=1&ListId="+listId;
+                        query = "ListId="+listId;
                         listItemService.getAll(query).then(function(listItems){
                             localState.lists = lists.lists.rows;
                             localState.listItems = listItems.listItems.rows;
@@ -795,10 +795,12 @@ export class ListingPage extends Component {
                         });
                     } else {
                         var body = {
-                            name: "List 1"
+                            name: "List 1",
+                            owner: authenticationService.getUserEmail()
                         };
                         listService.create(body).then(function(list){
-                            var query = "perPage=5&page=1&ListId="+list.id;
+                            var query = "ListId="+list.id+
+                                "&owner="+authenticationService.getUserEmail();
                             listService.getAll(query).then(function(lists){
                                 localState.lists = lists.lists.rows;
                                 localState.listId = list.id;
@@ -1022,10 +1024,12 @@ export class ListingPage extends Component {
     handleAddNewList(listName){
         var that = this;
         var body = {
+            owner: authenticationService.getUserEmail(),
             name: listName
         };
         listService.create(body).then(function(list){
-            var query = "perPage=5&page=1&ListId="+list.id;
+            var query = "ListId="+list.id+
+                "&owner="+authenticationService.getUserEmail();
             listService.getAll(query).then(function(lists){
                 that.setState({
                     lists: lists.lists.rows,

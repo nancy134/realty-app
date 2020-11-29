@@ -1,6 +1,9 @@
-var rp = require('request-promise');
+import authenticationService from '../helpers/authentication';
+import rp from 'request-promise';
+import fetch from 'node-fetch';
 
-export function getAll(query,cb){
+export function getAll(query){
+    console.log("query: "+query);
     var url = "";
     if (query) {
         url = process.env.REACT_APP_LISTING_SERVICE+"listings?"+query;
@@ -8,17 +11,17 @@ export function getAll(query,cb){
         url = process.env.REACT_APP_LISTING_SERVICE+"listings";
     }
 
+    var jwt = authenticationService.getJwt();
+
     return new Promise(function(resolve, reject){
         var options = {
             method: 'GET',
-            uri: url,
-            json: true
+            headers: {'Authorization': jwt}
         };
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
-        }).catch(function(err){
-            reject(err.error);
-        });
+        fetch(url, options)
+            .then(res => res.json())
+            .then(json => resolve(json))
+            .catch(err => reject(err));
     });
 }
 

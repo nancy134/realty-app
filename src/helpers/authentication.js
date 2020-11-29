@@ -48,10 +48,11 @@ export function loginResponse(email, password){
         };
         var signinPromise = auth.signin(signinParams);
         signinPromise.then(function(result){
+            console.log(result);
             const cookies = new Cookies();
             cookies.set('email',email.toLowerCase());
             cookies.set('name', email);
-            cookies.set('jwt','dj39fjtyzRwiD09');
+            cookies.set('jwt',result.IdToken);
             resolve(result);
         }).catch(function(err){
             reject(err);
