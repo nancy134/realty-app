@@ -21,7 +21,7 @@ export function getDefaultLocation(){
     var lng1 = cookies.get('lng1'); 
 
     var props = {};
-    if (formatted_address || formatted_address === "undefined"){
+    if (formatted_address && formatted_address !== "undefined"){
         props = {
             formatted_address: formatted_address,
             lat0: lat0,
