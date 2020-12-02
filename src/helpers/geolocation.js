@@ -21,7 +21,7 @@ export function getDefaultLocation(){
     var lng1 = cookies.get('lng1'); 
 
     var props = {};
-    if (formatted_address){
+    if (formatted_address || formatted_address === "undefined"){
         props = {
             formatted_address: formatted_address,
             lat0: lat0,
@@ -32,6 +32,7 @@ export function getDefaultLocation(){
     } else {
         props = {
             formatted_address: "Stamford, CT, USA",
+            address: "Stamford, CT",
             lat0: 41.1796839,
             lat1: 40.96346,
             lng0: -73.495165,

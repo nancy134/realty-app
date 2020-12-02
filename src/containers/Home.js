@@ -56,7 +56,6 @@ export class Home extends Component {
         lat1: this.state.lat1,
         lng1: this.state.lng1
     };
-    console.log(defaultLocation);
     geolocationService.saveDefaultLocation(defaultLocation);
     window.location.href = url; 
   }
@@ -100,6 +99,9 @@ export class Home extends Component {
                 });
 
             });
+        }, function(err){
+            var defaultLocation = geolocationService.getDefaultLocation();
+            that.setState(defaultLocation); 
         });
     } else {
        console.log("geolocation not available");
