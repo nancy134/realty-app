@@ -38,6 +38,9 @@
 .modal-80w {
     max-width: 80% !important;
 }
+.modal-60w {
+    max-width: 60% !important;
+}
 
 .edit-button {
    font-size: 60%;

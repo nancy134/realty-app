@@ -24,6 +24,9 @@ import { GoogleApiWrapper } from 'google-maps-react';
 import geolocationService from '../helpers/geolocation';
 import listService from '../services/lists';
 import listItemService from '../services/listItems';
+import PublishWizardIntro from '../components/PublishWizardIntro';
+import PublishWizardPaymentMethod from '../components/PublishWizardPaymentMethod';
+import PublishWizardFinal from '../components/PublishWizardFinal';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -83,6 +86,9 @@ export class ListingPage extends Component {
         this.handleTransitionAccept = this.handleTransitionAccept.bind(this);
         this.handleTransitionCancel = this.handleTransitionCancel.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.handlePublishWizardIntroNext = this.handlePublishWizardIntroNext.bind(this);
+        this.handlePublishWizardPaymentMethodNext = this.handlePublishWizardPaymentMethodNext.bind(this);
+        this.handlePublishWizardFinalClose = this.handlePublishWizardFinalClose.bind(this);
 
         // Space
         this.handleAccordionChange = this.handleAccordionChange.bind(this);
@@ -126,6 +132,9 @@ export class ListingPage extends Component {
             showModal: false,
             transitionModalTitle: "",
             transitionModalMessage: "",
+            showPublishWizardIntro: false,
+            showPublishWizardPaymentMethod: false,
+            showPublishWizardFinal: false,
 
             // Listing
             index: index,
@@ -518,7 +527,29 @@ export class ListingPage extends Component {
     // Transition
     handleTransitionStart(){
         this.setState({
+            showPublishWizardIntro: true
+        });
+        /*
+        this.setState({
             transitionStart: true
+        });
+        */
+    }
+    handlePublishWizardIntroNext(){
+        this.setState({
+            showPublishWizardIntro: false,
+            showPublishWizardPaymentMethod: true
+        });
+    }
+    handlePublishWizardPaymentMethodNext(){
+        this.setState({
+            showPublishWizardPaymentMethod: false,
+            showPublishWizardFinal: true
+        });
+    }
+    handlePublishWizardFinalClose(){
+        this.setState({
+            showPublishWizardFinal: false
         });
     }
     handleTransitionHide(data, title, message){
@@ -1107,6 +1138,18 @@ export class ListingPage extends Component {
                 onHide={this.handleDeleteDraftListingHide}
                 saving={this.state.deleteDraftListingSaving}
                 onDelete={this.handleDeleteDraftListingConfirm}
+            />
+            <PublishWizardIntro
+                show={this.state.showPublishWizardIntro}
+                onNext={this.handlePublishWizardIntroNext}
+            />
+            <PublishWizardPaymentMethod
+                show={this.state.showPublishWizardPaymentMethod}
+                onNext={this.handlePublishWizardPaymentMethodNext}
+            />
+            <PublishWizardFinal
+                show={this.state.showPublishWizardFinal}
+                onClose={this.handlePublishWizardFinalClose}
             />
             <Modal show={this.state.showModal}>
                 <Modal.Header>
