@@ -100,7 +100,7 @@ class ListingAddAddress extends React.Component{
         });
 
     }
-    updateValues(results, values){
+    updateValues(results, values, setFieldValue){
         var that=this;
         var street_address = "";
         var street_number = "";
@@ -133,9 +133,9 @@ class ListingAddAddress extends React.Component{
                 }
             }
             var addr = street_number + " " + street_address;
-            values.city = city;
-            values.state = state;
-            values.zip = zip;
+            setFieldValue('city', city);
+            setFieldValue('state', state);
+            setFieldValue('zip', zip);
             var owner = authenticationService.getUserEmail();
             var markers = [{
                 id: 0,
@@ -172,13 +172,14 @@ class ListingAddAddress extends React.Component{
         });
     }
 
-    handleSelectAddress(address, values){
+    handleSelectAddress(address, values, setFieldValue){
+            console.log(setFieldValue);
             var that = this;
             this.setState({
                 showVerifyAddressModal: true
             });
             geolocationService.geocodeByAddr(address, values).then(function(results){
-                that.updateValues(results, values);
+                that.updateValues(results, values, setFieldValue);
             }).catch(function(err){
                 this.setState({
                     showVerifyAddressModal: false
@@ -197,13 +198,13 @@ class ListingAddAddress extends React.Component{
             address: address
         });
     }
-    handleSelect = (address, values) => {
+    handleSelect = (address, values, setFieldValue) => {
         var that = this;
         this.setState({
             showVerifyAddressModal: true
         });
         geolocationService.geocodeByAddr(address, values).then(function(results){
-            that.updateValues(results, values);
+            that.updateValues(results, values, setFieldValue);
         }).catch(function(err){
             console.log("err: "+err);
         });
@@ -295,7 +296,7 @@ class ListingAddAddress extends React.Component{
                                     <PlacesAutocomplete
                                         value={this.state.address}
                                         onChange={(e) => {this.handleChange(e); this.handleModification();}}
-                                        onSelect={(e) => this.handleSelect(e, values)}
+                                        onSelect={(e) => this.handleSelect(e, values, setFieldValue)}
                                     >
                                     {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                                     <div>
@@ -389,7 +390,7 @@ class ListingAddAddress extends React.Component{
 
                                 <Form.Check key={index}>
                                     <Form.Check.Label
-                                        onClick={() => this.handleSelectAddress(address.formatted_address, values)}
+                                        onClick={() => this.handleSelectAddress(address.formatted_address, values, setFieldValue)}
                                     >
                                         <span className="addPointer">{address.formatted_address}</span>
                                     </Form.Check.Label>
@@ -424,8 +425,12 @@ class ListingAddAddress extends React.Component{
                                         as="select" 
                                         name="state"
                                         value={values.state} 
-                                        onChange={(e) => {handleChange(e);this.handleModification();}} 
-                                        isValid={touched.state && !errors.state && values.state !== ""}
+                                        onChange={(e) => {
+                                            handleChange(e);
+                                            this.handleModification();
+                                        }}
+                                        onBlur={handleBlur}
+                                        //isValid={touched.state && !errors.state && values.state !== ""}
                                         isInvalid={!!errors.state}
                                         disabled={isSubmitting}
                                         ref={this.stateRef}

@@ -12,12 +12,15 @@ import AccountConfirmModal from './AccountConfirmModal';
 import AccountForgotPasswordModal from './AccountForgotPasswordModal';
 import AccountForgotConfirmModal from './AccountForgotConfirmModal';
 
+import axios from '../services/axios';
+
 export class AccountButton extends Component{
     constructor(props){
         super(props);
         this.onLogin = this.onLogin.bind(this);
         this.onRegister = this.onRegister.bind(this);
         this.onConfirm = this.onConfirm.bind(this);
+        this.onAxiosTest = this.onAxiosTest.bind(this);
         this.handleRegisterCancel = this.handleRegisterCancel.bind(this);
         this.handleLoginCancel = this.handleLoginCancel.bind(this);
         this.handleConfirmCancel = this.handleConfirmCancel.bind(this);
@@ -153,6 +156,13 @@ export class AccountButton extends Component{
         var url = window.location.protocol + "//" + window.location.hostname + "/reporting";
         window.location.href = url;
     }
+    onAxiosTest(){
+        axios.get('https://sabre-api.phowma.com/axiostest').then(function(response){
+            console.log(response);
+        }).catch(function(error){
+            console.log(error);
+        });
+    }
     handleRegisterCancel(){
         this.setState({
             modalShowRegister:false,
@@ -184,6 +194,7 @@ export class AccountButton extends Component{
                     <Dropdown.Item as="button" onClick={() => {this.onMyReports()}}>My Reports</Dropdown.Item>
                     <Dropdown.Item as="button" onClick={() => {this.onMyAccount()}}>My Account</Dropdown.Item>
                     <Dropdown.Item as="button" onClick={() => {this.onLogout()}}>Logout</Dropdown.Item>
+                    <Dropdown.Item as="button" onClick={() => {this.onAxiosTest()}}>Axios Test</Dropdown.Item>
                 </DropdownButton> 
                 )
                 :( 

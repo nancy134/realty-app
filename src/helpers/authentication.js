@@ -1,5 +1,6 @@
 import Cookies from 'universal-cookie';
 import auth from '../services/auth';
+import LocalStorageService from '../services/localStorage';
 
 export function isAuthenticated(){
     const cookies = new Cookies();
@@ -38,6 +39,7 @@ export function deleteUser(){
     cookies.remove('name');
     cookies.remove('email');
     cookies.remove('jwt');
+    LocalStorageService.clearToken();
 }
 
 export function loginResponse(email, password){
@@ -53,6 +55,8 @@ export function loginResponse(email, password){
             cookies.set('email',email.toLowerCase());
             cookies.set('name', email);
             cookies.set('jwt',result.IdToken);
+
+            LocalStorageService.setToken(result);
             resolve(result);
         }).catch(function(err){
             reject(err);

@@ -88,7 +88,8 @@ export class ListingPage extends Component {
         this.handleClose = this.handleClose.bind(this);
         this.handlePublishWizardIntroNext = this.handlePublishWizardIntroNext.bind(this);
         this.handlePublishWizardPaymentMethodNext = this.handlePublishWizardPaymentMethodNext.bind(this);
-        this.handlePublishWizardFinalClose = this.handlePublishWizardFinalClose.bind(this);
+        this.handlePublishWizardFinalFinish = this.handlePublishWizardFinalFinish.bind(this);
+        this.handlePublishWizardClose = this.handlePublishWizardClose.bind(this);
 
         // Space
         this.handleAccordionChange = this.handleAccordionChange.bind(this);
@@ -547,11 +548,20 @@ export class ListingPage extends Component {
             showPublishWizardFinal: true
         });
     }
-    handlePublishWizardFinalClose(){
+    handlePublishWizardFinalFinish(){
         this.setState({
             showPublishWizardFinal: false
         });
+        this.handleListUpdate();
     }
+    handlePublishWizardClose(){
+        this.setState({
+            showPublishWizardIntro: false,
+            showPublishWizardPaymentMethod: false,
+            showPublishWizardFinal: false
+        });
+    }
+
     handleTransitionHide(data, title, message){
         this.setState({
             transitionStart: false,
@@ -1142,14 +1152,19 @@ export class ListingPage extends Component {
             <PublishWizardIntro
                 show={this.state.showPublishWizardIntro}
                 onNext={this.handlePublishWizardIntroNext}
+                onClose={this.handlePublishWizardClose}
             />
+            { this.state.showPublishWizardPaymentMethod ?
             <PublishWizardPaymentMethod
                 show={this.state.showPublishWizardPaymentMethod}
                 onNext={this.handlePublishWizardPaymentMethodNext}
+                onClose={this.handlePublishWizardClose}
+                listingDetail={listingDetail}
             />
+            : null}
             <PublishWizardFinal
                 show={this.state.showPublishWizardFinal}
-                onClose={this.handlePublishWizardFinalClose}
+                onFinish={this.handlePublishWizardFinalFinish}
             />
             <Modal show={this.state.showModal}>
                 <Modal.Header>

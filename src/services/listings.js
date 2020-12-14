@@ -3,7 +3,6 @@ import rp from 'request-promise';
 import fetch from 'node-fetch';
 
 export function getAll(query){
-    console.log("query: "+query);
     var url = "";
     if (query) {
         url = process.env.REACT_APP_LISTING_SERVICE+"listings?"+query;

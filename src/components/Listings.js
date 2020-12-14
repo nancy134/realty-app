@@ -94,14 +94,14 @@ class Listings extends React.Component {
         this.props.onNewListing();
     }
     handleSelectFavorite(e, id){
-        console.log("handleSelectFavorite");
         e.stopPropagation();
     }
     render() {
 
-        if (this.props.listings && this.props.listings.length){
-            
-        var listings = this.props.listings;
+        var listings = [];
+        if (this.props.listings){
+            listings = this.props.listings;
+        }
 
         var showImage = true;
         var showShortDescription = true;
@@ -182,11 +182,6 @@ class Listings extends React.Component {
         </div>
 
        ); 
-       } else {
-       return(
-       <p>No listings</p>
-       );
-       }
     }
 }
 export default Listings;

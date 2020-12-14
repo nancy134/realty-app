@@ -26,9 +26,9 @@ class PublishWizardFinal extends React.Component{
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
-                        onClick={this.props.onClose}
+                        onClick={this.props.onFinish}
                     >
-                        Close 
+                        <span>Finish</span> 
                     </Button>
                 </Modal.Footer>
             </Modal>

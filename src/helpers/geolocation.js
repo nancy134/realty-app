@@ -75,7 +75,8 @@ export function getVerifiedAddresses(address){
 
 export function calculateBounds(markers){
     var bounds = new window.google.maps.LatLngBounds();
-    if (markers){
+    var retBounds = {};
+    if (markers && markers.length > 0){
         var len = markers.length;
         for (var i=0; i<len; i++){
             var marker = markers[i];
@@ -85,16 +86,18 @@ export function calculateBounds(markers){
                 bounds.extend(point);
             }
         }
+        // Convert to correct format
+        var ne = bounds.getNorthEast();
+        var sw = bounds.getSouthWest();
+        retBounds = {
+            lat0: ne.lat(),
+            lng0: ne.lng(),
+            lat1: sw.lat(),
+            lng1: sw.lng()
+        };
+    } else {
+        retBounds = getDefaultLocation();
     }
-    // Convert to correct format
-    var ne = bounds.getNorthEast();
-    var sw = bounds.getSouthWest();
-    var retBounds = {
-        lat0: ne.lat(),
-        lng0: ne.lng(),
-        lat1: sw.lat(),
-        lng1: sw.lng()
-    };
     return retBounds;
 }
 
