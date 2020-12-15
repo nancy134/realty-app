@@ -8,13 +8,31 @@ import {
     Container,
     Button
 } from 'react-bootstrap';
+import userService from '../services/users';
 
 class AccountProfile extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            email: ""
+        }
+    }
 
-render(){
+    componentDidMount(){
+        var that = this;
+        userService.getUser().then(function(result){
+            that.setState({
+                email: result.email
+            });
+            console.log(result);
+        }).catch(function(err){
+            console.log(err);
+        });
+    };
+    render(){
     return (
     <React.Fragment>
-        <Container>
+        <Container className="profile">
             <Row className="pt-5">
             </Row>
             <Jumbotron className="pt-3">
@@ -29,7 +47,7 @@ render(){
                            <Form.Group as={Row} controlId="formPlaintextEmail">
                                <Form.Label column sm="2">Email</Form.Label>
                                <Col sm="7">
-                                   <Form.Control plaintext readOnly defaultValue="email@example.com" />
+                                   <Form.Control plaintext readOnly defaultValue={this.state.email} />
                                </Col >
                                <Col sm="3"><Button variant="link">Change email</Button></Col>
                            </Form.Group>
