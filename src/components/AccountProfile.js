@@ -1,184 +1,358 @@
 import React from 'react';
 import {
-    Form,
     Row,
     Col,
-    Jumbotron,
-    Image,
-    Container,
-    Button
+    Form,
+    Button,
+    Image
 } from 'react-bootstrap';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 import userService from '../services/users';
 
-class AccountProfile extends React.Component {
+const UserSchema = Yup.object().shape({
+    first: Yup.string(),
+    last: Yup.string(),
+    middle: Yup.string(),
+    company: Yup.string(),
+    title: Yup.string(),
+    address1: Yup.string(),
+    address2: Yup.string(),
+    city: Yup.string(),
+    state: Yup.string(),
+    zip: Yup.number().integer(),
+    bio: Yup.string()
+});
+
+class AccountProfile extends React.Component{
+
     constructor(props){
         super(props);
+        this.handleUpdate = this.handleUpdate.bind(this);
         this.state = {
-            email: ""
-        }
+            profile: null
+        };
     }
 
     componentDidMount(){
         var that = this;
         userService.getUser().then(function(result){
             that.setState({
-                email: result.email
+                profile: result
             });
-            console.log(result);
         }).catch(function(err){
             console.log(err);
         });
     };
+
+    handleUpdate(initialValues, values){
+        var profile = {};
+
+        if (initialValues.first !== values.first){
+            profile.first = values.first;
+        }
+        if (initialValues.last !== values.last){
+            profile.last = values.last;
+        }
+        if (initialValues.middle !== values.middle){
+            profile.middle = values.middle;
+        }
+        if (initialValues.company !== values.company){
+            profile.company = values.company;
+        }
+        if (initialValues.title !== values.title){
+            profile.title = values.title;
+        }
+        if (initialValues.address1 !== values.address1){
+            profile.address1 = values.address1;
+        }
+        if (initialValues.address2 !== values.address2){
+            profile.address2 = values.address2;
+        }
+        if (initialValues.city !== values.city){
+            profile.city = values.city;
+        }
+        if (initialValues.state !== values.state){
+            profile.state = values.state;
+        }
+        if (initialValues.zip !== values.zip){
+            profile.zip = values.zip;
+        }
+        if (initialValues.bio !== values.bio){
+            profile.bio = values.bio;
+        }
+
+        userService.updateUser(this.state.profile.id, profile).then(function(response){
+        }).catch(function(err){
+            console.log(err);
+        });
+    }
     render(){
-    return (
-    <React.Fragment>
-        <Container className="profile">
-            <Row className="pt-5">
-            </Row>
-            <Jumbotron className="pt-3">
-                <Row >
-                    <Col>
-                    <h1 className="text-center">Account Profile</h1>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                       <Form>
-                           <Form.Group as={Row} controlId="formPlaintextEmail">
-                               <Form.Label column sm="2">Email</Form.Label>
-                               <Col sm="7">
-                                   <Form.Control plaintext readOnly defaultValue={this.state.email} />
-                               </Col >
-                               <Col sm="3"><Button variant="link">Change email</Button></Col>
-                           </Form.Group>
+        var initialValues = {
+            email: "",
+            first: "",
+            last: "",
+            middle: "",
+            company: "",
+            title: "",
+            address1: "",
+            address2: "",
+            city: "",
+            state: "",
+            zip: "",
+            bio: ""
+        };
+        var profile = this.state.profile;
+        if (profile){
+            if (profile.email) initialValues.email = profile.email;
+            if (profile.first) initialValues.first = profile.first;
+            if (profile.last) initialValues.last = profile.last;
+            if (profile.middle) initialValues.middle = profile.middle;
+            if (profile.title) initialValues.title = profile.title;
+            if (profile.address1) initialValues.address1 = profile.address1;
+            if (profile.address2) initialValues.address2 = profile.address2;
+            if (profile.city) initialValues.city = profile.city;
+            if (profile.state) initialValues.state = profile.state;
+            if (profile.zip) initialValues.zip = profile.zip;
+            if (profile.bio) initialValues.bio = profile.bio;
+        }
+        return(
+            <Formik
+                enableReinitialize
+                initialValues={initialValues}
+                validationSchema={UserSchema}
+                onSubmit={(values, { setSubmitting }) => {
+                    setSubmitting(true);
+                    this.handleUpdate(initialValues, values);
+                    setSubmitting(false);
+                }}
+            >
+                {({
+                    values,
+                    errors,
+                    touched,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    isSubmitting,
+                    isValid,
+                    dirty,
+                    setFieldValue
+                }) => (
+                    <Form className="p-5 profile">
+                    <Row><Col>
+                        <Form.Row>
+                            <Form.Group as={Col} xs={4}>
+                                <Form.Label
+                                    className="font-weight-bold"
+                                >First Name</Form.Label>
+                                <Form.Control
+                                    name="first"
+                                    type="text"
+                                    value={values.first}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.first}
+                                    isValid={touched.first && !errors.first && values.first !== ""}
+                                    disabled={isSubmitting}
+                                />
+                            </Form.Group>
+                            <Form.Group as={Col} xs={2}>
+                                <Form.Label
+                                    className="font-weight-bold"
+                                >Middle</Form.Label>
+                                <Form.Control
+                                    name="middle"
+                                    type="text"
+                                    value={values.middle}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.middle}
+                                    isValid={touched.middle && !errors.middle && values.middle !== ""}
+                                    disabled={isSubmitting}
+                                />
+                            </Form.Group>
+                            <Form.Group as={Col} xs={4}>
+                                <Form.Label
+                                    className="font-weight-bold"
+                                >Last Name</Form.Label>
+                                <Form.Control
+                                    name="last"
+                                    type="text"
+                                    value={values.last}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.last}
+                                    isValid={touched.last && !errors.last && values.last !== ""}
+                                    disabled={isSubmitting}
+                                />
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} xs={10}>
+                                <Form.Label
+                                    className="font-weight-bold"
+                                >Title</Form.Label>
+                                <Form.Control
+                                    name="title"
+                                    type="text"
+                                    value={values.title}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.title}
+                                    isValid={touched.title && !errors.title && values.title !== ""}
+                                    disabled={isSubmitting}
+                                />
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} xs={10}>
+                                <Form.Label
+                                    className="font-weight-bold"
+                                >Company</Form.Label>
+                                <Form.Control
+                                    name="company"
+                                    type="text"
+                                    value={values.company}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.company}
+                                    isValid={touched.company && !errors.company && values.company !== ""}
+                                    disabled={isSubmitting}
+                                />
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} xs={10}>
+                                <Form.Label
+                                    className="font-weight-bold"
+                                >Address</Form.Label>
+                                <Form.Control
+                                    name="address1"
+                                    type="text"
+                                    value={values.address1}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.address1}
+                                    isValid={touched.address1 && !errors.address1 && values.address1 !== ""}
+                                    disabled={isSubmitting}
+                                />
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} xs={10}>
+                                <Form.Control
+                                    name="address2"
+                                    type="text"
+                                    value={values.address2}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.address2}
+                                    isValid={touched.address2 && !errors.address2 && values.address2 !== ""}
+                                    disabled={isSubmitting}
+                                />
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} xs={4}>
+                                <Form.Label
+                                    className="font-weight-bold"
+                                >City</Form.Label>
+                                <Form.Control
+                                    name="city"
+                                    type="text"
+                                    value={values.city}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.city}
+                                    isValid={touched.city && !errors.city && values.city !== ""}
+                                    disabled={isSubmitting}
+                                />
+                            </Form.Group>
+                            <Form.Group as={Col} xs={4}>
+                                <Form.Label
+                                    className="font-weight-bold"
+                                >State</Form.Label>
+                                <Form.Control
+                                    name="state"
+                                    type="text"
+                                    value={values.state}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.state}
+                                    isValid={touched.state && !errors.state && values.state !== ""}
+                                    disabled={isSubmitting}
+                                />
+                            </Form.Group>
+                            <Form.Group as={Col} xs={2}>
+                                <Form.Label
+                                    className="font-weight-bold"
+                                >Zip</Form.Label>
+                                <Form.Control
+                                    name="zip"
+                                    type="text"
+                                    value={values.zip}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.zip}
+                                    isValid={touched.zip && !errors.zip && values.zip !== ""}
+                                    disabled={isSubmitting}
+                                />
+                            </Form.Group>
+                        </Form.Row>
+                    </Col><Col>
+                        <Form.Row>
+                            <Form.Group as={Col} xs={10}>
+                            <Image src="/broker.jpg" className="img-center" roundedCircle/>
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} xs={10}>
+                            <Form.Label
+                                className="font-weight-bold"
+                            >Bio</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows="6"
+                            />
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} xs={5}>
+                                <Form.Label
+                                    className="font-weight-bold"
+                                >Email</Form.Label>
+                                <Form.Control
+                                    name="email"
+                                    type="text"
+                                    value={values.email}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.email}
+                                    isValid={touched.email && !errors.email && values.email !== ""}
+                                    disabled
+                                />
+                            </Form.Group>
 
-                           <Form.Group as={Row} controlId="formPlaintextPassword">
-                               <Form.Label column sm="2">Password</Form.Label>
-                               <Col sm="10">
-                                   <Button className="pl-0" variant="link">Change Password</Button> 
-                               </Col>
-                           </Form.Group>
-                           <Form.Group as={Row} controlId="name">
-                               <Form.Label column sm="2">Name</Form.Label>
-                               <Col sm="10">
-                                   <Form.Control type="text" />
-                               </Col>
-                           </Form.Group>
-                           <Form.Group as={Row} controlId="company">
-                               <Form.Label column sm="2">Company</Form.Label>
-                               <Col sm="10">
-                                   <Form.Control type="text" />
-                               </Col>
-                           </Form.Group>
-                           <Form.Group as={Row} controlId="title">
-                               <Form.Label column sm="2">Title</Form.Label>
-                               <Col sm="10">
-                                   <Form.Control type="text" />
-                               </Col>
-                           </Form.Group>
-                           <Form.Group as={Row} controlId="address1">
-                               <Form.Label column sm="4">Mailing Address</Form.Label>
-                               <Col sm="8">
-                                   <Form.Control type="text" />
-                               </Col>
-                           </Form.Group>
-                           <Form.Group as={Row} controlId="address2">
-                               <Form.Label column sm="4"></Form.Label>
-                               <Col sm="8">
-                                   <Form.Control type="text" />
-                               </Col>
-                           </Form.Group>
-                           <Form.Group as={Row} controlId="city">
-                               <Form.Label column sm="2">City</Form.Label>
-                               <Col sm="10">
-                                   <Form.Control type="text" />
-                               </Col>
-                           </Form.Group>
-                           <Form.Group as={Row} >
-                               <Form.Label column sm="2">State</Form.Label>
-                               <Col sm="4">
-                                   <Form.Control as="select" >
-                                       <option>State</option>
-                                       <option>Alabama</option>
-                                       <option>Alaska</option>
-                                   </Form.Control>
-                               </Col>
-                               <Form.Label column sm="1">Zip</Form.Label>
-                               <Col sm="5">
-                                   <Form.Control type="text" />
-                               </Col>
-                           </Form.Group>
-                           <Form.Group as={Row} >
-                               <Form.Label column sm="2">Phone</Form.Label>
-                               <Col sm="3">
-                                   <Form.Control as="select" defaultValue="office" >
-                                       <option value="office">Office</option>
-                                       <option value="mobile">Mobile</option>
-                                       <option value="other">Other</option>
-                                   </Form.Control>
-                               </Col>
-                               <Col sm="4">
-                                   <Form.Control type="text" />
-                               </Col>
-                               <Col>
-                                   <Form.Check label="Primary" type="radio" />
-                               </Col>
-                           </Form.Group>
-                          <Form.Group as={Row} >
-                               <Form.Label column sm="2">Phone</Form.Label>
-                               <Col sm="3">
-                                   <Form.Control as="select" defaultValue="mobile" >
-                                       <option value="office">Office</option>
-                                       <option value="mobile">Mobile</option>
-                                       <option value="other">Other</option>
-                                   </Form.Control>
-                               </Col>
-                               <Col sm="4">
-                                   <Form.Control type="text" />
-                               </Col>
-                               <Col>
-                                   <Form.Check label="Primary" type="radio" />
-                               </Col>
-                           </Form.Group>
-                          <Form.Group as={Row} >
-                               <Form.Label column sm="2">Phone</Form.Label>
-                               <Col sm="3">
-                                   <Form.Control as="select" defaultValue="other" >
-                                       <option value="office">Office</option>
-                                       <option value="mobile">Mobile</option>
-                                       <option value="other">Other</option>
-                                   </Form.Control>
-                               </Col>
-                               <Col sm="4">
-                                   <Form.Control type="text" />
-                               </Col>
-                               <Col>
-                                   <Form.Check label="Primary" type="radio" />
-                               </Col>
-                           </Form.Group>
-                           <Form.Group as={Row} controlId="website">
-                               <Form.Label column sm="2">Website</Form.Label>
-                               <Col sm="10">
-                                   <Form.Control type="text" />
-                               </Col>
-                           </Form.Group>
-
-                       </Form>
-                   </Col>
-                   <Col>
-                       <Image src="/broker.jpg" className="img-center" roundedCircle/>
-                       <div>Bio</div>
-                       <Form.Control as="textarea" rows="6" />
-                   </Col>
-               </Row>
-               <div className="text-right">
-               <Button variant="success">Update</Button>
-               </div>
-           </Jumbotron>
-       </Container>
-    </React.Fragment>
-    );
-}
+                        </Form.Row>
+                    </Col></Row>
+                    <Row>
+                        <Col xs={4}></Col>
+                        <Col xs={4}>
+                            <Button
+                                disabled={!(isValid && dirty) || isSubmitting}
+                                variant="success"
+                                block
+                                onClick={handleSubmit}
+                            >Update Profile</Button>
+                        </Col>
+                        <Col xs={4}></Col>
+                    </Row>
+                    </Form>
+                )}
+            </Formik>
+        );
+   }
 }
 
 export default AccountProfile;
