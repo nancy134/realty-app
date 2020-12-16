@@ -30,7 +30,8 @@ class AccountProfile extends React.Component{
         super(props);
         this.handleUpdate = this.handleUpdate.bind(this);
         this.state = {
-            profile: null
+            profile: null,
+            states: null,
         };
     }
 
@@ -38,7 +39,8 @@ class AccountProfile extends React.Component{
         var that = this;
         userService.getUser().then(function(result){
             that.setState({
-                profile: result
+                profile: result,
+                states: result.stateOptions
             });
         }).catch(function(err){
             console.log(err);
@@ -88,6 +90,12 @@ class AccountProfile extends React.Component{
         });
     }
     render(){
+        var states = null;
+        if (this.state.states){
+            states = this.state.states.map((item, key) =>
+                <option key={key}>{item}</option>
+            );
+        }
         var initialValues = {
             email: "",
             first: "",
@@ -274,15 +282,15 @@ class AccountProfile extends React.Component{
                                     className="font-weight-bold"
                                 >State</Form.Label>
                                 <Form.Control
+                                    as="select"
                                     name="state"
-                                    type="text"
                                     value={values.state}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     isInvalid={!!errors.state}
-                                    isValid={touched.state && !errors.state && values.state !== ""}
+                                    //isValid={touched.state && !errors.state && values.state !== ""}
                                     disabled={isSubmitting}
-                                />
+                                >{states}</Form.Control>
                             </Form.Group>
                             <Form.Group as={Col} xs={2}>
                                 <Form.Label
