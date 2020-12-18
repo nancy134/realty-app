@@ -3,9 +3,12 @@ import LocalStorage from './localStorage';
 
 const localStorageService = LocalStorage.getService();
 
-axios.interceptors.request.use(
+const axiosInstance = axios.create({});
+
+axiosInstance.interceptors.request.use(
     config => {
         const token = localStorageService.getIdToken();
+        console.log(token);
         if (token){
             config.headers['Authorization'] = 'Bearer ' + token;
         }
@@ -13,30 +16,34 @@ axios.interceptors.request.use(
         return config;
     },
     error => {
+        console.log(error);
         Promise.reject(error);
     });
 
-axios.interceptors.response.use((response) => {
+axiosInstance.interceptors.response.use((response) => {
+    console.log("axios.interceptors.response.use");
     return response
 }, function(error){
+    console.log(error);
     const originalRequest = error.config;
 
     if (error.response.status === 401 && !originalRequest._retry){
         originalRequest._retry = true;
         const refreshToken = localStorageService.getRefreshToken();
 
-        return axios.post('https://sabre-api.phowma.com/refreshToken',
+        return axiosInstance.post(process.env.REACT_APP_API+'refreshToken',
             {
                 "refreshToken": refreshToken
             }).then(res => {
+                console.log(res);
                 if (res.status === 201) {
                     localStorageService.setIdToken(res.data.IdToken);
-                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorageService.getIdToken();
+                    axiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + localStorageService.getIdToken();
                     return axios(originalRequest)
                 }
             })
     }
+    console.log(error);
     return Promise.reject(error);
 });
-
-export default axios;
+export default axiosInstance;

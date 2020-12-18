@@ -12,8 +12,6 @@ import AccountConfirmModal from './AccountConfirmModal';
 import AccountForgotPasswordModal from './AccountForgotPasswordModal';
 import AccountForgotConfirmModal from './AccountForgotConfirmModal';
 
-import axios from '../services/axios';
-
 export class AccountButton extends Component{
     constructor(props){
         super(props);
@@ -142,6 +140,10 @@ export class AccountButton extends Component{
         var url = window.location.protocol + "//" + window.location.hostname + "/account";
         window.location.href = url;
     }
+    onAdministration(){
+        var url = window.location.protocol + "//" + window.location.hostname + "/admin";
+        window.location.href = url;
+    }
     onLogout(){
        authenticationService.deleteUser();
        this.setState({authenticated: false});
@@ -185,6 +187,7 @@ export class AccountButton extends Component{
                     <Dropdown.Item as="button" onClick={() => {this.onMyListings()}}>My Listings</Dropdown.Item>
                     <Dropdown.Item as="button" onClick={() => {this.onMyReports()}}>My Reports</Dropdown.Item>
                     <Dropdown.Item as="button" onClick={() => {this.onMyAccount()}}>My Account</Dropdown.Item>
+                    <Dropdown.Item as="button" onClick={() => {this.onAdministration()}}>Administration</Dropdown.Item>
                     <Dropdown.Item as="button" onClick={() => {this.onLogout()}}>Logout</Dropdown.Item>
                 </DropdownButton> 
                 )

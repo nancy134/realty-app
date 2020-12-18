@@ -38,6 +38,7 @@ class AccountProfile extends React.Component{
     componentDidMount(){
         var that = this;
         userService.getUser().then(function(result){
+            console.log(result);
             that.setState({
                 profile: result,
                 states: result.stateOptions
