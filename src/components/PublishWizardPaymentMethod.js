@@ -146,7 +146,7 @@ class PublishWizardPaymentMethod extends React.Component{
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
-                        onClick={this.props.OnCancel}
+                        onClick={this.props.onCancel}
                     >
                         Cancel
                     </Button>

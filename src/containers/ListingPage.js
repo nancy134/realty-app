@@ -1152,13 +1152,13 @@ export class ListingPage extends Component {
             <PublishWizardIntro
                 show={this.state.showPublishWizardIntro}
                 onNext={this.handlePublishWizardIntroNext}
-                onClose={this.handlePublishWizardClose}
+                onCancel={this.handlePublishWizardClose}
             />
             { this.state.showPublishWizardPaymentMethod ?
             <PublishWizardPaymentMethod
                 show={this.state.showPublishWizardPaymentMethod}
                 onNext={this.handlePublishWizardPaymentMethodNext}
-                onClose={this.handlePublishWizardClose}
+                onCancel={this.handlePublishWizardClose}
                 listingDetail={listingDetail}
             />
             : null}
