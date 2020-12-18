@@ -39,7 +39,7 @@ axiosInstance.interceptors.response.use((response) => {
                 if (res.status === 201) {
                     localStorageService.setIdToken(res.data.IdToken);
                     axiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + localStorageService.getIdToken();
-                    return axios(originalRequest)
+                    return axiosInstance(originalRequest)
                 }
             })
     }
