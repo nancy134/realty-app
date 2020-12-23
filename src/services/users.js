@@ -13,7 +13,7 @@ function getUsers(){
 }
 
 function getUser(){
-    var url = process.env.REACT_APP_API + 'user/profile';
+    var url = process.env.REACT_APP_API + 'user/me';
     return new Promise(function(resolve, reject){
         axiosInstance.get(url).then(function(response){
             console.log(response);
@@ -27,7 +27,7 @@ function getUser(){
 
 function updateUser(id, body){
     return new Promise(function(resolve, reject){
-        var url = process.env.REACT_APP_API + '/user/profile/'+id;
+        var url = process.env.REACT_APP_API + '/user/me';
 
         axiosInstance.put(url,body).then(function(response){
             resolve(response.data);
@@ -38,9 +38,21 @@ function updateUser(id, body){
     });
 }
 
+function getUserEnums(){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + '/user/enums';
+        axiosInstance.get(url).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+             reject(err);
+        });
+    });
+}
+
 const users = {
     getUser,
     updateUser,
-    getUsers
+    getUsers,
+    getUserEnums
 };
 export default users;

@@ -37,12 +37,16 @@ class AccountProfile extends React.Component{
 
     componentDidMount(){
         var that = this;
-        userService.getUser().then(function(result){
-            console.log(result);
-            that.setState({
-                profile: result,
-                states: result.stateOptions
-            });
+        userService.getUserEnums().then(function(enums){
+            userService.getUser().then(function(result){
+                console.log(result);
+                that.setState({
+                    profile: result,
+                    states: enums.states 
+                });
+            }).catch(function(err){
+                console.log(err);
+            }); 
         }).catch(function(err){
             console.log(err);
         });
