@@ -8,13 +8,6 @@ import {
     InputGroup
 } from 'react-bootstrap';
 
-function SavingAlert(){
-    return(
-    <div className="w-100">
-       <Spinner animation="border" />
-    </div>
-    );
-}
 class AccountLoginModal extends React.Component {
     constructor(props){
         super(props);
@@ -72,9 +65,6 @@ class AccountLoginModal extends React.Component {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {this.props.loginProgress ?
-                <SavingAlert/>
-                : null}
                 {this.props.loginMessage ?
                 <Alert variant={this.props.loginMessageVariant}>
                 {this.props.loginMessage}
@@ -116,7 +106,17 @@ class AccountLoginModal extends React.Component {
                     id="login_button"
                     onClick={this.handleLogin}
                 >
-                    Login
+                    { !this.props.loginProgress ?
+                    <span>Login</span>
+                    :
+                    <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                    />
+                    }
                 </Button>
             </Modal.Footer>
         </Modal>
