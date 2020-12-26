@@ -50,15 +50,12 @@ class PublishWizardPaymentMethod extends React.Component{
         this.instance.requestPaymentMethod().then(function(result){
             billingService.setPaymentMethod(result.nonce).then(function(paymentResult){
                 var listingId = that.props.listingDetail.listing.ListingId;
-                console.log("listingId: "+listingId);
                 listingService.publish(listingId).then(function(result){
-                    console.log(result);
                     that.setState({
                         paymentSpinner: false
                     });
                     that.props.onNext();
                 }).catch(function(err){
-                    console.log(err);
                     that.setState({
                         paymentSpinner: false,
                         showError: true,
@@ -66,7 +63,6 @@ class PublishWizardPaymentMethod extends React.Component{
                     });
                 });
             }).catch(function(err){
-                console.log(err);
                 that.setState({
                     paymentSpinner: false,
                     showError: true,
@@ -74,7 +70,6 @@ class PublishWizardPaymentMethod extends React.Component{
                 });
             });
         }).catch(function(err){
-            console.log(err);
             that.setState({
                 paymentSpinner: false,
                 showError: true,

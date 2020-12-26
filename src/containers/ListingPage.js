@@ -27,6 +27,7 @@ import listItemService from '../services/listItems';
 import PublishWizardIntro from '../components/PublishWizardIntro';
 import PublishWizardPaymentMethod from '../components/PublishWizardPaymentMethod';
 import PublishWizardFinal from '../components/PublishWizardFinal';
+import UnpublishWizardIntro from '../components/UnpublishWizardIntro';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -89,6 +90,7 @@ export class ListingPage extends Component {
         this.handlePublishWizardIntroNext = this.handlePublishWizardIntroNext.bind(this);
         this.handlePublishWizardPaymentMethodNext = this.handlePublishWizardPaymentMethodNext.bind(this);
         this.handlePublishWizardFinalFinish = this.handlePublishWizardFinalFinish.bind(this);
+        this.handleUnpublishWizardIntroFinish = this.handleUnpublishWizardIntroFinish.bind(this);
         this.handlePublishWizardClose = this.handlePublishWizardClose.bind(this);
 
         // Space
@@ -136,6 +138,7 @@ export class ListingPage extends Component {
             showPublishWizardIntro: false,
             showPublishWizardPaymentMethod: false,
             showPublishWizardFinal: false,
+            showUnpublishWizardIntro: false,
 
             // Listing
             index: index,
@@ -526,15 +529,17 @@ export class ListingPage extends Component {
     }
 
     // Transition
-    handleTransitionStart(){
-        this.setState({
-            showPublishWizardIntro: true
-        });
-        /*
-        this.setState({
-            transitionStart: true
-        });
-        */
+    handleTransitionStart(transitionType){
+        if (transitionType === "publish"){
+
+            this.setState({
+                showPublishWizardIntro: true
+            });
+        } else {
+            this.setState({
+                showUnpublishWizardIntro: true
+            });
+        }
     }
     handlePublishWizardIntroNext(){
         this.setState({
@@ -554,11 +559,19 @@ export class ListingPage extends Component {
         });
         this.handleListUpdate();
     }
+    handleUnpublishWizardIntroFinish(){
+        this.setState({
+            showUnpublishWizardIntro: false,
+            showDetail: false
+        });
+        this.handleListUpdate();
+    }
     handlePublishWizardClose(){
         this.setState({
             showPublishWizardIntro: false,
             showPublishWizardPaymentMethod: false,
-            showPublishWizardFinal: false
+            showPublishWizardFinal: false,
+            showUnpublishWizardIntro: false
         });
     }
 
@@ -610,6 +623,7 @@ export class ListingPage extends Component {
 
     }
     handleUnpublish(id){
+        console.log("handleUnpublish: id: "+id);
         var unpublishPromise = listingService.unpublish(id);
         this.setState({transitionSaving: true});
         var that = this;
@@ -1165,6 +1179,12 @@ export class ListingPage extends Component {
             <PublishWizardFinal
                 show={this.state.showPublishWizardFinal}
                 onFinish={this.handlePublishWizardFinalFinish}
+            />
+            <UnpublishWizardIntro
+                show={this.state.showUnpublishWizardIntro}
+                onFinish={this.handleUnpublishWizardIntroFinish}
+                onCancel={this.handlePublishWizardClose}
+                listingDetail={listingDetail}
             />
             <Modal show={this.state.showModal}>
                 <Modal.Header>

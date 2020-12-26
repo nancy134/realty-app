@@ -1,6 +1,7 @@
 import authenticationService from '../helpers/authentication';
 import rp from 'request-promise';
 import fetch from 'node-fetch';
+import axios from 'axios';
 
 export function getAll(query){
     var url = "";
@@ -118,34 +119,31 @@ export function update(data,cb){
 }
 
 export function publish(index){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"listings/"+index+"/directPublications";
+    var url = process.env.REACT_APP_API+"listings/"+index+"/directPublications";
     return new Promise(function(resolve, reject){
         var options = {
             method: 'POST',
-            uri: url,
-            json: true
+            url: url
         };
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
+        axios(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
-            reject(err.error);
+            reject(err);
         });
     });
 }
 
-export function unpublish(index, cb){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"listings/"+index+"/publications";
-
+export function unpublish(index){
+    var url = process.env.REACT_APP_API+"listings/"+index+"/publications";
     return new Promise(function(resolve, reject){
         var options = {
             method: 'delete',
-            uri: url,
-            json: true
+            url: url
         };
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
+        axios(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
-            reject(err.error);
+            reject(err);
         });
     });
 }

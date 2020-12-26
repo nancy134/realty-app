@@ -8,7 +8,6 @@ const axiosInstance = axios.create({});
 axiosInstance.interceptors.request.use(
     config => {
         const token = localStorageService.getIdToken();
-        console.log(token);
         if (token){
             config.headers['Authorization'] = 'Bearer ' + token;
         }
@@ -16,15 +15,12 @@ axiosInstance.interceptors.request.use(
         return config;
     },
     error => {
-        console.log(error);
         Promise.reject(error);
     });
 
 axiosInstance.interceptors.response.use((response) => {
-    console.log("axios.interceptors.response.use");
     return response
 }, function(error){
-    console.log(error);
     const originalRequest = error.config;
 
     if (error.response.status === 401 && !originalRequest._retry){
@@ -35,7 +31,6 @@ axiosInstance.interceptors.response.use((response) => {
             {
                 "refreshToken": refreshToken
             }).then(res => {
-                console.log(res);
                 if (res.status === 201) {
                     localStorageService.setIdToken(res.data.IdToken);
                     axiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + localStorageService.getIdToken();

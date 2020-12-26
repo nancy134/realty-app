@@ -15,7 +15,7 @@ function TransitionButton(props) {
           <Button
               id="header_transition_button"
               className="m-1"
-              onClick={() => {props.onShow()}}
+              onClick={() => {props.onShow(props.transitionType)}}
           >
               {props.buttonText}
           </Button>
@@ -23,7 +23,7 @@ function TransitionButton(props) {
           { props.type === "link" ?
               <span
                   className="text-info addPointer"
-                  onClick={() => props.onShow()}
+                  onClick={() => props.onShow(props.transitionType)}
               >{props.buttonText}</span>
           : null}
           <TransitionModal
@@ -72,15 +72,18 @@ class ListingDetailToolbar extends React.Component {
         var listing = this.props.listing;
 
         var transitionButton = "";
+        var transitionType = "";
         var message = "";
         if (listing) {
             if (listing.publishStatus === "Draft"){
+               transitionType="publish";
                transitionButton = "Publish";
                message = "Your listing will become available to the public and charges will be applied";
             } else if (listing.publishStatus === "Approved" || listing.publishStatus === "Off Market"){
                 transitionButton = "Put on Market";
                 message = "Your listing will become public and charges will be applied";
             } else if (listing.publishStatus === "On Market"){
+                transitionType="unpublish";
                 transitionButton = "Take off Market";
                 message = "Your listing will be no longer be seen by the public";
             }
@@ -126,6 +129,7 @@ class ListingDetailToolbar extends React.Component {
                           type="button"
                           message={message}
                           buttonText={transitionButton}
+                          transitionType={transitionType}
                           onPublish={this.handlePublish}
                           onUnpublish={this.handleUnpublish}
                           onShow={this.props.onTransitionStart}
