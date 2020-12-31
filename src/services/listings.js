@@ -1,27 +1,29 @@
-import authenticationService from '../helpers/authentication';
 import rp from 'request-promise';
 import fetch from 'node-fetch';
-import axios from 'axios';
+import axiosInstance from './axios';
 
-export function getAll(query){
+export function getAll(query, listingMode){
     var url = "";
-    if (query) {
-        url = process.env.REACT_APP_LISTING_SERVICE+"listings?"+query;
+    if (listingMode === "myListings"){
+        url = process.env.REACT_APP_API+"listings/me";
     } else {
-        url = process.env.REACT_APP_LISTING_SERVICE+"listings";
+        url = process.env.REACT_APP_API+"listings";
     }
-
-    var jwt = authenticationService.getJwt();
+    if (query) {
+        url += "?"+query;
+    }
+    console.log("url: "+url);
 
     return new Promise(function(resolve, reject){
         var options = {
-            method: 'GET',
-            headers: {'Authorization': jwt}
+            url: url,
+            method: 'GET'
         };
-        fetch(url, options)
-            .then(res => res.json())
-            .then(json => resolve(json))
-            .catch(err => reject(err));
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
+        }).catch(function(err){
+            reject(err);
+        });
     });
 }
 
@@ -85,18 +87,19 @@ export function getEnums(cb){
 }
 
 export function create(listing){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"listings";
+    var url = process.env.REACT_APP_API+"listings";
     return new Promise(function(resolve, reject){
         var options = {
             method: 'POST',
-            uri: url,
-            json: true,
-            body: listing
+            url: url,
+            data: listing
         };
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
+        axiosInstance(options).then(function(result){
+            console.log(result);
+            resolve(result.data);
         }).catch(function(err){
-            reject(err.error);
+            console.log(err);
+            reject(err);
         });
     });
 }
@@ -125,7 +128,7 @@ export function publish(index){
             method: 'POST',
             url: url
         };
-        axios(options).then(function(result){
+        axiosInstance(options).then(function(result){
             resolve(result.data);
         }).catch(function(err){
             reject(err);
@@ -140,7 +143,7 @@ export function unpublish(index){
             method: 'delete',
             url: url
         };
-        axios(options).then(function(result){
+        axiosInstance(options).then(function(result){
             resolve(result.data);
         }).catch(function(err){
             reject(err);

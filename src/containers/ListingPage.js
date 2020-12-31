@@ -736,15 +736,8 @@ export class ListingPage extends Component {
             } else {
                 lMode = that.state.listingMode;
             }
-            var query = "";
-            var markerQuery = "";
-            if (lMode === "myListings" ){
-                query = "perPage=5&page="+localState.page+"&owner="+authenticationService.getUserEmail();
-                markerQuery = "perPage=250&page=1&owner="+authenticationService.getUserEmail();
-            } else {
-                query = 'perPage=20&page='+localState.page;
-                markerQuery = "perPage=250&page=1";
-            }
+            var query = 'perPage=20&page='+localState.page;
+            var markerQuery = "perPage=250&page=1";
 
             var spaceUseFilter = null;
             if (localState.spaceUseFilter){
@@ -777,7 +770,7 @@ export class ListingPage extends Component {
                 query += locationQuery;
                 markerQuery += locationQuery;
             }
-            var getAllPromise = listingService.getAll(query);
+            var getAllPromise = listingService.getAll(query, lMode);
             getAllPromise.then(function(listings){
                 var enumPromise = listingService.getEnumsPromise();
                 enumPromise.then(function(enums){
