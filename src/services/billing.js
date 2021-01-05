@@ -28,9 +28,23 @@ export function setPaymentMethod(nonce){
     });
 }
 
+export function getBillingEvents(){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + "billing/billingEvents";
+        axiosInstance({
+            method: 'GET',
+            url: url
+        }).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
 
 const billing = {
     getClientToken,
-    setPaymentMethod
+    setPaymentMethod,
+    getBillingEvents
 };
 export default billing;

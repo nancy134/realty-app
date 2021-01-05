@@ -6,6 +6,7 @@ import AccountToolbar from '../components/AccountToolbar';
 import AccountProfile from '../components/AccountProfile';
 import AccountBilling from '../components/AccountBilling';
 import AccountAssociates from '../components/AccountAssociates';
+import AccountPayment from '../components/AccountPayment';
 
 export class AccountPage extends Component {
     constructor(props){
@@ -36,6 +37,9 @@ export class AccountPage extends Component {
             ): null}
             {tab === "associates" ? (
             <AccountAssociates />
+            ): null}
+            {tab === "payment" ? (
+            <AccountPayment />
             ): null}
         </React.Fragment>
         );
