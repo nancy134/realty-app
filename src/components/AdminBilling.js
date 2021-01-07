@@ -55,6 +55,7 @@ class AdminBilling extends React.Component {
         }
 
         this.handleBillingCycleSelect = this.handleBillingCycleSelect.bind(this);
+        this.handleBillingCycleCalculate = this.handleBillingCycleCalculate.bind(this);
     }
 
     componentDidMount(){
@@ -79,6 +80,13 @@ class AdminBilling extends React.Component {
         });
     }
 
+    handleBillingCycleCalculate(){
+        billingService.playBillingCycle(this.state.selectedBillingCycle).then(function(result){
+            console.log(result);
+        }).catch(function(err){
+            console.log(err);
+        });
+    }
     handleBillingCycleSelect(e){
         this.setState({
             selectedBillingCycle: e.target.value
@@ -114,7 +122,11 @@ class AdminBilling extends React.Component {
                             </Form.Control>
                         </Col>
                         <Col sm={2}>
-                            <Button>Run Calculation</Button>
+                            <Button
+                                onClick={this.handleBillingCycleCalculate}
+                            >
+                                <span>Run Calculation</span>
+                            </Button>
                         </Col>
                     </Form.Group>
                 </Form>

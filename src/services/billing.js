@@ -70,11 +70,26 @@ export function getBillingCycles(){
     });
 }
 
+export function playBillingCycle(id){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + "billing/billingEvents/play/" + id;
+        axiosInstance({
+            method: 'GET',
+            url: url
+        }).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
 const billing = {
     getClientToken,
     setPaymentMethod,
     getBillingEvents,
     getBillingEventsMe,
-    getBillingCycles
+    getBillingCycles,
+    playBillingCycle
 };
 export default billing;
