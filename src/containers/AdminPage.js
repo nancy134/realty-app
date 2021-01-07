@@ -2,6 +2,7 @@ import React from 'react';
 import AdminToolbar from '../components/AdminToolbar';
 import AdminUsers from '../components/AdminUsers';
 import AdminListings from '../components/AdminListings';
+import AdminBilling from '../components/AdminBilling';
 
 export class AdminPage extends React.Component {
     constructor(props){
@@ -30,6 +31,9 @@ export class AdminPage extends React.Component {
                 : null }
                 {tab === "listings" ?
                 <AdminListings />
+                : null }
+                {tab === "billing" ?
+                <AdminBilling />
                 : null }
             </React.Fragment>
         );

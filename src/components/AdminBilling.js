@@ -1,7 +1,10 @@
 import React from 'react';
 import {
     Container,
-    Form
+    Form,
+    Row,
+    Col,
+    Button
 } from 'react-bootstrap';
 import { forwardRef } from 'react';
 import MaterialTable from 'material-table';
@@ -42,14 +45,14 @@ const tableIcons = {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-class AccountBilling extends React.Component {
+class AdminBilling extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             billingEvents: [],
             billingCycles: [],
             selectedBillingCycle: 0
-        };
+        }
 
         this.handleBillingCycleSelect = this.handleBillingCycleSelect.bind(this);
     }
@@ -62,7 +65,7 @@ class AccountBilling extends React.Component {
             if (billingCycleRows.length > 0){
                 selectedValue = billingCycleRows[0].id;
             }
-            billingService.getBillingEventsMe(selectedValue).then(function(billingEvents){
+            billingService.getBillingEvents(selectedValue).then(function(billingEvents){
                 that.setState({
                     billingEvents: billingEvents.billingEvents.rows,
                     billingCycles: billingCycleRows,
@@ -74,7 +77,6 @@ class AccountBilling extends React.Component {
         }).catch(function(err){
             console.log(err);
         });
-
     }
 
     handleBillingCycleSelect(e){
@@ -82,41 +84,52 @@ class AccountBilling extends React.Component {
             selectedBillingCycle: e.target.value
         });
     }
-
     render(){
         var billingCycles = [];
         billingCycles = this.state.billingCycles.map((item, key) =>
             <option
                 key={key}
+                value={item.id}
             >
                 {item.startDate} - {item.endDate}
-           </option>
+            </option>
         );
+
         return(
-        <Container>
-            <Form>
-                <Form.Group>
-                    <Form.Label>Billing cycles</Form.Label>
-                    <Form.Control
-                        as="select"
-                    >
-                        {billingCycles}
-                    </Form.Control>
-                </Form.Group>
-            </Form>
-            <MaterialTable
-                icons={tableIcons}
-                columns={[
-                    { title: 'Listing', field: 'ListingId'},
-                    { title: 'Days on Market', field: 'daysOnMarket'},
-                    { title: 'Cost', field: 'cost'}
-                ]}
-                data={this.state.billingEvents}
-                title="Billing Details"
-            />
-        </Container>
+            <Container>
+                <Form>
+                    <Form.Group as={Row}>
+                        <Form.Label 
+                            column
+                            sm={2}
+                        >
+                            <span>Billing Cycles</span>
+                        </Form.Label>
+                        <Col sm={4}>
+                            <Form.Control
+                                as="select"
+                                onChange={this.handleBillingCycleSelect}
+                            >
+                                {billingCycles}
+                            </Form.Control>
+                        </Col>
+                        <Col sm={2}>
+                            <Button>Run Calculation</Button>
+                        </Col>
+                    </Form.Group>
+                </Form>
+                <MaterialTable
+                    icons={tableIcons}
+                    columns={[
+                        { title: 'Listing', field: 'ListingId'},
+                        { title: 'Days on Market', field: 'daysOnMarket'},
+                        { title: 'Cost', field: 'cost'}
+                    ]}
+                    data={this.state.billingEvents}
+                    title="Listings"
+                />
+            </Container>
         );
     }
 }
-
-export default AccountBilling;
+export default AdminBilling;

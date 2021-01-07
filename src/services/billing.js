@@ -28,9 +28,37 @@ export function setPaymentMethod(nonce){
     });
 }
 
-export function getBillingEvents(){
+export function getBillingEvents(id){
     return new Promise(function(resolve, reject){
-        var url = process.env.REACT_APP_API + "billing/billingEvents";
+        var url = process.env.REACT_APP_API + "billing/billingCycles/" + id + "/billingEvents";
+        axiosInstance({
+            method: 'GET',
+            url: url
+        }).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
+export function getBillingEventsMe(id){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + "billing/billingCycles/" + id + "/billingEvents/me";
+        axiosInstance({
+            method: 'GET',
+            url: url
+        }).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
+export function getBillingCycles(){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + "billing/billingCycles";
         axiosInstance({
             method: 'GET',
             url: url
@@ -45,6 +73,8 @@ export function getBillingEvents(){
 const billing = {
     getClientToken,
     setPaymentMethod,
-    getBillingEvents
+    getBillingEvents,
+    getBillingEventsMe,
+    getBillingCycles
 };
 export default billing;

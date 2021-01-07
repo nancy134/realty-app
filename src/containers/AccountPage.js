@@ -4,9 +4,9 @@ import {
 } from 'react-bootstrap';
 import AccountToolbar from '../components/AccountToolbar';
 import AccountProfile from '../components/AccountProfile';
-import AccountBilling from '../components/AccountBilling';
+import AccountPaymentMethod from '../components/AccountPaymentMethod';
 import AccountAssociates from '../components/AccountAssociates';
-import AccountPayment from '../components/AccountPayment';
+import AccountBilling from '../components/AccountBilling';
 
 export class AccountPage extends Component {
     constructor(props){
@@ -33,13 +33,13 @@ export class AccountPage extends Component {
             <AccountProfile />
             ): null}
             {tab === "billing" ? (
-            <AccountBilling /> 
+            <AccountPaymentMethod /> 
             ): null}
             {tab === "associates" ? (
             <AccountAssociates />
             ): null}
             {tab === "payment" ? (
-            <AccountPayment />
+            <AccountBilling />
             ): null}
         </React.Fragment>
         );
