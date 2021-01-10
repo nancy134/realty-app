@@ -43,7 +43,7 @@ function Toolbar(props){
                 </Button>
             </Col>
             : null }
-            { (props.listingMode === "myListings") ?
+            { (props.listingMode === "myListings" || props.listingMode === "allListings") ?
             <Col>
                 <Button
                     size="sm"
