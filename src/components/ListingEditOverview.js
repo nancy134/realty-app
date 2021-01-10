@@ -11,6 +11,7 @@ import {
 import ImageUpload from './ImageUpload';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {listingTypes} from '../constants/listingTypes';
 
 const OverviewSchema = Yup.object().shape({
     shortDescription: Yup.string().required('Short Description is required'),
@@ -184,7 +185,7 @@ class ListingEditOverview extends React.Component {
                             isValid={touched.longDescription && !errors.longDescription && values.longDescription !== ""}
                             disabled={isSubmitting}
                         />
-                        { listing.listingType === "For Sale" ?
+                        { listing.listingType === listingTypes.FORSALE ?
                         <div>
                         <Form.Label>Listing Price</Form.Label>
                         <Form.Control

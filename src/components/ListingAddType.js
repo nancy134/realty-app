@@ -4,6 +4,7 @@ import {
     Button,
     Form
 } from 'react-bootstrap';
+import {listingTypes} from '../constants/listingTypes';
 
 class ListingAddType extends React.Component{
     constructor(props){
@@ -12,7 +13,7 @@ class ListingAddType extends React.Component{
         this.handleNext = this.handleNext.bind(this);
         this.handleListingTypeChange = this.handleListingTypeChange.bind(this);
         this.state = {
-            listingType: "For Lease"
+            listingType: listingTypes.FORLEASE 
         };
     }
     handleChange(e){
@@ -54,12 +55,12 @@ class ListingAddType extends React.Component{
                     >
                         <Form.Check.Input
                             type="radio"
-                            checked={this.state.listingType === "For Lease"}
+                            checked={this.state.listingType === listingTypes.FORLEASE}
                             onChange={this.handleChange}
-                            onClick={() => this.handleListingTypeChange("For Lease")}
+                            onClick={() => this.handleListingTypeChange(listingTypes.FORLEASE)}
                         />
                         <Form.Check.Label
-                            onClick={() => this.handleListingTypeChange("For Lease")}
+                            onClick={() => this.handleListingTypeChange(listingTypes.FORLEASE)}
                         >
                             For Lease
                         </Form.Check.Label> 
@@ -68,14 +69,14 @@ class ListingAddType extends React.Component{
                     >
                         <Form.Check.Input
                             type="radio"
-                            checked={this.state.listingType === "For Sale"}
+                            checked={this.state.listingType === listingTypes.FORSALE }
                             onChange={this.handleChange}
-                            onClick={() => this.handleListingTypeChange("For Sale")}
+                            onClick={() => this.handleListingTypeChange(listingTypes.FORSALE)}
                         />
                         <Form.Check.Label
-                            onClick={() => this.handleListingTypeChange("For Sale")}
+                            onClick={() => this.handleListingTypeChange(listingTypes.FORSALE)}
                         >
-                            For Sale
+                            {listingTypes.FORSALE} 
                         </Form.Check.Label>
                     </Form.Check>
 

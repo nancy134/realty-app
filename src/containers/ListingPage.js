@@ -28,6 +28,7 @@ import PublishWizardIntro from '../components/PublishWizardIntro';
 import PublishWizardPaymentMethod from '../components/PublishWizardPaymentMethod';
 import PublishWizardFinal from '../components/PublishWizardFinal';
 import UnpublishWizardIntro from '../components/UnpublishWizardIntro';
+import {listingTypes} from '../constants/listingTypes';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -439,7 +440,13 @@ export class ListingPage extends Component {
             if (moreFilters.maxRate) moreQuery += "&maxRate="+moreFilters.maxRate;
         }
 
-        moreQuery += "&ListingType="+state.listingType;
+        // Listing Type
+        if (state.listingType === listingTypes.BOTH){
+            moreQuery += "&ListingType[]="+listingTypes.FORSALE;
+            moreQuery += "&ListingType[]="+listingTypes.FORLEASE;
+        } else {
+            moreQuery += "&ListingType="+state.listingType;
+        }
 
         var bounds = null;
         if (state.bounds){

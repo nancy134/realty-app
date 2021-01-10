@@ -25,6 +25,7 @@ import listingService from '../services/listings';
 import imageService from '../services/images';
 import {formatDateTime} from '../helpers/utilities';
 import ContactModal from './ContactModal';
+import {listingTypes} from '../constants/listingTypes';
 
 class ListingDetail extends React.Component {
     constructor(props) {
@@ -629,7 +630,7 @@ class ListingDetail extends React.Component {
         const listingMode = this.props.listingMode;
         var listing = null;
         var states = null;
-        var listingTypes = null;
+        var listingTypesEnums = null;
         var spaceUses = null;
         var spaceTypes = null;
         var spaceDivisibles = null;
@@ -639,7 +640,7 @@ class ListingDetail extends React.Component {
         if (this.props.listingDetail){
            listing = this.props.listingDetail.listing;
            states = this.props.listingDetail.states;
-           listingTypes = this.props.listingDetail.listngTypes;
+           listingTypesEnums = this.props.listingDetail.listngTypes;
            spaceUses = this.props.listingDetail.spaceUses;
            spaceTypes = this.props.listingDetail.spaceTypes;
            spaceDivisibles = this.props.listingDetail.spaceDivisibles;
@@ -649,7 +650,7 @@ class ListingDetail extends React.Component {
         }  
         const owner = this.props.owner;
         const fullscreen = this.props.fullscreen;
-        var listingType = "For Lease";
+        var listingType = listingTypes.FORLEASE;
         if (listing){
             listingType = listing.listingType;
         }
@@ -696,7 +697,7 @@ class ListingDetail extends React.Component {
                 </div>
                 <ListingDetailOverview 
                     listing={listing} 
-                    listingTypes={listingTypes} 
+                    listingTypes={listingTypesEnums} 
                     editMode={editMode} 
                     getListing={this.props.onFetchListing}
                     onFilesAdded={this.handleFilesAdded}
@@ -715,7 +716,7 @@ class ListingDetail extends React.Component {
                     overviewSaving={this.state.overviewSaving}
 
                 />
-                { (editMode === "edit" && listingType === "For Lease") || 
+                { (editMode === "edit" && listingType === listingTypes.FORLEASE) || 
                   (listing && listing.spaces.length) > 0 ?
                     <ListingDetailAvailableSpace 
                         listing={listing}
@@ -740,7 +741,7 @@ class ListingDetail extends React.Component {
 
                     />
                 : null }
-                {(editMode === "edit" && listingType === "For Sale") || 
+                {(editMode === "edit" && listingType === listingTypes.FORSALE) || 
                  (listing && (listing.units.length > 0)) ?
                     <ListingDetailUnits 
                         listing={listing} 
@@ -774,7 +775,7 @@ class ListingDetail extends React.Component {
                         getListing={this.props.onFetchListing}
                     />
                 : null }
-                {(editMode === "edit" && listingType === "For Sale") || 
+                {(editMode === "edit" && listingType === listingTypes.FORSALE) || 
                  (listing && listing.portfolios.length) > 0 ?
                     <ListingDetailPortfolio 
                         listing={listing} 

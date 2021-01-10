@@ -9,6 +9,7 @@ import {
 } from 'react-bootstrap';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {listingTypes} from '../constants/listingTypes';
 
 const OverviewSchemaForSale = Yup.object().shape({
     shortDescription: Yup.string().required('Short Description is required'),
@@ -41,7 +42,7 @@ class ListingAddOverview extends React.Component{
     componentDidMount(){
         if (this.props.show){
         setTimeout(() => {
-            if (this.props.listing.listingType === "For Lease"){
+            if (this.props.listing.listingType === listingTypes.FORLEASE){
                 this.shortDescriptionRef.current.focus();
             }else{
                 this.listingPriceRef.current.focus();
@@ -59,7 +60,7 @@ class ListingAddOverview extends React.Component{
        };
 
        var schema = OverviewSchemaForLease;
-       if (this.props.listing.listingType === "For Sale"){
+       if (this.props.listing.listingType === listingTypes.FORSALE){
            schema = OverviewSchemaForSale;
        }
 
@@ -102,7 +103,7 @@ class ListingAddOverview extends React.Component{
                     <Col>
                         <Form>
                             <Form.Row>
-                                { this.props.listing.listingType === "For Sale" ?
+                                { this.props.listing.listingType === listingTypes.FORSALE ?
                                 <Col md={6}>
                                     <Form.Label className="font-weight-bold">Listing Price</Form.Label>
                                     <InputGroup>

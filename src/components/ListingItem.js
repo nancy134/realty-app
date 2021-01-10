@@ -16,6 +16,7 @@ import {
     faStar
 } from '@fortawesome/free-regular-svg-icons';
 import authenticationService from '../helpers/authentication';
+import {listingTypes} from '../constants/listingTypes';
 
 function getMinSize(array){
     return array.reduce((min, p) => p.size < min ? p.size : min, array[0].size);
@@ -264,7 +265,7 @@ class ListingItem extends React.Component {
                             { listing.spaces.length > 0 ?
                             <div>${price}</div>
                             : null }
-                            { listing.listingType === "For Sale" && listing.listingPrice?
+                            { listing.listingType === listingTypes.FORSALE && listing.listingPrice?
                             <div>For Sale ${listingPrice}</div>
                             : null }
                             { this.props.showShortDescription ?

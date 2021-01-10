@@ -13,6 +13,7 @@ import PlacesAutocomplete from 'react-places-autocomplete';
 import {
     geocodeByAddress
 } from 'react-places-autocomplete';
+import {listingTypes} from '../constants/listingTypes';
 
 const SpaceTypeMenu = React.forwardRef(
     ({style, className, spaceTypeFilters, 'aria-labelledby': labeledBy , onFilterChange}, ref) => {
@@ -151,12 +152,16 @@ class ListingToolbar extends React.Component {
                             <Dropdown.Menu>
                                 <Dropdown.Item
                                     as="button"
-                                    onClick={(e) => this.handleListingTypeChange(e,"For Lease")}
-                                >For Lease</Dropdown.Item>
+                                    onClick={(e) => this.handleListingTypeChange(e,listingTypes.FORLEASE)}
+                                >{listingTypes.FORLEASE}</Dropdown.Item>
                                 <Dropdown.Item
                                     as="button"
-                                    onClick={(e) => this.handleListingTypeChange(e,"For Sale")}
-                                >For Sale</Dropdown.Item>
+                                    onClick={(e) => this.handleListingTypeChange(e,listingTypes.FORSALE)}
+                                >{listingTypes.FORSALE}</Dropdown.Item>
+                                <Dropdown.Item
+                                    as="button"
+                                    onClick={(e) => this.handleListingTypeChange(e,listingTypes.BOTH)}
+                                >{listingTypes.BOTH}</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     </Col>
