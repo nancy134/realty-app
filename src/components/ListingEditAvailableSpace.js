@@ -21,8 +21,8 @@ import ImageUpload from './ImageUpload';
 
 const SpaceSchema = Yup.object().shape({
     unit: Yup.string(),
-    size: Yup.number().integer().required('Must be an integer'),
-    price: Yup.number().required('Must be a number'),
+    size: Yup.number().integer().required('Must enter a number').typeError('Must enter a number'),
+    price: Yup.number().required('Must enter a number').typeError('Must enter a number'),
     use: Yup.string().required("Must select a Use Type"),
     driveInDoors: Yup.number().integer().typeError('Must be an integer'),
     floors: Yup.number().integer().typeError('Must be an integer'),
@@ -189,6 +189,8 @@ class ListingEditAvailableSpace extends React.Component {
         <Formik
             initialValues={initialValues}
             validationSchema={SpaceSchema}
+            validateOnChange={false}
+            validateOnBlur={false}
             onSubmit={(values, { setSubmitting }) => {
                 setSubmitting(true);
                 this.handleSave(initialValues, values);
@@ -202,7 +204,7 @@ class ListingEditAvailableSpace extends React.Component {
                 handleChange, 
                 handleBlur, 
                 handleSubmit, 
-                isSubmitting, 
+                isSubmitting,
                 isValid, 
                 dirty, 
                 setFieldValue 
@@ -224,16 +226,19 @@ class ListingEditAvailableSpace extends React.Component {
                     <Form>
                         <Form.Row>
                             <Form.Group as={Col} >
-                                <Form.Label className="font-weight-bold">Unit Name <span className="font-weight-light">(optional)</span></Form.Label>
+                                <Form.Label
+                                    className="font-weight-bold"
+                                >
+                                    Unit Name <span className="font-weight-light">(optional)</span>
+                                </Form.Label>
                                 <Form.Control 
                                     id="space_edit_unit"
                                     name="unit"
                                     type="text"
                                     value ={values.unit} 
                                     onChange={handleChange}
-                                    onBlur={handleBlur}
                                     isInvalid={!!errors.unit}
-                                    isValid={touched.unit && !errors.unit && values.unit !== ""}
+                                    isValid={touched.unit && !errors.unit}
                                     disabled={isSubmitting}
                                 /> 
                                 <Form.Control.Feedback type="invalid">
@@ -249,9 +254,8 @@ class ListingEditAvailableSpace extends React.Component {
                                         type="text"
                                         value={values.size} 
                                         onChange={handleChange}
-                                        onBlur={handleBlur}
                                         isInvalid={!!errors.size}
-                                        isValid={touched.size && !errors.size && values.size !== ""}
+                                        isValid={touched.size && !errors.size}
                                         disabled={isSubmitting}
                                     />
                                     <InputGroup.Append>
@@ -274,7 +278,6 @@ class ListingEditAvailableSpace extends React.Component {
                                         type="text"
                                         value={values.price} 
                                         onChange={handleChange}
-                                        onBlur={handleBlur}
                                         isInvalid={!!errors.price}
                                         isValid={touched.price && !errors.price && values.price !== ""}
                                         disabled={isSubmitting}
@@ -309,7 +312,6 @@ class ListingEditAvailableSpace extends React.Component {
                                     as="select"
                                     value={values.use}
                                     onChange={handleChange}
-                                    onBlur={handleBlur}
                                     isInvalid={!!errors.use}
                                     isValid={touched.use && !errors.use && values.use !== ""}
                                     disabled={isSubmitting}
@@ -333,7 +335,6 @@ class ListingEditAvailableSpace extends React.Component {
                                     as="select" 
                                     value={values.type} 
                                     onChange={handleChange}
-                                    onBlur={handleBlur}
                                     disabled={isSubmitting}
                                    
                                 >
@@ -354,7 +355,6 @@ class ListingEditAvailableSpace extends React.Component {
                                     rows="5" 
                                     value={values.description} 
                                     onChange={handleChange}
-                                    onBlur={handleBlur}
                                     isInvalid={!!errors.description}
                                     isValid={touched.description && !errors.description && values.description !== ""}
                                     disabled={isSubmitting}
@@ -387,7 +387,6 @@ class ListingEditAvailableSpace extends React.Component {
                                                         type="text"
                                                         value={values.driveInDoors}
                                                         onChange={handleChange}
-                                                        onBlur={handleBlur}
                                                         isInvalid={!!errors.driveInDoors}
                                                         isValid={touched.driveInDoors && !errors.driveInDoors && values.driveInDoors !== ""}
                                                         disabled={isSubmitting}
@@ -404,7 +403,6 @@ class ListingEditAvailableSpace extends React.Component {
                                                         type="text"
                                                         value={values.floors}
                                                         onChange={handleChange}
-                                                        onBlur={handleBlur}
                                                         isInvalid={!!errors.floors}
                                                         isValid={touched.floors && !errors.floors && values.floors !== ""}
                                                         disabled={isSubmitting}
@@ -421,7 +419,6 @@ class ListingEditAvailableSpace extends React.Component {
                                                         as="select"
                                                         value={values.divisible}
                                                         onChange={handleChange}
-                                                        onBlur={handleBlur}
                                                         isInvalid={!!errors.divisible}
                                                         isValid={touched.divisible && !errors.divisible && values.divisible !== ""}
                                                         disabled={isSubmitting}
@@ -442,7 +439,6 @@ class ListingEditAvailableSpace extends React.Component {
                                                         type="text"
                                                         value={values.loadingDocks}
                                                         onChange={handleChange}
-                                                        onBlur={handleBlur}
                                                         isInvalid={!!errors.loadingDocks}
                                                         isValid={touched.loadingDocks && !errors.loadingDocks && values.loadingDocks !== ""}
                                                         disabled={isSubmitting}
@@ -460,7 +456,6 @@ class ListingEditAvailableSpace extends React.Component {
                                                         type="text"
                                                         value={values.leaseTerm}
                                                         onChange={handleChange}
-                                                        onBlur={handleBlur}
                                                         isInvalid={!!errors.leaseTerm}
                                                         isValid={touched.leaseTerm && !errors.leaseTerm && values.leaseTerm !== ""}
                                                         disabled={isSubmitting}
@@ -478,7 +473,6 @@ class ListingEditAvailableSpace extends React.Component {
                                                         type="text"
                                                         value={values.ceilingHeight}
                                                         onChange={handleChange}
-                                                        onBlur={handleBlur}
                                                         isInvalid={!!errors.ceilingHeight}
                                                         isValid={touched.ceilingHeight && !errors.ceilingHeight && values.ceilingHeight !== ""}
                                                         disabled={isSubmitting}
@@ -497,7 +491,6 @@ class ListingEditAvailableSpace extends React.Component {
                                                         type="text"
                                                         value={values.availableDate}
                                                         onChange={handleChange}
-                                                        onBlur={handleBlur}
                                                         isInvalid={!!errors.availableDate}
                                                         isValid={touched.availableDate && !errors.availableDate && values.availableDate !== ""}
                                                         disabled={isSubmitting}
@@ -514,7 +507,6 @@ class ListingEditAvailableSpace extends React.Component {
                                                         type="text"
                                                         value={values.nets}
                                                         onChange={handleChange}
-                                                        onBlur={handleBlur}
                                                         isInvalid={!!errors.nets}
                                                         isValid={touched.nets && !errors.nets && values.nets !== ""}
                                                         disabled={isSubmitting}
@@ -531,7 +523,6 @@ class ListingEditAvailableSpace extends React.Component {
                                                         type="text"
                                                         value={values.class}
                                                         onChange={handleChange}
-                                                        onBlur={handleBlur}
                                                         isInvalid={!!errors.class}
                                                         isValid={touched.class && !errors.class && values.class !== ""}
                                                         disabled={isSubmitting}

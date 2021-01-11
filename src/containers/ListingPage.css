@@ -200,3 +200,11 @@
     background-color: #dc3545 !important;
     border-color: #dc3545 !important;
 }
+
+.form-control.is-valid, .was-validated .form-control:valid {
+    background-position: center right calc(.375em + .5rem) !important;
+}
+
+.form-control.is-invalid, .was-validated .form-control:invalid {
+    background-position: center right calc(.375em + .5rem) !important;
+}
