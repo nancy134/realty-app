@@ -561,10 +561,25 @@ export class ListingPage extends Component {
         });
     }
     handlePublishWizardFinalFinish(){
-        this.setState({
-            showPublishWizardFinal: false
+        var that = this;
+        var localState = {
+            // Go to page 1
+            page: 1,
+            // Close wizard
+            showPublishWizardFinal: false,
+            // Close detail view
+            showDetail: false,
+            // Keep the bounds
+            bounds: this.state.bounds,
+            center: this.state.center,
+            zoomLevel: this.state.zoomLevel,
+            updateBounds: true
+        }
+        this.fetchListingsPromise(localState).then(function(localState){
+            that.setState(localState);
+        }).catch(function(err){
+            console.log(err);
         });
-        this.handleListUpdate();
     }
     handleUnpublishWizardIntroFinish(){
         this.setState({

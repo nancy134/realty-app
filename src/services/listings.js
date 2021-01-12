@@ -12,7 +12,6 @@ export function getAll(query, listingMode){
     if (query) {
         url += "?"+query;
     }
-    console.log("url: "+url);
 
     return new Promise(function(resolve, reject){
         var options = {
@@ -95,10 +94,8 @@ export function create(listing){
             data: listing
         };
         axiosInstance(options).then(function(result){
-            console.log(result);
             resolve(result.data);
         }).catch(function(err){
-            console.log(err);
             reject(err);
         });
     });
