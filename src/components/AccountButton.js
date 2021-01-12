@@ -228,12 +228,32 @@ export class AccountButton extends Component{
             <span className="align-top text-danger">
             {this.state.authenticated ? 
                 ( 
-                <DropdownButton id="dropdown-item-button" title={userName}>
-                    <Dropdown.Item as="button" onClick={() => {this.onMyListings()}}>My Listings</Dropdown.Item>
-                    <Dropdown.Item as="button" onClick={() => {this.onMyReports()}}>My Reports</Dropdown.Item>
-                    <Dropdown.Item as="button" onClick={() => {this.onMyAccount()}}>My Account</Dropdown.Item>
-                    <Dropdown.Item as="button" onClick={() => {this.onAdministration()}}>Administration</Dropdown.Item>
-                    <Dropdown.Item as="button" onClick={() => {this.onLogout()}}>Logout</Dropdown.Item>
+                <DropdownButton id="account-button-dropdown" title={userName}>
+                    <Dropdown.Item
+                        as="button"
+                        id="account-button-my-listings"
+                        onClick={() => {this.onMyListings()}}
+                    >My Listings</Dropdown.Item>
+                    <Dropdown.Item
+                        as="button"
+                        id="account-button-my-reports"
+                        onClick={() => {this.onMyReports()}}
+                    >My Reports</Dropdown.Item>
+                    <Dropdown.Item
+                        as="button"
+                        id="account-button-my-account"
+                        onClick={() => {this.onMyAccount()}}
+                    >My Account</Dropdown.Item>
+                    <Dropdown.Item
+                        as="button"
+                        id="account-button-administration"
+                        onClick={() => {this.onAdministration()}}
+                    >Administration</Dropdown.Item>
+                    <Dropdown.Item
+                        as="button"
+                        id="account-button-logout"
+                        onClick={() => {this.onLogout()}}
+                    >Logout</Dropdown.Item>
                 </DropdownButton> 
                 )
                 :( 
@@ -241,7 +261,7 @@ export class AccountButton extends Component{
                     <Button 
                         onClick={() => this.setState({modalShowLogin: true})} 
                         variant="success"
-                        id="account_button"
+                        id="account-button"
                     >
                         Login / Create Account
                     </Button>

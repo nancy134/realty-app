@@ -11,8 +11,8 @@ import {
 class AccountLoginModal extends React.Component {
     constructor(props){
         super(props);
-        this.onEmailChange = this.onEmailChange.bind(this);
-        this.onPasswordChange = this.onPasswordChange.bind(this);
+        this.handleEmailChange = this.handleEmailChange.bind(this);
+        this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
         this.emailRef = React.createRef();
@@ -31,12 +31,12 @@ class AccountLoginModal extends React.Component {
     handleLogin(){
         this.props.onLogin(this.state.email, this.state.password);
     }
-    onEmailChange(event){
+    handleEmailChange(event){
         this.setState({
             email: event.target.value.toLowerCase()
         });
     }
-    onPasswordChange(event){
+    handlePasswordChange(event){
         this.setState({
             password: event.target.value
         });
@@ -72,16 +72,16 @@ class AccountLoginModal extends React.Component {
                 : null}
                 <Form.Label>Email</Form.Label>
                 <Form.Control 
-                    id="login_email_input" 
-                    onChange={this.onEmailChange}
+                    id="login-email-input" 
+                    onChange={this.handleEmailChange}
                     ref={this.emailRef}
                 />
                 <Form.Label>Password</Form.Label>
                 <InputGroup>
                     <Form.Control
-                        id="login_password_input" 
+                        id="login-password-input" 
                         type={this.state.hidden ? 'password' : 'text'} 
-                        onChange={this.onPasswordChange}
+                        onChange={this.handlePasswordChange}
                         onKeyPress={this.handleKeyPress}
                     />
                     <InputGroup.Append>
@@ -103,7 +103,7 @@ class AccountLoginModal extends React.Component {
             <Modal.Footer>
                 <Button onClick={this.props.onCancel}>Cancel</Button>
                 <Button 
-                    id="login_button"
+                    id="login-button"
                     onClick={this.handleLogin}
                 >
                     { !this.props.loginProgress ?
