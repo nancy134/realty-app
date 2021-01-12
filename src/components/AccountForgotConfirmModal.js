@@ -7,18 +7,11 @@ import {
     Spinner
 } from 'react-bootstrap';
 
-function SavingAlert(){
-    return(
-    <div className="w-100">
-       <Spinner animation="border" />
-    </div>
-    );
-}
 class AccountForgotConfirmModal extends React.Component {
     constructor(props){
         super(props);
-        this.onCodeChange = this.onCodeChange.bind(this);
-        this.onPasswordChange = this.onPasswordChange.bind(this);
+        this.handleCodeChange = this.handleCodeChange.bind(this);
+        this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleForgotPassword = this.handleForgotPassword.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
         this.codeRef = React.createRef();
@@ -30,12 +23,12 @@ class AccountForgotConfirmModal extends React.Component {
     handleForgotPassword(){
         this.props.onForgotPassword(this.state.code, this.state.password);
     }
-    onCodeChange(event){
+    handleCodeChange(event){
         this.setState({
             code: event.target.value
         });
     }
-    onPasswordChange(event){
+    handlePasswordChange(event){
         this.setState({
             password: event.target.value
         });
@@ -64,9 +57,6 @@ class AccountForgotConfirmModal extends React.Component {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {this.props.forotPasswordProgress ?
-                <SavingAlert/>
-                : null}
                 {this.props.forgotPasswordMessage ?
                 <Alert variant="danger">
                 {this.props.forgotPasswrodMessage}
@@ -78,14 +68,14 @@ class AccountForgotConfirmModal extends React.Component {
                 <Form.Label>Code</Form.Label>
                 <Form.Control 
                     id="login_code_input" 
-                    onChange={this.onCodeChange}
+                    onChange={this.handleCodeChange}
                     ref={this.codeRef}
                 />
                 <Form.Label>Password</Form.Label>
                 <Form.Control
                     id="login_password_input"
                     type="password"
-                    onChange={this.onPasswordChange}
+                    onChange={this.handlePasswordChange}
                 />
             </Modal.Body>
             <Modal.Footer>
@@ -94,7 +84,17 @@ class AccountForgotConfirmModal extends React.Component {
                     id="login_button"
                     onClick={this.handleForgotPassword}
                 >
-                    Submit 
+                { !this.props.progress ?
+                    <span>Submit</span>
+                :
+                    <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                    />
+                }
                 </Button>
             </Modal.Footer>
         </Modal>

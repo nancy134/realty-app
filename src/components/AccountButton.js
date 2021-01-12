@@ -15,32 +15,55 @@ import AccountForgotConfirmModal from './AccountForgotConfirmModal';
 export class AccountButton extends Component{
     constructor(props){
         super(props);
-        this.onLogin = this.onLogin.bind(this);
-        this.onRegister = this.onRegister.bind(this);
-        this.onConfirm = this.onConfirm.bind(this);
-        this.handleRegisterCancel = this.handleRegisterCancel.bind(this);
+
+        // Login
+        this.handleLogin = this.handleLogin.bind(this);
         this.handleLoginCancel = this.handleLoginCancel.bind(this);
+
+        // Register
+        this.handleRegister = this.handleRegister.bind(this);
+        this.handleRegisterCancel = this.handleRegisterCancel.bind(this);
+
+        // Confirm
+        this.handleConfirm = this.handleConfirm.bind(this);
         this.handleConfirmCancel = this.handleConfirmCancel.bind(this);
+
+        // Forgot Password
         this.handleForgotPasswordStart = this.handleForgotPasswordStart.bind(this);
         this.handleForgotPassword = this.handleForgotPassword.bind(this);
+
+        // Forgot Password Confirm
+        this.handleForgotConfirm = this.handleForgotConfirm.bind(this);
+
         this.state = {
             authenticated: false,
+
+            // Login
             modalShowLogin: false,
-            modalShowRegister: false,
-            modalShowConfirm: false,
-            modalShowForgotPassword: false,
-            modalShowForgotConfirm: false,
             loginMessage: null,
             loginMessageVariant: "danger",
-            registerMessage: null,
-            confirmMessage: null,
-            forgotPasswordMessage: null,
-            forgotConfirmMessage: null,
             loginProgress: false,
+
+            // Register
+            modalShowRegister: false,
+            registerMessage: null,
             registerProgress: false,
+
+            // Confirm
+            modalShowConfirm: false,
+            confirmMessage: null,
             confirmProgress: false,
+
+            // Forgot Password
+            modalShowForgotPassword: false,
+            forgotPasswordMessage: null,
             forgotPasswordProgress: false,
+
+            // Forgot Password Confirm
+            modalShowForgotConfirm: false,
+            forgotConfirmMessage: null,
             forgotConfirmProgress: false,
+
             email: null 
         }
     }
@@ -49,7 +72,7 @@ export class AccountButton extends Component{
             this.setState({authenticated: true});
         }
     }
-    onLogin(email, password){
+    handleLogin(email, password){
         var that = this;
         this.setState({
             loginProgress: true
@@ -69,24 +92,31 @@ export class AccountButton extends Component{
            });
         });
     }
-    onRegister(email, password){
+    handleRegister(email, password){
         var that = this;
+        this.setState({
+            registerProgress: true
+        });
         authenticationService.signupResponse(email, password).then(function(result){
             that.setState({
                 email:email,
                 modalShowRegister:false,
                 modalShowConfirm:true,
-                registerMessage: null
+                registerMessage: null,
+                registerProgress: false,
+                loginMessage: "",
+                loginMessageVariant: "danger"
             });
 
             that.props.onRegister();
         }).catch(function(err){
             that.setState({
-                registerMessage: err.message
+                registerMessage: err.message,
+                registerProgress: false
             });
         });
     }
-    onConfirm(email,code){
+    handleConfirm(email,code){
         var that = this;
         authenticationService.confirmResponse(email, code).then(function(result){
             that.setState({
@@ -106,33 +136,48 @@ export class AccountButton extends Component{
     handleForgotPasswordStart(){
         this.setState({
             modalShowForgotPassword: true,
-            modalShowLogin: false
+            modalShowLogin: false,
+            loginMessage: "",
+            loginMessageVariant: "danger"
         });
     }
     handleForgotPassword(email){
         var that=this;
+        this.setState({
+           forgotPasswordProgress: true
+        });
         authenticationService.forgotPasswordResponse(email).then(function(result){
             that.setState({
                 modalShowForgotPassword: false,
                 modalShowForgotConfirm: true,
+                forgotPasswordProgress: false,
                 email: email
             });
         }).catch(function(err){
             that.setState({
-                forgotPasswordMessage: err.message
+                forgotPasswordMessage: err.message,
+                forgotPasswordProgress: false
             });
         });
     }
     handleForgotConfirm(code, password){
+        console.log(this);
         var that=this;
-        authenticationService.confirmForgotPasswordResponse(code, password).then(function(result){
+        this.setState({
+            forgotConfirmProgress: true
+        });
+        authenticationService.confirmForgotPasswordResponse(code, password, this.state.email).then(function(result){
+            console.log(result);
             that.setState({
                 modalShowForgotConfirm: false,
-                modalShowLogin: true
+                modalShowLogin: true,
+                forgotConfirmProgress: false
             });
         }).catch(function(err){
+            console.log(err);
             that.setState({
-                forgotPasswordConfirmMessage: err.message
+                forgotPasswordConfirmMessage: err.message,
+                forgotConfirmProgress: false
             });
         });
     }
@@ -207,7 +252,7 @@ export class AccountButton extends Component{
             <AccountLoginModal
                 show={this.state.modalShowLogin}
                 onCancel={this.handleLoginCancel}
-                onLogin ={(email, password) => {this.onLogin(email, password)}}
+                onLogin ={(email, password) => {this.handleLogin(email, password)}}
                 onRegisterStart={() => {this.setState({modalShowLogin:false,modalShowRegister:true})}}
                 onForgotPassword={this.handleForgotPasswordStart}
                 loginMessage={this.state.loginMessage}
@@ -218,10 +263,10 @@ export class AccountButton extends Component{
             { this.state.modalShowRegister ?
             <AccountRegisterModal
                 show={this.state.modalShowRegister}
-                onRegister={(email,password) =>{this.onRegister(email,password);}}
+                onRegister={(email,password) =>{this.handleRegister(email,password);}}
                 onCancel={this.handleRegisterCancel}
                 registerMessage={this.state.registerMessage}
-                registerProgress={this.state.registerProgress}
+                progress={this.state.registerProgress}
                 
             />
             : null}
@@ -229,10 +274,10 @@ export class AccountButton extends Component{
             <AccountConfirmModal
                 show={this.state.modalShowConfirm}
                 email={this.state.email}
-                onConfirm={(email,code) =>{this.onConfirm(email,code)}}
+                onConfirm={(email,code) =>{this.handleConfirm(email,code)}}
                 onCancel={this.handleConfirmCancel}
                 confirmMessage={this.state.confirmMessage}
-                confirmProgress={this.state.confirmProgress}
+                progress={this.state.confirmProgress}
                 confirmMessageVariant={this.state.confirmMessageVariant}
             />
             : null}
@@ -240,12 +285,14 @@ export class AccountButton extends Component{
             <AccountForgotPasswordModal
                 show={this.state.modalShowForgotPassword}
                 onForgotPassword={(email)=>{this.handleForgotPassword(email)}}
+                progress={this.state.forgotPasswordProgress}
             />
             : null}
             { this.state.modalShowForgotConfirm ?
             <AccountForgotConfirmModal
                 show={this.state.modalShowForgotConfirm}
                 onForgotPassword={(code, password)=>{this.handleForgotConfirm(code, password)}}
+                progress={this.state.forgotConfirmProgress}
             />
             : null}
         </span>

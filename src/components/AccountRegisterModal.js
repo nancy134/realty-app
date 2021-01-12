@@ -7,18 +7,11 @@ import {
     Spinner
 } from 'react-bootstrap';
 
-function SavingAlert(){
-    return(
-    <div className="w-100">
-       <Spinner animation="border" />
-    </div>
-    );
-}
 class AccountRegisterModal extends React.Component {
     constructor(props){
         super(props);
-        this.onEmailChange = this.onEmailChange.bind(this);
-        this.onPasswordChange = this.onPasswordChange.bind(this);
+        this.handleEmailChange = this.handleEmailChange.bind(this);
+        this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleRegister = this.handleRegister.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
         this.emailRef = React.createRef();
@@ -30,12 +23,12 @@ class AccountRegisterModal extends React.Component {
     handleRegister(){
         this.props.onRegister(this.state.email, this.state.password);
     }
-    onEmailChange(event){
+    handleEmailChange(event){
         this.setState({
             email: event.target.value.toLowerCase()
         });
     }
-    onPasswordChange(event){
+    handlePasswordChange(event){
         this.setState({
             password: event.target.value
         });
@@ -65,9 +58,6 @@ class AccountRegisterModal extends React.Component {
                 </Modal.Title> 
             </Modal.Header>
             <Modal.Body>
-                {this.props.loginProgress ?
-                <SavingAlert/>
-                : null}
                 {this.props.registerMessage ?
                 <Alert variant="danger">
                 {this.props.registerMessage}
@@ -75,13 +65,13 @@ class AccountRegisterModal extends React.Component {
                 : null }
                 <Form.Label>Email</Form.Label>
                 <Form.Control
-                    onChange={this.onEmailChange}
+                    onChange={this.handleEmailChange}
                     ref={this.emailRef}
                 />
                 <Form.Label>Password</Form.Label>
                 <Form.Control
                     type="password"
-                    onChange={this.onPasswordChange}
+                    onChange={this.handlePasswordChange}
                     onKeyPress={this.handleKeyPress}
                 />
                 <div>Password must be at least 8 characters and contain at least one of each below:</div>
@@ -94,7 +84,21 @@ class AccountRegisterModal extends React.Component {
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={this.props.onCancel}>Cancel</Button>
-                <Button onClick={this.handleRegister}>Register</Button>
+                <Button
+                    onClick={this.handleRegister}
+                >
+                    {!this.props.progress ?
+                    <span>Register</span>
+                    :
+                    <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                    />
+                    }
+                </Button>
             </Modal.Footer>
         </Modal>
         );

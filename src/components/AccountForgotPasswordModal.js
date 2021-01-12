@@ -7,17 +7,10 @@ import {
     Spinner
 } from 'react-bootstrap';
 
-function SavingAlert(){
-    return(
-    <div className="w-100">
-       <Spinner animation="border" />
-    </div>
-    );
-}
 class AccountForgotPasswordModal extends React.Component {
     constructor(props){
         super(props);
-        this.onEmailChange = this.onEmailChange.bind(this);
+        this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handleForgotPassword = this.handleForgotPassword.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
         this.emailRef = React.createRef();
@@ -28,7 +21,7 @@ class AccountForgotPasswordModal extends React.Component {
     handleForgotPassword(){
         this.props.onForgotPassword(this.state.email);
     }
-    onEmailChange(event){
+    handleEmailChange(event){
         this.setState({
             email: event.target.value.toLowerCase()
         });
@@ -57,9 +50,6 @@ class AccountForgotPasswordModal extends React.Component {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {this.props.forotPasswordProgress ?
-                <SavingAlert/>
-                : null}
                 {this.props.forgotPasswordMessage ?
                 <Alert variant="danger">
                 {this.props.forgotPasswrodMessage}
@@ -71,17 +61,29 @@ class AccountForgotPasswordModal extends React.Component {
                 <Form.Label>Email</Form.Label>
                 <Form.Control 
                     id="login_email_input" 
-                    onChange={this.onEmailChange}
+                    onChange={this.handleEmailChange}
                     ref={this.emailRef}
                 />
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={this.props.onCancel}>Cancel</Button>
+                <Button
+                    onClick={this.props.onCancel}
+                >Cancel</Button>
                 <Button 
                     id="login_button"
                     onClick={this.handleForgotPassword}
                 >
-                    Submit 
+                { !this.props.progress ?
+                    <span>Submit</span>
+                :
+                    <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                    />
+                }
                 </Button>
             </Modal.Footer>
         </Modal>
