@@ -257,7 +257,7 @@ class ListingItem extends React.Component {
                             <div>Built in {listing.yearBuilt}</div>
                             : null}
                             { listing.spaces.length === 1 ?
-                            <div>{size} sf Space</div>
+                            <div>{size} sf for lease</div>
                             : null}
                             { listing.spaces.length > 1 ?
                             <div>{size} sf ({listing.spaces.length} spaces)</div>
