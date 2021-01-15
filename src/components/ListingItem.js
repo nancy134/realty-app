@@ -163,7 +163,7 @@ class ListingItem extends React.Component {
     return(
         <ListGroup.Item 
             className="border p-1 addPointer list-item" 
-            onClick={() => this.props.onItemClick(listing.id, this.props.index)}
+            onClick={() => this.props.onItemClick(listing.id, listing.publishStatus)}
         >
             <Row>
                 {this.props.showImage ?

@@ -3,10 +3,13 @@ import {
     Map,
     GoogleApiWrapper,
     Marker,
-    InfoWindow,
     Polygon
 } from 'google-maps-react';
 //import geolocationService from '../helpers/geolocation';
+import {
+    Button
+} from 'react-bootstrap';
+import InfoWindowEx from '../components/InfoWindowEx';
 
 class ListingMap extends React.Component {
     constructor(props) {
@@ -19,6 +22,7 @@ class ListingMap extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleZoomChanged = this.handleZoomChanged.bind(this);
         this.handleDragEnd = this.handleDragEnd.bind(this);
+        this.handleInfoWindowClick = this.handleInfoWindowClick.bind(this);
     }
 
     handleChange(e) {
@@ -40,6 +44,9 @@ class ListingMap extends React.Component {
         });
     }
 
+    handleInfoWindowClick(selectedPlace){
+        this.props.onShowDetailChange(true, selectedPlace.listingId, selectedPlace.publishStatus);
+    }
     onMapClicked = () => {
         if (this.state.showingInfoWindow){
             this.setState({
@@ -58,6 +65,10 @@ class ListingMap extends React.Component {
                 return <Marker
                     key={index}
                     name={marker.address}
+                    city={marker.city}
+                    state={marker.state}
+                    listingId={marker.id}
+                    publishStatus={marker.publishStatus}
                     onClick={this.onMarkerClick}
                     position={{ lat: marker.location.coordinates[0], lng: marker.location.coordinates[1] }}
                 />
@@ -173,15 +184,28 @@ class ListingMap extends React.Component {
             >
                 {this.displayMarkers()}
 
-               <InfoWindow
+               <InfoWindowEx
                    marker={this.state.activeMarker}
                    onClose={this.onInfoWindowClose}
                    visible={this.state.showingInfoWindow}
                >
                    <div>
-                       <p>{this.state.selectedPlace.name}</p>
+                   <div>
+                       {this.state.selectedPlace.name}:{this.state.selectedPlace.listingId}
                    </div>
-               </InfoWindow>
+                   <div>
+                       {this.state.selectedPlace.city}, {this.state.selectedPlace.state}
+                   </div>
+                   <Button
+                       variant="link"
+                       size="sm"
+                       onClick={() => this.handleInfoWindowClick(this.state.selectedPlace)}
+                   >
+                    
+                       View Listing
+                   </Button>
+                   </div>
+               </InfoWindowEx>
                { false ?
                <Polygon
                    paths={polygon}

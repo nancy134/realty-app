@@ -291,14 +291,14 @@ export class ListingPage extends Component {
         });
 
     }
-    handleShowDetailChange(showDetail, index, arrayIndex){
+    handleShowDetailChange(showDetail, index, publishStatus){
         var editMode = "view";
         if (index !== this.state.index){
             editMode = "view";
         } else {
             editMode = this.state.editMode;
         }
-        if (showDetail && this.state.listings[arrayIndex].publishStatus === "Draft"){
+        if (showDetail && publishStatus === "Draft"){
             editMode = "edit";
         }        
 
@@ -1310,6 +1310,7 @@ export class ListingPage extends Component {
                         updateBounds={this.state.updateBounds}
                         center={this.state.center}
                         zoomLevel={this.state.zoomLevel}
+                        onShowDetailChange={this.handleShowDetailChange}
                     />
                     : null }
                 </Col>

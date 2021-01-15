@@ -84,8 +84,8 @@ class Listings extends React.Component {
         e.stopPropagation();
         this.props.onDelete(id);
     };
-    showDetailChange(id, arrayIndex){
-        this.props.onShowDetailChange(true, id, arrayIndex);
+    showDetailChange(id, publishStatus){
+        this.props.onShowDetailChange(true, id, publishStatus);
     }
     handleListingModeChange(listingMode){
         this.props.onListingModeChange(listingMode);
