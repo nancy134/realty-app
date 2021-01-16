@@ -449,17 +449,26 @@ export class ListingPage extends Component {
         }
 
         var bounds = null;
+        var center = null;
+        var zoomLevel = null;
+        var updateBounds = false;
         if (state.bounds){
             bounds = state.bounds;
+            updateBounds = true;
         } else {
             bounds = this.state.bounds;
+            center = this.state.center;
+            zoomLevel = this.state.zoomLevel;
         }
 
         var localState = {
             spaceUseFilter: spaceTypeFilter,
             moreQuery: moreQuery,
             bounds: bounds,
-            page: 1
+            center: center,
+            zoomLevel: zoomLevel,
+            page: 1,
+            updateBounds: updateBounds
         };
         var that = this;
         this.fetchListingsPromise(localState).then(function(localState){
