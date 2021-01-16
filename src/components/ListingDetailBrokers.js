@@ -76,11 +76,17 @@ class ListingDetailBrokers extends React.Component {
                     </Col>
                 </Row>
                 <Row className="pt-2 pb-2 ml-0 mr-0">
-                    <Col md={4}>
+                    <Col md={12}>
                         <Row>
-                            <Col md={4}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
-                            <Col md={8}>
-                                <Row>{listing.owner}</Row>
+                            <Col md={2}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
+                            <Col md={4}>
+                                <Row className="font-weight-bold">{listing.owner.first} {listing.owner.middle} {listing.owner.last}</Row>
+                                <Row>{listing.owner.email}</Row>
+                            </Col>
+                            <Col md={4}>
+                                <Row className="font-weight-bold">{listing.owner.company}</Row>
+                                <Row>{listing.owner.address1}</Row>
+                                <Row>{listing.owner.city}, {listing.owner.state} {listing.owner.zip}</Row>
                             </Col>
                         </Row>
                     </Col>

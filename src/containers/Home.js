@@ -131,6 +131,7 @@ export class Home extends Component {
                 />
                 <InputGroup.Append>
                 <Button
+                    id="button-find-space"
                     variant="outline-secondary"
                     onClick={this.handleFindSpace}
                 >Find Space</Button>

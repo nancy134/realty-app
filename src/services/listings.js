@@ -50,7 +50,7 @@ export function getMarkers(query){
 }
 
 export function get(index){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"listings/"+index;
+    var url = process.env.REACT_APP_API+"listings/"+index;
     return new Promise(function(resolve, reject){
         var options = {
             method: 'GET',
