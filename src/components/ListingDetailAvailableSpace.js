@@ -22,7 +22,7 @@ function SpaceItem(props){
     var editMode = props.editMode;
     var listing = props.listing;
     var index = props.index;
-
+    var eventKey = "Accordion"+props.index;
     var availableDate;
     if (space.availableDate && space.availableDate !== ""){
         availableDate = formatDate(space.availableDate);
@@ -31,30 +31,26 @@ function SpaceItem(props){
 
     // Calculate if Accordion is need
     var accordionNeeded = false;
-    if (editMode === "edit"){
+    if (space.description || 
+        space.driveInDoors ||
+        space.floors ||
+        space.divisible ||
+        space.loadingDocks ||
+        space.leaseTerm ||
+        space.ceilingHeight ||
+        space.availableDate ||
+        space.nets ||
+        space.class){
         accordionNeeded = true;
-    } else {
-        if (space.description || 
-            space.driveInDoors ||
-            space.floors ||
-            space.divisible ||
-            space.loadingDocks ||
-            space.leaseTerm ||
-            space.ceilingHeight ||
-            space.availableDate ||
-            space.nets ||
-            space.class){
-            accordionNeeded = true;
-        }
     }
+   
     var accordionText = props.accordionText[index];
-
     if (accordionNeeded){
     return(
     <Accordion key={space.unit}> 
         <Row className="ml-0 mr-0 border-bottom align-items-center" >
             <Col md={2}>{space.unit}</Col>
-            <Col md={1}>{space.size} sf</Col>
+            <Col md={2}>{space.size} sf</Col>
             <Col md={2}>${space.price} {space.priceUnit}</Col>
             <Col md={3}>
                 <Row>
@@ -62,155 +58,160 @@ function SpaceItem(props){
                     <Col >{space.type}</Col>
                 </Row>
             </Col> 
-            <Col md={4}>
+            <Col md={3}>
                 <Row>
-                    { editMode === "edit" ?
                     <Col>
-                         <EditButton
-                             title="Update Space"
-                             listing={listing}
-                             index={index}
-                             spaceUpdateIndex={props.spaceUpdateIndex}
-                             space={space} 
-                             spaceUses={props.spaceUses}
-                             spaceTypes={props.spaceTypes} 
-                             spaceDivisibles={props.spaceDivisibles}
-                             priceUnits={props.priceUnits}
-                             onSave={props.onSave}
-                             onShow={props.onShow}
-                             onHide={props.onHide}
-                             errorMessage={props.errorMessage}
-                             show={props.show}
-                             saving={props.saving}
-                         />
-                    </Col>
-                    : null }
-                    { editMode === "edit" ?
-                    <Col>
-                        <span>
-                        <FontAwesomeIcon 
-                            className="edit-button alight-top text-danger" 
-                            size="xs"
-                            onClick={() => {props.onDelete(props.space.id)}} 
-                            icon={faTrash} 
-                        />
+                        <span className="float-right">
+                            <Accordion.Toggle
+                                value={index}
+                                className="text-danger"
+                                as={Button}
+                                onClick={() => props.onAccordionChange(index)}
+                                variant="link"
+                                eventKey={eventKey}
+                            >
+                                <span>{accordionText}&nbsp;
+                                    <FontAwesomeIcon
+                                        icon={accordionText === "More" ? faAngleDown : faAngleUp}
+                                    />
+                                </span>
+                            </Accordion.Toggle>
+
+                            { editMode === "edit" ?
+                            <span className="pr-3">
+                                <EditButton
+                                    title="Update Space"
+                                    listing={listing}
+                                    index={index}
+                                    spaceUpdateIndex={props.spaceUpdateIndex}
+                                    space={space} 
+                                    spaceUses={props.spaceUses}
+                                    spaceTypes={props.spaceTypes} 
+                                    spaceDivisibles={props.spaceDivisibles}
+                                    priceUnits={props.priceUnits}
+                                    onSave={props.onSave}
+                                    onShow={props.onShow}
+                                    onHide={props.onHide}
+                                    errorMessage={props.errorMessage}
+                                    show={props.show}
+                                    saving={props.saving}
+                                />
+                            </span>
+                            : null }
+                            { editMode === "edit" ?
+                            <span>
+                                <FontAwesomeIcon 
+                                    className="edit-button text-danger" 
+                                    size="xs"
+                                    onClick={() => {props.onDelete(props.space.id)}} 
+                                    icon={faTrash} 
+                                />
+                            </span>
+                            : null }
                         </span>
-                    </Col>
-                    : null }
-                    <Col >
-                        <Accordion.Toggle 
-                            value={index}
-                            className="text-danger"
-                            as={Button}
-                            onClick={props.onAccordionChange}
-                            variant="link"
-                            eventKey={index}
-                        >
-                           {accordionText} <FontAwesomeIcon icon={accordionText === "More" ? faAngleDown : faAngleUp} />
-                        </Accordion.Toggle>
                     </Col>
                 </Row>
             </Col>  
         </Row>
-    <Accordion.Collapse eventKey={index}>
-        <div>
-            <Row>
-                <Col>
-                    {space.description}
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    {editMode === "edit" || (editMode === "view" && space.driveInDoors) ?
-                    <Row>
-                        <Col>Drive In Doors</Col>
-                        <Col className="font-weight-bold">{space.driveInDoors}</Col>
-                    </Row>
-                    : null }
-                </Col>
-                <Col>
-                    {editMode === "edit" || (editMode === "view" && space.floors) ?
-                    <Row>
-                        <Col>Floors</Col>
-                        <Col className="font-weight-bold">{space.floors}</Col>
-                    </Row>
-                    : null }
-                </Col>
-                <Col>
-                    {editMode === "edit" || (editMode === "view" && space.divisible) ?
-                    <Row>
-                        <Col>Divisible</Col>
-                        <Col className="font-weight-bold">{space.divisible}</Col>
-                    </Row>
-                    : null }
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    {editMode === "edit" || (editMode === "view" && space.loadingDocks) ?
-                    <Row>
-                        <Col>Loading Docks</Col>
-                        <Col className="font-weight-bold">{space.loadingDocks}</Col>
-                    </Row>
-                    : null }
-                </Col>
-                <Col>
-                    {editMode === "edit" || (editMode === "view" && space.leaseTerm) ?
-                    <Row>
-                        <Col>Lease Term</Col>
-                        <Col className="font-weight-bold">{space.leaseTerm}</Col>
-                    </Row>
-                    : null }
-                </Col>
-                <Col>
-                    {editMode === "edit" || (editMode === "view" && space.ceilingHeight) ?
-                    <Row>
-                        <Col>Ceiling Height</Col>
-                        <Col className="font-weight-bold">{space.ceilingHeight}</Col>
-                    </Row>
-                    : null }
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    {editMode === "edit" || (editMode === "view" && availableDate) ?
-                    <Row>
-                        <Col>Available Date</Col>
-                        <Col className="font-weight-bold">{availableDate}</Col>
-                    </Row>
-                    : null }
-                </Col>
-                <Col>
-                    {editMode === "edit" || (editMode === "view" && space.nets) ?
-                    <Row>
-                        <Col>Nets</Col>
-                        <Col className="font-weight-bold">{space.nets}</Col>
-                    </Row>
-                    : null }
-                </Col>
-                <Col>
-                    {editMode === "edit" || (editMode === "view" && space.class) ?
-                    <Row>
-                        <Col>Class</Col>
-                        <Col className="font-weight-bold">{space.class}</Col>
-                    </Row>
-                    : null }
-                </Col>
-            </Row>
-            {showImages ?
-            <Row className="border-bottom">
-                <Col><Image src="/image1.jpg" thumbnail /></Col>
-                <Col><Image src="/image2.jpg" thumbnail /></Col>
-                <Col><Image src="/image3.jpg" thumbnail /></Col>
-            </Row>
-            : null}
-        </div>
-    </Accordion.Collapse>
+        <Accordion.Collapse eventKey={eventKey}>
+            <div>
+                <Row>
+                    <Col>
+                        {space.description}
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        {editMode === "edit" || (editMode === "view" && space.driveInDoors) ?
+                        <Row>
+                            <Col>Drive In Doors</Col>
+                            <Col className="font-weight-bold">{space.driveInDoors}</Col>
+                        </Row>
+                        : null }
+                    </Col>
+                    <Col>
+                        {editMode === "edit" || (editMode === "view" && space.floors) ?
+                        <Row>
+                            <Col>Floors</Col>
+                            <Col className="font-weight-bold">{space.floors}</Col>
+                        </Row>
+                        : null }
+                    </Col>
+                    <Col>
+                        {editMode === "edit" || (editMode === "view" && space.divisible) ?
+                        <Row>
+                            <Col>Divisible</Col>
+                            <Col className="font-weight-bold">{space.divisible}</Col>
+                        </Row>
+                        : null }
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        {editMode === "edit" || (editMode === "view" && space.loadingDocks) ?
+                        <Row>
+                            <Col>Loading Docks</Col>
+                            <Col className="font-weight-bold">{space.loadingDocks}</Col>
+                        </Row>
+                        : null }
+                    </Col>
+                    <Col>
+                        {editMode === "edit" || (editMode === "view" && space.leaseTerm) ?
+                        <Row>
+                            <Col>Lease Term</Col>
+                            <Col className="font-weight-bold">{space.leaseTerm}</Col>
+                        </Row>
+                        : null }
+                    </Col>
+                    <Col>
+                        {editMode === "edit" || (editMode === "view" && space.ceilingHeight) ?
+                        <Row>
+                             <Col>Ceiling Height</Col>
+                             <Col className="font-weight-bold">{space.ceilingHeight}</Col>
+                        </Row>
+                        : null }
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        {editMode === "edit" || (editMode === "view" && availableDate) ?
+                        <Row>
+                            <Col>Available Date</Col>
+                            <Col className="font-weight-bold">{availableDate}</Col>
+                        </Row>
+                        : null }
+                    </Col>
+                    <Col>
+                        {editMode === "edit" || (editMode === "view" && space.nets) ?
+                        <Row>
+                            <Col>Nets</Col>
+                            <Col className="font-weight-bold">{space.nets}</Col>
+                        </Row>
+                        : null }
+                    </Col>
+                    <Col>
+                        {editMode === "edit" || (editMode === "view" && space.class) ?
+                        <Row>
+                            <Col>Class</Col>
+                            <Col className="font-weight-bold">{space.class}</Col>
+                        </Row>
+                        : null }
+                    </Col>
+                </Row>
+                {showImages ?
+                <Row className="border-bottom">
+                    <Col><Image src="/image1.jpg" thumbnail /></Col>
+                    <Col><Image src="/image2.jpg" thumbnail /></Col>
+                    <Col><Image src="/image3.jpg" thumbnail /></Col>
+                </Row>
+                : null}
+            </div>
+        </Accordion.Collapse>
     </Accordion>
     );
     } else {
     return(
-        <Row className="border-bottom align-items-center" >
+        <Row className="ml-0 mr-0 border-bottom align-items-center">
             <Col md={2}>{space.unit}</Col>
             <Col md={2}>{space.size} sf</Col>
             <Col md={2}>${space.price} sf/yr</Col>
@@ -222,37 +223,40 @@ function SpaceItem(props){
             </Col>
             <Col md={3}>
                 <Row>
-                    { editMode === "edit" ?
                     <Col>
-                         <EditButton
-                             title="Update Space"
-                             listing={listing}
-                             index={index}
-                             spaceUpdateIndex={props.spaceUpdateIndex}
-                             space={space}
-                             spaceUses={props.spaceUses}
-                             spaceTypes={props.spaceTypes}
-                             spaceDivisibles={props.spaceDivisibles}
-                             priceUnits={props.priceUnits}
-                             onSave={props.onSave}
-                             onShow={props.onShow}
-                             onHide={props.onHide}
-                             errorMessage={props.errorMessage}
-                             show={props.show}
-                             saving={props.saving}
-                         />
+                        <span className="float-right">
+                            { editMode === "edit" ?
+                            <span className="pr-3">
+                                 <EditButton
+                                     title="Update Space"
+                                     listing={listing}
+                                     index={index}
+                                     spaceUpdateIndex={props.spaceUpdateIndex}
+                                     space={space}
+                                     spaceUses={props.spaceUses}
+                                     spaceTypes={props.spaceTypes}
+                                     spaceDivisibles={props.spaceDivisibles}
+                                     priceUnits={props.priceUnits}
+                                     onSave={props.onSave}
+                                     onShow={props.onShow}
+                                     onHide={props.onHide}
+                                     errorMessage={props.errorMessage}
+                                     show={props.show}
+                                     saving={props.saving}
+                                 />
+                            </span>
+                            : null }
+                            { editMode === "edit" ?
+                            <span>
+                                <FontAwesomeIcon 
+                                    className="text-danger" 
+                                    size="xs" 
+                                    onClick={() => {props.onDelete(space.id)}}
+                                    icon={faTrash} />
+                            </span>
+                            : null }
+                        </span>
                     </Col>
-                    : null }
-                    { editMode === "edit" ?
-                    <Col>
-                        <FontAwesomeIcon 
-                            className="text-danger" 
-                            size="xs" 
-                            onClick={() => {props.onDelete(space.id)}}
-                            icon={faTrash} />
-                    </Col>
-                    : null }
-                    <Col></Col>
                 </Row>
             </Col>
         </Row>
@@ -330,22 +334,11 @@ function EditButton(props) {
 class ListingDetailAvailableSpace extends React.Component {
     constructor(props){
         super(props);
-        this.handleAccordionChange = this.handleAccordionChange.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.state = {
             text1: "More",
             accordionText: []
-        }
-    }
-
-    handleAccordionChange(e){
-        if (e.target.value === "1") {
-            if (this.state.text1 === "More"){
-                this.setState({text1: "Less"});
-            } else {
-                this.setState({text1: "More"});
-            }
         }
     }
     handleSave(space){

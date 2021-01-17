@@ -912,8 +912,7 @@ export class ListingPage extends Component {
         });
     }
     // Space
-    handleAccordionChange(e){
-        var index = parseInt(e.target.value);
+    handleAccordionChange(index){
         var spaceAccordionText = this.state.spaceAccordionText;
         if (this.state.spaceAccordionText[index] === "More"){
             spaceAccordionText[index] = "Less";
