@@ -26,24 +26,25 @@ export function getAll(query, listingMode){
     });
 }
 
-export function getMarkers(query){
+export function getMarkers(query, listingMode){
     var url = "";
-    if (query) {
-        url = process.env.REACT_APP_LISTING_SERVICE+"listingMarkers?"+query;
+    if (listingMode === "myListings") {
+        url = process.env.REACT_APP_API+"listingMarkers/me";
     } else {
-        url = process.env.REACT_APP_LISTING_SERVICE+"listingMarkers";
+        url = process.env.REACT_APP_API+"listingMarkers";
     }
-
+    if (query){
+        url += "?" + query;
+    }
     return new Promise(function(resolve, reject){
         var options = {
             method: 'GET',
-            uri: url,
-            json: true
+            url: url
         };
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
-            reject(err.error);
+            reject(err);
         });
     });
 

@@ -805,8 +805,7 @@ export class ListingPage extends Component {
             getAllPromise.then(function(listings){
                 var enumPromise = listingService.getEnumsPromise();
                 enumPromise.then(function(enums){
-                    var getMarkersPromise = listingService.getMarkers(markerQuery);
-                    getMarkersPromise.then(function(markers){
+                    listingService.getMarkers(markerQuery, lMode).then(function(markers){
                         localState.allAmenities = enums.amenities;
                         localState.listings = listings.listings.rows;
                         localState.page = listings.page;

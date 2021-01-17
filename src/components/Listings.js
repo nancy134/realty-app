@@ -43,7 +43,7 @@ function Toolbar(props){
                 </Button>
             </Col>
             : null }
-            { (props.listingMode === "myListings" || props.listingMode === "allListings") ?
+            { (props.loggedIn) ?
             <Col>
                 <Button
                     size="sm"
@@ -114,6 +114,7 @@ class Listings extends React.Component {
                     page={this.props.page}
                     count={this.props.count}
                     perPage={this.props.perPage}
+                    loggedIn={this.props.loggedIn}
                     onNewPage={this.props.onNewPage}
                     listingMode={this.props.listingMode}
                     onNewListing={this.handleNewListing}
