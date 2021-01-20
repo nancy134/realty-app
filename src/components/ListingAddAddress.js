@@ -193,6 +193,7 @@ class ListingAddAddress extends React.Component{
             geocoded: false
         });
     }
+
     handleChange = address => {
         this.setState({
             address: address
@@ -467,7 +468,7 @@ class ListingAddAddress extends React.Component{
                                         name="displayAddress"
                                         type="text"
                                         value={values.displayAddress} 
-                                        onChange={(e) => {handleChange(e);this.handleModification();}}
+                                        onChange={handleChange}
                                         onBlur={handleBlur}
                                         isInvalid={!!errors.displayAddress}
                                         isValid={touched.displayAddress && !errors.displayAddress && values.displayAddress !== ""}
