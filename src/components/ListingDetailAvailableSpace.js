@@ -114,7 +114,7 @@ function SpaceItem(props){
             </Col>  
         </Row>
         <Accordion.Collapse eventKey={eventKey}>
-            <div>
+            <div className="ml-2 mb-2">
                 <Row>
                     <Col>
                         {space.description}
@@ -172,7 +172,7 @@ function SpaceItem(props){
                         : null }
                     </Col>
                 </Row>
-                <Row>
+                <Row className="border-bottom">
                     <Col>
                         {editMode === "edit" || (editMode === "view" && availableDate) ?
                         <Row>

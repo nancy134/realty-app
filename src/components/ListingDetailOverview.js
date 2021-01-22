@@ -12,6 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import ListingEditOverview from './ListingEditOverview';
 import ImageGallery from 'react-image-gallery';
+//import './image-gallery.css';
 import 'react-image-gallery/styles/css/image-gallery.css';
 
 function EditButton(props) {
@@ -130,6 +131,7 @@ class ListingDetailOverview extends React.Component {
             var floatPrice = parseFloat(this.props.listing.listingPrice);
             listingPrice = floatPrice.toLocaleString(undefined, {maximumFractionDigits:0});
         }
+
         var hasImages = true;
         if (galleryImages.length === 0){
             hasImages = false;
@@ -185,10 +187,10 @@ class ListingDetailOverview extends React.Component {
                         <span className="image-container float-right">
                         { hasImages ?
                         <ImageGallery
-                          showThumbnails={false}
                           items={galleryImages}
-                          renderLeftNav={this.renderLeftNav}
-                          renderRightNav={this.renderRightNav}/>
+                          showThumbnails={false}
+                          showBullets={true}
+                        />
                         :
                         <ImageGallery
                           showThumbnails={false}

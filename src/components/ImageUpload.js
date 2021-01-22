@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import './ImageUpload.css'
+//import './ImageUpload.css'
 import Dropzone from './Dropzone'
 import Progress from './Progress'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

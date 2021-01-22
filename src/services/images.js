@@ -10,10 +10,8 @@ export function uploadFiles(imagesToAdd, table, id, progressCB) {
         });
 
         Promise.all(promises).then(function(ret){
-            console.log(ret);
             resolve("1");
         }).catch(function(err){
-            console.log(err);
             reject(err);
         });
     });
@@ -25,7 +23,6 @@ function sendRequest(file, table, id, order, progressCB){
 
         req.upload.addEventListener("progress", event => {
             if (event.lengthComputable) {
-                console.log("progress: event.loaded: "+event.loaded+" event.total: "+event.total);
                 //const copy = { ...uploadProgress };
 
                 uploadProgress[file.name] = {
@@ -37,14 +34,12 @@ function sendRequest(file, table, id, order, progressCB){
         });
 
         req.upload.addEventListener("load", event => {
-            console.log("load");
             //const copy = { ...uploadProgress };
             uploadProgress[file.name] = { state: "done", percentage: 100 };
             progressCB(uploadProgress);
         });
 
         req.upload.addEventListener("error", event => {
-            console.log("error");
             //const copy = { ...uploadProgress };
             uploadProgress[file.name] = { state: "error", percentage: 0 };
             progressCB(uploadProgress);
@@ -59,13 +54,10 @@ function sendRequest(file, table, id, order, progressCB){
         var url = process.env.REACT_APP_LISTING_SERVICE+"upload";
         req.open("POST", url);
         req.onreadystatechange = function(){
-            console.log("req.readyState: "+req.readyState);
             if (req.readyState === 4){
                 if (req.status === 200) {
-                    console.log("readyState=4");
                     resolve(req.status);
                 } else {
-                    console.log(req.responsetext);
                     reject(req.status);
                 }
             }

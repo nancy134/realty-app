@@ -34,14 +34,16 @@ class ListingDetail extends React.Component {
             listing: null,
 
             // Overview
-            overviewNew: false,
             overviewUpdate: false,
             overviewSaving: false,
+
+            // Images
             overviewFiles: [],
             uploadProgress: [],
             uploading: false,
             successfullyUploaded: false,
             cards: [],
+            imagesModified: false,
 
             // Space
             spaceNew: false,
@@ -77,11 +79,12 @@ class ListingDetail extends React.Component {
         this.handleListingUpdate = this.handleListingUpdate.bind(this);
 
         // Overview
-        this.handleFilesAdded = this.handleFilesAdded.bind(this);
         this.handleOverviewUpdate = this.handleOverviewUpdate.bind(this);
-        this.handleOverviewModalNew = this.handleOverviewModalNew.bind(this);
         this.handleOverviewModalUpdate = this.handleOverviewModalUpdate.bind(this);
         this.handleOverviewModalHide = this.handleOverviewModalHide.bind(this);
+
+        // Images
+        this.handleFilesAdded = this.handleFilesAdded.bind(this);
         this.handleImageProgress = this.handleImageProgress.bind(this);
         this.handleImagesChanged = this.handleImagesChanged.bind(this);
 
@@ -135,18 +138,6 @@ class ListingDetail extends React.Component {
     }
 
     // Overview
-
-    handleFilesAdded(files){
-        //this.props.onFilesAdded(files);
-        this.setState(prevState => ({
-            overviewFiles: prevState.overviewFiles.concat(files) 
-        }));
-    }
-    handleOverviewModalNew(){
-        this.setState({
-            overviewNew: true
-        });
-    }
     handleOverviewModalUpdate(){
         this.setState({
             overviewUpdate: true,
@@ -156,19 +147,25 @@ class ListingDetail extends React.Component {
     }
     handleOverviewModalHide(){
         this.setState({
-            overviewNew: false,
             overviewUpdate: false,
             overviewSaving: false,
             overviewError: null,
-            overviewFiles: []
+            overviewFiles: [],
+            imagesModified: false
         });
     }
     handleOverviewUpdate(listing){
         this.setState({overviewSaving: true});
         var listingProperties = Object.keys(listing).length;
-        var imagesToDelete = this.checkForDeletedImages(this.props.listingDetail.listing.images, this.state.cards);
-        var imagesToAdd = this.checkForAddedImages(this.state.overviewFiles, this.state.cards);
-        var imagesToUpdate = this.checkForUpdatedImages(this.state.cards);
+
+        var imagesToDelete = [];
+        var imagesToAdd = [];
+        var imagesToUpdate = [];
+        if (this.state.imagesModified){
+            imagesToDelete = this.checkForDeletedImages(this.props.listingDetail.listing.images, this.state.cards);
+            imagesToAdd = this.checkForAddedImages(this.state.overviewFiles, this.state.cards);
+            imagesToUpdate = this.checkForUpdatedImages(this.state.cards);
+        }
 
         var promises = [];
         if (listingProperties > 1){
@@ -229,16 +226,30 @@ class ListingDetail extends React.Component {
         });
 
     }
+
+    // Images
+
     handleImageProgress(uploadProgress){
         this.setState({
             uploadProgress: uploadProgress
         });
     }
     handleImagesChanged(cards){
+        console.log("handleImagesChanged()");
         this.setState({
+            imagesModified: true,
             cards: cards
         });
     }
+    handleFilesAdded(files){
+        console.log("handleFilesAdded()");
+        //this.props.onFilesAdded(files);
+        this.setState(prevState => ({
+            imagesModified: true,
+            overviewFiles: prevState.overviewFiles.concat(files)
+        }));
+    }
+
     checkForDeletedImages(images, cards){
         var imagesToDelete = [];
         for (var i=0; i<images.length; i++){
