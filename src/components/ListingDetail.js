@@ -10,11 +10,9 @@ import ListingDetailAvailableSpace from './ListingDetailAvailableSpace';
 import ListingDetailGeneral from './ListingDetailGeneral';
 import ListingDetailAmenities from './ListingDetailAmenities';
 import ListingDetailBrokers from './ListingDetailBrokers';
-//import ListingDetailBuildingIncome from './ListingDetailBuildingIncome';
 import ListingDetailUnits from './ListingDetailUnits';
 import ListingDetailTenants from './ListingDetailTenants';
 import ListingDetailPortfolio from './ListingDetailPortfolio';
-//import ListingDetailAttachments from './ListingDetailAttachments';
 import ListingDetailMap from './ListingDetailMap';
 import spaces from '../services/spaces';
 import units from '../services/units';
@@ -197,7 +195,6 @@ class ListingDetail extends React.Component {
                     promises.push(updateImagePromise);
                 }
             }
-
             if (promises.length > 0){
                 if (that.props.listingDetail.listing.publishStatus === "Draft"){
                     Promise.all(promises).then(function(values){
@@ -213,7 +210,7 @@ class ListingDetail extends React.Component {
                     });
                 }
             } else {
-                that.props.onFetchListing(that.props.listingDetail.listing.id);
+                that.props.onFetchListing(values[0].listing.id);
                 that.handleOverviewModalHide();
             }
 
