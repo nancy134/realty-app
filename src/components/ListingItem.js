@@ -271,7 +271,9 @@ class ListingItem extends React.Component {
                             { this.props.showShortDescription ?
                             <div>{listing.shortDescription}</div>
                             : null }
-
+                            { this.props.listingMode === "myListings" ?
+                            <div>Status: {listing.publishStatus}</div> 
+                            : null }
                         </Card.Body>
                     </Card>
                 </Col>

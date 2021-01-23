@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-//import './ImageUpload.css'
 import Dropzone from './Dropzone'
 import Progress from './Progress'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,7 +6,7 @@ import {
     faCheck
 } from '@fortawesome/free-solid-svg-icons';
 import {
-//    Image
+    Alert
 } from 'react-bootstrap';
 import ImageContainer from './ImageContainer';
 import { DndProvider } from 'react-dnd'
@@ -33,12 +32,15 @@ class ImageUpload extends Component {
         }
         this.state = {
             cards: cards,
+            isError: false,
+            errorMessage: ""
         };
 
         this.onFilesAdded = this.onFilesAdded.bind(this);
         this.renderProgress = this.renderProgress.bind(this);
         this.handleMoveCard = this.handleMoveCard.bind(this);
         this.handleDeleteCard = this.handleDeleteCard.bind(this);
+        this.handleError = this.handleError.bind(this);
 
     }
     onFilesAdded(files) {
@@ -59,7 +61,9 @@ class ImageUpload extends Component {
             cards[i].order = i+1;
         }
         this.setState({
-            cards: cards
+            cards: cards,
+            isError: false,
+            errorMessage: ""
         });
         this.props.onImagesChanged(cards);
 
@@ -85,6 +89,13 @@ class ImageUpload extends Component {
             cards: cards
         });
         this.props.onImagesChanged(cards);
+    }
+    handleError(files){
+        var errorMessage = "Image(s) are too large.  They must be less than 3MB.";
+        this.setState({
+            errorMessage: errorMessage,
+            isError: true
+        });
     }
     renderProgress(file) {
         const uploadProgress = this.props.uploadProgress[file.name];
@@ -112,28 +123,25 @@ class ImageUpload extends Component {
 
     }
     render(){
-        var isDraft = true;
-        if (this.props.listing && this.props.listing.publishStatus !== "Draft"){
-           isDraft = false;
-        }
         return (
         <div>
-                    <DndProvider backend={HTML5Backend}>
-                        <ImageContainer
-                            listing={this.props.listing}
-                            cards={this.state.cards}
-                            onListChanged={this.handleListChanged}
-                            onMoveCard={this.handleMoveCard}
-                            onDeleteCard={this.handleDeleteCard}
-                        />
-                    </DndProvider>
-                    {isDraft ?   
-                    <Dropzone
-                        onFilesAdded={this.onFilesAdded}
-                        disabled={this.props.uploading || this.props.successfullyUploaded}
-
-                    />
-                    : null}
+            <DndProvider backend={HTML5Backend}>
+                <ImageContainer
+                    listing={this.props.listing}
+                    cards={this.state.cards}
+                    onListChanged={this.handleListChanged}
+                    onMoveCard={this.handleMoveCard}
+                    onDeleteCard={this.handleDeleteCard}
+                />
+            </DndProvider>
+            <Dropzone
+                onFilesAdded={this.onFilesAdded}
+                disabled={this.props.uploading || this.props.successfullyUploaded}
+                onError={this.handleError}
+            />
+            { this.state.isError ?
+            <Alert variant="danger">{this.state.errorMessage}</Alert>
+            : null }
        </div>
 
     );

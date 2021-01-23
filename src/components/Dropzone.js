@@ -29,10 +29,24 @@ class Dropzone extends Component {
     onFilesAdded(evt) {
         if (this.props.disabled) return;
         const files = evt.target.files;
-        if (this.props.onFilesAdded) {
-            const array = this.fileListToArray(files);
-            this.props.onFilesAdded(array);
+        var largeFiles = this.checkForFileSize(files);
+        if (largeFiles.length > 0){
+            this.props.onError(files);
+        } else {
+            if (this.props.onFilesAdded) {
+                const array = this.fileListToArray(files);
+                this.props.onFilesAdded(array);
+            }
         }
+    }
+    checkForFileSize(files){
+        var largeFiles = [];
+        for (var i=0; i<files.length; i++){
+            if (files[i].size > 3145728){
+                largeFiles.push(files[i]);
+            }
+        }
+        return largeFiles;
     }
     fileListToArray(list) {
         const array = [];

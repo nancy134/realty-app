@@ -152,9 +152,9 @@ class ListingDetail extends React.Component {
             imagesModified: false
         });
     }
+
     handleOverviewUpdate(listing){
         this.setState({overviewSaving: true});
-        var listingProperties = Object.keys(listing).length;
 
         var imagesToDelete = [];
         var imagesToAdd = [];
@@ -165,81 +165,73 @@ class ListingDetail extends React.Component {
             imagesToUpdate = this.checkForUpdatedImages(this.state.cards);
         }
 
-        var promises = [];
-        if (listingProperties > 1){
-            promises.push(listingService.update(listing));
-        }
-
-        if (imagesToAdd.length > 0){
-             var uploadFilesPromise = imageService.uploadFiles(
-                imagesToAdd,
-                "listing",
-                this.props.listingDetail.listing.id,
-                this.handleImageProgress
-            );
-            promises.push(uploadFilesPromise);
-        }
-
         var that = this;
-        Promise.all(promises).then(function(values){
-            promises = [];
-            if (imagesToDelete.length > 0){
-               for (var i=0; i<imagesToDelete.length; i++){
-                    var deleteImagePromise = imageService.deletePromise(imagesToDelete[i]);
-                    promises.push(deleteImagePromise);
-                }
+        listingService.update(listing).then(function(updatedListing){
+            var promises = [];
+            if (imagesToAdd.length > 0){
+                var uploadFilesPromise = imageService.uploadFiles(
+                    imagesToAdd,
+                    "listing",
+                    updatedListing.listing.id,
+                    that.handleImageProgress
+                );
             }
-            if (imagesToUpdate.length > 0){
-                for (i=0; i<imagesToUpdate.length; i++){
-                    var updateImagePromise = imageService.update(imagesToUpdate[i]);
-                    promises.push(updateImagePromise);
+            promises.push(uploadFilesPromise);
+            Promise.all(promises).then(function(values){
+                promises = [];
+                if (imagesToDelete.length > 0){
+                    for (var i=0; i<imagesToDelete.length; i++){
+                        var deleteImagePromise = imageService.deletePromise(imagesToDelete[i]);
+                        promises.push(deleteImagePromise);
+                    }
                 }
-            }
-            if (promises.length > 0){
-                if (that.props.listingDetail.listing.publishStatus === "Draft"){
+                if (imagesToUpdate.length > 0){
+                    for (i=0; i<imagesToUpdate.length; i++){
+                        var updateImagePromise = imageService.update(imagesToUpdate[i]);
+                        promises.push(updateImagePromise);
+                    }
+                }
+                if (promises.length > 0){
                     Promise.all(promises).then(function(values){
-                        that.props.onFetchListing(that.props.listingDetail.listing.id);
+                        that.props.onFetchListing(updatedListing.listing.id);
                         that.handleOverviewModalHide();
-
                     }).catch(function(err){
-                        this.setState({
+                        that.setState({
                             overviewError: err.message,
                             overviewSaving: false
                         });
                         console.log(err);
                     });
+                } else {
+                    that.props.onFetchListing(updatedListing.listing.id);
+                    that.handleOverviewModalHide();
                 }
-            } else {
-                that.props.onFetchListing(values[0].listing.id);
-                that.handleOverviewModalHide();
-            }
 
-        }).catch(function(err){
-            this.setState({
-                overviewError: err.message,
-                overviewSaving: false
+            }).catch(function(err){
+                that.setState({
+                    overviewError: err.message,
+                    overviewSaving: false
+                });
+                console.log(err);
             });
+        }).catch(function(err){
             console.log(err);
         });
-
     }
 
     // Images
-
     handleImageProgress(uploadProgress){
         this.setState({
             uploadProgress: uploadProgress
         });
     }
     handleImagesChanged(cards){
-        console.log("handleImagesChanged()");
         this.setState({
             imagesModified: true,
             cards: cards
         });
     }
     handleFilesAdded(files){
-        console.log("handleFilesAdded()");
         //this.props.onFilesAdded(files);
         this.setState(prevState => ({
             imagesModified: true,

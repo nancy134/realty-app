@@ -55,7 +55,7 @@ class ListingAddAddress extends React.Component{
             markers: null,
             center: null,
             zoomLevel: 18,
-            updateBounds: false,
+            updateBounds: true,
             updateZoomLevel: false
         };
     }
@@ -218,8 +218,10 @@ class ListingAddAddress extends React.Component{
         var that = this;
         var enumPromise = listingService.getEnumsPromise();
         enumPromise.then(function(data){
+            var bounds = geolocationService.getDefaultLocation();
             that.setState({
-                states: data.states
+                states: data.states,
+                bounds: bounds
             });
         }).catch(function(err){
             console.log("err: "+err);
