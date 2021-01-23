@@ -105,7 +105,7 @@ class Listings extends React.Component {
 
         var showImage = true;
         var showShortDescription = true;
-
+        var showFavorites = false;
         return (
         <div>
             { this.props.loggedIn ?
@@ -140,6 +140,7 @@ class Listings extends React.Component {
                             <Tab.Content>
                             </Tab.Content>
                         </Tab>
+                        { showFavorites ?
                         <Tab
                             title="Favorites"
                             eventKey="myFavorites"
@@ -147,6 +148,7 @@ class Listings extends React.Component {
                             <Tab.Content>
                             </Tab.Content>
                         </Tab>
+                        : null }
                     </Tabs>
                 </Tab.Container>
             </div>

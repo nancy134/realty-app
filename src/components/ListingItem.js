@@ -160,6 +160,7 @@ class ListingItem extends React.Component {
         contentColSize = 12;
     }
 
+    var showFavorites = false;
     return(
         <ListGroup.Item 
             className="border p-1 addPointer list-item" 
@@ -200,7 +201,7 @@ class ListingItem extends React.Component {
                                     <FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} />
                                 </span>
                                 : null }
-                                { this.props.listingMode === "allListings" && !this.props.reporting ?
+                                { showFavorites && this.props.listingMode === "allListings" && !this.props.reporting ?
                                 <span
                                     data-id={listing.ListingId}
                                     onClick={(e) => this.props.onSelectFavorite(e, listing.ListingId)}
