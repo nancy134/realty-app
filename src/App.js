@@ -49,11 +49,11 @@ class App extends React.Component {
               <Navbar.Brand href="./home">
                   <img
                   alt="logo" 
-                  src="/metropolitan.png"
+                  src="https://sabre-images.s3.amazonaws.com/FindingCRE+Logo.jpg"
                   width="30"
                   height="30"
                   className="d-inline-block align-top"
-                  />{' '}Sabre Realty</Navbar.Brand>
+                  />{' '}FindingCRE.com</Navbar.Brand>
               <Navbar.Toggle />
               <Navbar.Collapse className="justify-content-end">
                   <Nav.Item>
