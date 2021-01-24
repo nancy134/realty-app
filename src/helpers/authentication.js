@@ -1,6 +1,7 @@
 import Cookies from 'universal-cookie';
 import auth from '../services/auth';
 import LocalStorageService from '../services/localStorage';
+import userService from '../services/users';
 
 export function isAuthenticated(){
     const cookies = new Cookies();
@@ -13,6 +14,12 @@ export function getUserEmail(){
     const cookies = new Cookies();
     return cookies.get('email');
 }
+
+export function getUserCognitoId(){
+    const cookies = new Cookies();
+    return cookies.get('cognitoId');
+}
+
 export function getUserName(){
     const cookies = new Cookies();
     return cookies.get('name');
@@ -25,7 +32,7 @@ export function getJwt(){
 
 export function isOwner(owner){
   if (isAuthenticated()){
-      if (owner === getUserEmail()){
+      if (owner === getUserCognitoId()){
           return true;
       } else {
           return false;
@@ -48,16 +55,21 @@ export function loginResponse(email, password){
             username: email,
             password: password
         };
-        var signinPromise = auth.signin(signinParams);
-        signinPromise.then(function(result){
-            console.log(result);
-            const cookies = new Cookies();
-            cookies.set('email',email.toLowerCase());
-            cookies.set('name', email);
-            cookies.set('jwt',result.IdToken);
-
+        auth.signin(signinParams).then(function(result){
             LocalStorageService.setToken(result);
-            resolve(result);
+
+            userService.getUser().then(function(user){
+                console.log(result);
+                const cookies = new Cookies();
+                cookies.set('email',user.email);
+                cookies.set('name', email);
+                cookies.set('jwt',result.IdToken);
+                cookies.set('cognitoId', user.cognitoId);
+                resolve(result);
+            }).catch(function(err){
+                reject(err);
+            });
+ 
         }).catch(function(err){
             reject(err);
         });

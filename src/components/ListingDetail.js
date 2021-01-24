@@ -675,7 +675,6 @@ class ListingDetail extends React.Component {
                     onEditToggle={this.handleEditToggle} 
                     onListingUpdate={this.handleListingUpdate} 
 
-                    onGoToListingByIndex={this.props.onGoToListingByIndex}
                     onContact={this.handleContact}
                     onGoToMyListing={this.props.onGoToMyListing}
                 />
@@ -688,6 +687,7 @@ class ListingDetail extends React.Component {
                     onUnpublish={this.props.onUnpublish}
                     onTransitionStart={this.props.onTransitionStart}
                     onDeleteDraft={this.props.onDeleteDraft}
+                    onGoToListingByIndex={this.props.onGoToListingByIndex}
                     onTransitionHide={this.props.onTransitionHide}
                     onTransitionCancel={this.props.onTransitionCancel}
                     transitionStart={this.props.transitionStart}

@@ -11,7 +11,6 @@ import AdminPage from './containers/AdminPage';
 class Routes extends React.Component {
 
 render(){
-  var reporting = true;
   return(
   <Switch loggedIn={this.props.loggedIn}>
     <Route exact path="/" render={() => (

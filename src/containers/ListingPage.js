@@ -672,6 +672,10 @@ export class ListingPage extends Component {
         });
     }
 
+    /////////////////////////////
+    // Delete Draft Listing
+    /////////////////////////////
+
     handleDeleteDraftListing(listingId){
         var message = "Are you sure you want to delete this draft listing?";
         this.setState({
@@ -688,10 +692,17 @@ export class ListingPage extends Component {
         var localState = {
             showDetail: false,
             page: 1,
-            showDeleteDraftListingModal: false
+            showDeleteDraftListingModal: false,
+            bounds: {lat0:null,lng0:null,lat1:null,lng1:null},
+            center: null,
+            zoomLevel: null,
+            updateBounds: true
         };
         deleteDraftPromise.then(function(result){
             that.fetchListingsPromise(localState).then(function(localState){
+                if (localState.bounds.lat0 === null){
+                    localState.bounds = geolocationService.calculateBounds(localState.markers);
+                }
                 that.setState(localState);
             }).catch(function(err){
                 console.log(err);

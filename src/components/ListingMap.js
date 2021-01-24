@@ -129,6 +129,7 @@ class ListingMap extends React.Component {
             if (!this.props.center){
                 this.refs.resultMap.map.fitBounds(bounds);
             } else {
+                console.log("this.props.center: "+this.props.center);
                 this.refs.resultMap.map.setCenter(this.props.center);
                 this.refs.resultMap.map.setZoom(this.props.zoomLevel);
             }

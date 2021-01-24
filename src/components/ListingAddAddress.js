@@ -483,6 +483,7 @@ class ListingAddAddress extends React.Component{
                         </Form>
                     </Col>
                     <Col>
+                        {this.state.bounds.lat0 ?
                         <ListingMap
                             showDetail={showDetail}
                             markers={this.state.markers}
@@ -493,6 +494,7 @@ class ListingAddAddress extends React.Component{
                             zoomLevel={this.state.zoomLevel}
                             style={{width: '90%'}}
                         />
+                        : null}
                     </Col>
                 </Row>
             </Modal.Body>
