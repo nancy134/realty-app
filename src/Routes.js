@@ -59,18 +59,6 @@ render(){
     <Route path="/account" exact component={AccountPage} />
     <Route path="/admin" exact component={AdminPage} />
     <Route path="/instructions" exact component={InstructionPage} />
-    <Route
-        path="/reporting"
-        render={
-            props => (
-                <ListingPage
-                    {...props}
-                    loggedIn={this.props.loggedIn}
-                    reporting={reporting}
-                />
-            )
-        } 
-    />
   </Switch>
   );
 }

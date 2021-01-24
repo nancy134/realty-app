@@ -236,11 +236,6 @@ export class AccountButton extends Component{
                     >My Listings</Dropdown.Item>
                     <Dropdown.Item
                         as="button"
-                        id="account-button-my-reports"
-                        onClick={() => {this.onMyReports()}}
-                    >My Reports</Dropdown.Item>
-                    <Dropdown.Item
-                        as="button"
                         id="account-button-my-account"
                         onClick={() => {this.onMyAccount()}}
                     >My Account</Dropdown.Item>

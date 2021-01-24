@@ -56,6 +56,8 @@ export class ListingPage extends Component {
 
         // Toolbar
         this.handleSearch = this.handleSearch.bind(this);
+        this.handleShowReportView = this.handleShowReportView.bind(this);
+
         // Add Listing
         this.handleAddListing = this.handleAddListing.bind(this);
         this.handleListingTypeNext = this.handleListingTypeNext.bind(this);
@@ -178,8 +180,9 @@ export class ListingPage extends Component {
             showDeleteDraftListingModal: false,
             deleteDraftListingSaving: false,
 
-            // Search
+            // Toolbar 
             formatted_address: formatted_address,
+            showReportView: false,
 
             // Map
             bounds: {lat0:lat0, lng0:lng0, lat1:lat1, lng1:lng1},
@@ -1123,7 +1126,11 @@ export class ListingPage extends Component {
             console.log(err);
         });
     }
-
+    handleShowReportView(showReportView){
+        this.setState({
+            showReportView: showReportView 
+        });
+    }
     render() {
         var showDetail = this.state.showDetail;
         var index = this.state.index;
@@ -1133,7 +1140,7 @@ export class ListingPage extends Component {
         var owner = this.state.owner;
         var listingDetail = this.state.listingDetail;
         var fullscreen = this.state.fullscreen;
-        var reporting = this.props.reporting;
+        var reporting = this.state.showReportView;
         // Layouts
         var leftColumnClassName = "p-0 leftcol";
         var leftColumnSize = 8;
@@ -1258,6 +1265,8 @@ export class ListingPage extends Component {
                     // needed
 		    formatted_address={this.state.formatted_address}
                     onSearch={this.handleSearch}
+                    onShowReportView={this.handleShowReportView}
+                    showReportView={this.state.showReportView}
                 />
 	    </Row>
             : null }

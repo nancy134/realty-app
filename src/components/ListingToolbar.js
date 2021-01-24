@@ -63,6 +63,8 @@ class ListingToolbar extends React.Component {
         this.handleSearchFocus = this.handleSearchFocus.bind(this);
         this.handleListingTypeChange = this.handleListingTypeChange.bind(this);
         this.handleClearFilters = this.handleClearFilters.bind(this);
+        this.handleShowReportView = this.handleShowReportView.bind(this);
+
         var address = "";
         if (this.props.formatted_address) address = this.props.formatted_address;
         this.state = {
@@ -137,6 +139,13 @@ class ListingToolbar extends React.Component {
             moreFilters: {minSize:"", maxSize:"", minPrice:"", maxPrice:""} 
         });
     }
+    handleShowReportView(){
+        if (this.props.showReportView){
+            this.props.onShowReportView(false);
+        } else {
+            this.props.onShowReportView(true);
+        }
+    }
     render(){
         var address = this.state.address;
         return (
@@ -166,7 +175,7 @@ class ListingToolbar extends React.Component {
                         </Dropdown>
                     </Col>
 
-                    <Col xs={4}>
+                    <Col xs={3}>
                         <PlacesAutocomplete
                             value={address}
                             onChange={this.handleSearchChange}
@@ -259,7 +268,24 @@ class ListingToolbar extends React.Component {
                             onClick={this.handleSearch}
                         >Search</Button>
                     </Col>
-
+                    { this.props.loggedIn && !this.props.showReportView ?
+                    <Col>
+                        <Button
+                            variant="warning"
+                            className="float-right"
+                            onClick={this.handleShowReportView}
+                        >Show Report View</Button>
+                    </Col>
+                    : null }
+                    { this.props.loggedIn && this.props.showReportView ?
+                    <Col>
+                        <Button
+                            variant="warning"
+                            className="float-right"
+                            onClick={this.handleShowReportView}
+                        >Hide Report View</Button>
+                    </Col>
+                    : null }
                 </Form.Row>
             </Form>
         );
