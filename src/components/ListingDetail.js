@@ -741,6 +741,13 @@ class ListingDetail extends React.Component {
 
                     />
                 : null }
+                <ListingDetailGeneral
+                    listing={listing}
+                    editMode={editMode}
+                    onListingUpdate={this.handleListingUpdate}
+                    getListing={this.props.onFetchListing}
+                    propertyTypes={propertyTypes}
+                />
                 {(editMode === "edit" && listingType === listingTypes.FORSALE) || 
                  (listing && (listing.units.length > 0)) ?
                     <ListingDetailUnits 
@@ -793,13 +800,6 @@ class ListingDetail extends React.Component {
                         getListing={this.props.onFetchListing} 
                     />
                 : null }
-                    <ListingDetailGeneral 
-                        listing={listing} 
-                        editMode={editMode} 
-                        onListingUpdate={this.handleListingUpdate} 
-                        getListing={this.props.onFetchListing}
-                        propertyTypes={propertyTypes}
-                />
                 {(editMode === "edit") || 
                 (listing && listing.amenities) ?
                 <ListingDetailAmenities
