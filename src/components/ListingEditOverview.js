@@ -6,7 +6,8 @@ import {
     Modal,
     Button,
     Alert,
-    Spinner
+    Spinner,
+    InputGroup
 } from 'react-bootstrap';
 import ImageUpload from './ImageUpload';
 import {Formik} from 'formik';
@@ -16,7 +17,7 @@ import {listingTypes} from '../constants/listingTypes';
 const OverviewSchema = Yup.object().shape({
     shortDescription: Yup.string().required('Short Description is required'),
     longDescription: Yup.string(),
-    listingPrice: Yup.number(),
+    listingPrice: Yup.number().transform((_value, originalValue) => Number(originalValue.replace(/,/g, ''))),
     listingType: Yup.string()
 });
 
@@ -38,18 +39,6 @@ function ErrorAlert(props) {
         );
     }
 }
-function SavingAlert(){
-    return(
-    <div className="w-100">
-        <Alert
-           variant="info"
-        >
-           Saving...<Spinner animation="border" />
-        </Alert>
-    </div>
-    );
-}
-
 
 class ListingEditOverview extends React.Component {
     constructor(props){
@@ -86,7 +75,7 @@ class ListingEditOverview extends React.Component {
             listing.longDescription = values.longDescription;
         }
         if (initialValues.listingPrice !== values.listingPrice){
-            listing.listingPrice = values.listingPrice;
+            listing.listingPrice = parseFloat(values.listingPrice.replace(/,/g, ''));
         }
         if (initialValues.listingType !== values.listingType){
             listing.listingType = values.listingType;
@@ -118,7 +107,19 @@ class ListingEditOverview extends React.Component {
         if (listing){
             if (listing.shortDescription) initialValues.shortDescription = listing.shortDescription;
             if (listing.longDescription) initialValues.longDescription = listing.longDescription;
-            if (listing.listingPrice) initialValues.listingPrice = listing.listingPrice;
+            if (listing.listingPrice){
+                initialValues.listingPrice = listing.listingPrice;
+                var hasDecimal = listing.listingPrice % 1;
+                var listingPrice = listing.listingPrice;
+                var floatPrice = parseFloat(listingPrice)
+                if (!hasDecimal){
+                    listingPrice = floatPrice.toLocaleString(undefined, {maximumFractionDigits:0});
+                } else {
+                    listingPrice = floatPrice.toLocaleString(undefined, {maximumFractionDigits:2});
+                }
+                initialValues.listingPrice = listingPrice;
+
+            }
             if (listing.listingType) initialValues.listingType = listing.listingType;
         }
         
@@ -160,48 +161,71 @@ class ListingEditOverview extends React.Component {
             <Row className="mt-2">
                 <Col xs={5}>
                     <Form>
-                        <Form.Label>Short Description</Form.Label>
-                        <Form.Control 
-                            id="overview_edit_short_description"
-                            name="shortDescription"
-                            type="text"
-                            value={values.shortDescription} 
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            isInvalid={!!errors.shortDescription}
-                            isValid={touched.shortDescription && !errors.shortDescription && values.shortDescription !== ""}
-                            disabled={isSubmitting} 
-                        /> 
-                        <Form.Label>Long Description</Form.Label>
-                        <Form.Control 
-                            id="overview_edit_long_description"
-                            name="longDescription"
-                            value={values.longDescription} 
-                            rows="8" 
-                            as="textarea" 
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            isInvalid={!!errors.longDescription}
-                            isValid={touched.longDescription && !errors.longDescription && values.longDescription !== ""}
-                            disabled={isSubmitting}
-                        />
+                        <Form.Row>
+                            <Form.Group as={Col}>
+                                <Form.Label
+                                    className="font-weight-bold"
+                                >Short Description</Form.Label>
+                                <Form.Control 
+                                    id="overview_edit_short_description"
+                                    name="shortDescription"
+                                    type="text"
+                                    value={values.shortDescription} 
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.shortDescription}
+                                    isValid={touched.shortDescription && !errors.shortDescription && values.shortDescription !== ""}
+                                    disabled={isSubmitting} 
+                                /> 
+                            </Form.Group>
+                        </Form.Row>
                         { listing.listingType === listingTypes.FORSALE ?
-                        <div>
-                        <Form.Label>Listing Price</Form.Label>
-                        <Form.Control
-                            id="overview_edit_listing_price"
-                            name="listingPrice"
-                            type="text"
-                            value={values.listingPrice}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            isInvalid={touched.listingPrice && !!errors.listingPrice}
-                            isValid={touched.listingPrice && !errors.listingPrice && values.listingPrice !== ""}
-                            disabled={isSubmitting}
-                        />
-                        </div>
+                        <Form.Row>
+                            <Form.Group as={Col}>
+                                <Form.Label
+                                    className="font-weight-bold"
+                                >Listing Price</Form.Label>
+
+                                <InputGroup>
+                                    <InputGroup.Prepend>
+                                        <InputGroup.Text>$</InputGroup.Text>
+                                    </InputGroup.Prepend>
+                                <Form.Control
+                                    id="overview_edit_listing_price"
+                                    name="listingPrice"
+                                    type="text"
+                                    value={values.listingPrice}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={touched.listingPrice && !!errors.listingPrice}
+                                    isValid={touched.listingPrice && !errors.listingPrice && values.listingPrice !== ""}
+                                    disabled={isSubmitting}
+                                />
+                                </InputGroup>
+                            </Form.Group>
+                        </Form.Row>
                         : null}
 
+                        <Form.Row>
+                            <Form.Group as={Col}>
+                                <Form.Label
+                                    className="font-weight-bold"
+                                >Long Description <span className="font-weight-light">(optional)</span>
+                                </Form.Label>
+                                <Form.Control 
+                                    id="overview_edit_long_description"
+                                    name="longDescription"
+                                    value={values.longDescription} 
+                                    rows="8" 
+                                    as="textarea" 
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.longDescription}
+                                    isValid={touched.longDescription && !errors.longDescription && values.longDescription !== ""}
+                                    disabled={isSubmitting}
+                                />
+                            </Form.Group>
+                        </Form.Row>
                     </Form>
                 </Col>
                 <Col xs={7}>
@@ -227,9 +251,6 @@ class ListingEditOverview extends React.Component {
                 {this.props.errorMessage ?
                 <ErrorAlert errorMessage={this.props.errorMessage}/>
                 : null}
-                {this.props.saving ?
-                <SavingAlert />
-                : null}
                 { dirty ?
                 <Button 
                     id="overview_edit_cancel_button"
@@ -250,7 +271,17 @@ class ListingEditOverview extends React.Component {
                     id="overview_edit_save_button"
                     onClick={handleSubmit}
                 >
-                    Save
+                    { this.props.saving ?
+                    <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                    />
+                    :
+                    <span>Save</span>
+                    }
                 </Button>
             </Modal.Footer>
         </Modal>
