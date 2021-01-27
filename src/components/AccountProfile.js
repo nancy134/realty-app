@@ -353,6 +353,13 @@ class AccountProfile extends React.Component{
                             <Form.Control
                                 as="textarea"
                                 rows="6"
+                                name="bio"
+                                value={values.bio}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                isInvalid={!!errors.bio}
+                                isValid={touched.bio && !errors.bio && values.bio !== ""}
+                                disabled={isSubmitting}
                             />
                             </Form.Group>
                         </Form.Row>
