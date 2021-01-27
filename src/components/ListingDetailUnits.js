@@ -81,8 +81,8 @@ class ListingDetailUnits extends React.Component {
         var editMode = this.props.editMode;
         var newUnit = [];
         return(
-        <React.Fragment>
-            <Row className="mt-2 border-bottom border-warning">
+        <div className="mb-2 shadow border">
+            <Row className="mt-2 ml-0 mr-0 border-bottom border-warning">
                 <Col>
                     <h3>Units&nbsp;
                     {editMode === "edit" ?
@@ -99,7 +99,7 @@ class ListingDetailUnits extends React.Component {
                     : null}</h3>
                 </Col>
             </Row>
-            <Row className="bg-light shadow">
+            <Row className="ml-0 mr-0 bg-light">
                 <Col md={3} className="font-weight-bold">Description</Col>
                 <Col md={2} className="font-weight-bold">No. of Units</Col>
                 <Col md={2} className="font-weight-bold">Square feet</Col>
@@ -109,7 +109,7 @@ class ListingDetailUnits extends React.Component {
             {!listing ? <div></div> :
             listing.units.map((unit,index) =>
             (
-            <Row key={unit.id}>
+            <Row className="ml-0 mr-0" key={unit.id}>
                 <Col md={3}>{unit.description}</Col>
                 <Col md={2}>{unit.numUnits}</Col>
                 <Col md={2}>{unit.space} sf</Col>
@@ -140,7 +140,7 @@ class ListingDetailUnits extends React.Component {
                 </Col>
             </Row>
             ))}
-        </React.Fragment>
+        </div>
         );
     }
 }
