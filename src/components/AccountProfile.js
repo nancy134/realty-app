@@ -4,7 +4,8 @@ import {
     Col,
     Form,
     Button,
-    Image
+    Image,
+    Spinner
 } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -32,22 +33,35 @@ class AccountProfile extends React.Component{
         this.state = {
             profile: null,
             states: null,
+            updateProgress: false
         };
     }
 
     componentDidMount(){
         var that = this;
+        this.setState({
+            updateProgress: true
+        });
         userService.getUserEnums().then(function(enums){
             userService.getUser().then(function(result){
+                that.setState({
+                    updateProgress: false
+                });
                 console.log(result);
                 that.setState({
                     profile: result,
                     states: enums.states 
                 });
             }).catch(function(err){
+                that.setState({
+                    updateProgress: false
+                });
                 console.log(err);
             }); 
         }).catch(function(err){
+            that.setState({
+                updateProgress: false
+            });
             console.log(err);
         });
     };
@@ -89,8 +103,19 @@ class AccountProfile extends React.Component{
             profile.bio = values.bio;
         }
 
+        var that = this;
+        this.setState({
+            updateProgress: true
+        });
+
         userService.updateUser(this.state.profile.id, profile).then(function(response){
+            that.setState({
+                updateProgress: false
+            });
         }).catch(function(err){
+            that.setState({
+                updateProgress: false,
+            });
             console.log(err);
         });
     }
@@ -121,6 +146,7 @@ class AccountProfile extends React.Component{
             if (profile.first) initialValues.first = profile.first;
             if (profile.last) initialValues.last = profile.last;
             if (profile.middle) initialValues.middle = profile.middle;
+            if (profile.company) initialValues.company = profile.company;
             if (profile.title) initialValues.title = profile.title;
             if (profile.address1) initialValues.address1 = profile.address1;
             if (profile.address2) initialValues.address2 = profile.address2;
@@ -357,7 +383,18 @@ class AccountProfile extends React.Component{
                                 variant="success"
                                 block
                                 onClick={handleSubmit}
-                            >Update Profile</Button>
+                            >
+                                { this.state.updateProgress ?
+                                <Spinner
+                                    as="span"
+                                    animation="border"
+                                    size="sm"
+                                    role="status"
+                                />
+                                :
+                                <span>Update Profile</span>
+                                }
+                            </Button>
                         </Col>
                         <Col xs={4}></Col>
                     </Row>
