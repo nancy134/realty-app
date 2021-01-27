@@ -654,7 +654,7 @@ class ListingDetail extends React.Component {
         if (listing){
             listingType = listing.listingType;
         }
-        
+        var showPortfolio = false;    
         if (showDetail){
             return (
             <div>
@@ -775,8 +775,8 @@ class ListingDetail extends React.Component {
                         getListing={this.props.onFetchListing}
                     />
                 : null }
-                {(editMode === "edit" && listingType === listingTypes.FORSALE) || 
-                 (listing && listing.portfolios.length) > 0 ?
+                {(showPortfolio && editMode === "edit" && listingType === listingTypes.FORSALE) || 
+                 (showPortfolio && listing && listing.portfolios.length) > 0 ?
                     <ListingDetailPortfolio 
                         listing={listing} 
                         editMode={editMode} 
