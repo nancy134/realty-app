@@ -20,7 +20,7 @@ class ListingDetailMap extends React.Component {
         var showDetail = false;
         return(
         <div className="mb-2 shadow border">
-            <Row className="mt-2 ml-0 mr-0 border-bottom border-warning">
+            <Row className="mt-2 ml-0 mr-0">
                 <Col>
                     <h3>Map</h3>
                 </Col>
