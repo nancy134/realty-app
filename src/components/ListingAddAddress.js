@@ -34,6 +34,8 @@ class ListingAddAddress extends React.Component{
         this.goNext = this.goNext.bind(this);
         this.handleVerifyAddress = this.handleVerifyAddress.bind(this);
         this.handleSelectAddress = this.handleSelectAddress.bind(this);
+        this.handleFocus = this.handleFocus.bind(this);
+        this.verifyAddress = this.verifyAddress.bind(this);
         this.addressRef = React.createRef();
         this.cityRef = React.createRef();
         this.stateRef = React.createRef();
@@ -199,16 +201,25 @@ class ListingAddAddress extends React.Component{
             address: address
         });
     }
-    handleSelect = (address, values, setFieldValue) => {
+
+    verifyAddress(address, values, setFieldValue){
         var that = this;
         this.setState({
             showVerifyAddressModal: true
         });
-        geolocationService.geocodeByAddr(address, values).then(function(results){
+        geolocationService.geocodeByAddr(this.state.address, values).then(function(results){
             that.updateValues(results, values, setFieldValue);
         }).catch(function(err){
             console.log("err: "+err);
         });
+    }
+    handleFocus(target, values, setFieldValue){
+        if (!this.state.geocoded){
+            this.verifyAddress(this.state.address, values, setFieldValue);
+        }
+    }
+    handleSelect = (address, values, setFieldValue) => {
+        this.verifyAddress(address, values, setFieldValue);
     }
 
     handleGoToListing(result){
@@ -305,6 +316,7 @@ class ListingAddAddress extends React.Component{
                                     <div>
                                         <InputGroup>                
                                             <Form.Control
+                                                onKeyPress={this.handleKeyPress}
                                                 {...getInputProps({
                                                     placeholder: 'Search address...',
                                                     className: 'form-control location-search-input',
@@ -330,7 +342,7 @@ class ListingAddAddress extends React.Component{
                                                         : 'suggestion-item';
                                                     // inline style for demonstration purpose
                                                     const style = suggestion.active
-                                                        ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                                        ? { color: 'white', backgroundColor: '#007bff', cursor: 'pointer' }
                                                         : { backgroundColor: '#ffffff', cursor: 'pointer' };
                                                     return (
                                                         <div key={index}
@@ -411,7 +423,8 @@ class ListingAddAddress extends React.Component{
                                         type="text"
                                         value={values.city} 
                                         onChange={(e) => {handleChange(e);this.handleModification();}}
-                                        onBlur={handleBlur}
+                                        onBlur={this.handleBlur}
+                                        onFocus={(e) => this.handleFocus(e, values, setFieldValue)}
                                         isInvalid={touched.city && !!errors.city}
                                         isValid={touched.city && !errors.city && values.city !== ""}
                                         disabled={isSubmitting}
