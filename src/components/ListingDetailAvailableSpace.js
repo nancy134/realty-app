@@ -214,7 +214,7 @@ function SpaceItem(props){
         <Row className="ml-0 mr-0 border-bottom align-items-center">
             <Col md={2}>{space.unit}</Col>
             <Col md={2}>{space.size} sf</Col>
-            <Col md={2}>${space.price} sf/yr</Col>
+            <Col md={2}>${space.price} {space.priceUnit}</Col>
             <Col md={3}>
                 <Row>
                     <Col >{space.use}</Col>
