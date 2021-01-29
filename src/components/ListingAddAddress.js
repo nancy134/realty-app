@@ -175,7 +175,6 @@ class ListingAddAddress extends React.Component{
     }
 
     handleSelectAddress(address, values, setFieldValue){
-            console.log(setFieldValue);
             var that = this;
             this.setState({
                 showVerifyAddressModal: true
@@ -207,7 +206,7 @@ class ListingAddAddress extends React.Component{
         this.setState({
             showVerifyAddressModal: true
         });
-        geolocationService.geocodeByAddr(this.state.address, values).then(function(results){
+        geolocationService.geocodeByAddr(address, values).then(function(results){
             that.updateValues(results, values, setFieldValue);
         }).catch(function(err){
             console.log("err: "+err);
