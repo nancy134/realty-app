@@ -5,7 +5,8 @@ import {
     Tabs,
     Tab,
     Dropdown,
-    Button
+    Button,
+    Alert
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -102,7 +103,6 @@ class Listings extends React.Component {
         if (this.props.listings){
             listings = this.props.listings;
         }
-
         var showImage = true;
         var showShortDescription = true;
         var showFavorites = false;
@@ -162,6 +162,7 @@ class Listings extends React.Component {
             />
             }
             <div>
+                { listings.length > 0 ?
                 <ListGroup>
                     {listings.map((listing, index) =>
                     (
@@ -181,6 +182,9 @@ class Listings extends React.Component {
                         />
                     ))}
                 </ListGroup>
+                :
+                <Alert variant="info">No listings found</Alert>
+                }
             </div>
         </div>
 

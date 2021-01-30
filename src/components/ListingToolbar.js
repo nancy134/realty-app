@@ -74,12 +74,22 @@ class ListingToolbar extends React.Component {
             spaceTypeFilters: [],
             numMoreFilters: 0,
             moreFilters: {minSize:"",maxSize:"",minPrice:"",maxPrice:""},
-            bounds: null
+            bounds: null,
+            searchClass: "",
+            searchVariant: "warning",
+            needsGeocoding: false
         };
     }
+    // Changes while typing
     handleSearchChange = address => {
-        this.setState({address});
+        this.setState({
+            address: address,
+            needsGeocoding: true,
+            searchClass: "toolbar-search-button",
+            searchVariant: "danger",
+        });
     };
+    // Dropdown address selected
     handleSearchSelect = address => {
 
         geocodeByAddress(address).then(results => { 
@@ -91,14 +101,43 @@ class ListingToolbar extends React.Component {
             this.setState({
                 address: address,
                 formatted_address: formatted_address,
-                bounds: {lat0:lat0, lng0:lng0, lat1:lat1, lng1:lng1}
+                bounds: {lat0:lat0, lng0:lng0, lat1:lat1, lng1:lng1},
+                searchClass: "toolbar-search-button",
+                searchVariant: "danger",
+                needsGeocoding: false
             });
         }).catch(error => {
-            console.error('Error', error);
+            console.log(error);
         });
     };
+    // Search button Selected
     handleSearch(){
-        this.props.onSearch(this.state);
+        if (this.state.needsGeoding === false){
+            this.setState({
+                searchClass: "",
+                searchVariant: "warning"
+            });
+            this.props.onSearch(this.state);
+        } else {
+            geocodeByAddress(this.state.address).then(results => {
+                var formatted_address = results[0].formatted_address;
+                var lat0 = results[0].geometry.viewport.getNorthEast().lat();
+                var lng0 = results[0].geometry.viewport.getNorthEast().lng();
+                var lat1 = results[0].geometry.viewport.getSouthWest().lat();
+                var lng1 = results[0].geometry.viewport.getSouthWest().lng();
+                this.setState({
+                    address: this.state.address,
+                    formatted_address: formatted_address,
+                    bounds: {lat0:lat0, lng0:lng0, lat1:lat1, lng1:lng1},
+                    searchClass: "",
+                    searchVariant: "warning",
+                    needsGeocoding: false
+                });
+                this.props.onSearch(this.state);
+            }).catch(error => {
+                console.log(error);
+            });
+        }
     }
     handleSearchFocus(e){
         e.target.select();
@@ -107,7 +146,9 @@ class ListingToolbar extends React.Component {
     handleFilterChange(filters){
         this.setState({
             numSpaceTypeFilters: filters.length,
-            spaceTypeFilters: filters
+            spaceTypeFilters: filters,
+            searchClass: "toolbar-search-button",
+            searchVariant: "danger"
         });
     }
     handleMoreFilterChange(moreFilters){
@@ -121,14 +162,18 @@ class ListingToolbar extends React.Component {
         if (numMoreFilters > 0){
             this.setState({
                 numMoreFilters: numMoreFilters,
-                moreFilters: moreFilters
+                moreFilters: moreFilters,
+                searchClass: "toolbar-search-button",
+                searchVariant: "danger"
             });
         } 
     }
     handleListingTypeChange(e, type){
         e.preventDefault();
         this.setState({
-            listingType: type
+            listingType: type,
+            searchClass: "toolbar-search-button",
+            searchVariant: "danger"
         });
     }
     handleClearFilters(){
@@ -136,7 +181,9 @@ class ListingToolbar extends React.Component {
             numSpaceTypeFilters: 0,
             spaceTypeFilters: [],
             numMoreFilters: 0,
-            moreFilters: {minSize:"", maxSize:"", minPrice:"", maxPrice:""} 
+            moreFilters: {minSize:"", maxSize:"", minPrice:"", maxPrice:""},
+            searchClass: "toolbar-search-button",
+            searchVariant: "danger"
         });
     }
     handleShowReportView(){
@@ -194,16 +241,17 @@ class ListingToolbar extends React.Component {
                             <InputGroup>
                                 <div className="autocomplete-dropdown-container">
                                     {loading && <div></div>}
-                                    {suggestions.map(suggestion => {
+                                    {suggestions.map((suggestion, index) => {
                                         const className = suggestion.active
                                             ? 'suggestion-item--active'
                                             : 'suggestion-item';
                                         // inline style for demonstration purpose
                                         const style = suggestion.active
-                                            ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                            ? { color: 'white', backgroundColor: '#007bff', cursor: 'pointer' }
                                             : { backgroundColor: '#ffffff', cursor: 'pointer' };
                                         return (
                                             <div
+                                                key={index}
                                                 {...getSuggestionItemProps(suggestion, {
                                                     className,
                                                     style,
@@ -264,7 +312,8 @@ class ListingToolbar extends React.Component {
                     </Col>
                     <Col xs="auto">
                         <Button
-                            variant="warning"
+                            className={this.state.searchClass}
+                            variant={this.state.searchVariant}
                             onClick={this.handleSearch}
                         >Search</Button>
                     </Col>
