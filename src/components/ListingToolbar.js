@@ -68,7 +68,7 @@ class ListingToolbar extends React.Component {
         var address = "";
         if (this.props.formatted_address) address = this.props.formatted_address;
         this.state = {
-            listingType: "For Lease",
+            listingType: listingTypes.BOTH,
             address: address,
             numSpaceTypeFilters: 0,
             spaceTypeFilters: [],
@@ -181,6 +181,7 @@ class ListingToolbar extends React.Component {
             numSpaceTypeFilters: 0,
             spaceTypeFilters: [],
             numMoreFilters: 0,
+            listingType: listingTypes.BOTH,
             moreFilters: {minSize:"", maxSize:"", minPrice:"", maxPrice:""},
             searchClass: "toolbar-search-button",
             searchVariant: "danger"
