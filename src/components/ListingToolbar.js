@@ -144,8 +144,14 @@ class ListingToolbar extends React.Component {
     }
 
     handleFilterChange(filters){
+        var numSpaceTypeFilters = 0;
+        if (filters.length > 0 && filters[0] === "Any"){
+            numSpaceTypeFilters = 0;
+        } else {
+            numSpaceTypeFilters = filters.length;
+        }
         this.setState({
-            numSpaceTypeFilters: filters.length,
+            numSpaceTypeFilters: numSpaceTypeFilters,
             spaceTypeFilters: filters,
             searchClass: "toolbar-search-button",
             searchVariant: "danger"
@@ -316,7 +322,7 @@ class ListingToolbar extends React.Component {
                             className={this.state.searchClass}
                             variant={this.state.searchVariant}
                             onClick={this.handleSearch}
-                        >Search</Button>
+                        >Apply Filters</Button>
                     </Col>
                     { this.props.loggedIn && !this.props.showReportView ?
                     <Col>

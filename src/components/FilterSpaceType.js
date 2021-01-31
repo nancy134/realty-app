@@ -6,11 +6,15 @@ import listings from '../services/listings';
 
 function SpaceTypeItem(props){
     var checked=false;
+    if (props.spaceTypeFilters.length === 0 && props.label === "Any"){
+        checked = true;
+    }
     for (var i=0; i<props.spaceTypeFilters.length; i++){
         if (props.spaceTypeFilters[i] === props.label){
             checked = true;
         }
     }
+  
     return(
         <Form.Check
             onChange={props.onChange}
@@ -34,11 +38,18 @@ class FilterSpaceType extends React.Component {
        var spaceTypes = this.state.spaceTypes.spaceUses;
        var filters = this.props.spaceTypeFilters;
        if (evt.target.checked){
-          filters.push(spaceTypes[parseInt(evt.target.value)]);
+          if (evt.target.value === "any"){
+              filters = ["Any"];
+          } else {
+              filters.push(spaceTypes[parseInt(evt.target.value)]);
+          }
        } else {
-           var index = filters.indexOf(spaceTypes[parseInt(evt.target.value)]);
-           if (index >= 0) {
-               filters.splice( index, 1 );
+           if (evt.target.value === "any"){
+           } else {
+               var index = filters.indexOf(spaceTypes[parseInt(evt.target.value)]);
+               if (index >= 0) {
+                   filters.splice( index, 1 );
+               }
            }
        }
        this.props.onFilterChange(filters);
@@ -54,6 +65,14 @@ class FilterSpaceType extends React.Component {
         if (this.state.spaceTypes){
             return(
             <div className="m-2">
+                <SpaceTypeItem
+                    spaceTypeFilters={this.props.spaceTypeFilters}
+                    onChange={this.handleChange}
+                    value="any"
+                    key="any"
+                    type="checkbox"
+                    label="Any"
+                />
                 {this.state.spaceTypes.spaceUses.map((spaceType,key) => (
                     <SpaceTypeItem
                         spaceTypeFilters={this.props.spaceTypeFilters}

@@ -429,7 +429,7 @@ export class ListingPage extends Component {
     handleSearch(state){
         var spaceTypeFilter = "";
         var moreQuery = "";
-        if (state.spaceTypeFilters){
+        if (state.spaceTypeFilters && state.spaceTypeFilters[0] !== "Any"){
             state.spaceTypeFilters.forEach(filter => {
                 spaceTypeFilter += "&spaceUse[]="+filter;
             });
