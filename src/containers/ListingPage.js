@@ -427,7 +427,6 @@ export class ListingPage extends Component {
     }
 
     handleSearch(state){
-
         var spaceTypeFilter = "";
         var moreQuery = "";
         if (state.spaceTypeFilters){
@@ -784,12 +783,7 @@ export class ListingPage extends Component {
             var query = 'perPage=20&page='+localState.page;
             var markerQuery = "perPage=250&page=1";
 
-            var spaceUseFilter = null;
-            if (localState.spaceUseFilter){
-                spaceUseFilter = localState.spaceUseFilter;
-            } else if (that.state.spaceUserFilter){
-                spaceUseFilter = that.state.spaceUseFilter;
-            }
+            var spaceUseFilter = localState.spaceUseFilter ? localState.spaceUseFilter : that.state.spaceUseFilter;
             if (spaceUseFilter){
                 query += spaceUseFilter;
                 markerQuery += spaceUseFilter;
