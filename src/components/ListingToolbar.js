@@ -189,9 +189,12 @@ class ListingToolbar extends React.Component {
             numMoreFilters: 0,
             listingType: listingTypes.BOTH,
             moreFilters: {minSize:"", maxSize:"", minPrice:"", maxPrice:""},
-            searchClass: "toolbar-search-button",
-            searchVariant: "danger"
+            searchClass: "",
+            searchVariant: "warning"
+        }, () => {
+            this.props.onSearch(this.state);
         });
+
     }
     handleShowReportView(){
         if (this.props.showReportView){
