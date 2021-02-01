@@ -11,9 +11,6 @@ import Listings from '../components/Listings';
 import ReportListings from '../components/ReportListings';
 import ListingToolbar from '../components/ListingToolbar';
 import ListingDetail from '../components/ListingDetail';
-import ListingAddType from '../components/ListingAddType';
-import ListingAddAddress from '../components/ListingAddAddress';
-import ListingAddOverview from '../components/ListingAddOverview';
 import listingService from '../services/listings';
 import spaceService from '../services/spaces';
 import authenticationService from '../helpers/authentication';
@@ -29,6 +26,7 @@ import PublishWizardPaymentMethod from '../components/PublishWizardPaymentMethod
 import PublishWizardFinal from '../components/PublishWizardFinal';
 import UnpublishWizardIntro from '../components/UnpublishWizardIntro';
 import {listingTypes} from '../constants/listingTypes';
+import Wizard from '../components/Wizard';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -58,16 +56,6 @@ export class ListingPage extends Component {
         this.handleSearch = this.handleSearch.bind(this);
         this.handleShowReportView = this.handleShowReportView.bind(this);
 
-        // Add Listing
-        this.handleAddListing = this.handleAddListing.bind(this);
-        this.handleListingTypeNext = this.handleListingTypeNext.bind(this);
-        this.handleListingAddressNext = this.handleListingAddressNext.bind(this);
-        this.handleGoToListing = this.handleGoToListing.bind(this);
-        this.handleListingOverviewNext = this.handleListingOverviewNext.bind(this);
-        this.handleCancelAddType = this.handleCancelAddType.bind(this);
-        this.handleCancelAddAddress = this.handleCancelAddAddress.bind(this);
-        this.handleCancelAddOverview = this.handleCancelAddOverview.bind(this);
-
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleListingToggle = this.handleListingToggle.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
@@ -76,6 +64,9 @@ export class ListingPage extends Component {
         this.handleNewPage = this.handleNewPage.bind(this);
 
         // Listing
+        this.handleAddListing = this.handleAddListing.bind(this);
+        this.handleAddListingFinish = this.handleAddListingFinish.bind(this);
+        this.handleAddListingCancel = this.handleAddListingCancel.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
         this.handleCreate = this.handleCreate.bind(this);
         this.handleFetchListing = this.handleFetchListing.bind(this);
@@ -125,12 +116,9 @@ export class ListingPage extends Component {
         this.handleAddNewList = this.handleAddNewList.bind(this);
 
         this.state = {
-
-            // Add listing
-            addListingType: false,
-            addListingAddress: false,
-            addListingOverview: false,
-            newListing: {},
+            // Wizard
+            startWizard: false,
+            finishWizard: true,
 
             // Transition
             transitionStart: false,
@@ -201,6 +189,20 @@ export class ListingPage extends Component {
             listId: 0 
         };
     }
+    handleAddListing(){
+        this.setState({
+            showWizard: true,
+            finishWizard: false 
+        });
+    }
+
+    handleAddListingCancel(){
+        this.setState({
+            showWizard: false,
+            finishWizard: true
+        });
+    }
+
     handleGoToListingByIndex(index, publishStatus){
         var editMode = "view";
         var listingMode = "allListings";
@@ -331,27 +333,10 @@ export class ListingPage extends Component {
 
     // Add Listing
 
-    handleAddListing(){
-        this.setState({
-            addListingType: true
-        });
-    }
-    handleListingTypeNext(listing){
-        this.setState({
-            addListingType: false,
-            addListingAddress: true,
-            newListing: listing
-        });
-    }
-
-    handleListingAddressNext(listing){
-        this.setState({
-            addListingAddress: false,
-            addListingOverview: true,
-            newListing: listing
-        });
-    }
-    handleListingOverviewNext(listing){
+    handleAddListingFinish(listing){
+        console.log("handleAddListingFinish()");
+        console.log("listing:");
+        console.log(listing);
         listing.owner = authenticationService.getUserEmail();
         var createPromise = listingService.create(listing);
         var that = this;
@@ -366,7 +351,9 @@ export class ListingPage extends Component {
                 bounds: bounds,
                 center: null,
                 zoomLevel: null,
-                page: 1
+                page: 1,
+                showWizard: false,
+                finishWizard: true
             };
 
             that.fetchListingPromise(localState).then(function(localState){
@@ -386,21 +373,7 @@ export class ListingPage extends Component {
             console.log(err);
         });
     }
-    handleCancelAddType(){
-        this.setState({
-            addListingType: false
-        });
-    }
-    handleCancelAddAddress(){
-        this.setState({
-            addListingAddress: false
-        });
-    }
-    handleCancelAddOverview(){
-        this.setState({
-            addListingOverview: false
-        });
-    }
+
     handleListingToggle(value){
         var localState = {
             listingMode: value,
@@ -1234,29 +1207,14 @@ export class ListingPage extends Component {
                     </Button>
                 </Modal.Footer>
             </Modal>
-            <ListingAddType
-                show={this.state.addListingType}
-                onNext={this.handleListingTypeNext}
-                onCancel={this.handleCancelAddType}
-            />
-            { this.state.addListingAddress ?
-            <ListingAddAddress
-                show={this.state.addListingAddress}
-                onNext={this.handleListingAddressNext}
-                listing={this.state.newListing}
-                onCancel={this.handleCancelAddAddress}
-                onGoToListing={this.handleGoToListing}
+            { this.state.showWizard ?
+            <Wizard 
+                start={this.state.showWizard}
+                finish={this.state.finishWizard}
+                onFinish={this.handleAddListingFinish}
+                onCancel={this.handleAddListingCancel}
             />
             : null }
-            { this.state.addListingOverview ?
-                <ListingAddOverview
-                    show={this.state.addListingOverview}
-                    onNext={this.handleListingOverviewNext}
-                    listing={this.state.newListing}
-                    onCancel={this.handleCancelAddOverview}
-                />
-            : null }
-
             { !fullscreen ?
 	    <Row className="bg-success">
 	        <ListingToolbar

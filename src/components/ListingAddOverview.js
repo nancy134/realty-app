@@ -177,7 +177,7 @@ class ListingAddOverview extends React.Component{
             <Modal.Footer>
                 <Button 
                     id="overview_edit_cancel_button"
-                    onClick={this.props.onCancel}
+                    onMouseDown={this.props.onCancel}
                 >
                     Discard Changes 
                 </Button>
