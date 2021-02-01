@@ -10,6 +10,7 @@ import {
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {listingTypes} from '../constants/listingTypes';
+import StepperAddListing from '../components/StepperAddListing';
 
 const OverviewSchemaForSale = Yup.object().shape({
     shortDescription: Yup.string().required('Short Description is required'),
@@ -64,6 +65,14 @@ class ListingAddOverview extends React.Component{
            schema = OverviewSchemaForSale;
        }
 
+        // Stepper
+        var addListingTypeActive=true;
+        var addListingTypeCompleted=true;
+        var addListingAddressActive=true;
+        var addListingAddressCompleted=true;
+        var addListingOverviewActive=true;
+        var addListingOverviewCompleted=false;
+
        if (this.props.show){
        return(
        <Formik
@@ -92,6 +101,7 @@ class ListingAddOverview extends React.Component{
           onHide={this.props.onHide}
           aria-labelledby="contained-modal-title-vcenter"
           backdrop='static'
+          dialogClassName="modal-80w"
         >
             <Modal.Header>
                 <Modal.Title id="contained-modal-title-vcenter">
@@ -99,6 +109,14 @@ class ListingAddOverview extends React.Component{
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
+                <StepperAddListing
+                    addListingTypeActive={addListingTypeActive}
+                    addListingTypeCompleted={addListingTypeCompleted}
+                    addListingAddressActive={addListingAddressActive}
+                    addListingAddressCompleted={addListingAddressCompleted}
+                    addListingOverviewActive={addListingOverviewActive}
+                    addListingOverviewCompleted={addListingOverviewCompleted}
+                />
                 <Row className="mt-2">
                     <Col>
                         <Form>

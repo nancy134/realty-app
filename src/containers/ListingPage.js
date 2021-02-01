@@ -26,7 +26,7 @@ import PublishWizardPaymentMethod from '../components/PublishWizardPaymentMethod
 import PublishWizardFinal from '../components/PublishWizardFinal';
 import UnpublishWizardIntro from '../components/UnpublishWizardIntro';
 import {listingTypes} from '../constants/listingTypes';
-import Wizard from '../components/Wizard';
+import WizardAddListing from '../components/WizardAddListing';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -1208,7 +1208,7 @@ export class ListingPage extends Component {
                 </Modal.Footer>
             </Modal>
             { this.state.showWizard ?
-            <Wizard 
+            <WizardAddListing
                 start={this.state.showWizard}
                 finish={this.state.finishWizard}
                 onFinish={this.handleAddListingFinish}

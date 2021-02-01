@@ -4,7 +4,7 @@ import ListingAddType from '../components/ListingAddType';
 import ListingAddAddress from '../components/ListingAddAddress';
 import ListingAddOverview from '../components/ListingAddOverview';
 
-export class Wizard extends Component {
+export class WizardAddListing extends Component {
     constructor(props){
         super(props);
 
@@ -99,4 +99,4 @@ export class Wizard extends Component {
     }
 }
 
-export default Wizard;
+export default WizardAddListing;

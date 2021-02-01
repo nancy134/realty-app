@@ -5,6 +5,7 @@ import {
     Form
 } from 'react-bootstrap';
 import {listingTypes} from '../constants/listingTypes';
+import StepperAddListing from '../components/StepperAddListing';
 
 class ListingAddType extends React.Component{
     constructor(props){
@@ -38,11 +39,14 @@ class ListingAddType extends React.Component{
     }
     render()
     {
+       var addListingTypeActive = true;
+       var addListingTypeCompleted = false;
        return(
         <Modal
           show={this.props.show}
           onHide={this.props.onHide}
           aria-labelledby="contained-modal-title-vcenter"
+          dialogClassName="modal-80w"
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
@@ -50,6 +54,10 @@ class ListingAddType extends React.Component{
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
+                <StepperAddListing
+                    addListingTypeActive={addListingTypeActive}
+                    addListingTypeCompleted={addListingTypeCompleted} 
+                />
                 <Form>
                     <Form.Check
                     >

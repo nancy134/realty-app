@@ -18,6 +18,7 @@ import {
     getLatLng
 } from 'react-places-autocomplete';
 import authenticationService from '../helpers/authentication';
+import StepperAddListing from '../components/StepperAddListing';
 
 const AddressSchema = Yup.object().shape({
     city: Yup.string().required('City is required'),
@@ -245,6 +246,13 @@ class ListingAddAddress extends React.Component{
                 <option key={key}>{item}</option>
             );
         }
+
+        // Stepper
+        var addListingTypeActive=true;
+        var addListingTypeCompleted=true;
+        var addListingAddressActive=true;
+        var addListingAddressCompleted=false;
+
        var initialValues = {
            address: "",
            city: "",
@@ -300,6 +308,13 @@ class ListingAddAddress extends React.Component{
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
+                <StepperAddListing
+                    addListingTypeActive={addListingTypeActive}
+                    addListingTypeCompleted={addListingTypeCompleted}
+                    addListingAddressActive={addListingAddressActive}
+                    addListingAddressCompleted={addListingAddressCompleted}
+                />
+
                 <Row className="mt-2">
                     <Col>
                         <Form>
