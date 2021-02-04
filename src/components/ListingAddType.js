@@ -39,26 +39,29 @@ class ListingAddType extends React.Component{
     }
     render()
     {
+       // Stepper
+       var loggedIn=this.props.loggedIn;
        var addListingTypeActive = true;
-       var addListingTypeCompleted = false;
        return(
         <Modal
           show={this.props.show}
           onHide={this.props.onHide}
           aria-labelledby="contained-modal-title-vcenter"
           dialogClassName="modal-80w"
+          animation={false}
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                  Select Listing Type 
+                    <span>Create New Listing</span>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <StepperAddListing
                     addListingTypeActive={addListingTypeActive}
-                    addListingTypeCompleted={addListingTypeCompleted} 
+                    loggedIn={loggedIn}
                 />
-                <Form>
+                <Form className="pl-5 pr-5">
+                    <h3>Select Listing Type</h3>
                     <Form.Check
                     >
                         <Form.Check.Input
@@ -95,7 +98,7 @@ class ListingAddType extends React.Component{
                     id="overview_edit_cancel_button"
                     onClick={this.props.onCancel}
                 >
-                    Cancel
+                    <span>Discard Changes</span> 
                 </Button>
                 <Button 
                     id="overview_edit_next_button"

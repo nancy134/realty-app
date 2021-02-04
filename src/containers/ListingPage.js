@@ -334,9 +334,6 @@ export class ListingPage extends Component {
     // Add Listing
 
     handleAddListingFinish(listing){
-        console.log("handleAddListingFinish()");
-        console.log("listing:");
-        console.log(listing);
         listing.owner = authenticationService.getUserEmail();
         var createPromise = listingService.create(listing);
         var that = this;
@@ -1209,6 +1206,7 @@ export class ListingPage extends Component {
             </Modal>
             { this.state.showWizard ?
             <WizardAddListing
+                loggedIn={this.props.loggedIn}
                 start={this.state.showWizard}
                 finish={this.state.finishWizard}
                 onFinish={this.handleAddListingFinish}

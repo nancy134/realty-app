@@ -7,6 +7,7 @@ import {
     Spinner,
     InputGroup
 } from 'react-bootstrap';
+import StepperAddListing from '../components/StepperAddListing';
 
 class AccountLoginModal extends React.Component {
     constructor(props){
@@ -52,24 +53,83 @@ class AccountLoginModal extends React.Component {
         }, 1)
     }
     render(){
+
+        // Wizard
+        var className="";
+        var animation=true;
+        var nextButton="Login"
+        var title="Login";
+        var cancel="Cancel";
+        var formPadding="";
+        if (this.props.isWizard){
+            className="modal-80w"
+            animation=false;
+            nextButton="Next";
+            title="Create New Listing";
+            cancel="Discard Changes";
+            formPadding="pl-5 pr-5 ml-5 mr-5";
+        }
+
+        // Stepper
+        var addListingTypeCompleted=true;
+        var addListingAddressCompleted=true;
+        var addListingOverviewCompleted=true;
+        var forgotPassword=this.props.forgotPassword;
+        var forgotPasswordCompleted=true;
+        var forgotConfirmCompleted=true;
+        var notRegistered=this.props.notRegistered;
+        var registerCompleted=true;
+        var confirmCompleted=true;
+        var loginActive=true;
+        var loginCompleted=false;
+
+        // Button
+        var buttonDisabled = true;
+        if (this.state.email !== "" && this.state.password !== ""){
+            buttonDisabled = false;
+        }
+
         return(
         <Modal
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
-            centered
+            dialogClassName={className}
+            animation={animation}
             show={this.props.show}
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Login
+                    <span>{title}</span> 
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
+
+                { this.props.isWizard ?
+                <StepperAddListing
+                    addListingTypeCompleted={addListingTypeCompleted}
+                    addListingAddressCompleted={addListingAddressCompleted}
+                    addListingOverviewCompleted={addListingOverviewCompleted}
+                    forgotPassword={forgotPassword}
+                    forgotPasswordCompleted={forgotPasswordCompleted}
+                    forgotConfirmCompleted={forgotConfirmCompleted}
+                    notRegistered={notRegistered}
+                    registerCompleted={registerCompleted}
+                    confirmCompleted={confirmCompleted}
+                    loginActive={loginActive}
+                    loginCompleted={loginCompleted}
+                />
+                : null }
+                <Form className={formPadding}>
+                { this.props.isWizard ?
+                <h3>Login</h3>
+                : null }
+
                 {this.props.loginMessage ?
                 <Alert variant={this.props.loginMessageVariant}>
                 {this.props.loginMessage}
                 </Alert>
                 : null}
+                
                 <Form.Label>Email</Form.Label>
                 <Form.Control 
                     id="login-email-input" 
@@ -98,16 +158,17 @@ class AccountLoginModal extends React.Component {
                     onClick={this.props.onRegisterStart} 
                     variant="link">Don't hava an account? Create one here
                 </Button>
-               
+                </Form> 
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={this.props.onCancel}>Cancel</Button>
-                <Button 
+                <Button onClick={this.props.onCancel}>{cancel}</Button>
+                <Button
+                    disabled={buttonDisabled}
                     id="login-button"
                     onClick={this.handleLogin}
                 >
                     { !this.props.loginProgress ?
-                    <span>Login</span>
+                    <span>{nextButton}</span>
                     :
                     <Spinner
                         as="span"

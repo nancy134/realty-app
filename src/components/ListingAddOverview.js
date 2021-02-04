@@ -66,12 +66,10 @@ class ListingAddOverview extends React.Component{
        }
 
         // Stepper
-        var addListingTypeActive=true;
         var addListingTypeCompleted=true;
-        var addListingAddressActive=true;
         var addListingAddressCompleted=true;
         var addListingOverviewActive=true;
-        var addListingOverviewCompleted=false;
+        var loggedIn=this.props.loggedIn;
 
        if (this.props.show){
        return(
@@ -81,7 +79,7 @@ class ListingAddOverview extends React.Component{
             onSubmit={(values, { setSubmitting }) => {
                 setSubmitting(true);
                 this.handleNext(initialValues, values);
-                setSubmitting(false);
+                //setSubmitting(false);
             }}
         >
             {({ 
@@ -102,20 +100,19 @@ class ListingAddOverview extends React.Component{
           aria-labelledby="contained-modal-title-vcenter"
           backdrop='static'
           dialogClassName="modal-80w"
+          animation={false}
         >
             <Modal.Header>
                 <Modal.Title id="contained-modal-title-vcenter">
-                  Enter Overview 
+                    <span>Create New Listing</span> 
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <StepperAddListing
-                    addListingTypeActive={addListingTypeActive}
                     addListingTypeCompleted={addListingTypeCompleted}
-                    addListingAddressActive={addListingAddressActive}
                     addListingAddressCompleted={addListingAddressCompleted}
                     addListingOverviewActive={addListingOverviewActive}
-                    addListingOverviewCompleted={addListingOverviewCompleted}
+                    loggedIn={loggedIn}
                 />
                 <Row className="mt-2">
                     <Col>
@@ -204,7 +201,7 @@ class ListingAddOverview extends React.Component{
                     id="overview_create_listing_button"
                     onClick={handleSubmit}
                 >
-                    Create New Listing 
+                    <span>Next</span>
                 </Button>
             </Modal.Footer>
        </Modal>

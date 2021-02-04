@@ -44,7 +44,6 @@ function Toolbar(props){
                 </Button>
             </Col>
             : null }
-            { (props.loggedIn) ?
             <Col>
                 <Button
                     size="sm"
@@ -53,7 +52,6 @@ function Toolbar(props){
                     <FontAwesomeIcon icon={faPlus} />&nbsp;New Listing
                 </Button>
             </Col>
-            : null }
             <Col>
                 <ListingPagination
                     page={props.page}
@@ -159,6 +157,7 @@ class Listings extends React.Component {
                 perPage={this.props.perPage}
                 onNewPage={this.props.onNewPage}
                 listingMode={this.props.listingMode}
+                onNewListing={this.handleNewListing}
             />
             }
             <div>

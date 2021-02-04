@@ -248,10 +248,9 @@ class ListingAddAddress extends React.Component{
         }
 
         // Stepper
-        var addListingTypeActive=true;
         var addListingTypeCompleted=true;
         var addListingAddressActive=true;
-        var addListingAddressCompleted=false;
+        var loggedIn=this.props.loggedIn;
 
        var initialValues = {
            address: "",
@@ -301,18 +300,18 @@ class ListingAddAddress extends React.Component{
           aria-labelledby="contained-modal-title-vcenter"
           backdrop='static'
           dialogClassName="modal-80w"
+          animation={false}
         >
             <Modal.Header>
                 <Modal.Title id="contained-modal-title-vcenter">
-                  Enter Listing Address 
+                <span>Create New Listing</span> 
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <StepperAddListing
-                    addListingTypeActive={addListingTypeActive}
                     addListingTypeCompleted={addListingTypeCompleted}
                     addListingAddressActive={addListingAddressActive}
-                    addListingAddressCompleted={addListingAddressCompleted}
+                    loggedIn={loggedIn}
                 />
 
                 <Row className="mt-2">

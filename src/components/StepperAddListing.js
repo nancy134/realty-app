@@ -20,11 +20,43 @@ class StepperAddListing extends React.Component {
                 </Step>
                 <Step
                     active={this.props.addListingOverviewActive}
-                    completed={this.props.AddListingOverviewCompleted}
+                    completed={this.props.addListingOverviewCompleted}
                 >
                     <StepLabel>Overview</StepLabel>
                 </Step>
-                { this.props.loggedIn ?
+                { this.props.notRegistered ?
+                <Step
+                    active={this.props.registerActive}
+                    completed={this.props.registerCompleted}
+                >
+                    <StepLabel>Register</StepLabel>
+                </Step>
+                : null }
+                { this.props.notRegistered ?
+                <Step
+                    active={this.props.confirmActive}
+                    completed={this.props.confirmCompleted}
+                >
+                    <StepLabel>Confirm</StepLabel>
+                </Step>
+                : null }
+                { this.props.forgotPassword ?
+                <Step
+                    active={this.props.forgotPasswordActive}
+                    completed={this.props.forgotPasswordCompleted}
+                >
+                    <StepLabel>Forgot Password</StepLabel>
+                </Step>
+                : null }
+                { this.props.forgotPassword ?
+                <Step
+                    active={this.props.forgotConfirmActive}
+                    completed={this.props.forgotConfirmCompleted}
+                >
+                    <StepLabel>Confirm</StepLabel>
+                </Step>
+                : null }
+                { !this.props.loggedIn ?
                 <Step
                     active={this.props.loginActive}
                     completed={this.props.loginCompleted}
@@ -32,6 +64,13 @@ class StepperAddListing extends React.Component {
                     <StepLabel>Login</StepLabel>
                 </Step>
                 : null }
+                <Step
+                    active={this.props.addListingReviewActive}
+                    completed={this.props.addListingReviewCompleted}
+                >
+                    <StepLabel>Review</StepLabel>
+                </Step>
+
             </Stepper>
         </React.Fragment>
         );
