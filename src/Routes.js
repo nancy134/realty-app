@@ -10,6 +10,16 @@ import AdminPage from './containers/AdminPage';
 
 class Routes extends React.Component {
 
+constructor(props){
+    super(props);
+    this.handleLogin = this.handleLogin.bind(this);
+}
+
+handleLogin(){
+    console.log("handleLogin()");
+    this.props.onLogin();
+}
+
 render(){
   return(
   <Switch loggedIn={this.props.loggedIn}>
@@ -21,6 +31,8 @@ render(){
         render={
             props => (
                 <Home
+                    loggedIn={this.props.loggedIn}
+                    showWizard={this.props.showWizard}
                     {...props}
                 />
             )
@@ -32,6 +44,7 @@ render(){
             props => (
                 <ListingPage
                     {...props}
+                    onLogin={this.handleLogin}
                     loggedIn={this.props.loggedIn}
                 />
             )
@@ -42,6 +55,7 @@ render(){
         render={
             props => (
                 <ListingPage {...props}
+                    onLogin={this.handleLogin} 
                     loggedIn={this.props.loggedIn}
                 />
             )

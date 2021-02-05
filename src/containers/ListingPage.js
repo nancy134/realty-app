@@ -72,6 +72,7 @@ export class ListingPage extends Component {
         this.handleFetchListing = this.handleFetchListing.bind(this);
         this.handleGoToListingByIndex = this.handleGoToListingByIndex.bind(this);
         this.handleGoToMyListing = this.handleGoToMyListing.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
 
         // Transition
         this.handleTransitionStart = this.handleTransitionStart.bind(this);
@@ -201,6 +202,11 @@ export class ListingPage extends Component {
             showWizard: false,
             finishWizard: true
         });
+    }
+
+    handleLogin(){
+        console.log("handleLogin()");
+        this.props.onLogin();
     }
 
     handleGoToListingByIndex(index, publishStatus){
@@ -1211,6 +1217,7 @@ export class ListingPage extends Component {
                 finish={this.state.finishWizard}
                 onFinish={this.handleAddListingFinish}
                 onCancel={this.handleAddListingCancel}
+                onLogin={this.handleLogin}
             />
             : null }
             { !fullscreen ?

@@ -3,7 +3,8 @@ import './App.css';
 import { 
     Container,
     Nav,
-    Navbar
+    Navbar,
+    Button
 } from 'react-bootstrap';
 import Routes from './Routes';
 import AccountButton from './components/AccountButton';
@@ -19,6 +20,7 @@ class App extends React.Component {
       this.handleLogout = this.handleLogout.bind(this);
       this.handleRegister = this.handleRegister.bind(this);
       this.handleConfirm = this.handleConfirm.bind(this);
+      this.handleAddListing = this.handleAddListing.bind(this);
   }
   componentDidMount(){
       if (authenticationService.isAuthenticated()){
@@ -35,7 +37,19 @@ class App extends React.Component {
       this.setState({
           loggedIn: false
       },() => {
-          window.location.reload();
+          var url =
+              window.location.protocol +
+              "//" +
+              window.location.hostname +
+              window.location.pathname;
+      
+          window.location.href = url;
+      });
+  }
+  handleAddListing(){
+      console.log("handleAddListing()");
+      this.setState({
+          showWizard: true
       });
   }
   handleRegister(){
@@ -57,8 +71,19 @@ class App extends React.Component {
               <Navbar.Toggle />
               <Navbar.Collapse className="justify-content-end">
                   <Nav.Item>
+                      <Nav.Link eventKey="link-2">
+                          <Button
+                              onClick={this.handleAddListing}
+                              variant="outline-primary"
+                          >
+                              <span>Add a Listing</span>
+                          </Button>
+                      </Nav.Link> 
+                  </Nav.Item>
+                  <Nav.Item>
                       <Nav.Link eventKey="link-1">
                           <AccountButton 
+                              loggedIn={this.state.loggedIn}
                               onLogin={this.handleLogin} 
                               onLogout={this.handleLogout} 
                               onRegister={this.handleRegister}
@@ -68,10 +93,14 @@ class App extends React.Component {
                   </Nav.Item>
               </Navbar.Collapse>
           </Navbar>
+
           <Routes
               // Logged in
+              onLogin={this.handleLogin}
               loggedIn={this.state.loggedIn}
-          ></Routes>
+              showWizard={this.state.showWizard}
+          >
+</Routes>
     </Container>
   );
 }

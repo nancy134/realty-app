@@ -14,16 +14,38 @@ import {
 import { GoogleApiWrapper } from 'google-maps-react';
 import Geocode from 'react-geocode';
 import geolocationService from '../helpers/geolocation';
+import WizardAddListing from '../components/WizardAddListing';
+import authenticationService from '../helpers/authentication';
+import listingService from '../services/listings';
 
 export class Home extends Component { 
   constructor(props, context) {
     super(props, context);
     this.handleFindSpace = this.handleFindSpace.bind(this);
+    this.handleAddListingFinish = this.handleAddListingFinish.bind(this);
+    this.handleAddListingCancel = this.handleAddListingCancel.bind(this);
     this.state = {
         address: ''
     };
   }
-
+  handleAddListingFinish(listing){
+      listing.owner = authenticationService.getUserEmail();
+      listingService.create(listing).then(function(data){
+          var url = 
+              window.location.protocol + 
+              "//" + 
+              window.location.hostname + 
+              "/listing?listingMode=myListings";
+          window.location.href = url
+      }).catch(function(err){
+          console.log(err);
+      });
+  }
+  handleAddListingCancel(){
+      this.setState({
+          finishWizard: false
+      });
+  }
   handleChange = address => {
       this.setState({address});
   };
@@ -109,8 +131,19 @@ export class Home extends Component {
   }
 
   render(){
+    console.log("this.props.showWizard: "+this.props.showWizard);
   return (
     <div className="bimage">
+        { this.props.showWizard ?
+        <WizardAddListing
+            loggedIn={this.props.loggedIn}
+            start={this.props.showWizard}
+            finish={this.state.finishWizard}
+            onFinish={this.handleAddListingFinish}
+            onCancel={this.handleAddListingCancel}
+            onLogin={this.handleLogin}
+        />
+        : null }
       <p className="p-5"></p>
       <Jumbotron className="jtron">
         <Container>

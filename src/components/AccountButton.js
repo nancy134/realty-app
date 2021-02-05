@@ -36,7 +36,6 @@ export class AccountButton extends Component{
         this.handleForgotConfirm = this.handleForgotConfirm.bind(this);
 
         this.state = {
-            authenticated: false,
 
             // Login
             modalShowLogin: false,
@@ -69,7 +68,7 @@ export class AccountButton extends Component{
     }
     componentDidMount(){
         if (authenticationService.isAuthenticated()){
-            this.setState({authenticated: true});
+            this.props.onLogin();
         }
     }
     handleLogin(email, password){
@@ -79,7 +78,6 @@ export class AccountButton extends Component{
         });
         authenticationService.loginResponse(email, password).then(function(result){
             that.setState({
-                authenticated: true,
                 modalShowLogin: false,
                 loginMessage: null,
                 loginProgress: false
@@ -191,7 +189,6 @@ export class AccountButton extends Component{
     }
     onLogout(){
        authenticationService.deleteUser();
-       this.setState({authenticated: false});
        this.props.onLogout();
     }
     onMyListings(){
@@ -226,7 +223,7 @@ export class AccountButton extends Component{
         return(
         <span>
             <span className="align-top text-danger">
-            {this.state.authenticated ? 
+            {this.props.loggedIn ? 
                 ( 
                 <DropdownButton id="account-button-dropdown" title={userName}>
                     <Dropdown.Item
