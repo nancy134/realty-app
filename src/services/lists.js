@@ -1,20 +1,15 @@
-var rp = require('request-promise');
+import axiosInstance from './axios';
 
-export function getAll(query){
-    var url = "";
-    if (query){
-       url = process.env.REACT_APP_LISTING_SERVICE+"lists?"+query;
-    } else {
-       url = process.env.REACT_APP_LISTING_SERVICE+"lists";
-    }
+export function getAll(){
+    var url = process.env.REACT_APP_API+"lists/me";
+    console.log("url: "+url);
     return new Promise(function(resolve, reject){
         var options = {
             method: 'GET',
-            url: url,
-            json: true
+            url: url
         };
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
             reject(err);
         });
@@ -22,16 +17,16 @@ export function getAll(query){
 }
 
 export function create(body){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"lists";
+    var url = process.env.REACT_APP_API+"lists/me";
+    console.log("url: "+url);
     return new Promise(function(resolve, reject){
         var options = {
             method: 'POST',
-            uri: url,
-            json: true,
-            body: body
+            url: url,
+            data: body
         };
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
             reject(err);
         });

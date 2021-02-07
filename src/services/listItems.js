@@ -1,53 +1,59 @@
-var rp = require('request-promise');
+import axiosInstance from './axios';
 
-export function getAll(query){
-    var url = "";
-    if (query){
-        url = process.env.REACT_APP_LISTING_SERVICE+"listItems?"+query;
-    } else {
-        url = process.env.REACT_APP_LISTING_SERVICE+"listItems";
-    }
-
+export function getAll(ListId){
+    var url =
+        process.env.REACT_APP_API +
+        "lists/" +
+        ListId +
+        "/listItems/me";
+    console.log("url: "+url);
     return new Promise(function(resolve, reject){
         var options = {
             method: 'GET',
-            uri: url,
-            json: true
+            url: url,
         };
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
             reject(err);
         });
     });
 }
 
-export function create(body){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"listItems";
+export function create(ListId, body){
+    var url =
+        process.env.REACT_APP_API +
+        "lists/" +
+        ListId +
+        "/listItems/me";
+    console.log("url: "+url);
     return new Promise(function(resolve, reject){
         var options = {
             method: 'POST',
-            uri: url,
-            json: true,
-            body: body
+            url: url,
+            data: body
         };
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
             reject(err);
         });
     });
 }
 
-export function deleteItem(id){
+export function deleteItem(ListItemId){
+    var url =
+        process.env.REACT_APP_API +
+        "listItems/" +
+        ListItemId;
+    console.log("DELETE url: "+url);
     return new Promise(function(resolve, reject){
         var options = {
             method: 'DELETE',
-            uri: process.env.REACT_APP_LISTING_SERVICE+"listItems/"+id,
-            json: true
+            url: url
         };
-        rp(options).then(function(result){
-            resolve(result);
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
             reject(err);
         });

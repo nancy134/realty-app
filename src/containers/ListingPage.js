@@ -839,12 +839,10 @@ export class ListingPage extends Component {
                     localState.bounds = geolocationService.calculateBounds(localState.markers);
                 }
                 localState.readyForMap = true;
-                var query = "owner="+authenticationService.getUserEmail();
-                listService.getAll(query).then(function(lists){
+                listService.getAll().then(function(lists){
                     if (lists.lists.rows.length > 0){
                         var listId = lists.lists.rows[0].id; 
-                        query = "ListId="+listId;
-                        listItemService.getAll(query).then(function(listItems){
+                        listItemService.getAll(listId).then(function(listItems){
                             localState.lists = lists.lists.rows;
                             localState.listItems = listItems.listItems.rows;
                             localState.listId = listId; 
@@ -857,13 +855,10 @@ export class ListingPage extends Component {
                         });
                     } else {
                         var body = {
-                            name: "List 1",
-                            owner: authenticationService.getUserEmail()
+                            name: "List 1"
                         };
                         listService.create(body).then(function(list){
-                            var query = "ListId="+list.id+
-                                "&owner="+authenticationService.getUserEmail();
-                            listService.getAll(query).then(function(lists){
+                            listService.getAll().then(function(lists){
                                 localState.lists = lists.lists.rows;
                                 localState.listId = list.id;
                                 localState.reportPage = 1;
@@ -1001,9 +996,8 @@ export class ListingPage extends Component {
 
     // Reports
     handleReportListChange(listTab){
-        var query = "perPage=10&page=1&ListId="+listTab;
         var that = this;
-        listItemService.getAll(query).then(function(listItems){
+        listItemService.getAll(listTab).then(function(listItems){
             that.setState({
                 listItems: listItems.listItems.rows,
                 listId: listTab,
@@ -1016,14 +1010,15 @@ export class ListingPage extends Component {
         });
     }
     handleAddToList(e, ListingId){
+        console.log("ListingId: "+ListingId);
         var that = this;
         var body = {
-            ListingId: ListingId,
-            ListId: this.state.listId
+            ListingId: ListingId
         }
-        listItemService.create(body).then(function(listItem){
-            var query = "perPage=5&page=1&ListId="+that.state.listId;
-            listItemService.getAll(query).then(function(listItems){
+        var listId = this.state.listId;
+        listItemService.create(listId, body).then(function(listItem){
+            var listId = that.state.listId;
+            listItemService.getAll(listId).then(function(listItems){
                 that.setState({
                     listItems: listItems.listItems.rows,
                     reportPage: listItems.page,
@@ -1050,8 +1045,8 @@ export class ListingPage extends Component {
         }
         if (id){
             listItemService.deleteItem(id).then(function(result){
-                var query = "perPage=5&page=1&ListId="+that.state.listId;
-                listItemService.getAll(query).then(function(listItems){
+                var listId = that.state.listId;
+                listItemService.getAll(listId).then(function(listItems){
                     that.setState({
                         listItems: listItems.listItems.rows,
                         reportPage: listItems.page,
@@ -1069,8 +1064,8 @@ export class ListingPage extends Component {
     }
     handleNewPageReport(goToPage){
          var that = this;
-         var query = "perPage=5&page="+goToPage+"&ListId="+this.state.listId;
-         listItemService.getAll(query).then(function(listItems){
+         var listId = this.state.listId;
+         listItemService.getAll(listId).then(function(listItems){
              that.setState({
                  listItems: listItems.listItems.rows,
                  reportPage: listItems.page,
@@ -1085,13 +1080,10 @@ export class ListingPage extends Component {
     handleAddNewList(listName){
         var that = this;
         var body = {
-            owner: authenticationService.getUserEmail(),
             name: listName
         };
         listService.create(body).then(function(list){
-            var query = "ListId="+list.id+
-                "&owner="+authenticationService.getUserEmail();
-            listService.getAll(query).then(function(lists){
+            listService.getAll().then(function(lists){
                 that.setState({
                     lists: lists.lists.rows,
                     listId: list.id,
