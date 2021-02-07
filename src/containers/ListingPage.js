@@ -839,42 +839,7 @@ export class ListingPage extends Component {
                     localState.bounds = geolocationService.calculateBounds(localState.markers);
                 }
                 localState.readyForMap = true;
-                listService.getAll().then(function(lists){
-                    if (lists.lists.rows.length > 0){
-                        var listId = lists.lists.rows[0].id; 
-                        listItemService.getAll(listId).then(function(listItems){
-                            localState.lists = lists.lists.rows;
-                            localState.listItems = listItems.listItems.rows;
-                            localState.listId = listId; 
-                            localState.reportPage = listItems.page;
-                            localState.reportPerPage = listItems.perPage;
-                            localState.reportCount = listItems.listItems.count;
-                            that.setState(localState);
-                        }).catch(function(err){
-                            console.log(err);
-                        });
-                    } else {
-                        var body = {
-                            name: "List 1"
-                        };
-                        listService.create(body).then(function(list){
-                            listService.getAll().then(function(lists){
-                                localState.lists = lists.lists.rows;
-                                localState.listId = list.id;
-                                localState.reportPage = 1;
-                                localState.reportCount = 0;
-                                localState.reportPerPage = 5;
-                               that.setState(localState);
-                            }).catch(function(err){
-                                console.log(err);
-                            });
-                        }).catch(function(err){
-                            console.log(err);
-                        });
-                    }
-                }).catch(function(err){
-                    console.log(err);
-                });
+                that.setState(localState);
             }).catch(function(err){
                 console.log(err);
             });
@@ -1100,9 +1065,54 @@ export class ListingPage extends Component {
         });
     }
     handleShowReportView(showReportView){
-        this.setState({
-            showReportView: showReportView 
-        });
+        if (showReportView){
+            var localState = {};
+            var that = this;
+            listService.getAll().then(function(lists){
+                if (lists.lists.rows.length > 0){
+                    console.log("lists found");
+                    var listId = lists.lists.rows[0].id;
+                    listItemService.getAll(listId).then(function(listItems){
+                        localState.lists = lists.lists.rows;
+                        localState.listItems = listItems.listItems.rows;
+                        localState.listId = listId;
+                        localState.reportPage = listItems.page;
+                        localState.reportPerPage = listItems.perPage;
+                        localState.reportCount = listItems.listItems.count;
+                        localState.showReportView = showReportView;
+                        that.setState(localState);
+                    }).catch(function(err){
+                        console.log(err);
+                    });
+                } else {
+                    console.log("lists not found...creating one");
+                    var body = {
+                        name: "List 1"
+                    };
+                    listService.create(body).then(function(list){
+                        listService.getAll().then(function(lists){
+                            localState.lists = lists.lists.rows;
+                            localState.listId = list.id;
+                            localState.reportPage = 1;
+                            localState.reportCount = 0;
+                            localState.reportPerPage = 5;
+                            localState.showReportView = showReportView;
+                            that.setState(localState);
+                        }).catch(function(err){
+                            console.log(err);
+                        });
+                    }).catch(function(err){
+                        console.log(err);
+                    });
+                }
+            }).catch(function(err){
+                console.log(err);
+            });
+        } else {
+            this.setState({
+                showReportView: showReportView 
+            });
+        }
     }
     render() {
         var showDetail = this.state.showDetail;
