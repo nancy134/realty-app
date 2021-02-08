@@ -81,7 +81,7 @@ class ListingItem extends React.Component {
     render(){
     var listing = this.props.listing;
     var publishStatus = listing.publishStatus;
-    if (publishStatus === "Draft") {
+    if (publishStatus === "Draft" && listing.listing) {
         if (listing.listing.latestApprovedId === null){
             publishStatus = "Unpublished";
         } else {

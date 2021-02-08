@@ -22,8 +22,7 @@ export class ReportListPage extends React.Component {
 
     componentDidMount(){
         var that = this;
-        var query="perPage=20&page=1&ListId="+this.state.id;
-        listItemService.getAll(query).then(function(data){
+        listItemService.getAll(this.state.id).then(function(data){
             that.setState({
                 listItems: data.listItems.rows
             });

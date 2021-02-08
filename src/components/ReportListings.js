@@ -163,7 +163,6 @@ class ReportListings extends React.Component {
         var showImage = false;
         var showShortDescription = false;
         var showDeleteFromList = true;
-
         return (
         <div>
             <AddNewListModal
