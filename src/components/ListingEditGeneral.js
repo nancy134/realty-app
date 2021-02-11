@@ -10,7 +10,7 @@ import {Formik} from 'formik';
 import * as Yup from 'yup';
 
 const GeneralSchema = Yup.object().shape({
-    propertyType: Yup.string().required('Property Type is required'),
+    propertyType: Yup.string(),
     zone: Yup.string(),
     buildingClass: Yup.string(),
     totalBuildingSize: Yup.number().integer().typeError('Must be an integer'),
@@ -127,6 +127,8 @@ class ListingEditGeneral extends React.Component {
         if (listing.totalAvailableSpace) initialValues.totalAvailableSpace = listing.totalAvailableSpace;
         if (listing.nets) initialValues.nets = listing.nets;
     }
+
+    var hideForNow = false;
     return(
     <Formik
         initialValues={initialValues}
@@ -161,55 +163,6 @@ class ListingEditGeneral extends React.Component {
         </Modal.Header>
         <Modal.Body style={{'maxHeight': 'calc(100vh - 210px)', 'overflowY': 'auto'}}> 
         <Form>
-            <Form.Row>
-                <Form.Group as={Col}>
-                    <Form.Label className="font-weight-bold">Property Type</Form.Label>
-                    <Form.Control 
-                        id="general_edit_property_type"
-                        name="propertyType"
-                        as="select" 
-                        value={values.propertyType} 
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                    >
-                        <option key="-1"></option>
-                        {this.props.propertyTypes.map((propertyType, index) => (
-                        <option key={index}>{propertyType}</option>
-                        ))}
-                    </Form.Control>
-                </Form.Group>
-                <Form.Group as={Col}>
-                    <Form.Label className="font-weight-bold">Zone <span className="font-weight-light">(optional)</span></Form.Label>
-                    <Form.Control
-                        id="general_edit_zone"
-                        name="zone"
-                        type="text"
-                        value={values.zone}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        isInvalid={!!errors.zone}
-                        isValid={touched.zone && !errors.zone && values.zone !== ""}
-                        disabled={isSubmitting}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        {errors.zone}
-                    </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group as={Col}>
-                    <Form.Label className="font-weight-bold">Building Class <span className="font-weight-light">(optional)</span></Form.Label>
-                    <Form.Control
-                        id="general_edit_building_class"
-                        name="buildingClass"
-                        type="text"
-                        value={values.buildingClass}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        isInvalid={!!errors.buildingClass}
-                        isValid={touched.buildingClass && !errors.buildingClass && values.buildingClass !== ""}
-                        disabled={isSubmitting}
-                    />
-                </Form.Group>
-            </Form.Row>
             <Form.Row>
                 <Form.Group as={Col}>
                     <Form.Label className="font-weight-bold">Building Size <span className="font-weight-light">(optional)</span></Form.Label>
@@ -454,6 +407,57 @@ class ListingEditGeneral extends React.Component {
                             {errors.nets}
                         </Form.Control.Feedback>
                     </InputGroup>
+                </Form.Group>
+            </Form.Row>
+            <Form.Row>
+                { hideForNow ?
+                <Form.Group as={Col}>
+                    <Form.Label className="font-weight-bold">Property Type <span className="font-weight-light">(optional)</span></Form.Label>
+                    <Form.Control
+                        id="general_edit_property_type"
+                        name="propertyType"
+                        as="select"
+                        value={values.propertyType}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                    >
+                        <option key="-1"></option>
+                        {this.props.propertyTypes.map((propertyType, index) => (
+                        <option key={index}>{propertyType}</option>
+                        ))}
+                    </Form.Control>
+                </Form.Group>
+                : null }
+                <Form.Group as={Col}>
+                    <Form.Label className="font-weight-bold">Zone <span className="font-weight-light">(optional)</span></Form.Label>
+                    <Form.Control
+                        id="general_edit_zone"
+                        name="zone"
+                        type="text"
+                        value={values.zone}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.zone}
+                        isValid={touched.zone && !errors.zone && values.zone !== ""}
+                        disabled={isSubmitting}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.zone}
+                    </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col}>
+                    <Form.Label className="font-weight-bold">Building Class <span className="font-weight-light">(optional)</span></Form.Label>
+                    <Form.Control
+                        id="general_edit_building_class"
+                        name="buildingClass"
+                        type="text"
+                        value={values.buildingClass}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.buildingClass}
+                        isValid={touched.buildingClass && !errors.buildingClass && values.buildingClass !== ""}
+                        disabled={isSubmitting}
+                    />
                 </Form.Group>
             </Form.Row>
 

@@ -149,12 +149,6 @@ class ListingDetailGeneral extends React.Component {
                 </Row>
                 <Row className="pt-2 ml-0 mr-0">
                     <Col>
-                        {editMode === "edit" || (editMode === "view" && propertyType) ?
-                        <Row>
-                        <Col>Property Type</Col>
-                        <Col className="font-weight-bold">{propertyType}</Col>
-                        </Row>
-                        : null}
                         {editMode === "edit" || (editMode === "view" && totalBuildingSize) ?
                         <Row>
                         <Col>Total Building Size</Col>
