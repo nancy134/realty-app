@@ -68,20 +68,17 @@ export class ListingPage extends Component {
         this.handleAddListingFinish = this.handleAddListingFinish.bind(this);
         this.handleAddListingCancel = this.handleAddListingCancel.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
-        this.handleCreate = this.handleCreate.bind(this);
         this.handleFetchListing = this.handleFetchListing.bind(this);
         this.handleGoToListingByIndex = this.handleGoToListingByIndex.bind(this);
         this.handleGoToMyListing = this.handleGoToMyListing.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
 
+        // Message
+        this.handleMessageClose = this.handleMessageClose.bind(this);
+
         // Transition
         this.handleTransitionStart = this.handleTransitionStart.bind(this);
-        this.handlePublish = this.handlePublish.bind(this);
-        this.handleUnpublish = this.handleUnpublish.bind(this);
-        this.handleTransitionHide = this.handleTransitionHide.bind(this);
-        this.handleTransitionAccept = this.handleTransitionAccept.bind(this);
-        this.handleTransitionCancel = this.handleTransitionCancel.bind(this);
-        this.handleClose = this.handleClose.bind(this);
+        this.handleMessageClose = this.handleMessageClose.bind(this);
         this.handlePublishWizardIntroNext = this.handlePublishWizardIntroNext.bind(this);
         this.handlePublishWizardPaymentMethodNext = this.handlePublishWizardPaymentMethodNext.bind(this);
         this.handlePublishWizardFinalFinish = this.handlePublishWizardFinalFinish.bind(this);
@@ -121,12 +118,12 @@ export class ListingPage extends Component {
             startWizard: false,
             finishWizard: true,
 
+            // Message Modal 
+            showMessageModal: false,
+            messageModalTitle: "",
+            messageModalMessage: "",
+
             // Transition
-            transitionStart: false,
-            transitionSaving: false,
-            showModal: false,
-            transitionModalTitle: "",
-            transitionModalMessage: "",
             showPublishWizardIntro: false,
             showPublishWizardPaymentMethod: false,
             showPublishWizardFinal: false,
@@ -175,10 +172,16 @@ export class ListingPage extends Component {
 
             // Map
             bounds: {lat0:lat0, lng0:lng0, lat1:lat1, lng1:lng1},
-            updateBounds: true,
             center: null,
             zoomLevel: null,
+            myListings: {
+                bounds: {lat0:null, lng0:null, lat1:null, lng1:null},
+                center: null,
+                zoomLevel: null,
+            },
             readyForMap: false,
+            updateBounds: true,
+       
 
             // Detail Map
             detailBounds: {lat0:lat0, lng0:lng0, lat1:lat1, lng1:lng1},
@@ -344,16 +347,18 @@ export class ListingPage extends Component {
         var createPromise = listingService.create(listing);
         var that = this;
         createPromise.then(function(data) {
-            var bounds = {lat0:null,lng0:null,lat1:null,lng1:null}; 
+            var myBounds = {lat0:null,lng0:null,lat1:null,lng1:null}; 
             var localState = {
                 addListingOverview: false,
                 listingMode: "myListings",
                 index: data.listing.id,
                 showDetail: true,
                 editMode: "edit",
-                bounds: bounds,
-                center: null,
-                zoomLevel: null,
+                myListings: {
+                    bounds: myBounds,
+                    center: null,
+                    zoomLevel: null
+                },
                 page: 1,
                 showWizard: false,
                 finishWizard: true
@@ -361,8 +366,8 @@ export class ListingPage extends Component {
 
             that.fetchListingPromise(localState).then(function(localState){
                 that.fetchListingsPromise(localState).then(function(localState){
-                    if (localState.bounds.lat0 === null){
-                        localState.bounds = geolocationService.calculateBounds(localState.markers);
+                    if (localState.myListings.bounds.lat0 === null){
+                        localState.myListings.bounds = geolocationService.calculateBounds(localState.markers);
                     }
                     that.setState(localState);
                 }).catch(function(err){
@@ -382,14 +387,32 @@ export class ListingPage extends Component {
             listingMode: value,
             page: 1,
             showDetail: false,
-            bounds: {lat0:null,lng0:null,lat1:null,lng1:null},
-            center: null,
-            zoomLevel: null,
+            bounds: this.state.bounds,
+            center: this.state.center,
+            zoomLevel: this.state.zoomLevel,
+            myListings: {
+                bounds: this.state.myListings.bounds,
+                center: this.state.myListings.center,
+                zoomLeve: this.state.myListings.zoomLevel
+            },
             updateBounds: true
         };
         var that = this;
         this.fetchListingsPromise(localState).then(function(localState){
-            localState.bounds = geolocationService.calculateBounds(localState.markers);
+            //localState.bounds = geolocationService.calculateBounds(localState.markers);
+                if (localState.listingMode === "allListings"){
+                    if (localState.bounds.lat0 === null){
+                        localState.bounds =
+                            geolocationService.calculateBounds(localState.markers);
+                    }
+                }
+                if (localState.listingMode === "myListings"){
+                    if (localState.myListings.bounds.lat0 === null){
+                        localState.myListings.bounds =
+                           geolocationService.calculateBounds(localState.markers);
+                    }
+                }
+
             that.setState(localState);
         }).catch(function(err){
             console.log(err);
@@ -482,6 +505,7 @@ export class ListingPage extends Component {
          });
     }
     handleUpdate(listing){
+        console.log("handleUpdate");
         var updatePromise = listingService.update(listing);
         var that = this;
         updatePromise.then(function(data){
@@ -502,27 +526,19 @@ export class ListingPage extends Component {
         }).catch(function(err){
             var errMessage = "An error occurred while trying to save your listing";
             that.setState({
-               showModal: true,
-               transitionModalTitle: "Oops!",
-               transitionModalMessage: errMessage 
+               showMessageModal: true,
+               messageModalTitle: "Oops!",
+               messageModalMessage: errMessage 
             });
             console.log(err);
         });
     }
-    handleCreate(listing){
-        listing.owner = authenticationService.getUserEmail();
-        var createPromise = listingService.create(listing);
-        createPromise(function(data){
-            this.setState({
-                listingDetail: data,
-                index: data.listing.id
-            });
-            this.handleListUpdate();
-        });
 
-    }
-
-    // Transition
+    //////////////////////////////////
+    //
+    // Publish / UnPublish Transitions
+    //
+    //////////////////////////////////
     handleTransitionStart(transitionType){
         if (transitionType === "publish"){
 
@@ -557,10 +573,10 @@ export class ListingPage extends Component {
             // Close detail view
             showDetail: false,
             // Keep the bounds
-            bounds: this.state.bounds,
-            center: this.state.center,
-            zoomLevel: this.state.zoomLevel,
-            updateBounds: true
+            //bounds: this.state.bounds,
+            //center: this.state.center,
+            //zoomLevel: this.state.zoomLevel,
+            //updateBounds: true
         }
         this.fetchListingsPromise(localState).then(function(localState){
             that.setState(localState);
@@ -569,11 +585,24 @@ export class ListingPage extends Component {
         });
     }
     handleUnpublishWizardIntroFinish(){
+        /*
         this.setState({
             showUnpublishWizardIntro: false,
             showDetail: false
         });
         this.handleListUpdate();
+        */
+        var that = this;
+        var localState = {
+            showUnpublishWizardIntro: false,
+            showDetail: false,
+            page: this.state.page
+        }
+        this.fetchListingsPromise(localState).then(function(localstate){
+            that.setState(localState);
+        }).catch(function(err){
+            console.log(err);
+        });
     }
     handlePublishWizardClose(){
         this.setState({
@@ -581,69 +610,6 @@ export class ListingPage extends Component {
             showPublishWizardPaymentMethod: false,
             showPublishWizardFinal: false,
             showUnpublishWizardIntro: false
-        });
-    }
-
-    handleTransitionHide(data, title, message){
-        this.setState({
-            transitionStart: false,
-            transitionSaving: false,
-            listingDetail: data,
-            showDetail: false,
-            showModal: true,
-            transitionModalTitle: title,
-            transitionModalMessage: message,
-            updateBounds: true
-        }, () => {
-            this.handleListUpdate();
-        });
-    }
-    handleTransitionAccept(data, title, message){
-        this.setState({
-            transitionStart: false,
-            transitionSaving: false,
-            listingDetail: data,
-            showDetail: false,
-            showModal: true,
-            transitionModalTitle: title,
-            transitionModalMessage: message
-        }, () => {
-            this.handleListUpdate();
-        });
-    }
-    handleTransitionCancel(){
-        this.setState({
-            transitionStart: false
-        });
-    }
-    handlePublish(id){
-        var publishPromise = listingService.publish(id);
-        this.setState({transitionSaving: true});
-        var that = this;
-        publishPromise.then(function(data){
-            var title = "Congratulations!";
-            var message = "You Listing has been published!";
-            that.handleTransitionHide(data, title, message);
-        }).catch(function(err){
-            var title = "Oops!"
-            var message = "We're sorry! Something went wrong";
-            that.handleTransitionHide(null, title, message);
-        });
-
-    }
-    handleUnpublish(id){
-        console.log("handleUnpublish: id: "+id);
-        var unpublishPromise = listingService.unpublish(id);
-        this.setState({transitionSaving: true});
-        var that = this;
-        unpublishPromise.then(function(data){
-            var title = "Off Market";
-            var message = "Your listing is now off the market";
-            that.handleTransitionHide(data, title, message);
-        }).catch(function(err){
-            var title = "Oops!"
-            var message = "We're sorry! Something went wrong";
-            that.handleTransitionHide(null, title, message);
         });
     }
 
@@ -747,24 +713,35 @@ export class ListingPage extends Component {
             });
         });
     }
+
+    //
+    // FetchListingsPromise
+    //
     fetchListingsPromise(localState){
         var that = this;
         return new Promise(function(resolve, reject){
+
+            // Listing mode
             var lMode = "allListings";
             if (localState.listingMode){
                 lMode = localState.listingMode;
             } else {
                 lMode = that.state.listingMode;
             }
+
+            // Pagination
             var query = 'perPage=20&page='+localState.page;
             var markerQuery = "perPage=250&page=1";
 
-            var spaceUseFilter = localState.spaceUseFilter ? localState.spaceUseFilter : that.state.spaceUseFilter;
+            // Space Use Filtesr
+            var spaceUseFilter = localState.spaceUseFilter ?
+                  localState.spaceUseFilter : that.state.spaceUseFilter;
             if (spaceUseFilter){
                 query += spaceUseFilter;
                 markerQuery += spaceUseFilter;
             }
 
+            // More Filters
             var moreQuery = localState.moreQuery ? localState.moreQuery : that.state.moreQuery;
             if (moreQuery){
                 query += moreQuery;
@@ -773,18 +750,21 @@ export class ListingPage extends Component {
 
             // Location query 
             var locationQuery = "";
-            var lat0 = localState.bounds ? localState.bounds.lat0 : null;
-            var lng0 = localState.bounds ? localState.bounds.lng0 : null;
-            var lat1 = localState.bounds ? localState.bounds.lat1 : null;
-            var lng1 = localState.bounds ? localState.bounds.lng1 : null;
-            if (lat0){
-                locationQuery += "&lat0="+lat0;
-                locationQuery += "&lng0="+lng0;
-                locationQuery += "&lat1="+lat1;
-                locationQuery += "&lng1="+lng1;
-                query += locationQuery;
-                markerQuery += locationQuery;
+            if (lMode === "allListings"){
+                var lat0 = localState.bounds ? localState.bounds.lat0 : null;
+                var lng0 = localState.bounds ? localState.bounds.lng0 : null;
+                var lat1 = localState.bounds ? localState.bounds.lat1 : null;
+                var lng1 = localState.bounds ? localState.bounds.lng1 : null;
+                if (lat0){
+                    locationQuery += "&lat0="+lat0;
+                    locationQuery += "&lng0="+lng0;
+                    locationQuery += "&lat1="+lat1;
+                    locationQuery += "&lng1="+lng1;
+                    query += locationQuery;
+                    markerQuery += locationQuery;
+                }
             }
+
             var getAllPromise = listingService.getAll(query, lMode);
             getAllPromise.then(function(listings){
                 var enumPromise = listingService.getEnumsPromise();
@@ -824,19 +804,26 @@ export class ListingPage extends Component {
             });
     
         } else {
+            var bounds = this.state.bounds;
+            var myBounds = this.state.myListings.bounds;
             localState = {
                 listingMode: this.state.listingMode,
                 page: this.state.page,
-                bounds: {
-                    lat0: this.state.bounds.lat0,
-                    lng0: this.state.bounds.lng0,
-                    lat1: this.state.bounds.lat1,
-                    lng1: this.state.bounds.lng1
-                }
+                bounds: bounds,
+                myListings: { bounds: myBounds}
             };
             this.fetchListingsPromise(localState).then(function(localState){
-                if (localState.bounds.lat0 === null){
-                    localState.bounds = geolocationService.calculateBounds(localState.markers);
+                if (localState.listingMode === "allListings"){
+                    if (localState.bounds.lat0 === null){
+                        localState.bounds = 
+                            geolocationService.calculateBounds(localState.markers);
+                    }
+                }
+                if (localState.listingMode === "myListings"){
+                    if (localState.myListings.bounds.lat0 === null){
+                        localState.myListings.bounds = 
+                           geolocationService.calculateBounds(localState.markers);
+                    }
                 }
                 localState.readyForMap = true;
                 that.setState(localState);
@@ -850,9 +837,9 @@ export class ListingPage extends Component {
     shouldComponentUpdate(){
         return true;
     }
-    handleClose() {
+    handleMessageClose() {
         this.setState({
-            showModal: false
+            showMessageModal: false
         });
     }
     // Space
@@ -944,13 +931,22 @@ export class ListingPage extends Component {
 
     handleBoundsChange(bounds, center, zoomLevel){
         var localState = {
-            bounds: bounds,
             listingMode: this.state.listingMode,
             page: this.state.page,
             updateBounds: false,
-            center: center,
-            zoomLevel: zoomLevel
         };
+
+        if (this.state.listingMode === "allListings"){
+            localState.bounds = bounds;
+            localState.center = center;
+            localState.zoomLevel = zoomLevel;
+        }
+        if (this.state.listingMode === "myListings"){
+            localState.myListings = {};
+            localState.myListings.bounds = bounds;
+            localState.myListings.center = center;
+            localState.myListings.zoomLevel = zoomLevel;
+        }
         var that = this;
         this.fetchListingsPromise(localState).then(function(localState){
             that.setState(localState);
@@ -1146,7 +1142,19 @@ export class ListingPage extends Component {
             var rightColSize = 4;
             var reportColSize = 3;
         }
-        
+    
+        // Map
+        var bounds = {};
+        var center, zoomLevel;
+        if (listingMode === "allListings"){
+            bounds = this.state.bounds;
+            center = this.state.center;
+            zoomLevel = this.state.zoomLevel;
+        }else if (listingMode === "myListings"){
+            bounds = this.state.myListings.bounds;
+            center = this.state.myListings.center;
+            zoomLevel = this.state.myListings.zoomLevel;
+        }
         return (
         <React.Fragment>
 
@@ -1198,16 +1206,16 @@ export class ListingPage extends Component {
                 onCancel={this.handlePublishWizardClose}
                 listingDetail={listingDetail}
             />
-            <Modal show={this.state.showModal}>
+            <Modal show={this.state.showMessageModal}>
                 <Modal.Header>
-                    <Modal.Title>{this.state.transitionModalTitle}</Modal.Title>
+                    <Modal.Title>{this.state.messageModalTitle}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>{this.state.transitionModalMessage}</Modal.Body>
+                <Modal.Body>{this.state.messageModalMessage}</Modal.Body>
                 <Modal.Footer>
                     <Button
                         id="alert_modal_close"
                         variant="secondary" 
-                        onClick={this.handleClose}>
+                        onClick={this.handleMessageClose}>
                     Close
                     </Button>
                 </Modal.Footer>
@@ -1259,21 +1267,15 @@ export class ListingPage extends Component {
                             onShowDetailChange={this.handleShowDetailChange} 
                             onEditToggle={this.handleEditToggle} 
                             onOwnerChange={this.handleOwnerChange} 
-                            onListUpdate={this.handleListUpdate} 
                             onUpdate={this.handleUpdate}
-                            onCreate={this.handleCreate}
                             onFetchListing={this.handleFetchListing}
                             showSpinner={this.state.showSpinner}
 
                             // Transition
                             onTransitionStart={this.handleTransitionStart}
                             onTransitionCancel={this.handleTransitionCancel}
-                            onPublish={this.handlePublish}
-                            onUnpublish={this.handleUnpublish}
+                            // Delete
                             onDeleteDraft={this.handleDeleteDraftListing}
-                            onTransitionHide={this.handleTransitionHide}
-                            transitionStart={this.state.transitionStart}
-                            transitionSaving={this.state.transitionSaving}
                             // Space
                             spaceAccordionText={this.state.spaceAccordionText}
                             onAccordionChange={this.handleAccordionChange}
@@ -1291,11 +1293,11 @@ export class ListingPage extends Component {
                     <ListingMap 
                         showDetail={showDetail}
                         markers={this.state.markers}
-                        bounds={this.state.bounds}
+                        bounds={bounds}
                         onBoundsChange={this.handleBoundsChange}
                         updateBounds={this.state.updateBounds}
-                        center={this.state.center}
-                        zoomLevel={this.state.zoomLevel}
+                        center={center}
+                        zoomLevel={zoomLevel}
                         onShowDetailChange={this.handleShowDetailChange}
                     />
                     : null }

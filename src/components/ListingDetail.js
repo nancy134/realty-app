@@ -128,10 +128,9 @@ class ListingDetail extends React.Component {
         this.props.onEditToggle(value);
     }
     handleListingUpdate(listing){
+        console.log("handleListingUpdate()");
         if (this.props.listingDetail && this.props.listingDetail.listing){
             this.props.onUpdate(listing);
-        } else { // Create
-            this.props.onCreate(listing);
         }
     }
 
@@ -586,9 +585,6 @@ class ListingDetail extends React.Component {
         if (this.props.listingDetail && this.props.listingDetail.listing){
             this.props.onUpdate(listing);
             this.handleAmenityModalHide();
-        } else { // Create
-            this.props.onCreate(listing);
-            this.handleAmenityModalHide();
         }
     }
 
@@ -683,15 +679,9 @@ class ListingDetail extends React.Component {
                     editMode={editMode}
                     onEditModeChange={this.handleEditToggle}
                     listingMode={listingMode}
-                    onPublish={this.props.onPublish}
-                    onUnpublish={this.props.onUnpublish}
                     onTransitionStart={this.props.onTransitionStart}
                     onDeleteDraft={this.props.onDeleteDraft}
                     onGoToListingByIndex={this.props.onGoToListingByIndex}
-                    onTransitionHide={this.props.onTransitionHide}
-                    onTransitionCancel={this.props.onTransitionCancel}
-                    transitionStart={this.props.transitionStart}
-                    transitionSaving={this.props.transitionSaving}
 
                 />
                 </div>

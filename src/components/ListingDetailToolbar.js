@@ -34,8 +34,6 @@ function TransitionButton(props) {
               states={props.states}
               transition={props.buttonText}
               onCancel={props.onCancel}
-              onPublish={props.onPublish}
-              onUnpublish={props.onUnpublish}
               saving={props.saving}
               transitionMessage={props.TransitionMessage}
           />
@@ -113,20 +111,12 @@ class ListingDetailToolbar extends React.Component {
     constructor(props){
         super(props);
         this.handleEditModeChange = this.handleEditModeChange.bind(this);
-        this.handlePublish = this.handlePublish.bind(this);
-        this.handleUnpublish = this.handleUnpublish.bind(this);
         this.handleDeleteDraft = this.handleDeleteDraft.bind(this);
         this.handleGoToListingByIndex = this.handleGoToListingByIndex.bind(this);
     }
 
     handleEditModeChange(editMode){
         this.props.onEditModeChange(editMode);
-    }
-    handlePublish(){
-        this.props.onPublish(this.props.listing.ListingId);
-    }
-    handleUnpublish(){
-        this.props.onUnpublish(this.props.listing.ListingId);
     }
     handleGoToListingByIndex(index, publishStatus){
         this.props.onGoToListingByIndex(index, publishStatus);
@@ -189,12 +179,8 @@ class ListingDetailToolbar extends React.Component {
                           message={message}
                           buttonText={transitionButton}
                           transitionType={transitionType}
-                          onPublish={this.handlePublish}
-                          onUnpublish={this.handleUnpublish}
                           onShow={this.props.onTransitionStart}
                           onCancel={this.props.onTransitionCancel}
-                          show={this.props.transitionStart}
-                          saving={this.props.transitionSaving}
                           transitionMessage={this.props.transitionMessage}
                       />
 

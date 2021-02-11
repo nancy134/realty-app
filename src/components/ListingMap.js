@@ -87,6 +87,7 @@ class ListingMap extends React.Component {
     handleZoomChanged(props, map){
 
         var mapBounds = map.getBounds();
+        if (mapBounds){
         var ne = mapBounds.getNorthEast();
         var sw = mapBounds.getSouthWest();
         var bounds = {
@@ -97,7 +98,8 @@ class ListingMap extends React.Component {
         };
         var center = map.getCenter();
         var zoomLevel = map.getZoom();
-        if (this.props.onBoundsChange) this.props.onBoundsChange(bounds, center, zoomLevel);  // new
+        if (this.props.onBoundsChange) this.props.onBoundsChange(bounds, center, zoomLevel);
+        }
     }
     handleDragEnd(props, map){
         var mapBounds = map.getBounds();
@@ -129,7 +131,6 @@ class ListingMap extends React.Component {
             if (!this.props.center){
                 this.refs.resultMap.map.fitBounds(bounds);
             } else {
-                console.log("this.props.center: "+this.props.center);
                 this.refs.resultMap.map.setCenter(this.props.center);
                 this.refs.resultMap.map.setZoom(this.props.zoomLevel);
             }
