@@ -205,6 +205,7 @@ class ListingToolbar extends React.Component {
     }
     render(){
         var address = this.state.address;
+        var listingMode = this.props.listingMode;
         return (
             <Form className="toolbar-form m-2">
                 <Form.Row>
@@ -231,7 +232,7 @@ class ListingToolbar extends React.Component {
                             </Dropdown.Menu>
                         </Dropdown>
                     </Col>
-
+                    { listingMode === "allListings" ?
                     <Col xs={3}>
                         <PlacesAutocomplete
                             value={address}
@@ -277,6 +278,7 @@ class ListingToolbar extends React.Component {
                         )}
                         </PlacesAutocomplete>
                     </Col>
+                    : null }
                     <Col xs="auto"> 
                         <Dropdown>
                             <Dropdown.Toggle 
