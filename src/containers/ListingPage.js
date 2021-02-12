@@ -64,7 +64,6 @@ export class ListingPage extends Component {
         this.handleNewPage = this.handleNewPage.bind(this);
 
         // Listing
-        this.handleAddListing = this.handleAddListing.bind(this);
         this.handleAddListingFinish = this.handleAddListingFinish.bind(this);
         this.handleAddListingCancel = this.handleAddListingCancel.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
@@ -114,9 +113,6 @@ export class ListingPage extends Component {
         this.handleAddNewList = this.handleAddNewList.bind(this);
 
         this.state = {
-            // Wizard
-            startWizard: false,
-            finishWizard: true,
 
             // Message Modal 
             showMessageModal: false,
@@ -193,22 +189,12 @@ export class ListingPage extends Component {
             listId: 0 
         };
     }
-    handleAddListing(){
-        this.setState({
-            showWizard: true,
-            finishWizard: false 
-        });
-    }
 
     handleAddListingCancel(){
-        this.setState({
-            showWizard: false,
-            finishWizard: true
-        });
+        this.props.onAddListingCancel();
     }
 
     handleLogin(){
-        console.log("handleLogin()");
         this.props.onLogin();
     }
 
@@ -359,9 +345,7 @@ export class ListingPage extends Component {
                     center: null,
                     zoomLevel: null
                 },
-                page: 1,
-                showWizard: false,
-                finishWizard: true
+                page: 1
             };
 
             that.fetchListingPromise(localState).then(function(localState){
@@ -370,15 +354,19 @@ export class ListingPage extends Component {
                         localState.myListings.bounds = geolocationService.calculateBounds(localState.markers);
                     }
                     that.setState(localState);
+                    that.props.onAddListingCancel();
                 }).catch(function(err){
                     console.log(err);
+                    that.props.onAddListingCancel();
                 });
             }).catch(function(err){
                 console.log(err);
+                that.props.onAddListingCancel();
             });
 
         }).catch(function(err){
             console.log(err);
+            that.props.onAddListingCancel();
         });
     }
 
@@ -1220,11 +1208,10 @@ export class ListingPage extends Component {
                     </Button>
                 </Modal.Footer>
             </Modal>
-            { this.state.showWizard ?
+            { this.props.showAddListingWizard ?
             <WizardAddListing
                 loggedIn={this.props.loggedIn}
-                start={this.state.showWizard}
-                finish={this.state.finishWizard}
+                start={this.props.showAddListingWizard}
                 onFinish={this.handleAddListingFinish}
                 onCancel={this.handleAddListingCancel}
                 onLogin={this.handleLogin}

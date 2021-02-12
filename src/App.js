@@ -15,12 +15,12 @@ class App extends React.Component {
       super(props);
       this.state = {
           loggedIn: false,
+          showAddListingWizard: false
       };
       this.handleLogin = this.handleLogin.bind(this);
       this.handleLogout = this.handleLogout.bind(this);
-      this.handleRegister = this.handleRegister.bind(this);
-      this.handleConfirm = this.handleConfirm.bind(this);
       this.handleAddListing = this.handleAddListing.bind(this);
+      this.handleAddListingCancel = this.handleAddListingCancel.bind(this);
   }
   componentDidMount(){
       if (authenticationService.isAuthenticated()){
@@ -30,7 +30,6 @@ class App extends React.Component {
       }
   }
   handleLogin(){
-      console.log("handleLogin()");
       this.setState({loggedIn: true});
   }
   handleLogout(){
@@ -47,14 +46,14 @@ class App extends React.Component {
       });
   }
   handleAddListing(){
-      console.log("handleAddListing()");
       this.setState({
-          showWizard: true
+          showAddListingWizard: true
       });
   }
-  handleRegister(){
-  }
-  handleConfirm(){
+  handleAddListingCancel(){
+      this.setState({
+          showAddListingWizard: false
+      });
   }
   render(){
   return (
@@ -98,7 +97,8 @@ class App extends React.Component {
               // Logged in
               onLogin={this.handleLogin}
               loggedIn={this.state.loggedIn}
-              showWizard={this.state.showWizard}
+              showAddListingWizard={this.state.showAddListingWizard}
+              onAddListingCancel={this.handleAddListingCancel}
           >
 </Routes>
     </Container>

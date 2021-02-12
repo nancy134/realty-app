@@ -42,9 +42,7 @@ export class Home extends Component {
       });
   }
   handleAddListingCancel(){
-      this.setState({
-          finishWizard: false
-      });
+      this.props.onAddListingCancel();
   }
   handleChange = address => {
       this.setState({address});
@@ -131,14 +129,13 @@ export class Home extends Component {
   }
 
   render(){
-    console.log("this.props.showWizard: "+this.props.showWizard);
+    console.log("this.props.showAddListingWizard: "+this.props.showAddListingWizard);
   return (
     <div className="bimage">
-        { this.props.showWizard ?
+        { this.props.showAddListingWizard ?
         <WizardAddListing
             loggedIn={this.props.loggedIn}
-            start={this.props.showWizard}
-            finish={this.state.finishWizard}
+            start={this.props.showAddListingWizard}
             onFinish={this.handleAddListingFinish}
             onCancel={this.handleAddListingCancel}
             onLogin={this.handleLogin}

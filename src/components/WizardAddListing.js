@@ -49,7 +49,7 @@ export class WizardAddListing extends Component {
         this.state = {
 
             // Add listing
-            addListingType: this.props.start,
+            addListingType: true,
             addListingAddress: false,
             addListingOverview: false,
             addListingReview: false,
@@ -298,14 +298,17 @@ export class WizardAddListing extends Component {
     }
 
     render(){
+        var startWizard = this.props.start && this.state.addListingType;
         return(
         <React.Fragment>
+            { startWizard ?
             <ListingAddType
-                show={this.state.addListingType}
+                show={startWizard}
                 onNext={this.handleListingTypeNext}
                 onCancel={this.handleCancelAddType}
                 loggedIn={this.props.loggedIn}
             />
+            : null }
             { this.state.addListingAddress ?
             <ListingAddAddress
                 show={this.state.addListingAddress}
@@ -318,7 +321,7 @@ export class WizardAddListing extends Component {
             : null }
             { this.state.addListingOverview ?
                 <ListingAddOverview
-                    show={this.state.addListingOverview && !this.props.finish}
+                    show={this.state.addListingOverview}
                     onNext={this.handleListingOverviewNext}
                     listing={this.state.newListing}
                     onCancel={this.handleCancelAddOverview}

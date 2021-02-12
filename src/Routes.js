@@ -16,7 +16,6 @@ constructor(props){
 }
 
 handleLogin(){
-    console.log("handleLogin()");
     this.props.onLogin();
 }
 
@@ -32,7 +31,8 @@ render(){
             props => (
                 <Home
                     loggedIn={this.props.loggedIn}
-                    showWizard={this.props.showWizard}
+                    showAddListingWizard={this.props.showAddListingWizard}
+                    onAddListingCancel={this.props.onAddListingCancel}
                     {...props}
                 />
             )
@@ -57,6 +57,8 @@ render(){
                 <ListingPage {...props}
                     onLogin={this.handleLogin} 
                     loggedIn={this.props.loggedIn}
+                    showAddListingWizard={this.props.showAddListingWizard}
+                    onAddListingCancel={this.props.onAddListingCancel}
                 />
             )
         }

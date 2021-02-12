@@ -45,14 +45,6 @@ function Toolbar(props){
             </Col>
             : null }
             <Col>
-                <Button
-                    size="sm"
-                    onClick={props.onNewListing}
-                 >
-                    <FontAwesomeIcon icon={faPlus} />&nbsp;New Listing
-                </Button>
-            </Col>
-            <Col>
                 <ListingPagination
                     page={props.page}
                     count={props.count}
