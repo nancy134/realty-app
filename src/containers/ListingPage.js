@@ -381,7 +381,7 @@ export class ListingPage extends Component {
             myListings: {
                 bounds: this.state.myListings.bounds,
                 center: this.state.myListings.center,
-                zoomLeve: this.state.myListings.zoomLevel
+                zoomLevel: this.state.myListings.zoomLevel
             },
             updateBounds: true
         };
