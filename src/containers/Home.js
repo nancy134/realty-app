@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import './Home.css';
 import {
-    Jumbotron,
-    InputGroup,
-    FormControl,
-    Button,
-    Container
+    Row,
+    Col,
 } from 'react-bootstrap';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {
@@ -17,7 +14,7 @@ import geolocationService from '../helpers/geolocation';
 import WizardAddListing from '../components/WizardAddListing';
 import authenticationService from '../helpers/authentication';
 import listingService from '../services/listings';
-
+import ListingToolbar from '../components/ListingToolbar';
 export class Home extends Component { 
   constructor(props, context) {
     super(props, context);
@@ -66,72 +63,27 @@ export class Home extends Component {
           console.error('Error', error);
       });
   };
-  handleFindSpace(){
+  handleFindSpace(state){
     var url = "";
-    url = window.location.protocol + "//" + window.location.hostname + "/listing";
+    url = window.location.protocol + "//" + window.location.hostname + "/listing?filter=home";
     var defaultLocation = { 
-        formatted_address: this.state.formatted_address,
-        lat0: this.state.lat0,
-        lng0: this.state.lng0,
-        lat1: this.state.lat1,
-        lng1: this.state.lng1
+        formatted_address: state.address,
+        lat0: state.bounds.lat0,
+        lng0: state.bounds.lng0,
+        lat1: state.bounds.lat1,
+        lng1: state.bounds.lng1,
+        listingType: state.listingType
     };
-    geolocationService.saveDefaultLocation(defaultLocation);
+    geolocationService.saveLocation(defaultLocation);
     window.location.href = url; 
   }
 
   componentDidMount(){
-    Geocode.setApiKey('AIzaSyB47KccZa8VRlzFuQJAvZ8UPembfW-3gq4');
-    var that = this;
-    if ("geolocation" in navigator){
-        navigator.geolocation.getCurrentPosition(function(position){
-            Geocode.fromLatLng(position.coords.latitude, position.coords.longitude).then(function(response){
-               var city = "";
-               var state = "";
-               var len = response.results[0].address_components.length;
-               for (var i=0; i<len; i++){
-                  var len2 = response.results[0].address_components[i].types.length;
-                   for (var j=0; j<len2; j++){
-                       if (response.results[0].address_components[i].types[j] === "locality"){
-                           city = response.results[0].address_components[i].long_name;
-                       } else if (response.results[0].address_components[i].types[j] === "administrative_area_level_1"){
-                           state = response.results[0].address_components[i].short_name;
-                      }
-                   }
-               }
-
-               var address = city+", "+state;
-               Geocode.fromAddress(address).then(function(response2){
-
-                   var lat0 = response2.results[0].geometry.bounds.northeast.lat;
-                   var lng0 = response2.results[0].geometry.bounds.northeast.lng;
-                   var lat1 = response2.results[0].geometry.bounds.southwest.lat;
-                   var lng1 = response2.results[0].geometry.bounds.southwest.lng;
-
-                    that.setState({
-                        address: address,
-                        formatted_address: address,
-                        lat0: lat0,
-                        lng0: lng0,
-                        lat1: lat1,
-                        lng1: lng1
-                    });
-                });
-
-            });
-        }, function(err){
-            var defaultLocation = geolocationService.getDefaultLocation();
-            that.setState(defaultLocation); 
-        });
-    } else {
-       console.log("geolocation not available");
-    }
   }
 
   render(){
-    console.log("this.props.showAddListingWizard: "+this.props.showAddListingWizard);
   return (
-    <div className="bimage">
+    <div className="home-filter bimage">
         { this.props.showAddListingWizard ?
         <WizardAddListing
             loggedIn={this.props.loggedIn}
@@ -141,62 +93,23 @@ export class Home extends Component {
             onLogin={this.handleLogin}
         />
         : null }
-      <p className="p-5"></p>
-      <Jumbotron className="jtron">
-        <Container>
-          <h1>FIND YOUR SPACE</h1>
-            <PlacesAutocomplete
-              value={this.state.address}
-              onChange={this.handleChange}
-              onSelect={this.handleSelect}
-            >
-            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-              <div>
-                <InputGroup>                
-                <FormControl
-                  {...getInputProps({
-                    placeholder: 'Search...',
-                    className: 'form-control location-search-input',
-                  })}
-                />
-                <InputGroup.Append>
-                <Button
-                    id="button-find-space"
-                    variant="outline-secondary"
-                    onClick={this.handleFindSpace}
-                >Find Space</Button>
-                </InputGroup.Append>
-              </InputGroup>
-              <InputGroup>
-              <div className="autocomplete-dropdown-container">
-                {loading && <div></div>}
-                {suggestions.map(suggestion => {
-                  const className = suggestion.active
-                    ? 'suggestion-item--active'
-                    : 'suggestion-item';
-                  // inline style for demonstration purpose
-                  const style = suggestion.active
-                    ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                  return (
-                    <div
-                      {...getSuggestionItemProps(suggestion, {
-                        className,
-                        style,
-                      })}
-                    >
-                      <span className="ml-3">{suggestion.description}</span>
-                    </div>
-                  );
-                })}
-              </div>
-              </InputGroup>
-            </div>
-          )}
-        </PlacesAutocomplete>
-        <p className="p-5"></p>
-      </Container>
-      </Jumbotron>
+        <Row className="pt-5 pl-5">
+            <Col>
+                <h1>Find your commercial property</h1>
+            </Col>
+        </Row>
+        <Row className="pl-5">
+          <ListingToolbar
+              buttonText="Search"
+              listingMode={"allListings"}
+              formatted_address={this.state.formatted_address}
+              onSearch={this.handleFindSpace}
+              showClearFiltersButton={false}
+              showReportViewButton={false}
+              showMoreFiltersButton={false}
+              showSpaceTypeButton={false}
+          />
+        </Row>
     </div>
   );
   }

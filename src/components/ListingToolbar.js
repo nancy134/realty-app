@@ -14,6 +14,8 @@ import {
     geocodeByAddress
 } from 'react-places-autocomplete';
 import {listingTypes} from '../constants/listingTypes';
+import Geocode from 'react-geocode';
+import geolocationService from '../helpers/geolocation';
 
 const SpaceTypeMenu = React.forwardRef(
     ({style, className, spaceTypeFilters, 'aria-labelledby': labeledBy , onFilterChange}, ref) => {
@@ -67,8 +69,10 @@ class ListingToolbar extends React.Component {
 
         var address = "";
         if (this.props.formatted_address) address = this.props.formatted_address;
+        var listingType = listingTypes.BOTH;
+        if (this.props.listingType) listingType = this.props.listingType;
         this.state = {
-            listingType: listingTypes.BOTH,
+            listingType: listingType,
             address: address,
             numSpaceTypeFilters: 0,
             spaceTypeFilters: [],
@@ -143,6 +147,71 @@ class ListingToolbar extends React.Component {
         e.target.select();
     }
 
+    getCurrentLocation(){
+        Geocode.setApiKey('AIzaSyB47KccZa8VRlzFuQJAvZ8UPembfW-3gq4');
+        var that = this;
+        if ("geolocation" in navigator){
+            navigator.geolocation.getCurrentPosition(function(position){
+                Geocode.fromLatLng(position.coords.latitude, position.coords.longitude).then(function(response){
+                    var city = "";
+                    var state = "";
+                    var len = response.results[0].address_components.length;
+                    for (var i=0; i<len; i++){
+                        var len2 = response.results[0].address_components[i].types.length;
+                        for (var j=0; j<len2; j++){
+                            if (response.results[0].address_components[i].types[j] === "locality"){
+                                city = response.results[0].address_components[i].long_name;
+                            } else if (response.results[0].address_components[i].types[j] === "administrative_area_level_1"){
+                                state = response.results[0].address_components[i].short_name;
+                           }
+                        }
+                    }
+
+                    var address = city+", "+state;
+                    Geocode.fromAddress(address).then(function(response2){
+
+                        var lat0 = response2.results[0].geometry.bounds.northeast.lat;
+                        var lng0 = response2.results[0].geometry.bounds.northeast.lng;
+                        var lat1 = response2.results[0].geometry.bounds.southwest.lat;
+                        var lng1 = response2.results[0].geometry.bounds.southwest.lng;
+
+                        that.setState({
+                            address: address,
+                            formatted_address: address,
+                            lat0: lat0,
+                            lng0: lng0,
+                            lat1: lat1,
+                            lng1: lng1
+                        });
+                    });
+
+                });
+            }, function(err){
+                var defaultLocation = geolocationService.getDefaultLocation();
+                that.setState(defaultLocation); 
+            });
+        } else {
+            console.log("geolocation not available");
+        }
+    }
+    componentDidMount(){
+        if (!this.props.formatted_address){
+            var defaultLocation = geolocationService.getSavedLocation();
+            if (defaultLocation.formatted_address){
+                this.setState({
+                    formatted_address: defaultLocation.formatted_address,
+                    address: defaultLocation.formatted_address,
+                    lat0: defaultLocation.lat0,
+                    lng0: defaultLocation.lng0,
+                    lat1: defaultLocation.lat1,
+                    lng1: defaultLocation.lng1,
+                    listingType: defaultLocation.listingType
+                });
+            } else {
+                this.getCurrentLocation();
+            }
+        }
+    }
     handleFilterChange(filters){
         var numSpaceTypeFilters = 0;
         if (filters.length > 0 && filters[0] === "Any"){
@@ -206,6 +275,7 @@ class ListingToolbar extends React.Component {
     render(){
         var address = this.state.address;
         var listingMode = this.props.listingMode;
+        
         return (
             <Form className="toolbar-form m-2">
                 <Form.Row>
@@ -279,6 +349,7 @@ class ListingToolbar extends React.Component {
                         </PlacesAutocomplete>
                     </Col>
                     : null }
+                    { this.props.showSpaceTypeButton ?
                     <Col xs="auto"> 
                         <Dropdown>
                             <Dropdown.Toggle 
@@ -298,6 +369,8 @@ class ListingToolbar extends React.Component {
                             />
                         </Dropdown>
                     </Col>
+                    : null }
+                    { this.props.showMoreFiltersButton ?
                     <Col xs="auto">
                         <Dropdown>
                             <Dropdown.Toggle 
@@ -317,19 +390,22 @@ class ListingToolbar extends React.Component {
                             </Dropdown.Menu>
                         </Dropdown>
                     </Col >
+                    : null }
+                    { this.props.showClearFiltersButton ?
                     <Col xs="auto">
                         <Button
                             onClick={this.handleClearFilters}
                         >Clear Filters</Button>
                     </Col>
+                    : null }
                     <Col xs="auto">
                         <Button
                             className={this.state.searchClass}
                             variant={this.state.searchVariant}
                             onClick={this.handleSearch}
-                        >Apply Filters</Button>
+                        >{this.props.buttonText}</Button>
                     </Col>
-                    { this.props.loggedIn && !this.props.showReportView ?
+                    { this.props.showReportViewButton && !this.props.showReportView ?
                     <Col>
                         <Button
                             variant="warning"
@@ -338,7 +414,7 @@ class ListingToolbar extends React.Component {
                         >Show Report View</Button>
                     </Col>
                     : null }
-                    { this.props.loggedIn && this.props.showReportView ?
+                    { this.props.showReportViewButton && this.props.showReportView ?
                     <Col>
                         <Button
                             variant="warning"

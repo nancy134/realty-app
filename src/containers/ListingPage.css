@@ -16,6 +16,10 @@
    height: 81vh;
 }
 
+.home-filter {
+    height: 60vh;
+}
+
 .fullcol {
     overflow: scroll;
 }

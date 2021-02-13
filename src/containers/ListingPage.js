@@ -38,6 +38,8 @@ export class ListingPage extends Component {
            fullscreen = true;
            index = props.match.params.id;
         }
+
+        // Listing Type
         const params = new URLSearchParams(props.location.search);
         var listingModeParam = params.get('listingMode');
         var listingMode = "allListings";
@@ -45,12 +47,23 @@ export class ListingPage extends Component {
            listingMode = listingModeParam;
         }
 
-        var defaultLocation = geolocationService.getDefaultLocation();
+        // Location
+        var defaultLocation = geolocationService.getSavedLocation();
+        if (!defaultLocation.formatted_address){
+            defaultLocation = geolocationService.getDefaultLocation();
+        }
         var formatted_address = defaultLocation.formatted_address;
         var lat0 = defaultLocation.lat0;
         var lng0 = defaultLocation.lng0;
         var lat1 = defaultLocation.lat1;
         var lng1 = defaultLocation.lng1;
+
+        // Listing Type
+        var filterParam = params.get('filter');
+        var listingType = listingTypes.BOTH;
+        if (filterParam === "home"){
+            listingType = defaultLocation.listingType;
+        }
 
         // Toolbar
         this.handleSearch = this.handleSearch.bind(this);
@@ -165,6 +178,7 @@ export class ListingPage extends Component {
             // Toolbar 
             formatted_address: formatted_address,
             showReportView: false,
+            listingType: listingType,
 
             // Map
             bounds: {lat0:lat0, lng0:lng0, lat1:lat1, lng1:lng1},
@@ -387,7 +401,6 @@ export class ListingPage extends Component {
         };
         var that = this;
         this.fetchListingsPromise(localState).then(function(localState){
-            //localState.bounds = geolocationService.calculateBounds(localState.markers);
                 if (localState.listingMode === "allListings"){
                     if (localState.bounds.lat0 === null){
                         localState.bounds =
@@ -429,14 +442,6 @@ export class ListingPage extends Component {
             if (moreFilters.maxRate) moreQuery += "&maxRate="+moreFilters.maxRate;
         }
 
-        // Listing Type
-        if (state.listingType === listingTypes.BOTH){
-            moreQuery += "&ListingType[]="+listingTypes.FORSALE;
-            moreQuery += "&ListingType[]="+listingTypes.FORLEASE;
-        } else {
-            moreQuery += "&ListingType="+state.listingType;
-        }
-
         var bounds = null;
         var center = null;
         var zoomLevel = null;
@@ -451,6 +456,7 @@ export class ListingPage extends Component {
         }
 
         var localState = {
+            listingType: state.listingType,
             spaceUseFilter: spaceTypeFilter,
             moreQuery: moreQuery,
             bounds: bounds,
@@ -735,6 +741,18 @@ export class ListingPage extends Component {
                 query += moreQuery;
                 markerQuery += moreQuery;
             }
+
+            // Listing Type
+            var listingTypeQuery = "";
+            var listingType = localState.listingType ? localState.listingType : that.state.listingType;
+            if (listingType === listingTypes.BOTH){
+                listingTypeQuery += "&ListingType[]="+listingTypes.FORSALE;
+                listingTypeQuery += "&ListingType[]="+listingTypes.FORLEASE;
+            } else {
+                listingTypeQuery += "&ListingType="+listingType;
+            }
+            query += listingTypeQuery;
+            markerQuery += listingTypeQuery;
 
             // Location query 
             var locationQuery = "";
@@ -1220,15 +1238,14 @@ export class ListingPage extends Component {
             { !fullscreen ?
 	    <Row className="bg-success">
 	        <ListingToolbar
-                    // No longer needed
-                    loggedIn={loggedIn} 
+                    buttonText="Apply Filters"
 		    listingMode={listingMode}
-		    onAddListing={this.handleAddListing} 
-		    onListingToggle={this.handleListingToggle}
-		    onFilterChange={this.handleFilterChange}
-		    onMoreFilterChange={this.handleMoreFilterChange}
-                    // needed
+                    showMoreFiltersButton={true}
+                    showReportViewButton={this.props.loggedIn}
+                    showClearFiltersButton={true}
+                    showSpaceTypeButton={true}
 		    formatted_address={this.state.formatted_address}
+                    listingType={this.state.listingType}
                     onSearch={this.handleSearch}
                     onShowReportView={this.handleShowReportView}
                     showReportView={this.state.showReportView}

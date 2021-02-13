@@ -14,3 +14,7 @@
 .profile {
     overflow-y: scroll;
 }
+
+.flex-grow {
+    flex: 1 0 auto;
+}

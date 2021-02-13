@@ -2,23 +2,26 @@ import {
     geocodeByAddress
 } from 'react-places-autocomplete';
 import Cookies from 'universal-cookie';
+import {listingTypes} from '../constants/listingTypes';
 
-export function saveDefaultLocation(props){
+export function saveLocation(props){
     const cookies = new Cookies();
     cookies.set('formatted_address', props.formatted_address);
     cookies.set('lat0', props.lat0);
     cookies.set('lng0', props.lng0);
     cookies.set('lat1', props.lat1);
     cookies.set('lng1', props.lng1);
+    cookies.set('listingType', props.listingType);
 }
 
-export function getDefaultLocation(){
+export function getSavedLocation(){
     const cookies = new Cookies();
     var formatted_address = cookies.get('formatted_address');
     var lat0 = cookies.get('lat0');
     var lng0 = cookies.get('lng0');
     var lat1 = cookies.get('lat1');
     var lng1 = cookies.get('lng1'); 
+    var listingType = cookies.get('listingType');
 
     var props = {};
     if (formatted_address && formatted_address !== "undefined"){
@@ -27,19 +30,24 @@ export function getDefaultLocation(){
             lat0: lat0,
             lng0: lng0,
             lat1: lat1,
-            lng1: lng1
-        };
-    } else {
-        props = {
-            formatted_address: "Stamford, CT, USA",
-            address: "Stamford, CT",
-            lat0: 41.1796839,
-            lat1: 40.96346,
-            lng0: -73.495165,
-            lng1: -73.633827
+            lng1: lng1,
+            listingType: listingType
         };
     }
     return props; 
+}
+
+export function getDefaultLocation(){
+    var props = {
+        formatted_address: "Stamford, CT, USA",
+        address: "Stamford, CT",
+        lat0: 41.1796839,
+        lat1: 40.96346,
+        lng0: -73.495165,
+        lng1: -73.633827,
+        listingType: listingTypes.BOTH
+    };
+    return props;
 }
 
 export function geocodeByAddr(address, values){
@@ -116,6 +124,7 @@ const geolocation = {
     calculateBounds,
     addPoint,
     getDefaultLocation,
-    saveDefaultLocation
+    getSavedLocation,
+    saveLocation
 };
 export default geolocation;
