@@ -37,16 +37,21 @@ class FilterSpaceType extends React.Component {
     handleChange(evt){
        var spaceTypes = this.state.spaceTypes.spaceUses;
        var filters = this.props.spaceTypeFilters;
+       var index = -1;
        if (evt.target.checked){
           if (evt.target.value === "any"){
               filters = ["Any"];
           } else {
               filters.push(spaceTypes[parseInt(evt.target.value)]);
+              index = filters.indexOf("Any");
+              if (index >= 0){
+                  filters.splice(index, 1);
+              }
           }
        } else {
            if (evt.target.value === "any"){
            } else {
-               var index = filters.indexOf(spaceTypes[parseInt(evt.target.value)]);
+               index = filters.indexOf(spaceTypes[parseInt(evt.target.value)]);
                if (index >= 0) {
                    filters.splice( index, 1 );
                }
