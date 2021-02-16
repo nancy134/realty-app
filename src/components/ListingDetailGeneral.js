@@ -80,7 +80,7 @@ class ListingDetailGeneral extends React.Component {
         this.props.getListing();
     } 
     render() {
-        var propertyType = "";
+        //var propertyType = "";
         var totalBuildingSize = "";
         var lotSize = ""; 
         var taxes = "";
@@ -102,7 +102,7 @@ class ListingDetailGeneral extends React.Component {
 
         if (editMode === "view" && listing && isEmpty(listing)) return null;
         if (listing){
-            propertyType = listing.propertyType;
+            //propertyType = listing.propertyType;
             totalBuildingSize = listing.totalBuildingSize;
 
             lotSize = listing.lotSize;

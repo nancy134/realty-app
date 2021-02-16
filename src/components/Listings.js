@@ -10,9 +10,6 @@ import {
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faPlus
-} from '@fortawesome/free-solid-svg-icons';
-import {
     faFilePdf
 } from '@fortawesome/free-regular-svg-icons';
 import ListingPagination from '../components/ListingPagination';

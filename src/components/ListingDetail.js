@@ -14,6 +14,8 @@ import ListingDetailUnits from './ListingDetailUnits';
 import ListingDetailTenants from './ListingDetailTenants';
 import ListingDetailPortfolio from './ListingDetailPortfolio';
 import ListingDetailMap from './ListingDetailMap';
+import ListingDetailAttachments from './ListingDetailAttachments';
+import DeleteModal from './DeleteModal';
 import spaces from '../services/spaces';
 import units from '../services/units';
 import tenants from '../services/tenants';
@@ -21,6 +23,7 @@ import portfolios from '../services/portfolios';
 import authenticationService from '../helpers/authentication';
 import listingService from '../services/listings';
 import imageService from '../services/images';
+import attachmentService from '../services/attachments';
 import {formatDateTime} from '../helpers/utilities';
 import ContactModal from './ContactModal';
 import {listingTypes} from '../constants/listingTypes';
@@ -47,6 +50,15 @@ class ListingDetail extends React.Component {
             spaceNew: false,
             spaceUpdate: false,
             spaceSaving: false,
+
+            // Attachments Dialog
+            attachmentsAdd: false,
+            attachmentsSaving: false,
+
+            // Attachments
+            attachmentFiles: [],
+            attachmentsUploadProgress: {},
+            attachmentsModified: false,
 
             // Unit
             unitNew: false,
@@ -91,6 +103,18 @@ class ListingDetail extends React.Component {
         this.handleSpaceModalNew = this.handleSpaceModalNew.bind(this);
         this.handleSpaceModalUpdate = this.handleSpaceModalUpdate.bind(this);
         this.handleSpaceModalHide = this.handleSpaceModalHide.bind(this);
+
+        // Attachments Dialog
+        this.handleAttachmentsAdd = this.handleAttachmentsAdd.bind(this);
+        this.handleAttachmentsDelete = this.handleAttachmentsDelete.bind(this);
+        this.handleAttachmentsDeleteModalShow = this.handleAttachmentsDeleteModalShow.bind(this);
+        this.handleAttachmentsDeleteModalHide = this.handleAttachmentsDeleteModalHide.bind(this);
+        this.handleAttachmentsModalAdd = this.handleAttachmentsModalAdd.bind(this);
+        this.handleAttachmentsModalHide = this.handleAttachmentsModalHide.bind(this);
+
+        // Attachments
+        this.handleAttachmentsAdded = this.handleAttachmentsAdded.bind(this);
+        this.handleAttachmentsProgress = this.handleAttachmentsProgress.bind(this);
 
         // Unit 
         this.handleUnitUpdate = this.handleUnitUpdate.bind(this);
@@ -253,6 +277,7 @@ class ListingDetail extends React.Component {
         }
         return imagesToDelete;
     }
+
     checkForAddedImages(files, cards){
         var imagesToAdd = [];
         for (var i=0; i<cards.length; i++){
@@ -350,6 +375,108 @@ class ListingDetail extends React.Component {
                 });
             }
         }
+    }
+
+    // Attachments 
+    handleAttachmentsModalAdd(){
+        this.setState({
+            attachmentsAdd: true,
+            succesfullyUploaded: false,
+        });
+    }
+
+    handleAttachmentsModalHide(){
+       this.setState({
+           attachmentsAdd: false,
+           attachmentsSaving: false,
+           attachmentsError: null,
+           attachmentFiles: [],
+           attachmentsModified: false
+       });
+   }
+
+   handleAttachmentsDeleteModalShow(id, name){
+       console.log("handleAttachmentsDeleteModalShow()");
+       var message = "Delete '"+name+"' attachment?"
+       this.setState({
+           attachmentsDeleteModal: true,
+           attachmentDeleteMessage: message,
+           attachmentToDelete: id
+       });
+   }
+
+   handleAttachmentsDeleteModalHide(){
+       this.setState({
+           attachmentsDeleteModal: false 
+       });
+   }
+
+   handleAttachmentsAdd(attachment){
+       this.setState({
+           attachmentsSaving: true
+       });
+
+       var attachmentsToAdd = [];
+       if (this.state.attachmentsModified){
+           attachmentsToAdd = this.checkForAddedAttachments(this.state.attachmentFiles);
+       }
+       var that = this;
+       var promises = [];
+       if (attachmentsToAdd.length > 0){
+           var uploadAttachmentsPromise = attachmentService.uploadFiles(
+               attachmentsToAdd,
+               "listing",
+               this.props.listingDetail.listing.id,
+               attachment.name,
+               that.handleAttachmentsProgress
+           );
+       }
+       promises.push(uploadAttachmentsPromise);
+       Promise.all(promises).then(function(values){
+           that.props.onFetchListing(that.props.listingDetail.listing.id);
+           that.handleAttachmentsModalHide();
+       });
+   }
+    handleAttachmentsDelete(){
+        console.log("handleAttachmentsDelete()");
+        console.log("this.state.attachmentToDelete: "+this.state.attachmentToDelete);
+        var that = this;;
+        attachmentService.deleteFile(this.state.attachmentToDelete).then(function(result){
+            console.log(result);
+            that.setState({
+               attachmentsDeleteModal: false
+            });
+            that.props.onFetchListing(that.props.listingDetail.id);
+
+        }).catch(function(err){
+            console.log(err);
+        });
+    }
+    handleAttachmentsProgress(uploadProgress){
+        console.log("uploadProgress: "+uploadProgress);
+        this.setState({
+            attachmentsUploadProgress: uploadProgress
+        });
+    }
+    handleAttachmentsAdded(files){
+        console.log("handleAttachmentsAdded()");
+        console.log("files:");
+        console.log(files);
+        this.setState(prevState => ({
+            attachmentsModified: true,
+            attachmentFiles: prevState.attachmentFiles.concat(files)
+        }));
+    }
+    checkForAddedAttachments(files){
+        var filesToAdd = [];
+        for (var i=0; i<files.length; i++){
+            var fileToAdd = {
+                file: files[i],
+                order: 1
+            };
+            filesToAdd.push(fileToAdd);
+        }
+        return filesToAdd;
     }
 
     // Unit
@@ -626,7 +753,6 @@ class ListingDetail extends React.Component {
         const listingMode = this.props.listingMode;
         var listing = null;
         var states = null;
-        var listingTypesEnums = null;
         var spaceUses = null;
         var spaceTypes = null;
         var spaceDivisibles = null;
@@ -636,7 +762,6 @@ class ListingDetail extends React.Component {
         if (this.props.listingDetail){
            listing = this.props.listingDetail.listing;
            states = this.props.listingDetail.states;
-           listingTypesEnums = this.props.listingDetail.listngTypes;
            spaceUses = this.props.listingDetail.spaceUses;
            spaceTypes = this.props.listingDetail.spaceTypes;
            spaceDivisibles = this.props.listingDetail.spaceDivisibles;
@@ -658,6 +783,12 @@ class ListingDetail extends React.Component {
                     show={this.state.showContactModal}
                     onHide={this.handleContactHide}
                     onSendMessage={this.handleSendMessage}
+                />
+                <DeleteModal
+                    show={this.state.attachmentsDeleteModal}
+                    message={this.state.attachmentDeleteMessage}
+                    onHide={this.handleAttachmentsDeleteModalHide}
+                    onDelete={this.handleAttachmentsDelete}
                 />
                 <div id="stickyHeader">
                 <ListingDetailHeader 
@@ -687,7 +818,6 @@ class ListingDetail extends React.Component {
                 </div>
                 <ListingDetailOverview 
                     listing={listing} 
-                    listingTypes={listingTypesEnums} 
                     editMode={editMode} 
                     getListing={this.props.onFetchListing}
                     onFilesAdded={this.handleFilesAdded}
@@ -698,7 +828,6 @@ class ListingDetail extends React.Component {
                     showSpinner={this.props.showSpinner}
 
                     onOverviewUpdate={this.handleOverviewUpdate}
-                    onOverviewModalNew={this.handleOverviewModalNew}
                     onOverviewModalUpdate={this.handleOverviewModalUpdate}
                     onOverviewModalHide={this.handleOverviewModalHide}
                     overviewUpdate={this.state.overviewUpdate}
@@ -737,6 +866,23 @@ class ListingDetail extends React.Component {
                     onListingUpdate={this.handleListingUpdate}
                     getListing={this.props.onFetchListing}
                     propertyTypes={propertyTypes}
+                />
+                <ListingDetailAttachments
+                    listing={listing}
+                    editMode={editMode}
+                    getListing={this.props.onFetchListing}
+                    onAttachmentsAdded={this.handleAttachmentsAdded}
+                    files={this.state.attachmentFiles}
+                    uploading={this.state.uploadingAttachments}
+                    uploadProgress={this.state.uploadAttachmentsProgress}
+
+                    onAttachmentsAdd={this.handleAttachmentsAdd}
+                    attachmentsAdd={this.state.attachmentsAdd}
+                    onAttachmentsDelete={this.handleAttachmentsDelete}
+                    onAttachmentsModalAdd={this.handleAttachmentsModalAdd}
+                    onAttachmentsModalHide={this.handleAttachmentsModalHide}
+                    onAttachmentsDeleteModalShow={this.handleAttachmentsDeleteModalShow}
+                    attachmentsSaving={this.state.attachmentsSaving}
                 />
                 {(editMode === "edit" && listingType === listingTypes.FORSALE) || 
                  (listing && (listing.units.length > 0)) ?

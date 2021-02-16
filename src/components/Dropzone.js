@@ -92,7 +92,7 @@ class Dropzone extends Component {
                 ref={this.fileInputRef}
                 className="FileInput"
                 type="file"
-                multiple
+                multiple={this.props.multiple}
                 onChange={this.onFilesAdded}
             />
             <span className="upload-images">Upload Images</span>

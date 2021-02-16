@@ -20,7 +20,7 @@ const style = {
   display: 'inline-block',
   height: '80px'
 }
-export const Card = ({ id, url, index, file, onMoveCard, onDeleteCard, isDraft }) => {
+export const Card = ({ id, url, index, file, onMoveCard, onDeleteCard }) => {
   const ref = useRef(null)
   function onClick(){
       onDeleteCard(index);
@@ -82,9 +82,7 @@ export const Card = ({ id, url, index, file, onMoveCard, onDeleteCard, isDraft }
     <span className="border" ref={ref} style={{ ...style, opacity }}>
     <span className="img-wrap">
         <span>{order}</span>
-        {isDraft ?  
         <span onClick={onClick} className="close">&times;</span>
-        : null}
         <Image src={src} className="edit-image p-2"/>
     </span>
 

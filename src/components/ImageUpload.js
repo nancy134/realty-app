@@ -137,6 +137,7 @@ class ImageUpload extends Component {
             <Dropzone
                 onFilesAdded={this.onFilesAdded}
                 disabled={this.props.uploading || this.props.successfullyUploaded}
+                multiple={true}
                 onError={this.handleError}
             />
             { this.state.isError ?

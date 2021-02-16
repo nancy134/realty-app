@@ -19,10 +19,6 @@ class ImageContainer extends Component {
 
     renderCard(card, index){
      
-        var isDraft = true;
-        if (this.props.listing && this.props.listing.publishStatus !== "Draft"){
-            isDraft = false;
-        }
         return(
         <Card
           key={card.id}
@@ -32,7 +28,6 @@ class ImageContainer extends Component {
           file={card.file}
           onMoveCard={this.handleMoveCard}
           onDeleteCard={this.handleDeleteCard}
-          isDraft={isDraft}
         />
         );
     }

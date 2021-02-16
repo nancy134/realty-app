@@ -4,12 +4,10 @@ import {
     Row,
     Col,
 } from 'react-bootstrap';
-import PlacesAutocomplete from 'react-places-autocomplete';
 import {
     geocodeByAddress
 } from 'react-places-autocomplete';
 import { GoogleApiWrapper } from 'google-maps-react';
-import Geocode from 'react-geocode';
 import geolocationService from '../helpers/geolocation';
 import WizardAddListing from '../components/WizardAddListing';
 import authenticationService from '../helpers/authentication';
