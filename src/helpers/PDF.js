@@ -405,7 +405,7 @@ export function Broker(props){
                 fontSize: 10,
             }}
         >
-            {listing.owner}
+            {listing.owner.email}
         </Text>
         </View>
     );

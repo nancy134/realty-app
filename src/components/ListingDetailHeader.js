@@ -62,7 +62,7 @@ function ReportButton(props){
                 className="p-0 ml-1"
                 onClick={() => {props.onReport()}}
             >
-                <span><FontAwesomeIcon icon={faFilePdf} /> Report</span>
+                <span><FontAwesomeIcon icon={faFilePdf} /> Brochure</span>
             </Button>
         </span>
     );
