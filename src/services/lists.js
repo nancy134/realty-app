@@ -2,7 +2,6 @@ import axiosInstance from './axios';
 
 export function getAll(){
     var url = process.env.REACT_APP_API+"lists/me";
-    console.log("url: "+url);
     return new Promise(function(resolve, reject){
         var options = {
             method: 'GET',
@@ -18,7 +17,6 @@ export function getAll(){
 
 export function create(body){
     var url = process.env.REACT_APP_API+"lists/me";
-    console.log("url: "+url);
     return new Promise(function(resolve, reject){
         var options = {
             method: 'POST',
@@ -33,8 +31,41 @@ export function create(body){
     });
 }
 
+export function update(id, body){
+    var url = process.env.REACT_APP_API + "lists/" + id;
+    return new Promise(function(resolve, reject){
+       var options = {
+           method: 'PUT',
+           url: url,
+           data: body
+        };
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    }); 
+}
+
+export function deleteList(id){
+    var url = process.env.REACT_APP_API + "lists/" + id;
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'DELETE',
+            url: url
+        };
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
+        }).catch(function(err){
+            reject(err);
+        }); 
+    });
+}
+
 const lists = {
     getAll,
-    create
+    create,
+    update,
+    deleteList
 };
 export default lists;

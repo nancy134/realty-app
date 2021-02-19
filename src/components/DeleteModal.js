@@ -2,7 +2,8 @@ import React from 'react';
 import {
     Modal,
     Button,
-    Spinner
+    Spinner,
+    Alert
 } from 'react-bootstrap';
 
 class DeleteModal extends React.Component {
@@ -26,6 +27,14 @@ class DeleteModal extends React.Component {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
+                { this.props.errorMessage && this.props.errorMessage.length > 0 ?
+                <Alert
+                    variant="danger"
+                >
+                    <span>{this.props.errorMessage}</span>
+                </Alert>
+                : null }
+
                 <div>{this.props.message}</div>
                 {this.props.saving ?
                 <div>Saving...<Spinner animation="border" /></div>

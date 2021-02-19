@@ -2,21 +2,24 @@ import React from 'react';
 import {
     ListGroup,
     Row, Col,
-    Tabs,
-    Tab,
     Button,
     Modal,
-    Form
+    Form,
+    Dropdown,
+    Spinner,
+    Alert
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faPlus
+    faTrash,
+    faPencilAlt
 } from '@fortawesome/free-solid-svg-icons';
 import {
     faFilePdf
 } from '@fortawesome/free-regular-svg-icons';
 import ListingPagination from '../components/ListingPagination';
 import ListingItem from '../components/ListingItem';
+import DeleteModal from '../components/DeleteModal';
 
 function Toolbar(props){
     return(
@@ -51,7 +54,17 @@ function Toolbar(props){
     );
 }
 
-function AddNewListModal(props){
+function AddListModal(props){
+
+    var title = "Add New List";
+    var buttonText = "Create List";
+    var buttonClick = props.onAddList;
+    if (props.dialogMode === "edit"){
+        title = "Edit List Name";
+        buttonText = "Update List Name"
+        buttonClick = props.onEditList;
+    }
+
     return(
     <Modal
         aria-labelledby="contained-modal-title-vcenter"
@@ -59,15 +72,23 @@ function AddNewListModal(props){
         show={props.show}
     >
         <Modal.Header>
-            <Modal.Title>Add New List</Modal.Title>
+            <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+            { props.listEror && props.listError.length > 0 ?
+            <Alert
+                variant="danger"
+            >
+                <span>{props.listError}</span>
+            </Alert>
+            : null }
             <Form>
                 <Form.Label>List Name</Form.Label>
                 <Form.Control
                     id="list_name"
                     name="name"
                     type="text"
+                    value={props.listName}
                     onChange={props.onListNameChange}
                 /> 
             </Form>
@@ -79,14 +100,23 @@ function AddNewListModal(props){
                 Cancel
             </Button>
             <Button
-                onClick={props.onAddNewList}
+                onClick={buttonClick}
             >
-                Create List
+                { !props.listProgress ?
+                <span>{buttonText}</span>
+                :
+                <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                />
+                }
             </Button>
         </Modal.Footer>
     </Modal>
     );
-
 }
 
 class ReportListings extends React.Component {
@@ -95,54 +125,113 @@ class ReportListings extends React.Component {
         super(props);
         this.showDetailChange = this.showDetailChange.bind(this);
         this.handleListChange = this.handleListChange.bind(this);
-        this.handleAddNewList = this.handleAddNewList.bind(this);
-        this.handleHideAddListModal = this.handleHideAddListModal.bind(this);
         this.handleListNameChange = this.handleListNameChange.bind(this);
+
         this.handleReportListDetail = this.handleReportListDetail.bind(this);
         this.handleReportListSummary = this.handleReportListSummary.bind(this);
 
+        this.handleAddListModalShow = this.handleAddListModalShow.bind(this);
+        this.handleAddListModalHide = this.handleAddListModalHide.bind(this);
+        this.handleAddList = this.handleAddList.bind(this);
+        this.handleListNameChange = this.handleListNameChange.bind(this);
+        this.handleEditList = this.handleEditList.bind(this);
+        this.handleAddListStart = this.handleAddListStart.bind(this);
+        this.handleEditListStart = this.handleEditListStart.bind(this);
+
+        // Delete
+        this.handleDeleteListModalShow = this.handleDeleteListModalShow.bind(this);
+        this.handleDeleteListStart = this.handleDeleteListStart.bind(this);
+        this.handleDeleteListModalHide = this.handleDeleteListModalHide.bind(this);
+        this.handleDeleteList = this.handleDeleteList.bind(this);
+
         this.state = {
-            showAddListModal: false
+            listName: "",
+            list: {},
+            dialogMode: "add",
+            deleteMessage: ""
         };
     }
-    componentDidMount() {
-    }
-    componentWillUnmount() {
-    }
-    showDetailChange(id, arrayIndex){
-        this.props.onShowDetailChange(true, id, arrayIndex);
-    }
-    handleListChange(listTab){
-        if (listTab === "add"){
-            this.setState({
-                showAddListModal: true
-            });
-        } else {
-            this.props.onReportListChange(listTab);
-        }
-    }
-    handleAddNewList(){
-        this.props.onAddNewList(this.state.listName);
+    handleAddListStart(){
         this.setState({
-            showAddListModal: false
+            dialogMode: "add"
+        }, () => {
+            this.handleAddListModalShow();
+        });
+
+    }
+    handleAddListModalShow(){
+        this.props.onAddListModalShow();
+    }
+    handleEditListStart(list){
+        this.setState({
+            list: list,
+            listName: list.name,
+            dialogMode: "edit"
+        }, () => {
+            this.handleAddListModalShow();
         });
     }
-    handleHideAddListModal(){
+    handleDeleteListStart(e, id, name){
+        var deleteMessage = "Do you want to delete '"+name+"' ?";
         this.setState({
-            showAddListModal: false
+            listToDelete: id,
+            deleteMessage: deleteMessage 
+        }, () => {
+            this.handleDeleteListModalShow();
         });
     }
+    handleDeleteListModalShow(){
+        this.props.onDeleteListModalShow();
+    } 
+    handleAddListModalHide(){
+        this.setState({
+            list: {},
+            listName: ""
+        });
+        this.props.onAddListModalHide();
+    }
+    handleDeleteListModalHide(){
+        this.setState({
+            listToDelete: 0,
+            deleteMessage: ""
+        });
+        this.props.onDeleteListModalHide();
+    }
+    handleAddList(){
+        this.props.onAddList(this.state.listName);
+    }
+
     handleListNameChange(event){
         this.setState({
             listName: event.target.value
         });
     }
+    handleEditList(){
+        var list = {
+            id: this.state.list.id,
+            name: this.state.listName
+        };
+        
+        this.props.onEditList(list);
+    }
+
+    handleDeleteList(){
+        this.props.onDeleteList(this.state.listToDelete);
+    }
+    showDetailChange(id, arrayIndex){
+        this.props.onShowDetailChange(true, id, arrayIndex);
+    }
+
+    handleListChange(e,id){
+        this.props.onReportListChange(id);
+    }
+
     handleReportListDetail(){
         var id = this.props.listId;
         var url = 
             window.location.protocol + 
             "//" + window.location.hostname + 
-            "/report/list/" + id +
+            "/report/list/" + id + 
             "?reportType=detail";
         window.open(url, "_blank");
     }
@@ -159,18 +248,43 @@ class ReportListings extends React.Component {
         if (this.props.lists.length > 0){
 
         var listings = this.props.listItems;
-        var activeKey = this.props.listId;
         var showImage = false;
         var showShortDescription = false;
         var showDeleteFromList = true;
+
+        var selectedListName = "";
+        for (var i=0; i<this.props.lists.length; i++){
+            if (this.props.lists[i].id === this.props.listId){
+                selectedListName = this.props.lists[i].name;
+                break;
+            }
+        }
+
         return (
         <div>
-            <AddNewListModal
-                show={this.state.showAddListModal}
-                onAddNewList={this.handleAddNewList}
-                onHide={this.handleHideAddListModal}
+            { this.props.showAddListModal ?
+            <AddListModal
+                show={this.props.showAddListModal}
+                onAddList={this.handleAddList}
+                onEditList={this.handleEditList}
+                onHide={this.handleAddListModalHide}
                 onListNameChange={this.handleListNameChange}
+                listProgress={this.props.listProgress}
+                listError={this.props.listError}
+                list={this.state.list}
+                dialogMode={this.state.dialogMode}
+                listName={this.state.listName}
             />
+            : null }
+            { this.props.showDeleteListModal ?
+            <DeleteModal
+                show={this.props.showDeleteListModal}
+                message={this.state.deleteMessage}
+                errorMessage={this.props.listError}
+                onHide={this.handleDeleteListModalHide}
+                onDelete={this.handleDeleteList}
+            />
+            : null }
             { this.props.loggedIn ?
             <div id="stickyHeader" className="bg-white">
                 <Toolbar
@@ -182,33 +296,48 @@ class ReportListings extends React.Component {
                     onReportListDetail={this.handleReportListDetail}
                     onReportListSummary={this.handleReportListSummary}
                 />
-                <Tab.Container>
-                    <Tabs
-                        className="listing-tabs pt-1 border-0"
-                        id="listing-tabs"
-                        activeKey={activeKey}
-                        onSelect={tab => this.handleListChange(tab)}
+                <Dropdown className="pt-2">
+                    <Dropdown.Toggle
+                        size="sm"
+                        variant="warning"
+                        id="dropdown-basic"
                     >
-                        {this.props.lists.map((list, index) =>
-                        <Tab
-                            title={list.name}
-                            eventKey={list.id}
+                        <span>{selectedListName}</span> 
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                        { this.props.lists.map((list, index) =>
+                        <Dropdown.Item
+                            onClick={(e) => this.handleListChange(e, list.id)}
                             key={index}
                         >
-                            <Tab.Content>
-                            </Tab.Content>
-                        </Tab>
-                        )}
+                            <span>{list.name}</span>
+                            { this.props.lists.length > 1 ?
+                            <span className="pl-1 pr-2 text-danger float-right">
+                                <FontAwesomeIcon
+                                    onClick={(e) => this.handleDeleteListStart(e, list.id, list.name)}
+                                    size="xs"
+                                    icon={faTrash}
+                                />
+                            </span>
+                            : null }
 
-                        <Tab
-                            title={<FontAwesomeIcon icon={faPlus}/>}
-                            eventKey="add"
-                        >
-                            <Tab.Content>
-                            </Tab.Content>
-                        </Tab>
-                    </Tabs>
-                </Tab.Container>
+                            <span className="pl-1 pr-2 text-danger float-right">
+                                <FontAwesomeIcon
+                                    onClick={() => this.handleEditListStart(list)}
+                                    size="xs"
+                                    icon={faPencilAlt}
+                                />
+                            </span>
+
+                        </Dropdown.Item>
+                        )}
+                        <Dropdown.Divider/>
+                        <Dropdown.Item onClick={this.handleAddListStart}>
+                            <span>Add New...</span>
+                        </Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
             </div>
             :
             <Toolbar
@@ -237,6 +366,13 @@ class ReportListings extends React.Component {
                         />
                     ))}
                 </ListGroup>
+                {listings.length === 0 ?
+                <Alert
+                    variant="primary"
+                >
+                    <span>Add listings from the left</span>
+                </Alert>
+                : null }
             </div>
         </div>
 

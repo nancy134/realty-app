@@ -119,11 +119,17 @@ export class ListingPage extends Component {
         this.handleBoundsChange = this.handleBoundsChange.bind(this);
 
         // Reports
+        this.handleAddListModalShow = this.handleAddListModalShow.bind(this);
+        this.handleAddListModalHide = this.handleAddListModalHide.bind(this);
+        this.handleDeleteListModalShow = this.handleDeleteListModalShow.bind(this);
+        this.handleDeleteListModalHide = this.handleDeleteListModalHide.bind(this);
         this.handleReportListChange = this.handleReportListChange.bind(this);
         this.handleAddToList = this.handleAddToList.bind(this);
         this.handleDeleteFromList = this.handleDeleteFromList.bind(this);
         this.handleNewPageReport = this.handleNewPageReport.bind(this);
-        this.handleAddNewList = this.handleAddNewList.bind(this);
+        this.handleAddList = this.handleAddList.bind(this);
+        this.handleEditList = this.handleEditList.bind(this);
+        this.handleDeleteList = this.handleDeleteList.bind(this);
 
         this.state = {
 
@@ -198,9 +204,16 @@ export class ListingPage extends Component {
             detailMarkers: null,
 
             // Reports
+            showAddListModal: false,
+            deleteListModalShow: false,
             lists: [],
             listItems: [],
-            listId: 0 
+            listId: 0,
+            listProgress: false,
+            listError: "",
+            reportPage: 1,
+            reportCount: 0,
+            reportPerPage: 5 
         };
     }
 
@@ -962,6 +975,27 @@ export class ListingPage extends Component {
     }
 
     // Reports
+    handleAddListModalShow(){
+        this.setState({
+            showAddListModal: true
+        });
+    }
+    handleDeleteListModalShow(){
+        this.setState({
+            showDeleteListModal: true
+        });
+    }
+    handleDeleteListModalHide(){
+        this.setState({
+            showDeleteListModal: false
+        });
+    }
+    handleAddListModalHide(){
+        this.setState({
+            showAddListModal: false,
+            listError: ""
+        });
+    }
     handleReportListChange(listTab){
         var that = this;
         listItemService.getAll(listTab).then(function(listItems){
@@ -977,7 +1011,6 @@ export class ListingPage extends Component {
         });
     }
     handleAddToList(e, ListingId){
-        console.log("ListingId: "+ListingId);
         var that = this;
         var body = {
             ListingId: ListingId
@@ -1044,11 +1077,14 @@ export class ListingPage extends Component {
          });
     }
 
-    handleAddNewList(listName){
+    handleAddList(listName){
         var that = this;
         var body = {
             name: listName
         };
+        this.setState({
+            listProgress: true
+        });
         listService.create(body).then(function(list){
             listService.getAll().then(function(lists){
                 that.setState({
@@ -1057,22 +1093,102 @@ export class ListingPage extends Component {
                     listItems: [],
                     reportPage: 1,
                     reportCount: 0,
-                    reportPerPage: 5 
+                    reportPerPage: 5,
+                    listProgress: false
+                });
+                that.handleAddListModalHide();
+            }).catch(function(err){
+                that.setState({
+                    listProgress: false,
+                    listError: "Error creating list"
+                });
+            });
+        }).catch(function(err){
+            that.setState({
+                listProgress: false,
+                listError: "Error create list"
+            });
+        });
+    }
+
+    handleEditList(list){
+        var that = this;
+        this.setState({
+            listProgress: true
+        });
+        var body = {
+            name: list.name
+        };
+        listService.update(list.id,body).then(function(list){
+            listService.getAll().then(function(lists){
+                that.setState({
+                    lists: lists.lists.rows,
+                    listId: list.id,
+                    listProgress: false
+                }); 
+                that.handleAddListModalHide();
+            }).catch(function(err){
+                that.setState({
+                    listProgress: false,
+                    listError: "Error updating list"
+                });
+            });
+        }).catch(function(err){
+            that.setState({
+                listProgress: false,
+                listError: "Error updatinglist"
+            });
+        });
+    }
+
+    handleDeleteList(id){
+        var that = this;
+        this.setState({
+            listProgress: true
+        });
+        listService.deleteList(id).then(function(result){
+            listService.getAll().then(function(lists){
+                var listId = lists.lists.rows[0].id;
+                listItemService.getAll(listId).then(function(listItems){
+
+                    if (lists.lists.rows.length > 0)
+                        listId = lists.lists.rows[0].id
+ 
+                    that.setState({
+                        lists: lists.lists.rows,
+                        listId: listId,
+                        listItems: listItems.listItems.rows
+                    });
+                    that.handleDeleteListModalHide();
+                }).catch(function(err){
+                    console.log(err);
+                    that.setState({
+                        listProgress: false,
+                        listError: "Error deleting list" 
+                    });
                 });
             }).catch(function(err){
                 console.log(err);
+                that.setState({
+                    listProgress: false,
+                    listError: "Error deleting list"
+                });
             });
         }).catch(function(err){
             console.log(err);
-        });
+            that.setState({
+                listProgress: false,
+                listError: "Error deleting list"
+            });
+        }); 
     }
+
     handleShowReportView(showReportView){
         if (showReportView){
             var localState = {};
             var that = this;
             listService.getAll().then(function(lists){
                 if (lists.lists.rows.length > 0){
-                    console.log("lists found");
                     var listId = lists.lists.rows[0].id;
                     listItemService.getAll(listId).then(function(listItems){
                         localState.lists = lists.lists.rows;
@@ -1343,7 +1459,19 @@ export class ListingPage extends Component {
                         lists={this.state.lists}
                         listItems={this.state.listItems}
                         listId={this.state.listId}
-                        onAddNewList={this.handleAddNewList}
+                        onAddList={this.handleAddList}
+                        onEditList={this.handleEditList}
+
+                        //Add List Dialog
+                        showAddListModal={this.state.showAddListModal}
+                        onAddListModalShow={this.handleAddListModalShow}
+                        onAddListModalHide={this.handleAddListModalHide}
+                        listProgress={this.state.addListProgress}
+                        listError={this.state.addListError}
+
+                        onDeleteListModalShow={this.handleDeleteListModalShow}
+                        showDeleteListModal={this.state.showDeleteListModal}
+                        onDeleteList={this.handleDeleteList}
                     />
                 </Col>
                 : null}

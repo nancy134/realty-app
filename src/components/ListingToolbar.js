@@ -282,6 +282,7 @@ class ListingToolbar extends React.Component {
                     <Col xs="auto">
                         <Dropdown>
                             <Dropdown.Toggle
+                                size="sm"
                                 variant="secondary"
                             >
                                 {this.state.listingType} 
@@ -313,6 +314,7 @@ class ListingToolbar extends React.Component {
                         <div>
                             <InputGroup>                
                                 <Form.Control
+                                    size="sm"
                                     onFocus={this.handleSearchFocus}
                                     {...getInputProps({
                                         placeholder: address,
@@ -352,7 +354,8 @@ class ListingToolbar extends React.Component {
                     { this.props.showSpaceTypeButton ?
                     <Col xs="auto"> 
                         <Dropdown>
-                            <Dropdown.Toggle 
+                            <Dropdown.Toggle
+                                size="sm"
                                 variant="secondary" 
                                 id="toolbar_dropdown_space_type"
                             >
@@ -374,6 +377,7 @@ class ListingToolbar extends React.Component {
                     <Col xs="auto">
                         <Dropdown>
                             <Dropdown.Toggle 
+                                size="sm"
                                 variant="secondary" 
                                 id="toolbar_dropdown_more_filters"
                             >
@@ -394,12 +398,14 @@ class ListingToolbar extends React.Component {
                     { this.props.showClearFiltersButton ?
                     <Col xs="auto">
                         <Button
+                            size="sm"
                             onClick={this.handleClearFilters}
                         >Clear Filters</Button>
                     </Col>
                     : null }
                     <Col xs="auto">
                         <Button
+                            size="sm"
                             className={this.state.searchClass}
                             variant={this.state.searchVariant}
                             onClick={this.handleSearch}
@@ -409,18 +415,20 @@ class ListingToolbar extends React.Component {
                     <Col>
                         <Button
                             variant="warning"
+                            size="sm"
                             className="float-right"
                             onClick={this.handleShowReportView}
-                        >Show Report View</Button>
+                        >Report Mode On</Button>
                     </Col>
                     : null }
                     { this.props.showReportViewButton && this.props.showReportView ?
                     <Col>
                         <Button
                             variant="warning"
+                            size="sm"
                             className="float-right"
                             onClick={this.handleShowReportView}
-                        >Hide Report View</Button>
+                        >Report Mode Off</Button>
                     </Col>
                     : null }
                 </Form.Row>

@@ -6,7 +6,6 @@ export function getAll(ListId){
         "lists/" +
         ListId +
         "/listItems/me";
-    console.log("url: "+url);
     return new Promise(function(resolve, reject){
         var options = {
             method: 'GET',
@@ -26,7 +25,6 @@ export function create(ListId, body){
         "lists/" +
         ListId +
         "/listItems/me";
-    console.log("url: "+url);
     return new Promise(function(resolve, reject){
         var options = {
             method: 'POST',
