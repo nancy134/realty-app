@@ -66,7 +66,7 @@ class App extends React.Component {
                   width="30"
                   height="30"
                   className="d-inline-block align-top"
-                  />{' '}FindingCRE.com</Navbar.Brand>
+                  />{' '}FindingCRE</Navbar.Brand>
               <Navbar.Toggle />
               <Navbar.Collapse className="justify-content-end">
                   <Nav.Item>
