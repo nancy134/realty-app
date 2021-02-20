@@ -132,6 +132,7 @@ class App extends React.Component {
               loggedIn={this.state.loggedIn}
               showAddListingWizard={this.state.showAddListingWizard}
               onAddListingCancel={this.handleAddListingCancel}
+              onShowPolicyModal={this.handlePolicyModalShow}
           >
           </Routes>
     </div>

@@ -47,6 +47,7 @@ render(){
                     {...props}
                     onLogin={this.handleLogin}
                     loggedIn={this.props.loggedIn}
+                    onShowPolicyModal={this.props.onShowPolicyModal}
                 />
             )
         }
@@ -60,6 +61,7 @@ render(){
                     loggedIn={this.props.loggedIn}
                     showAddListingWizard={this.props.showAddListingWizard}
                     onAddListingCancel={this.props.onAddListingCancel}
+                    onShowPolicyModal={this.props.onShowPolicyModal}
                 />
             )
         }

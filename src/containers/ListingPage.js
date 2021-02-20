@@ -1309,6 +1309,7 @@ export class ListingPage extends Component {
                 show={this.state.showPublishWizardIntro}
                 onNext={this.handlePublishWizardIntroNext}
                 onCancel={this.handlePublishWizardClose}
+                onShowPolicyModal={this.props.onShowPolicyModal}
             />
             { this.state.showPublishWizardPaymentMethod ?
             <PublishWizardPaymentMethod
