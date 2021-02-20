@@ -156,6 +156,7 @@ class AccountProfile extends React.Component{
             if (profile.bio) initialValues.bio = profile.bio;
         }
         return(
+        <div className="profile-view">
             <Formik
                 enableReinitialize
                 initialValues={initialValues}
@@ -408,6 +409,7 @@ class AccountProfile extends React.Component{
                     </Form>
                 )}
             </Formik>
+        </div>
         );
    }
 }

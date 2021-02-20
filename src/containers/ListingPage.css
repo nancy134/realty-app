@@ -9,11 +9,10 @@
 .leftcol {
    overflow:hidden;
 }
-
 .rightcol {
-   overflow-y: scroll;
+   overflow-y: auto;
    overflow-x: hidden;
-   height: 81vh;
+   height: 78vh;
 }
 
 .home-filter {
@@ -216,4 +215,8 @@
         transform: scale(0.95);
         box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
     }
+}
+
+.listing-container{
+    flex-grow: 1;
 }

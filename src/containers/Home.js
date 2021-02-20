@@ -81,7 +81,7 @@ export class Home extends Component {
 
   render(){
   return (
-    <div className="home-filter bimage">
+    <div className="ml-1 mr-1 home-filter bimage">
         { this.props.showAddListingWizard ?
         <WizardAddListing
             loggedIn={this.props.loggedIn}

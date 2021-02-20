@@ -1,20 +1,24 @@
 .bimage{
   background: url("https://sabre-images.s3.amazonaws.com/office.jpg");
 }
-.jtron{
-    opacity: 0.9;
-    margin-left: 15%;
-    margin-right: 15%
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
-.app {
+
+body {
+    display: flex;
+    flex-direction: column;
     overflow-x: hidden;
-    overflow-y: hidden;
+}
+.mycontainer{
+    flex: auto;
 }
 
-.profile {
-    overflow-y: scroll;
-}
-
-.flex-grow {
-    flex: 1 0 auto;
+.profile-view {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 78vh;
 }

@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import { 
-    Container,
     Nav,
     Navbar,
     Button
@@ -9,18 +8,33 @@ import {
 import Routes from './Routes';
 import AccountButton from './components/AccountButton';
 import authenticationService from './helpers/authentication';
+import PolicyModal from './components/PolicyModal';
 
 class App extends React.Component {
   constructor(props){
       super(props);
+
+      console.log(window.location.pathname);
+      var minimalTab = false;
+      if (window.location.pathname === "/terms")
+          minimalTab = true;
       this.state = {
           loggedIn: false,
-          showAddListingWizard: false
+          showAddListingWizard: false,
+
+          // Policy
+          showPolicyModal: false,
+          policyType: "",
+          minimalTab: minimalTab 
       };
       this.handleLogin = this.handleLogin.bind(this);
       this.handleLogout = this.handleLogout.bind(this);
       this.handleAddListing = this.handleAddListing.bind(this);
       this.handleAddListingCancel = this.handleAddListingCancel.bind(this);
+
+      // Policy
+      this.handlePolicyModalShow = this.handlePolicyModalShow.bind(this);
+      this.handlePolicyModalHide = this.handlePolicyModalHide.bind(this);
   }
   componentDidMount(){
       if (authenticationService.isAuthenticated()){
@@ -28,6 +42,18 @@ class App extends React.Component {
               loggedIn: true
           });
       }
+  }
+  handlePolicyModalShow(type){
+      this.setState({
+          showPolicyModal: true,
+          policyType: type
+      });
+  }
+  handlePolicyModalHide(){
+      this.setState({
+          showPolicyModal: false,
+          policyType: ""
+      });
   }
   handleLogin(){
       this.setState({loggedIn: true});
@@ -57,8 +83,15 @@ class App extends React.Component {
   }
   render(){
   return (
-      <Container fluid className="app d-flex flex-column vh-100 vw-100">
-          <Navbar className="p-0">
+      <React.Fragment>
+      <div className="mycontainer">
+          <PolicyModal
+              show={this.state.showPolicyModal}
+              type={this.state.policyType}
+              onHide={this.handlePolicyModalHide}
+          />
+          { !this.state.minimalTab ?
+          <Navbar>
               <Navbar.Brand href="./home">
                   <img
                   alt="logo" 
@@ -92,7 +125,7 @@ class App extends React.Component {
                   </Nav.Item>
               </Navbar.Collapse>
           </Navbar>
-
+          : null }
           <Routes
               // Logged in
               onLogin={this.handleLogin}
@@ -100,8 +133,27 @@ class App extends React.Component {
               showAddListingWizard={this.state.showAddListingWizard}
               onAddListingCancel={this.handleAddListingCancel}
           >
-</Routes>
-    </Container>
+          </Routes>
+    </div>
+    { !this.state.minimalTab ?
+    <div className="bg-light ml-1 mr-1">
+       <Button
+           variant="link"
+           size="sm"
+           onClick={() => this.handlePolicyModalShow("terms")}
+       >
+           <span>Terms & Conditions</span>
+       </Button>
+       <Button
+           variant="link"
+           size="sm"
+           onClick={() => this.handlePolicyModalShow("about")}
+       >
+           <span>About</span>
+       </Button>
+    </div>
+    : null }
+    </React.Fragment>
   );
 }
 }

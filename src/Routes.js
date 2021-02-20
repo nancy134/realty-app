@@ -7,6 +7,7 @@ import InstructionPage from './containers/InstructionPage';
 import ReportPage from './containers/ReportPage';
 import ReportListPage from './containers/ReportListPage';
 import AdminPage from './containers/AdminPage';
+import TermsPage from './containers/TermsPage';
 
 class Routes extends React.Component {
 
@@ -74,6 +75,7 @@ render(){
     <Route path="/account" exact component={AccountPage} />
     <Route path="/admin" exact component={AdminPage} />
     <Route path="/instructions" exact component={InstructionPage} />
+    <Route path="/terms" exact component={TermsPage} />
   </Switch>
   );
 }

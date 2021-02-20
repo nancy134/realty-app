@@ -1352,7 +1352,7 @@ export class ListingPage extends Component {
             />
             : null }
             { !fullscreen ?
-	    <Row className="bg-success">
+	    <Row className="ml-1 mr-1 bg-success">
 	        <ListingToolbar
                     buttonText="Apply Filters"
 		    listingMode={listingMode}
@@ -1368,7 +1368,8 @@ export class ListingPage extends Component {
                 />
 	    </Row>
             : null }
-	    <Row>
+            <div className="listing-container">
+	    <Row className="ml-1 mr-1">
 	        <Col xs={leftColumnSize} className={leftColumnClassName}>
                     <CSSTransition
 		        in={showDetail}
@@ -1476,11 +1477,7 @@ export class ListingPage extends Component {
                 </Col>
                 : null}
             </Row>
-            <Row className="bg-light">
-                <Col md={12} className="text-right">
-                    <div className="text-right" >About</div>
-                </Col>
-            </Row>
+            </div>
         </React.Fragment>
         );
     }
