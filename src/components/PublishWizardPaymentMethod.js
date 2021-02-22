@@ -1,9 +1,12 @@
 import React from 'react';
 import {
+    Row,
+    Col,
     Modal,
     Button,
     Spinner,
-    Alert
+    Alert,
+    Image
 } from 'react-bootstrap';
 import DropIn from 'braintree-web-drop-in-react';
 import billingService from '../services/billing';
@@ -24,18 +27,40 @@ class PublishWizardPaymentMethod extends React.Component{
             paymentMethodRequestable: false,
             paymentSpinner: false,
             showError: false,
-            errorMessage: ""
+            errorMessage: "",
+            creditCardEntered: false
         };
     }
 
     componentDidMount(){
         var that = this;
         billingService.getClientToken().then(function(result){
-            that.setState({
-                clientToken: result.clientToken
+            billingService.getPaymentMethod().then(function(paymentMethod){
+                if (paymentMethod.creditCards.length > 0){
+                    var defaultPaymentMethod = null;
+                    for (var i=0; i<paymentMethod.creditCards.length; i++){
+                        if (paymentMethod.creditCards[i].default === true){
+                            defaultPaymentMethod = paymentMethod.creditCards[i];
+                        } 
+                    }
+                    that.setState({
+                        defaultPaymentMethod: defaultPaymentMethod
+                    });
+                }
+            }).catch(function(err){
+                if (err.errorCode === "notFoundError"){
+                    that.setState({
+                        clientToken: result.clientToken
+                    });
+                } else {
+                    that.setState({
+                        showError: true,
+                        errorMessage: err.message
+                    });
+                }
             });
         }).catch(function(err){
-            this.setState({
+            that.setState({
                 showError: true,
                 errorMessage: err.message
             });
@@ -43,24 +68,18 @@ class PublishWizardPaymentMethod extends React.Component{
     }
 
     handleNext(){
+
         var that = this;
         this.setState({
             paymentSpinner: true
-        });   
+        });
+
+        if (!this.state.defaultPaymentMethod && !this.state.creditCardEntered){
         this.instance.requestPaymentMethod().then(function(result){
             billingService.setPaymentMethod(result.nonce).then(function(paymentResult){
-                var listingId = that.props.listingDetail.listing.ListingId;
-                listingService.publish(listingId).then(function(result){
-                    that.setState({
-                        paymentSpinner: false
-                    });
-                    that.props.onNext();
-                }).catch(function(err){
-                    that.setState({
-                        paymentSpinner: false,
-                        showError: true,
-                        errorMessage: err.message
-                    });
+                that.setState({
+                    paymentSpinner: false,
+                    creditCardEntered: true
                 });
             }).catch(function(err){
                 that.setState({
@@ -76,6 +95,21 @@ class PublishWizardPaymentMethod extends React.Component{
                 errorMessage: err.message
             });
         });
+        } else {
+            var listingId = that.props.listingDetail.listing.ListingId;
+            listingService.publish(listingId).then(function(result){
+                that.setState({
+                    paymentSpinner: false
+                });
+                that.props.onNext();
+            }).catch(function(err){
+                that.setState({
+                    paymentSpinner: false,
+                    showError: true,
+                    errorMessage: err.message
+                });
+            });
+        }        
     }
 
     handleNoPaymentMethodRequestable(event){
@@ -104,6 +138,7 @@ class PublishWizardPaymentMethod extends React.Component{
                 show={this.props.show}
                 backdrop='static'
                 dialogClassName="modal-60w"
+                animation={false}
             >
                 <Modal.Header>
                     <Modal.Title
@@ -119,8 +154,10 @@ class PublishWizardPaymentMethod extends React.Component{
                         <span>{this.state.errorMessage}</span>
                     </Alert>
                     : null }
+                    { !this.state.defaultPaymentMethod ?
+                    <div style={{'height': '60vh'}}>
                     { this.state.clientToken ?
-                    <DropIn
+		    <DropIn
                         options={{
                             authorization: this.state.clientToken
                         }}
@@ -137,7 +174,25 @@ class PublishWizardPaymentMethod extends React.Component{
                         role="status"
                         aria-hidden="true"
                     />
-                    }
+                     }
+                    </div>
+                    : null}
+                    {this.state.defaultPaymentMethod ?
+                    <div style={{'height': '60vh'}}>
+                            <p>The default credit card on file will be billed according to the payment schedule detailed in the <span>Terms & Conditions</span></p>
+                               <Alert variant="info">
+                                <Row>
+                                    <Col xs={1}>
+                                        <Image src={this.state.defaultPaymentMethod.imageUrl}/>
+                                    </Col>
+                                    <Col>
+                                        <span>{this.state.defaultPaymentMethod.cardType}</span>
+                                        <span> ending in {this.state.defaultPaymentMethod.last4}</span>
+                                    </Col>
+                                </Row>
+                             </Alert>
+                    </div>
+                    : null}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
@@ -147,7 +202,7 @@ class PublishWizardPaymentMethod extends React.Component{
                     </Button>
                     <Button
                         onClick={this.handleNext}
-                        disabled={!this.state.paymentMethodRequestable}
+                        disabled={!this.state.paymentMethodRequestable && !this.state.defaultPaymentMethod}
                     >
                         {this.state.paymentSpinner ?
                         <Spinner

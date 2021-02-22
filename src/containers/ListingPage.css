@@ -220,3 +220,7 @@
 .listing-container{
     flex-grow: 1;
 }
+
+[data-braintree-id="toggle"] {
+  display: none;
+}

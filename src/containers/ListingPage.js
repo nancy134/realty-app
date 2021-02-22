@@ -406,9 +406,9 @@ export class ListingPage extends Component {
             center: this.state.center,
             zoomLevel: this.state.zoomLevel,
             myListings: {
-                bounds: this.state.myListings.bounds,
-                center: this.state.myListings.center,
-                zoomLevel: this.state.myListings.zoomLevel
+                bounds: {lat0:null,lng0:null,lat1:null,lng1:null},
+                center: null,
+                zoomLevel: null
             },
             updateBounds: true
         };
@@ -578,12 +578,14 @@ export class ListingPage extends Component {
             // Close wizard
             showPublishWizardFinal: false,
             // Close detail view
-            showDetail: false,
+            showDetail: true,
             // Keep the bounds
-            //bounds: this.state.bounds,
-            //center: this.state.center,
-            //zoomLevel: this.state.zoomLevel,
-            //updateBounds: true
+            myListings: {
+               bounds: this.state.myListings.bounds,
+               center: this.state.myListings.center,
+               zoomLevel: this.state.myListings.zoomLevel
+           },
+           updateBounds: true
         }
         this.fetchListingsPromise(localState).then(function(localState){
             that.setState(localState);
@@ -1305,12 +1307,14 @@ export class ListingPage extends Component {
                 saving={this.state.deleteDraftListingSaving}
                 onDelete={this.handleDeleteDraftListingConfirm}
             />
+            { this.state.showPublishWizardIntro ?
             <PublishWizardIntro
                 show={this.state.showPublishWizardIntro}
                 onNext={this.handlePublishWizardIntroNext}
                 onCancel={this.handlePublishWizardClose}
                 onShowPolicyModal={this.props.onShowPolicyModal}
             />
+            : null }
             { this.state.showPublishWizardPaymentMethod ?
             <PublishWizardPaymentMethod
                 show={this.state.showPublishWizardPaymentMethod}

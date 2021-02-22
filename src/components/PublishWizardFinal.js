@@ -11,6 +11,7 @@ class PublishWizardFinal extends React.Component{
                 show={this.props.show}
                 backdrop='static'
                 dialogClassName="modal-60w"
+                animation={false}
             >
                 <Modal.Header>
                     <Modal.Title
@@ -19,10 +20,9 @@ class PublishWizardFinal extends React.Component{
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <h1>Congratulations!</h1>
-                    <p>Your listing is now public on All Commerical Listings.</p>
-                    <p>It will be publish for FREE for the first 30 days.</p>
-                    <p>After 30 days you will be charged $25/mo for each listing</p>
+                    <h2>Congratulations!</h2>
+                    <p>You listing is has been published and visible to all visitors on FindingCRE.com!</p>
+                    <p>Easy access to any listings you have created are available on the “My Listings” tab.  A listing can be taken off market at any time by editing the listing and clicking the “Take Off Market”.</p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button

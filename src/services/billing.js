@@ -28,6 +28,24 @@ export function setPaymentMethod(nonce){
     });
 }
 
+export function getPaymentMethod(){
+    var url = process.env.REACT_APP_API + "billing/paymentMethod";
+    return new Promise(function(resolve, reject){
+        axiosInstance({
+            method: 'get',
+            url: url
+        }).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            if (err.response && err.response.data){
+                reject(err.response.data);
+            }else{
+                reject(err);
+            }
+        });
+    });
+}
+
 export function getBillingEvents(id){
     return new Promise(function(resolve, reject){
         var url = process.env.REACT_APP_API + "billing/billingCycles/" + id + "/billingEvents";
@@ -87,6 +105,7 @@ export function playBillingCycle(id){
 const billing = {
     getClientToken,
     setPaymentMethod,
+    getPaymentMethod,
     getBillingEvents,
     getBillingEventsMe,
     getBillingCycles,
