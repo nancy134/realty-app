@@ -578,7 +578,7 @@ export class ListingPage extends Component {
             // Close wizard
             showPublishWizardFinal: false,
             // Close detail view
-            showDetail: true,
+            showDetail: false,
             // Keep the bounds
             myListings: {
                bounds: this.state.myListings.bounds,
