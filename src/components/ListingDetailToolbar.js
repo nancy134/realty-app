@@ -6,8 +6,10 @@ import {
     Tab,
     Button
 } from 'react-bootstrap';
-import TransitionModal from './TransitionModal';
 import authenticationService from '../helpers/authentication';
+import { publishTypes } from '../constants/publishTypes';
+import { getPublishType } from '../helpers/utilities';
+import { transitionTypes } from '../constants/transitionTypes';
 
 function TransitionButton(props) {
   return (
@@ -28,40 +30,15 @@ function TransitionButton(props) {
               >{props.buttonText}</span>
           : null}
           
-          <TransitionModal
-              show={props.show}
-              message={props.message}
-              states={props.states}
-              transition={props.buttonText}
-              onCancel={props.onCancel}
-              saving={props.saving}
-              transitionMessage={props.TransitionMessage}
-          />
       </span>
   );
 }
 
 function InformationalText(props){
     var listing = props.listing;
-    var hasLiveVersion = false;
-    var hasDraftVersion = false;
-    var onlyDraft = false;
-    var onlyLive = false;
+    var publishType = getPublishType(listing);
 
-    if (listing.publishStatus === "Draft" && listing.listing.latestApprovedId){
-        hasLiveVersion = true;
-    }
-    if (listing.publishStatus === "On Market" && listing.listing.latestDraftId){
-        hasDraftVersion = true;
-    }
-    if (listing.publishStatus === "Draft" && !listing.listing.latestApprovedId){
-        onlyDraft = true;
-    }
-    if (listing.publishStatus === "On Market" && !listing.listing.latestDraftId){
-        onlyLive = true;
-    }
-
-    if (hasLiveVersion){
+    if (publishType === publishTypes.DRAFT_WITH_LIVE){
         return(
         <Row className="pr-2 small bg-white">
             <Col className="text-center">
@@ -72,7 +49,7 @@ function InformationalText(props){
             </Col>
         </Row>
         );
-    } else if (hasDraftVersion){
+    } else if (publishType === publishTypes.LIVE_WITH_DRAFT){
         return(
         <Row className="pr-2 small bg-white">
             <Col className="text-center">
@@ -83,7 +60,7 @@ function InformationalText(props){
             </Col>
         </Row>
         );
-    } else if (onlyDraft){
+    } else if (publishType === publishTypes.ONLY_DRAFT){
         return(
         <Row className="pr-2 small bg-white">
             <Col className="text-center">
@@ -96,7 +73,7 @@ function InformationalText(props){
             </Col>
         </Row>
         );
-    } else if (onlyLive){
+    } else if (publishType === publishTypes.ONLY_LIVE){
         return(
         <Row className="pr-2 small bg-white">
             <Col className="text-center">
@@ -131,23 +108,26 @@ class ListingDetailToolbar extends React.Component {
         var listing = this.props.listing;
         var transitionButton = "";
         var transitionType = "";
-        var message = "";
+        var publishType = getPublishType(listing);
+
         if (listing) {
             if (listing.publishStatus === "Draft"){
-               transitionType="publish";
-               transitionButton = "Publish";
-               message = "Your listing will become available to the public and charges will be applied";
+               var transitionButton = "Publish";
+               transitionType = transitionTypes.PUBLISH;
+               if (publishType === publishTypes.DRAFT_WITH_LIVE){
+                   transitionType = transitionTypes.PUBLISH_UPDATES;
+                   transitionButton = "Publish Updates";
+               }
             } else if (listing.publishStatus === "Approved" || listing.publishStatus === "Off Market"){
+                transitionType = transitionTypes.PUT_ON_MARKET;
                 transitionButton = "Put on Market";
-                message = "Your listing will become public and charges will be applied";
             } else if (listing.publishStatus === "On Market"){
-                transitionType="unpublish";
+                transitionType = transitionTypes.TAKE_OFF_MARKET;
                 transitionButton = "Take off Market";
-                message = "Your listing will be no longer be seen by the public";
             }
         }
         var isOwner = authenticationService.isOwner(listing.owner.cognitoId);
-       
+
        if (listingMode === "myListings" ){
        return(
            <div className="mb-2 shadow border">
@@ -176,12 +156,9 @@ class ListingDetailToolbar extends React.Component {
                    >
                       <TransitionButton
                           type="button"
-                          message={message}
                           buttonText={transitionButton}
                           transitionType={transitionType}
                           onShow={this.props.onTransitionStart}
-                          onCancel={this.props.onTransitionCancel}
-                          transitionMessage={this.props.transitionMessage}
                       />
 
                    </Col>

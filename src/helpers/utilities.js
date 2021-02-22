@@ -1,3 +1,20 @@
+import { publishTypes } from '../constants/publishTypes';
+
+export function getPublishType(listing){
+    if (listing.publishStatus === "Draft" && listing.listing.latestApprovedId){
+        return publishTypes.DRAFT_WITH_LIVE;
+    }
+    if (listing.publishStatus === "On Market" && listing.listing.latestDraftId){
+        return publishTypes.LIVE_WITH_DRAFT;
+    }
+    if (listing.publishStatus === "Draft" && !listing.listing.latestApprovedId){
+        return publishTypes.ONLY_DRAFT;
+    }
+    if (listing.publishStatus === "On Market" && !listing.listing.latestDraftId){
+        return publishTypes.ONLY_LIVE;
+    }
+}
+
 export function formatDate(date){
     var d = new Date(date),
         month = '' + (d.getMonth() + 1),

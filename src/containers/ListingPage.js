@@ -24,9 +24,11 @@ import listItemService from '../services/listItems';
 import PublishWizardIntro from '../components/PublishWizardIntro';
 import PublishWizardPaymentMethod from '../components/PublishWizardPaymentMethod';
 import PublishWizardFinal from '../components/PublishWizardFinal';
+import PublishWizardUpdate from '../components/PublishWizardUpdate';
 import UnpublishWizardIntro from '../components/UnpublishWizardIntro';
 import {listingTypes} from '../constants/listingTypes';
 import WizardAddListing from '../components/WizardAddListing';
+import { transitionTypes } from '../constants/transitionTypes';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -143,6 +145,7 @@ export class ListingPage extends Component {
             showPublishWizardPaymentMethod: false,
             showPublishWizardFinal: false,
             showUnpublishWizardIntro: false,
+            showPublishWizardUpdate: false,
 
             // Listing
             index: index,
@@ -547,14 +550,18 @@ export class ListingPage extends Component {
     //
     //////////////////////////////////
     handleTransitionStart(transitionType){
-        if (transitionType === "publish"){
+        if (transitionType === transitionTypes.PUBLISH){
 
             this.setState({
                 showPublishWizardIntro: true
             });
-        } else {
+        } else  if (transitionType === transitionTypes.TAKE_OFF_MARKET){
             this.setState({
                 showUnpublishWizardIntro: true
+            });
+        } else if (transitionType === transitionTypes.PUBLISH_UPDATES){
+            this.setState({
+                showPublishWizardUpdate: true
             });
         }
     }
@@ -577,6 +584,7 @@ export class ListingPage extends Component {
             page: 1,
             // Close wizard
             showPublishWizardFinal: false,
+            showPublishWizardUpdate: false,
             // Close detail view
             showDetail: false,
             // Keep the bounds
@@ -618,6 +626,7 @@ export class ListingPage extends Component {
             showPublishWizardIntro: false,
             showPublishWizardPaymentMethod: false,
             showPublishWizardFinal: false,
+            showPublishWizardUpdate: false,
             showUnpublishWizardIntro: false
         });
     }
@@ -1327,6 +1336,14 @@ export class ListingPage extends Component {
                 show={this.state.showPublishWizardFinal}
                 onFinish={this.handlePublishWizardFinalFinish}
             />
+            { this.state.showPublishWizardUpdate ?
+            <PublishWizardUpdate
+                listingDetail={listingDetail}
+                show={this.state.showPublishWizardUpdate}
+                onCancel={this.handlePublishWizardClose}
+                onFinish={this.handlePublishWizardFinalFinish}
+            />
+            : null}
             <UnpublishWizardIntro
                 show={this.state.showUnpublishWizardIntro}
                 onFinish={this.handleUnpublishWizardIntroFinish}
