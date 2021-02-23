@@ -125,6 +125,12 @@ class ImageUpload extends Component {
     render(){
         return (
         <div>
+            <Alert
+                variant="info"
+            >
+               <span>To upload images, select Upload Images or drag and drop images to the dotted rectangle.<br/></span>
+               <span>To reorder images, drag image to desired location</span>
+            </Alert>
             <DndProvider backend={HTML5Backend}>
                 <ImageContainer
                     listing={this.props.listing}
