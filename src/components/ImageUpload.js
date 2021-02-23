@@ -128,8 +128,8 @@ class ImageUpload extends Component {
             <Alert
                 variant="info"
             >
-               <span>To upload images, select Upload Images or drag and drop images to the dotted rectangle.<br/></span>
-               <span>To reorder images, drag image to desired location</span>
+               <span style={{'font-size': '80%'}}>To upload images, select Upload Images or drag and drop images to the dotted rectangle.<br/></span>
+               <span style={{'font-size': '80%'}}>To reorder images, drag image to desired location. Maximum image size: 3MB</span>
             </Alert>
             <DndProvider backend={HTML5Backend}>
                 <ImageContainer
