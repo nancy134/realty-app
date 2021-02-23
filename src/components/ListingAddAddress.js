@@ -240,6 +240,7 @@ class ListingAddAddress extends React.Component{
     }
     render()
     {
+        var show = false;
         var states = null;
         if (this.state.states){
             states = this.state.states.map((item,key) =>
@@ -488,6 +489,7 @@ class ListingAddAddress extends React.Component{
                                     </Form.Control.Feedback>
                                 </Col>
                             </Form.Row>
+                            { show ?
                             <Form.Row>
                                 <Col md={12}>
                                     <Form.Label className="font-weight-bold">Display Address <span className="font-weight-light">(optional)</span></Form.Label>
@@ -506,6 +508,7 @@ class ListingAddAddress extends React.Component{
                                     </Form.Control.Feedback>
                                 </Col>
                             </Form.Row>
+                            : null }
                         </Form>
                     </Col>
                     <Col>
