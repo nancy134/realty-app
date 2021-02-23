@@ -10,7 +10,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faTrash,
     faStar as faStarFilled,
-    faArrowRight
+    faArrowRight,
+    faArrowLeft
 } from '@fortawesome/free-solid-svg-icons';
 import {
     faStar
@@ -225,7 +226,7 @@ class ListingItem extends React.Component {
                                     onClick={(e) => this.props.onAddToList(e, listing.ListingId)}
                                     className="float-right"
                                 >
-                                    <FontAwesomeIcon className="text-danger" size="lg" icon={faArrowRight} />
+                                    <FontAwesomeIcon className="text-danger" icon={faArrowRight} />
                                 </span>
 
                                 : null }
@@ -235,7 +236,7 @@ class ListingItem extends React.Component {
                                     onClick={(e) => this.props.onDeleteFromList(e, listing.ListingId)}
                                     className="float-right"
                                 >
-                                    <FontAwesomeIcon className="text-danger" size="sm" icon={faTrash} />
+                                    <FontAwesomeIcon className="text-danger" size="sm" icon={faArrowLeft} />
                                 </span>
 
                                 : null }
