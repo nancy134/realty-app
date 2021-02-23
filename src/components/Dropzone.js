@@ -95,7 +95,7 @@ class Dropzone extends Component {
                 multiple={this.props.multiple}
                 onChange={this.onFilesAdded}
             />
-            <span className="upload-images">Upload Images</span>
+            <span className="upload-images">{this.props.label}</span>
         </span>
     );
     }

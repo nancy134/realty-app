@@ -867,6 +867,8 @@ class ListingDetail extends React.Component {
                     getListing={this.props.onFetchListing}
                     propertyTypes={propertyTypes}
                 />
+                { (editMode === "edit") ||
+                  (listing && (listing.attachments.length > 0)) ?
                 <ListingDetailAttachments
                     listing={listing}
                     editMode={editMode}
@@ -884,6 +886,7 @@ class ListingDetail extends React.Component {
                     onAttachmentsDeleteModalShow={this.handleAttachmentsDeleteModalShow}
                     attachmentsSaving={this.state.attachmentsSaving}
                 />
+                : null }
                 {(editMode === "edit" && listingType === listingTypes.FORSALE) || 
                  (listing && (listing.units.length > 0)) ?
                     <ListingDetailUnits 

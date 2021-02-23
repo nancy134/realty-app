@@ -112,7 +112,7 @@ class ListingDetailToolbar extends React.Component {
 
         if (listing) {
             if (listing.publishStatus === "Draft"){
-               var transitionButton = "Publish";
+               transitionButton = "Publish";
                transitionType = transitionTypes.PUBLISH;
                if (publishType === publishTypes.DRAFT_WITH_LIVE){
                    transitionType = transitionTypes.PUBLISH_UPDATES;

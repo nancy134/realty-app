@@ -114,6 +114,7 @@ class ListingEditAttachments extends React.Component {
                 <Dropzone
                     onFilesAdded={this.handleAttachmentsAdded}
                     multiple={false}
+                    label="Upload Attachment"
                 />
                 :
                     <span >

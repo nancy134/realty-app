@@ -145,6 +145,7 @@ class ImageUpload extends Component {
                 disabled={this.props.uploading || this.props.successfullyUploaded}
                 multiple={true}
                 onError={this.handleError}
+                label="Upload images"
             />
             { this.state.isError ?
             <Alert variant="danger">{this.state.errorMessage}</Alert>
