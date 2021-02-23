@@ -16,9 +16,11 @@ import ListingPagination from '../components/ListingPagination';
 import ListingItem from '../components/ListingItem';
 
 function Toolbar(props){
+    var show = false;
     return(
     <div className="pt-1">
         <Row>
+            { show ?
             <Col>
                 <Dropdown>
                     <Dropdown.Toggle
@@ -34,6 +36,7 @@ function Toolbar(props){
                     </Dropdown.Menu>
                 </Dropdown>
             </Col>
+            : null }
             { (props.listingMode === "myFavorites" && !this.props.reporting) ?
             <Col>
                 <Button size="sm">
