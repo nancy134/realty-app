@@ -418,7 +418,7 @@ class ListingToolbar extends React.Component {
                             size="sm"
                             className="float-right"
                             onClick={this.handleShowReportView}
-                        >Report Mode On</Button>
+                        >Open Report Mode</Button>
                     </Col>
                     : null }
                     { this.props.showReportViewButton && this.props.showReportView ?
@@ -428,7 +428,7 @@ class ListingToolbar extends React.Component {
                             size="sm"
                             className="float-right"
                             onClick={this.handleShowReportView}
-                        >Report Mode Off</Button>
+                        >Close Report Mode</Button>
                     </Col>
                     : null }
                 </Form.Row>
