@@ -135,7 +135,7 @@ class ListingDetailAttachments extends React.Component {
         const editMode = this.props.editMode;
 
         return (
-            <div className="mb-2 shadow border">
+            <div className="m-4 shadow border">
                 <Row className="mt-2 ml-0 mr-0">
                     <Col>
 	                <h3>Attachments {editMode === "edit" ? 

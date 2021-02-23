@@ -64,7 +64,7 @@ class ListingDetailBrokers extends React.Component {
         if (listing){
         }
         return (
-            <div className="mb-2 shadow border">
+            <div className="m-4 shadow border">
                 <Row className="mt-2 ml-0 mr-0">
                     <Col>
                         <h3>Brokers { enableEdit && editMode === "edit" ?
