@@ -23,7 +23,7 @@ const SpaceSchema = Yup.object().shape({
     unit: Yup.string(),
     size: Yup.number().integer().required('Must enter a number').typeError('Must enter a number'),
     price: Yup.number().required('Must enter a number').typeError('Must enter a number'),
-    use: Yup.string().required("Must select a Use Type"),
+    use: Yup.string().required("Must select a Type"),
     driveInDoors: Yup.number().integer().typeError('Must be an integer'),
     floors: Yup.number().integer().typeError('Must be an integer'),
     divisible: Yup.string(),
@@ -194,7 +194,7 @@ class ListingEditAvailableSpace extends React.Component {
             onSubmit={(values, { setSubmitting }) => {
                 setSubmitting(true);
                 this.handleSave(initialValues, values);
-                setSubmitting(false);
+                //setSubmitting(false);
             }}
         >
             {({ 
@@ -223,28 +223,31 @@ class ListingEditAvailableSpace extends React.Component {
                     </Modal.Title>
                 </Modal.Header>                    
                 <Modal.Body style={{'maxHeight': 'calc(100vh - 210px)', 'overflowY': 'auto'}}>
-                    <Form>
+                    <Form className="pb-5">
                         <Form.Row>
                             <Form.Group as={Col} >
-                                <Form.Label
-                                    className="font-weight-bold"
-                                >
-                                    Unit Name <span className="font-weight-light">(optional)</span>
-                                </Form.Label>
-                                <Form.Control 
-                                    id="space_edit_unit"
-                                    name="unit"
-                                    type="text"
-                                    value ={values.unit} 
+                                <Form.Label className="font-weight-bold">Type</Form.Label>
+                                <Form.Control
+                                    id="space_edit_use"
+                                    name="use"
+                                    as="select"
+                                    value={values.use}
                                     onChange={handleChange}
-                                    isInvalid={!!errors.unit}
-                                    isValid={touched.unit && !errors.unit}
+                                    isInvalid={!!errors.use}
+                                    isValid={touched.use && !errors.use && values.use !== ""}
                                     disabled={isSubmitting}
-                                /> 
+
+                                >
+                                    <option key="-1"></option>
+                                    {this.props.spaceUses.map((spaceUse, index) =>(
+                                    <option key={index}>{spaceUse}</option>
+                                    ))}
+                                </Form.Control>
                                 <Form.Control.Feedback type="invalid">
-                                    {errors.unit}
+                                    {errors.use}
                                 </Form.Control.Feedback>
                             </Form.Group>
+
                             <Form.Group as={Col} >
                                 <Form.Label className="font-weight-bold">Size</Form.Label>
                                 <InputGroup>
@@ -305,46 +308,47 @@ class ListingEditAvailableSpace extends React.Component {
                         </Form.Row>
                         <Form.Row>
                             <Form.Group as={Col} >
-                                <Form.Label className="font-weight-bold">Use</Form.Label>
+                                <Form.Label className="font-weight-bold">Lease Type <span className="font-weight-light">(optional)</span></Form.Label>
                                 <Form.Control
-                                    id="space_edit_use"
-                                    name="use"
+                                    id="space_edit_type"
+                                    name="type"
                                     as="select"
-                                    value={values.use}
+                                    value={values.type}
                                     onChange={handleChange}
-                                    isInvalid={!!errors.use}
-                                    isValid={touched.use && !errors.use && values.use !== ""}
                                     disabled={isSubmitting}
 
                                 >
                                     <option key="-1"></option>
-                                    {this.props.spaceUses.map((spaceUse, index) =>(
-                                    <option key={index}>{spaceUse}</option>
+                                    {this.props.spaceTypes.map((spaceType, index) => (
+                                        <option key={index}>{spaceType}</option>
                                     ))}
                                 </Form.Control>
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.use}
-                                </Form.Control.Feedback>
                             </Form.Group>
 
                             <Form.Group as={Col} >
-                                <Form.Label className="font-weight-bold">Lease Type <span className="font-weight-light">(optional)</span></Form.Label>
-                                <Form.Control 
-                                    id="space_edit_type"
-                                    name="type"
-                                    as="select" 
-                                    value={values.type} 
-                                    onChange={handleChange}
-                                    disabled={isSubmitting}
-                                   
+                                <Form.Label
+                                    className="font-weight-bold"
                                 >
-                                    <option key="-1"></option>
-                                    {this.props.spaceTypes.map((spaceType, index) => ( 
-                                        <option key={index}>{spaceType}</option>
-                                    ))}
-                                </Form.Control> 
+                                    Name <span className="font-weight-light">(optional)</span>
+                                </Form.Label>
+                                <Form.Control
+                                    id="space_edit_unit"
+                                    name="unit"
+                                    type="text"
+                                    value ={values.unit}
+                                    onChange={handleChange}
+                                    isInvalid={!!errors.unit}
+                                    isValid={touched.unit && !errors.unit}
+                                    disabled={isSubmitting}
+                                    placeholder="eg. 1st Floor"
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.unit}
+                                </Form.Control.Feedback>
                             </Form.Group>
+
                         </Form.Row>
+                        { !this.props.simple ?
                         <Form.Row>
                             <Form.Group as={Col}>
                                 <Form.Label className="font-weight-bold">Description <span className="font-weight-light">(optional)</span></Form.Label>
@@ -364,6 +368,8 @@ class ListingEditAvailableSpace extends React.Component {
                                 </Form.Control.Feedback>
                             </Form.Group>
                         </Form.Row>
+                        : null } 
+                        { !this.props.simple ?
                         <Form.Row>
                             <Accordion className="w-100">
                                 <Card>
@@ -538,6 +544,7 @@ class ListingEditAvailableSpace extends React.Component {
                                 </Card>
                             </Accordion>
                         </Form.Row>
+                        : null }
                         {showImages ?
                         <Form.Row>
                             <Accordion className="w-100">

@@ -15,7 +15,57 @@ import {
     faTrash
 } from '@fortawesome/free-solid-svg-icons';
 import ListingEditAvailableSpace from './ListingEditAvailableSpace';
-import {formatDate} from '../helpers/utilities';
+import {spaceNameValuePairs} from '../helpers/utilities';
+
+function NameValue(props){
+    var startIndex = props.index * 3;
+    var stopIndex = startIndex + props.cols;
+    var items = [];
+    for (var i=startIndex; i<stopIndex; i++){
+        var label = props.nameValuePairs[i].label;
+        var value = props.nameValuePairs[i].value;
+        var prefix = props.nameValuePairs[i].prefix;
+        var unit = props.nameValuePairs[i].unit;
+        items.push(
+            <Col key={i}>
+                <Row>
+                    <Col>{label}</Col>
+                    <Col className="font-weight-bold">{prefix} {value} {unit}</Col>
+                </Row>
+            </Col>
+        );
+    }
+    if ((stopIndex - startIndex) === 1){
+        items.push(<Col key={2}></Col>);
+        items.push(<Col key={3}></Col>);
+    } else if ((stopIndex - startIndex) === 2){
+        items.push(<Col key={3}></Col>);
+    }
+    return(
+        <React.Fragment>
+        {items}    
+        </React.Fragment>
+    );
+}
+
+function NameValues(props){
+
+    return(
+    <React.Fragment>
+        {props.rows.map((cols, index) =>
+        (
+            <Row key={index}>
+                <NameValue
+                    editMode={props.editMode}
+                    nameValuePairs={props.nameValuePairs}
+                    index={index}
+                    cols={cols}
+                />        
+            </Row>
+        ))}
+    </React.Fragment>
+    );
+}
 
 function SpaceItem(props){
     var space = props.space;
@@ -23,10 +73,6 @@ function SpaceItem(props){
     var listing = props.listing;
     var index = props.index;
     var eventKey = "Accordion"+props.index;
-    var availableDate;
-    if (space.availableDate && space.availableDate !== ""){
-        availableDate = formatDate(space.availableDate);
-    }
     var showImages = false;
 
     // Calculate if Accordion is need
@@ -46,19 +92,35 @@ function SpaceItem(props){
    
     var accordionText = props.accordionText[index];
     if (accordionNeeded){
+
+    var nameValuePairs = spaceNameValuePairs(space);
+    var rows = [];
+    if (nameValuePairs.length >= 0 && nameValuePairs.length <= 3){
+       rows.push(nameValuePairs.length);
+    }
+    if (nameValuePairs.length > 3 && nameValuePairs.length <= 6){
+       rows.push(3);
+       rows.push(nameValuePairs.length - 3);
+    }
+    if (nameValuePairs.length > 6 && nameValuePairs.length <= 9){
+       rows.push(3);
+       rows.push(3)
+       rows.push(nameValuePairs.length - 6);
+    }
+    if (nameValuePairs.length > 9 && nameValuePairs.length <= 12){
+       rows.push(3);
+       rows.push(3);
+       rows.push(3)
+       rows.push(nameValuePairs.length - 9);
+    }
     return(
     <Accordion key={space.unit}> 
         <Row className="ml-0 mr-0 border-bottom align-items-center" >
-            <Col md={2}>{space.unit}</Col>
+            <Col md={2}>{space.use}</Col>
             <Col md={2}>{space.size} sf</Col>
             <Col md={2}>${space.price} {space.priceUnit}</Col>
-            <Col md={3}>
-                <Row>
-                    <Col >{space.use}</Col>
-                    <Col >{space.type}</Col>
-                </Row>
-            </Col> 
-            <Col md={3}>
+            <Col md={4}>{space.unit}</Col>
+            <Col md={2}>
                 <Row>
                     <Col>
                         <span className="float-right">
@@ -120,84 +182,10 @@ function SpaceItem(props){
                         {space.description}
                     </Col>
                 </Row>
-                <Row>
-                    <Col>
-                        {editMode === "edit" || (editMode === "view" && space.driveInDoors) ?
-                        <Row>
-                            <Col>Drive In Doors</Col>
-                            <Col className="font-weight-bold">{space.driveInDoors}</Col>
-                        </Row>
-                        : null }
-                    </Col>
-                    <Col>
-                        {editMode === "edit" || (editMode === "view" && space.floors) ?
-                        <Row>
-                            <Col>Floors</Col>
-                            <Col className="font-weight-bold">{space.floors}</Col>
-                        </Row>
-                        : null }
-                    </Col>
-                    <Col>
-                        {editMode === "edit" || (editMode === "view" && space.divisible) ?
-                        <Row>
-                            <Col>Divisible</Col>
-                            <Col className="font-weight-bold">{space.divisible}</Col>
-                        </Row>
-                        : null }
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        {editMode === "edit" || (editMode === "view" && space.loadingDocks) ?
-                        <Row>
-                            <Col>Loading Docks</Col>
-                            <Col className="font-weight-bold">{space.loadingDocks}</Col>
-                        </Row>
-                        : null }
-                    </Col>
-                    <Col>
-                        {editMode === "edit" || (editMode === "view" && space.leaseTerm) ?
-                        <Row>
-                            <Col>Lease Term</Col>
-                            <Col className="font-weight-bold">{space.leaseTerm}</Col>
-                        </Row>
-                        : null }
-                    </Col>
-                    <Col>
-                        {editMode === "edit" || (editMode === "view" && space.ceilingHeight) ?
-                        <Row>
-                             <Col>Ceiling Height</Col>
-                             <Col className="font-weight-bold">{space.ceilingHeight}</Col>
-                        </Row>
-                        : null }
-                    </Col>
-                </Row>
-                <Row className="border-bottom">
-                    <Col>
-                        {editMode === "edit" || (editMode === "view" && availableDate) ?
-                        <Row>
-                            <Col>Available Date</Col>
-                            <Col className="font-weight-bold">{availableDate}</Col>
-                        </Row>
-                        : null }
-                    </Col>
-                    <Col>
-                        {editMode === "edit" || (editMode === "view" && space.nets) ?
-                        <Row>
-                            <Col>Nets</Col>
-                            <Col className="font-weight-bold">{space.nets}</Col>
-                        </Row>
-                        : null }
-                    </Col>
-                    <Col>
-                        {editMode === "edit" || (editMode === "view" && space.class) ?
-                        <Row>
-                            <Col>Class</Col>
-                            <Col className="font-weight-bold">{space.class}</Col>
-                        </Row>
-                        : null }
-                    </Col>
-                </Row>
+                <NameValues
+                    rows={rows}
+                    nameValuePairs={nameValuePairs}
+                />
                 {showImages ?
                 <Row className="border-bottom">
                     <Col><Image src="/image1.jpg" thumbnail /></Col>
@@ -212,16 +200,11 @@ function SpaceItem(props){
     } else {
     return(
         <Row className="ml-0 mr-0 border-bottom align-items-center">
-            <Col md={2}>{space.unit}</Col>
+            <Col md={2}>{space.use}</Col>
             <Col md={2}>{space.size} sf</Col>
             <Col md={2}>${space.price} {space.priceUnit}</Col>
-            <Col md={3}>
-                <Row>
-                    <Col >{space.use}</Col>
-                    <Col >{space.type}</Col>
-                </Row>
-            </Col>
-            <Col md={3}>
+	    <Col md={4}>{space.unit}</Col>
+            <Col md={2}>
                 <Row>
                     <Col>
                         <span className="float-right">
@@ -260,7 +243,6 @@ function SpaceItem(props){
                 </Row>
             </Col>
         </Row>
-
     );
     } 
 }
@@ -293,6 +275,7 @@ function AddButton(props) {
                 onSave={listing => props.onSave(listing)}
                 errorMessage={props.errorMessage}
                 saving={props.saving}
+                simple={props.simple}
             />
             : null }
         </span>
@@ -326,6 +309,7 @@ function EditButton(props) {
               onSave={listing => props.onSave(listing)}
               errorMessage={props.errorMessage}
               saving={props.saving}
+              simple={props.simple}
           />
           :null }
         </span>
@@ -373,23 +357,20 @@ class ListingDetailAvailableSpace extends React.Component {
                             errorMessage={this.props.unitError}
                             show={this.props.spaceNew}
                             saving={this.props.spaceSaving}
+                            simple={this.props.simple}
                             /> 
                             : null}</h3>
                     </Col>
                 </Row>
                 <Row className="ml-0 mr-0 bg-light">
-                    <Col md={2} className="font-weight-bold">Unit Name</Col>
-                    <Col md={2}  className="font-weight-bold">Size</Col>
+                    <Col md={2} className="font-weight-bold">Type</Col>
+                    <Col md={2} className="font-weight-bold">Size</Col>
                     <Col md={2} className="font-weight-bold">Price</Col>
-                    <Col md={3}>
-                        <Row>
-                            <Col className="font-weight-bold">Use</Col>
-                            <Col className="font-weight-bold">Lease Type</Col>
-                        </Row>
-                    </Col>
-                    <Col md={3}></Col>
+                    <Col md={4} className="font-weight-bold">Name</Col>
+                    <Col md={2}></Col>
                 </Row>
-                {!listing ? <div></div> : 
+                {!listing ? <div></div> : null}
+                { listing.spaces && listing.spaces.length > 0 ? 
                 listing.spaces.map((space, index) =>
                 (
                 <SpaceItem
@@ -414,7 +395,7 @@ class ListingDetailAvailableSpace extends React.Component {
                     text1={this.state.text1}
                     onDelete={this.props.onDelete}
                 />
-                ))}
+                )): null}
             </div>
 
         );

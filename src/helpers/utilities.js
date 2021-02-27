@@ -41,6 +41,53 @@ export function formatDateTime(d) {
     return (date.getMonth()+1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
 }
 
+function addNameValuePair(label, value, prefix, unit, nameValuePairs){
+    var nameValuePair = {
+        label: label,
+        value: value,
+        prefix: prefix,
+        unit: unit
+    }
+    nameValuePairs.push(nameValuePair);
+}
+
+// Convert Space details to a set of name value pairs
+export function spaceNameValuePairs(space){
+    var nameValuePairs = [];
+
+    if (space.type){
+        addNameValuePair("Lease Type", space.type, null, null, nameValuePairs);
+    }
+    if (space.driveInDoors){
+        addNameValuePair("Drive in Doors", space.driveInDoors, null, "door(s)", nameValuePairs);
+    }
+    if (space.floors){
+        addNameValuePair("Floors", space.floors, null, "floor(s)", nameValuePairs);
+    }
+    if (space.divisible){
+        addNameValuePair("Divisible?", space.divisible, null, null, nameValuePairs);
+    }
+    if (space.loadingDocks){
+        addNameValuePair("Loading Docks", space.loadingDocks, null, "dock(s)", nameValuePairs);
+    }
+    if (space.leaseTerm){
+        addNameValuePair("Lease Term", space.leaseTerm, null, null, nameValuePairs);
+    }
+    if (space.ceilingHeight){
+        addNameValuePair("Ceiling Height", space.ceilingHeight, null, "ft", nameValuePairs);
+    }
+    if (space.availableDate){
+        var availableDate = formatDate(space.availableDate);
+        addNameValuePair("Available Date", availableDate, null, null, nameValuePairs);
+    }
+    if (space.nets){
+        addNameValuePair("Nets", space.nets, "$", null, nameValuePairs);
+    }
+    if (space.class){
+        addNameValuePair("Class", space.class, null, null, nameValuePairs);
+    } 
+    return nameValuePairs;
+}
 // Convert Building Details to a set of name value pairs
 // Used in display and reporting
 export function generalNameValuePairs(listing){
