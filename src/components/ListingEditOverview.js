@@ -13,6 +13,7 @@ import ImageUpload from './ImageUpload';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {listingTypes} from '../constants/listingTypes';
+import FilterSpaceType from '../components/FilterSpaceType';
 
 const OverviewSchema = Yup.object().shape({
     shortDescription: Yup.string().required('Short Description is required'),
@@ -46,22 +47,63 @@ class ListingEditOverview extends React.Component {
         this.handleSave = this.handleSave.bind(this);
         this.handleFilesAdded = this.handleFilesAdded.bind(this);
         this.handleImagesChanged = this.handleImagesChanged.bind(this);
+        this.handleFilterChange = this.handleFilterChanged.bind(this);
+        this.handleToggleCheckbox = this.handleToggleCheckbox.bind(this);
+
+        var checkedPropertyTypes = [];
+        for (var i=0; i<this.props.propertyTypes.length; i++){
+            var checkedPropertyType = false;
+            if (this.props.listing && this.props.listing.propertyTypes){
+                for (var j=0; j<this.props.listing.propertyTypes.length; j++){
+                    if (this.props.listing.propertyTypes[j] === this.props.propertyTypes[i]){
+                        checkedPropertyType = true;
+                    }
+                }
+            }
+            checkedPropertyTypes.push(checkedPropertyType);
+        }
         if (this.props.listing){
             this.state = {
                 images: this.props.listing.images ? this.props.listing.images : [],
-                imagesToDelete: []
+                imagesToDelete: [],
+                checkedPropertyTypes: checkedPropertyTypes,
+                propertyTypesChanged: false
             };
         } else {
            this.state = {
                 images: [],
                 imagesAdded: false,
-                imagesToDelete: []
+                imagesToDelete: [],
+                checkedPropertyTypes: checkedPropertyTypes,
+                propertyTypesChanged: false
            };
         }
     }
 
+    handleToggleCheckbox(index){
+        //const { checkedPropertyTypes } = this.state;
+        //checkedPropertyTypes[index] = !checkedPropertyTypes[index];
+
+        var checkedPropertyTypes = this.state.checkedPropertyTypes;
+        checkedPropertyTypes[index] = !checkedPropertyTypes[index];
+        this.setState({
+            checkedPropertyTypes: checkedPropertyTypes,
+            propertyTypesChanged: true
+        });
+    }
+    handleFilterChanged(filters){
+        console.log(filters);
+    }
     handleSave(initialValues, values){
         var listing = {};
+        var propertyTypes = [];
+        for (var i=0; i<this.state.checkedPropertyTypes.length; i++){
+            if (this.state.checkedPropertyTypes[i] === true){
+                propertyTypes.push(this.props.propertyTypes[i]);
+            }
+        }
+        listing.propertyTypes = propertyTypes;
+
         if (this.props.listing){
             listing.ListingId = this.props.listing.ListingId;
         } else {
@@ -158,9 +200,9 @@ class ListingEditOverview extends React.Component {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
+            <Form>
             <Row className="mt-2">
-                <Col xs={5}>
-                    <Form>
+                <Col xs={4}>
                         <Form.Row>
                             <Form.Group as={Col}>
                                 <Form.Label
@@ -226,9 +268,24 @@ class ListingEditOverview extends React.Component {
                                 />
                             </Form.Group>
                         </Form.Row>
-                    </Form>
                 </Col>
-                <Col xs={7}>
+                <Col xs={2}>
+                    <Form.Label
+                        className="font-weight-bold"
+                    >Property Uses</Form.Label>
+                    <div>
+                        {this.props.propertyTypes.map((propertyType, index) => (
+                            <Form.Check
+                                key={index}
+                                type="checkbox"
+                                label={propertyType}
+                                defaultChecked={this.state.checkedPropertyTypes[index]}
+                                onChange={() => this.handleToggleCheckbox(index)}
+                            />
+                        ))}
+                    </div>
+                </Col>
+                <Col xs={6}>
                     <Row>
                     <ImageUpload 
                         id="overview_edit_image_upload"
@@ -245,7 +302,7 @@ class ListingEditOverview extends React.Component {
                     </Row>
                 </Col>
             </Row>
-         
+            </Form> 
             </Modal.Body>
             <Modal.Footer>
                 {this.props.errorMessage ?
@@ -267,7 +324,11 @@ class ListingEditOverview extends React.Component {
                 </Button>
                 }
                 <Button
-                    disabled={(!(isValid && dirty) || isSubmitting) && !this.state.imagesAdded}
+                    disabled={
+                        (!(isValid && dirty) || isSubmitting) && 
+                        !this.state.imagesAdded && 
+                        !this.state.propertyTypesChanged
+                    }
                     id="overview_edit_save_button"
                     onClick={handleSubmit}
                 >

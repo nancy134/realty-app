@@ -44,7 +44,7 @@ function ContactButton(props) {
           <Button
               id="header_contact_button"
               variant="info"
-              className="p-0 ml-3"
+              className=""
               onClick={() => {props.onContact()}}
           >
              <span><FontAwesomeIcon icon={faAddressBook} /> Contact</span>
@@ -59,7 +59,7 @@ function ReportButton(props){
             <Button
                 id="header_report_button"
                 variant="info"
-                className="p-0 ml-1"
+                className="ml-1"
                 onClick={() => {props.onReport()}}
             >
                 <span><FontAwesomeIcon icon={faFilePdf} /> Brochure</span>
@@ -129,25 +129,18 @@ class ListingDetailHeader extends React.Component {
             <div className="pb-1">
             <Row className="align-items-center bg-info m-0">
 	        <Col md={8}className="text-white">
-                    <div className=" address-title font-weight-bold">{title} {enableAddressEdit && editMode === "edit" ? 
-                        <EditButton 
-                            listing={listing} 
-                            states={states} 
-                            onSave={this.handleSave}
-                        /> : null}
                         <ContactButton
                             onContact={this.props.onContact}
                         />
                         <ReportButton
                             onReport={this.handleReport}
                         />
-                    </div>
                 </Col>
                 <Col md={4} className="text-right">
                     { listing && !fullscreen ? 
                     <Button
                         onClick={this.handleExpand} 
-                        className="expandButton p-0" 
+                        className="expandButton" 
                         variant="info"
                     >
                         <FontAwesomeIcon icon={faExpand} /> Expand
@@ -156,7 +149,7 @@ class ListingDetailHeader extends React.Component {
                     {!fullscreen ?
                     <Button
                         id="header_close_detail"
-                        className="closeButton p-0 ml-3" 
+                        className="closeButton ml-3" 
                         variant="info" 
                         onClick={this.handleClose}
                     >

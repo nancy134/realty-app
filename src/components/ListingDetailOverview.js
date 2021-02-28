@@ -40,6 +40,7 @@ function EditButton(props) {
             <ListingEditOverview
                 listing = {props.listing}
                 listingTypes = {props.listingTypes}
+                propertyTypes={props.propertyTypes}
                 getListing={props.getListing}
                 onFilesAdded={props.onFilesAdded}
                 files={props.files}
@@ -140,15 +141,17 @@ class ListingDetailOverview extends React.Component {
         const listing = this.props.listing;
         const editMode = this.props.editMode;
         const listingTypes = this.props.listingTypes;
-
+        const propertyTypes = this.props.propertyTypes;
+var title = listing.address + ", " + listing.city + ", "+listing.zip;
         return (
             <div className="m-4 shadow border">
                 <Row className="mt-2 ml-0 mr-0">
                     <Col>
-	                <h3>Overview {editMode === "edit" ? 
+	                <h4>{title} {editMode === "edit" ? 
                             <EditButton 
                                 listing={listing} 
                                 listingTypes={listingTypes} 
+                                propertyTypes={propertyTypes}
                                 onSave={this.handleSave} 
                                 getListing={this.props.getListing}
                                 onFilesAdded={this.handleFilesAdded}
@@ -165,23 +168,23 @@ class ListingDetailOverview extends React.Component {
                                 errorMessage={this.props.errorMessage}
                                 onImagesChanged={this.props.onImagesChanged}
                             /> 
-                            : null}</h3>
+                            : null}</h4>
                     </Col>
                     {listing && listing.listingPrice ?
-                    <Col>
+                    <Col xs={3}>
                         <div className="text-right">
-                            <h4>{listingType} ${listingPrice}</h4>
+                            <h5>{listingType} ${listingPrice}</h5>
                          </div>
                     </Col>
                     :
-                    <Col>
+                    <Col xs={3}>
                         <span className="text-right">
-                            <h4>{listingType}</h4>
+                            <p>{listingType}</p>
                         </span>
                     </Col>
                     }
                 </Row>
-                <Row className="pt-2 pb-2 ml-0 mr-0">
+                <Row className="pt-2 pb-3 ml-0 mr-0">
                     <Col md={12}>
 
                         <span className="image-container float-right">
@@ -200,7 +203,8 @@ class ListingDetailOverview extends React.Component {
                         }
                         </span>
                         <div>
-                            <div className="font-weight-bold">{shortDescription}</div>
+                            <h5>{shortDescription}</h5>
+                            <div className="pb-2">Property Uses: <span className="font-weight-bold">Retail, Office</span></div>
                             <div className="preLine">{longDescription}</div>
                         </div>
 

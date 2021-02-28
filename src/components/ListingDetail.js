@@ -833,7 +833,7 @@ class ListingDetail extends React.Component {
                     overviewUpdate={this.state.overviewUpdate}
                     onImagesChanged={this.handleImagesChanged}
                     overviewSaving={this.state.overviewSaving}
-
+                    propertyTypes={propertyTypes}
                 />
                 { (editMode === "edit" && listingType === listingTypes.FORLEASE) || 
                   (listing && listing.spaces.length) > 0 ?
