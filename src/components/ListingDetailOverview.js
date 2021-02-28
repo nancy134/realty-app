@@ -15,6 +15,18 @@ import ImageGallery from 'react-image-gallery';
 //import './image-gallery.css';
 import 'react-image-gallery/styles/css/image-gallery.css';
 
+function PropertyTypeList(props){
+
+    var items = [];
+    for (var i=0; i<props.propertyTypes.length; i++){
+        if (i !== 0)
+            items.push(<span key={i}>, {props.propertyTypes[i]} </span>);
+        else
+            items.push(<span key={i}>{props.propertyTypes[i]}</span>);
+    }
+    return(items);
+}
+
 function EditButton(props) {
     return (
         <span>
@@ -179,7 +191,7 @@ var title = listing.address + ", " + listing.city + ", "+listing.zip;
                     :
                     <Col xs={3}>
                         <span className="text-right">
-                            <p>{listingType}</p>
+                            <h5>{listingType}</h5>
                         </span>
                     </Col>
                     }
@@ -204,7 +216,13 @@ var title = listing.address + ", " + listing.city + ", "+listing.zip;
                         </span>
                         <div>
                             <h5>{shortDescription}</h5>
-                            <div className="pb-2">Property Uses: <span className="font-weight-bold">Retail, Office</span></div>
+                            { listing.propertyTypes && listing.propertyTypes.length > 0 ?
+                            <div className="pb-2">Property Uses: <span className="font-weight-bold">
+                                <PropertyTypeList
+                                    propertyTypes={listing.propertyTypes}
+                                />
+                            </span></div>
+                            : null }
                             <div className="preLine">{longDescription}</div>
                         </div>
 

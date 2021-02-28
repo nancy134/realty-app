@@ -326,6 +326,7 @@ export class WizardAddListing extends Component {
                     listing={this.state.newListing}
                     onCancel={this.handleCancelAddOverview}
                     loggedIn={this.props.loggedIn}
+                    propertyTypes={this.props.propertyTypes}
                 />
             : null }
             { this.state.modalShowLogin ?

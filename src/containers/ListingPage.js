@@ -152,6 +152,7 @@ export class ListingPage extends Component {
             owner: false,
             listingDetail: null,
             allAmenities: [],
+            propertyTypes: [],
 
             // Spaces
             spaceAccordionText: [],
@@ -801,6 +802,7 @@ export class ListingPage extends Component {
                 enumPromise.then(function(enums){
                     listingService.getMarkers(markerQuery, lMode).then(function(markers){
                         localState.allAmenities = enums.amenities;
+                        localState.propertyTypes = enums.propertyTypes;
                         localState.listings = listings.listings.rows;
                         localState.page = listings.page;
                         localState.perPage = listings.perPage;
@@ -1371,6 +1373,7 @@ export class ListingPage extends Component {
                 onFinish={this.handleAddListingFinish}
                 onCancel={this.handleAddListingCancel}
                 onLogin={this.handleLogin}
+                propertyTypes={this.state.propertyTypes}
             />
             : null }
             { !fullscreen ?

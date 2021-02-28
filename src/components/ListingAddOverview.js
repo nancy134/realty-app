@@ -28,15 +28,55 @@ class ListingAddOverview extends React.Component{
     constructor(props){
         super(props);
         this.handleNext = this.handleNext.bind(this);
+        this.handleToggleCheckbox = this.handleToggleCheckbox.bind(this);
 
         this.shortDescriptionRef = React.createRef();
         this.listingPriceRef = React.createRef();
+        var checkedPropertyTypes = [];
+
+        for (var i=0; i<this.props.propertyTypes.length; i++){
+            var checkedPropertyType = false;
+            if (this.props.listing && this.props.listing.propertyTypes){
+                for (var j=0; j<this.props.listing.propertyTypes.length; j++){
+                    if (this.props.listing.propertyTypes[j] === this.props.propertyTypes[i]){
+                        checkedPropertyType = true;
+                    }
+                }
+            }
+            checkedPropertyTypes.push(checkedPropertyType);
+        }
+
+        this.state = {
+            checkedPropertyTypes: checkedPropertyTypes,
+            propertyTypesChanged: false
+        };
     }
+
+    handleToggleCheckbox(index){
+        var checkedPropertyTypes = this.state.checkedPropertyTypes;
+        checkedPropertyTypes[index] = !checkedPropertyTypes[index];
+        this.setState({
+            checkedPropertyTypes: checkedPropertyTypes,
+            propertyTypesChanged: true
+        });
+    }
+
     handleNext(initialValues, values){
         var listing = this.props.listing;
-        if (values.shortDescription !== initialValues.shortDescription) listing.shortDescription = values.shortDescription;
-        if (values.longDescription !== initialValues.longDescription) listing.longDescription = values.longDescription;
-        if (values.listingPrice !== initialValues.listingPrice) listing.listingPrice = values.listingPrice;
+
+        var propertyTypes = [];
+        for (var i=0; i<this.state.checkedPropertyTypes.length; i++){
+            if (this.state.checkedPropertyTypes[i] === true){
+                propertyTypes.push(this.props.propertyTypes[i]);
+            }
+        }
+        listing.propertyTypes = propertyTypes;
+        if (values.shortDescription !== initialValues.shortDescription)
+            listing.shortDescription = values.shortDescription;
+        if (values.longDescription !== initialValues.longDescription)
+            listing.longDescription = values.longDescription;
+        if (values.listingPrice !== initialValues.listingPrice)
+            listing.listingPrice = values.listingPrice;
         
         this.props.onNext(listing);
     }
@@ -114,9 +154,9 @@ class ListingAddOverview extends React.Component{
                     addListingOverviewActive={addListingOverviewActive}
                     loggedIn={loggedIn}
                 />
+                <Form>
                 <Row className="mt-2">
-                    <Col>
-                        <Form>
+                    <Col xs={9}>
                             <Form.Row>
                                 { this.props.listing.listingType === listingTypes.FORSALE ?
                                 <Col md={6}>
@@ -185,9 +225,25 @@ class ListingAddOverview extends React.Component{
                                     </Form.Control.Feedback>
                                 </Col>
                             </Form.Row>
-                        </Form>
+                    </Col>
+                    <Col xs={3}>
+                        <Form.Label
+                            className="font-weight-bold"
+                        >Property Uses</Form.Label>
+                        <div>
+                        {this.props.propertyTypes.map((propertyType, index) => (
+                            <Form.Check
+                                key={index}
+                                type="checkbox"
+                                label={propertyType}
+                                defaultChecked={this.state.checkedPropertyTypes[index]}
+                                onChange={() => this.handleToggleCheckbox(index)}
+                            />
+                        ))}
+                        </div>
                     </Col>
                 </Row>
+                </Form>
             </Modal.Body>
             <Modal.Footer>
                 <Button 

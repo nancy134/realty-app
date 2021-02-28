@@ -8,6 +8,18 @@ import {
 } from 'react-bootstrap';
 import StepperAddListing from '../components/StepperAddListing';
 
+function PropertyTypeList(props){
+
+    var items = [];
+    for (var i=0; i<props.propertyTypes.length; i++){
+        if (i !== 0)
+            items.push(<span key={i}>, {props.propertyTypes[i]} </span>);
+        else
+            items.push(<span key={i}>{props.propertyTypes[i]}</span>);
+    }
+    return(items);
+}
+
 class ListingAddReview extends React.Component{
     constructor(props){
         super(props);
@@ -38,7 +50,8 @@ class ListingAddReview extends React.Component{
         var listingType = listing.listingType;
         var address = listing.address + " " + listing.city + "," + listing.state + " " + listing.zip;
         var shortDescription = listing.shortDescription;
-        var longDescription = listing.longDescription; 
+        var longDescription = listing.longDescription;
+        var propertyTypes = listing.propertyTypes;
        return(
         <Modal
           show={this.props.show}
@@ -80,12 +93,18 @@ class ListingAddReview extends React.Component{
                     <Col xs={10}>{address}</Col>
                 </Row>
                 <Row>
-                    <Col><p className="font-weight-bold">Short Description</p>
-                    <p>{shortDescription}</p></Col>
+                    <Col xs={2} className="font-weight-bold">Short Description</Col>
+                    <Col xs={10}>{shortDescription}</Col>
                 </Row>
                 <Row>
-                    <Col><p className="font-weight-bold">Long Description</p>
-                    <p>{longDescription}</p></Col>
+                    <Col xs={2} className="font-weight-bold">Property Uses</Col>
+                    <Col xs={10}><PropertyTypeList propertyTypes={propertyTypes}/></Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <div className="font-weight-bold">Long Description</div>
+                        <div>{longDescription}</div>
+                    </Col>
                 </Row>
                 </div>
             </Modal.Body>
