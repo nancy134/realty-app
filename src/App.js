@@ -96,14 +96,11 @@ class App extends React.Component {
               <Navbar.Brand href="./home">
                   <img
                   alt="logo" 
-                  src="https://sabre-images.s3.amazonaws.com/FindingCRE+Logo.jpg"
-                  width="30"
-                  height="30"
+                  src="https://sabre-images.s3.amazonaws.com/FindingCRELogowithText.jpg"
                   className="d-inline-block align-top"
-                  />{' '}FindingCRE</Navbar.Brand>
+                  /></Navbar.Brand>
               <Navbar.Toggle />
               <Navbar.Collapse className="justify-content-end">
-                  { window.location.pathname === "/listing" ?
                   <Nav.Item>
                       <Nav.Link eventKey="link-2">
                           <Button
@@ -114,7 +111,6 @@ class App extends React.Component {
                           </Button>
                       </Nav.Link> 
                   </Nav.Item>
-                  : null }
                   <Nav.Item>
                       <Nav.Link eventKey="link-1">
                           <AccountButton 
