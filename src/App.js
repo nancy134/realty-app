@@ -96,7 +96,7 @@ class App extends React.Component {
               <Navbar.Brand href="./home">
                   <img
                   alt="logo" 
-                  src="https://sabre-images.s3.amazonaws.com/FindingCRELogowithText.jpg"
+                  src="https://sabre-images.s3.amazonaws.com/FindingCRELogowithText4.jpg"
                   className="d-inline-block align-top"
                   /></Navbar.Brand>
               <Navbar.Toggle />
