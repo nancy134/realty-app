@@ -82,6 +82,7 @@ class App extends React.Component {
       });
   }
   render(){
+  console.log("window.location.pathname: "+window.location.pathname);
   return (
       <React.Fragment>
       <div className="mycontainer">
@@ -102,6 +103,7 @@ class App extends React.Component {
                   />{' '}FindingCRE</Navbar.Brand>
               <Navbar.Toggle />
               <Navbar.Collapse className="justify-content-end">
+                  { window.location.pathname === "/listing" ?
                   <Nav.Item>
                       <Nav.Link eventKey="link-2">
                           <Button
@@ -112,6 +114,7 @@ class App extends React.Component {
                           </Button>
                       </Nav.Link> 
                   </Nav.Item>
+                  : null }
                   <Nav.Item>
                       <Nav.Link eventKey="link-1">
                           <AccountButton 
