@@ -13,6 +13,7 @@ import WizardAddListing from '../components/WizardAddListing';
 import authenticationService from '../helpers/authentication';
 import listingService from '../services/listings';
 import ListingToolbar from '../components/ListingToolbar';
+
 export class Home extends Component { 
   constructor(props, context) {
     super(props, context);
@@ -24,14 +25,30 @@ export class Home extends Component {
     };
   }
   handleAddListingFinish(listing){
+      var that = this;
       listing.owner = authenticationService.getUserEmail();
       listingService.create(listing).then(function(data){
+          that.props.onAddListingCancel();
+          console.log("data:");
+          console.log(data);
+          /*
           var url = 
               window.location.protocol + 
               "//" + 
               window.location.hostname + 
-              "/listing?listingMode=myListings";
+              "/listing?listingMode=myListings&listing="+data.id;
           window.location.href = url
+          */
+          that.props.history.push({
+              pathname: '/listing',
+              data: {
+                  listingId: data.listing.id,
+                  showDetail: true,
+                  listingMode: "myListings",
+                  createListing: true,
+                  editMode: "edit"
+              }
+          });
       }).catch(function(err){
           console.log(err);
       });
@@ -55,7 +72,8 @@ export class Home extends Component {
               lat0: lat0,
               lng0: lng0,
               lat1: lat1,
-              lng1: lng1
+              lng1: lng1,
+              propertyTypes: []
           });
       }).catch(error => {
           console.error('Error', error);
@@ -77,6 +95,14 @@ export class Home extends Component {
   }
 
   componentDidMount(){
+      var that = this;
+      listingService.getEnumsPromise().then(function(enums){
+          that.setState({
+              propertyTypes: enums.propertyTypes
+          });
+      }).catch(function(err){
+          console.log(err);
+      });
   }
 
   render(){
@@ -89,6 +115,7 @@ export class Home extends Component {
             onFinish={this.handleAddListingFinish}
             onCancel={this.handleAddListingCancel}
             onLogin={this.handleLogin}
+            propertyTypes={this.state.propertyTypes}
         />
         : null }
         <Row className="pt-5 pl-5">

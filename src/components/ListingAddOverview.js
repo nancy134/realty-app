@@ -82,13 +82,13 @@ class ListingAddOverview extends React.Component{
     }
     componentDidMount(){
         if (this.props.show){
-        setTimeout(() => {
-            if (this.props.listing.listingType === listingTypes.FORLEASE){
-                this.shortDescriptionRef.current.focus();
-            }else{
-                this.listingPriceRef.current.focus();
-            }
-        }, 1);
+            setTimeout(() => {
+                if (this.props.listing.listingType === listingTypes.FORLEASE){
+                    this.shortDescriptionRef.current.focus();
+                }else{
+                    this.listingPriceRef.current.focus();
+                }
+            }, 1);
         }
     }
     render()

@@ -8,36 +8,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faTimes,
     faExpand,
-    faPencilAlt,
     faAddressBook,
     faFilePdf
 } from '@fortawesome/free-solid-svg-icons';
-import ListingEditHeader from './ListingEditHeader';
 
-function EditButton(props) {
-  const [modalShow, setModalShow] = React.useState(false);
-
-  return (
-      <span>
-      <Button 
-          id="header_edit_button"
-          variant="info" 
-          onClick={() => setModalShow(true)}
-      >
-          <FontAwesomeIcon className="text-danger" icon={faPencilAlt} /> 
-      </Button>
-      {modalShow ?
-      <ListingEditHeader
-        show={modalShow}
-        listing={props.listing}
-        states={props.states}
-        onHide={() => setModalShow(false)}
-        onSave={listing => props.onSave(listing)}
-      />
-      : null}
-      </span>
-  );
-}
 function ContactButton(props) {
   return (
       <span>
@@ -97,32 +71,7 @@ class ListingDetailHeader extends React.Component {
         window.open(url, "_blank");
     }
     render() {
-        const editMode = this.props.editMode;
         const listing = this.props.listing;
-        const states = this.props.states;
-        const enableAddressEdit = false;
-        var address = "<Address>";
-        var city = "<City>"; 
-        var zip = "<Zip>";
-        if (listing){
-
-            if (listing.address){
-                address = listing.address;
-            }
-            if (listing.displayAddress){
-                address = listing.displayAddress;
-            }
-            if (listing.city){
-                city = listing.city;
-            }
-            if (listing.zip){
-                zip = listing.zip;
-            }
-        }
-        var title = address + ", " + city + ", "+zip;
-
-        //var closeButton = "Close";
-        //if (!listing) closeButton = "Cancel";
 
         var fullscreen = this.props.fullscreen;
         return(

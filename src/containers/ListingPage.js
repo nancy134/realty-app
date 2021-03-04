@@ -33,9 +33,23 @@ import { transitionTypes } from '../constants/transitionTypes';
 export class ListingPage extends Component {
     constructor(props){
         super(props);
-
-        var fullscreen = false;
+        console.log("location:");
+        console.log(this.props.location);
         var index = null;
+        var fullscreen = false;
+        var listingMode = "allListings";
+        var createListing = false;
+        var showDetail = false;
+        var editMode = "view";
+
+        if (this.props.location && this.props.location.data){
+            index = this.props.location.data.listingId;
+            listingMode = this.props.location.data.listingMode;
+            showDetail = this.props.location.data.showDetail;
+            createListing = this.props.location.data.createListing;
+            editMode = this.props.location.data.editMode; 
+        }
+
         if (props.match.params.id){
            fullscreen = true;
            index = props.match.params.id;
@@ -44,7 +58,6 @@ export class ListingPage extends Component {
         // Listing Type
         const params = new URLSearchParams(props.location.search);
         var listingModeParam = params.get('listingMode');
-        var listingMode = "allListings";
         if (listingModeParam){
            listingMode = listingModeParam;
         }
@@ -153,14 +166,15 @@ export class ListingPage extends Component {
             listingDetail: null,
             allAmenities: [],
             propertyTypes: [],
+            createListing: createListing,
 
             // Spaces
             spaceAccordionText: [],
 
             // Controls
             fullscreen: fullscreen,
-            showDetail: false,
-            editMode: "view",
+            showDetail: showDetail,
+            editMode: editMode,
             listingMode: listingMode,
             page: 1,
             spaceUseFilter: null,
@@ -822,6 +836,7 @@ export class ListingPage extends Component {
     }
 
     componentDidMount(){
+        console.log("componentDidMount()");
         var localState = {};
         var that = this;
         if (this.state.fullscreen){
@@ -858,7 +873,20 @@ export class ListingPage extends Component {
                     }
                 }
                 localState.readyForMap = true;
-                that.setState(localState);
+                if (that.state.createListing){
+                    localState.index = that.state.index;
+                    localState.showDetail = that.state.showDetail;
+                    localState.listingMode = that.state.listingMode;
+                    that.fetchListingPromise(localState).then(function(localState){ 
+                        console.log("localState:");
+                        console.log(localState);
+                        that.setState(localState);
+                    }).catch(function(err){
+                        console.log(err);
+                    });
+                } else {
+                    that.setState(localState);
+                }
             }).catch(function(err){
                 console.log(err);
             });
@@ -1396,6 +1424,7 @@ export class ListingPage extends Component {
             <div className="listing-container">
 	    <Row className="ml-1 mr-1">
 	        <Col xs={leftColumnSize} className={leftColumnClassName}>
+                    { listingDetail ?
                     <CSSTransition
 		        in={showDetail}
 		        appear={false}
@@ -1435,6 +1464,7 @@ export class ListingPage extends Component {
                             bounds={this.state.detailBounds}
                         />
                     </CSSTransition>
+                    : null }
                     { (this.state.readyForMap && !fullscreen) ?
                     <ListingMap 
                         showDetail={showDetail}

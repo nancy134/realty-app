@@ -13,7 +13,6 @@ import ImageUpload from './ImageUpload';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {listingTypes} from '../constants/listingTypes';
-import FilterSpaceType from '../components/FilterSpaceType';
 
 const OverviewSchema = Yup.object().shape({
     shortDescription: Yup.string().required('Short Description is required'),
