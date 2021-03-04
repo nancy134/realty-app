@@ -20,7 +20,12 @@ import {
 import ListingPagination from '../components/ListingPagination';
 import ListingItem from '../components/ListingItem';
 import DeleteModal from '../components/DeleteModal';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 
+const ReportSchema = Yup.object().shape({
+    name: Yup.string().max(20).required()
+});
 function Toolbar(props){
     return(
     <div className="pt-1">
@@ -58,14 +63,43 @@ function AddListModal(props){
 
     var title = "Add New List";
     var buttonText = "Create List";
-    var buttonClick = props.onAddList;
     if (props.dialogMode === "edit"){
         title = "Edit List Name";
         buttonText = "Update List Name"
-        buttonClick = props.onEditList;
     }
 
+    var initialValues = {
+        name: ""
+    };
+    if (props.listName){
+        initialValues.name = props.listName
+    }
+    
     return(
+    <Formik
+        initialValues={initialValues}
+        validationSchema={ReportSchema}
+        onSubmit={(values, { setSubmitting }) => {
+            setSubmitting(true);
+            if (props.dialogMode === "edit"){
+                props.onEditList(initialValues, values);
+            } else {
+                props.onAddList(initialValues, values);
+            }
+        }}
+    >
+        {({
+           values,
+           errors,
+           touched,
+           handleChange,
+           handleBlur,
+           handleSubmit,
+           isSubmitting,
+           isValid,
+           dirty,
+           setFieldValue
+        }) => (
     <Modal
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -82,16 +116,22 @@ function AddListModal(props){
                 <span>{props.listError}</span>
             </Alert>
             : null }
-            <Form>
-                <Form.Label>List Name</Form.Label>
-                <Form.Control
-                    id="list_name"
-                    name="name"
-                    type="text"
-                    value={props.listName}
-                    onChange={props.onListNameChange}
-                /> 
-            </Form>
+                <Form>
+                    <Form.Label>List Name</Form.Label>
+                    <Form.Control
+                        id="list_name"
+                        name="name"
+                        type="text"
+                        value={values.name}
+                        onChange={handleChange}
+                        isInvalid={!!errors.name}
+                        isValid={touched.name && !errors.name}
+                        disabled={isSubmitting}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                    {errors.name}
+                    </Form.Control.Feedback>
+                </Form>
         </Modal.Body>
         <Modal.Footer>
             <Button
@@ -100,7 +140,8 @@ function AddListModal(props){
                 Cancel
             </Button>
             <Button
-                onClick={buttonClick}
+                disabled={!(isValid && dirty) || isSubmitting}
+                onClick={handleSubmit}
             >
                 { !props.listProgress ?
                 <span>{buttonText}</span>
@@ -116,6 +157,8 @@ function AddListModal(props){
             </Button>
         </Modal.Footer>
     </Modal>
+    )}
+    </Formik>
     );
 }
 
@@ -197,8 +240,8 @@ class ReportListings extends React.Component {
         });
         this.props.onDeleteListModalHide();
     }
-    handleAddList(){
-        this.props.onAddList(this.state.listName);
+    handleAddList(initialValues, values){
+        this.props.onAddList(values.name);
     }
 
     handleListNameChange(event){
@@ -206,10 +249,10 @@ class ReportListings extends React.Component {
             listName: event.target.value
         });
     }
-    handleEditList(){
+    handleEditList(initialValues, values){
         var list = {
             id: this.state.list.id,
-            name: this.state.listName
+            name: values.name
         };
         
         this.props.onEditList(list);
