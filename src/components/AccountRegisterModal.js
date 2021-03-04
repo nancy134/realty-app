@@ -142,7 +142,7 @@ class AccountRegisterModal extends React.Component {
                 </ul>
                <Button
                     onClick={this.props.onLoginStart}
-                    variant="link">Already hava an account? Login here
+                    variant="link">Already have an account? Login here
                 </Button>
 
                 </Form>

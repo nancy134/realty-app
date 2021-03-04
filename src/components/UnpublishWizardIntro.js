@@ -46,7 +46,7 @@ class UnpublishWizardIntro extends React.Component {
                 </Modal.Header>
                 <Modal.Body>
                     <ul>
-                        <li>When you take a listing off market it will no longer be seend by the public</li>
+                        <li>When you take a listing off market it will no longer be send by the public</li>
                     </ul>
                 </Modal.Body>
                 <Modal.Footer>

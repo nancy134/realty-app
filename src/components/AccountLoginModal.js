@@ -156,7 +156,7 @@ class AccountLoginModal extends React.Component {
                     variant="link">Forgot password?</Button>
                 <Button 
                     onClick={this.props.onRegisterStart} 
-                    variant="link">Don't hava an account? Create one here
+                    variant="link">Don't have an account? Create one here
                 </Button>
                 </Form> 
             </Modal.Body>
