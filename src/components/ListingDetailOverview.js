@@ -14,6 +14,7 @@ import ListingEditOverview from './ListingEditOverview';
 import ImageGallery from 'react-image-gallery';
 //import './image-gallery.css';
 import 'react-image-gallery/styles/css/image-gallery.css';
+import { abbrState } from '../helpers/utilities';
 
 function PropertyTypeList(props){
 
@@ -154,7 +155,9 @@ class ListingDetailOverview extends React.Component {
         const editMode = this.props.editMode;
         const listingTypes = this.props.listingTypes;
         const propertyTypes = this.props.propertyTypes;
-var title = listing.address + ", " + listing.city + ", "+listing.zip;
+
+        var stateAbbr = abbrState(listing.state, 'abbr');
+        var title = listing.address + ", " + listing.city + ", "+stateAbbr+ " " +listing.zip;
         return (
             <div className="m-4 shadow border">
                 <Row className="mt-2 ml-0 mr-0">
@@ -216,6 +219,13 @@ var title = listing.address + ", " + listing.city + ", "+listing.zip;
                         </span>
                         <div>
                             <h5>{shortDescription}</h5>
+                            <div className="preLine">{longDescription}</div>
+                        </div>
+
+                    </Col>
+                </Row>
+                <Row  className="mt-2 ml-0 mr-0">
+                    <Col>
                             { listing.propertyTypes && listing.propertyTypes.length > 0 ?
                             <div className="pb-2">Property Uses: <span className="font-weight-bold">
                                 <PropertyTypeList
@@ -223,8 +233,6 @@ var title = listing.address + ", " + listing.city + ", "+listing.zip;
                                 />
                             </span></div>
                             : null }
-                            <div className="preLine">{longDescription}</div>
-                        </div>
 
                     </Col>
                 </Row>
