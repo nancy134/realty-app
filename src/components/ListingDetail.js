@@ -804,6 +804,7 @@ class ListingDetail extends React.Component {
 
                     onContact={this.handleContact}
                     onGoToMyListing={this.props.onGoToMyListing}
+                    onExpand={this.props.onExpand}
                 />
                 <ListingDetailToolbar 
                     listing={listing}

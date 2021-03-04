@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faTimes,
     faExpand,
+    faCompress,
     faAddressBook,
     faFilePdf
 } from '@fortawesome/free-solid-svg-icons';
@@ -48,6 +49,7 @@ class ListingDetailHeader extends React.Component {
         this.handleClose = this.handleClose.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.handleExpand = this.handleExpand.bind(this);
+        this.handleCollapse = this.handleCollapse.bind(this);
         this.handleReport = this.handleReport.bind(this);
     }
     handleClose(){
@@ -57,8 +59,14 @@ class ListingDetailHeader extends React.Component {
         this.props.onListingUpdate(listing);
     }
     handleExpand(){
+        this.props.onExpand(true);
+        /*
         var url = window.location.protocol + "//" + window.location.hostname + "/listing/"+this.props.listing.id;
         window.location.href = url;
+        */
+    }
+    handleCollapse(){
+        this.props.onExpand(false);
     }
     handleReport(){
         var id = this.props.listing.id;
@@ -73,11 +81,21 @@ class ListingDetailHeader extends React.Component {
     render() {
         const listing = this.props.listing;
 
+        // Fullscreen
         var fullscreen = this.props.fullscreen;
+        var expandButtonText = "Expand";
+        var expandButtonIcon = faExpand;
+        var expandButtonFunction = this.handleExpand;
+        if (fullscreen){
+            expandButtonText = "Collapse";
+            expandButtonIcon = faCompress;
+            expandButtonFunction = this.handleCollapse;
+        }
+
         return(
             <div className="pb-1">
             <Row className="align-items-center bg-info m-0">
-	        <Col md={8}className="text-white">
+	        <Col md={6}className="text-white">
                         <ContactButton
                             onContact={this.props.onContact}
                         />
@@ -85,17 +103,16 @@ class ListingDetailHeader extends React.Component {
                             onReport={this.handleReport}
                         />
                 </Col>
-                <Col md={4} className="text-right">
-                    { listing && !fullscreen ? 
+                <Col md={6} className="text-right">
+                    { listing ? 
                     <Button
-                        onClick={this.handleExpand} 
+                        onClick={expandButtonFunction} 
                         className="expandButton" 
                         variant="info"
                     >
-                        <FontAwesomeIcon icon={faExpand} /> Expand
+                        <FontAwesomeIcon icon={expandButtonIcon} /> {expandButtonText} 
                     </Button>
                     : null}
-                    {!fullscreen ?
                     <Button
                         id="header_close_detail"
                         className="closeButton ml-3" 
@@ -104,7 +121,6 @@ class ListingDetailHeader extends React.Component {
                     >
                         <FontAwesomeIcon icon={faTimes}/> Close
                     </Button>
-                    : null }
                 </Col>
             </Row>
             </div>

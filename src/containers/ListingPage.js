@@ -146,6 +146,9 @@ export class ListingPage extends Component {
         this.handleEditList = this.handleEditList.bind(this);
         this.handleDeleteList = this.handleDeleteList.bind(this);
 
+        //Expand
+        this.handleExpand = this.handleExpand.bind(this);
+
         this.state = {
 
             // Message Modal 
@@ -235,6 +238,15 @@ export class ListingPage extends Component {
         };
     }
 
+    handleExpand(expand){
+        var fullscreen = true;
+        if (!expand){
+            fullscreen = false;
+        }         
+        this.setState({
+            fullscreen: fullscreen 
+        });
+    }
     handleAddListingCancel(){
         this.props.onAddListingCancel();
     }
@@ -351,6 +363,7 @@ export class ListingPage extends Component {
             addListingAddress: false,
             index: index,
             showDetail: showDetail,
+            fullscreen: false,
             editMode: editMode,
             updateBounds:true 
         };
@@ -1239,6 +1252,7 @@ export class ListingPage extends Component {
                         localState.reportPerPage = listItems.perPage;
                         localState.reportCount = listItems.listItems.count;
                         localState.showReportView = showReportView;
+                        localState.fullscreen = false;
                         that.setState(localState);
                     }).catch(function(err){
                         console.log(err);
@@ -1256,6 +1270,7 @@ export class ListingPage extends Component {
                             localState.reportCount = 0;
                             localState.reportPerPage = 5;
                             localState.showReportView = showReportView;
+                            localState.fullscreen = false;
                             that.setState(localState);
                         }).catch(function(err){
                             console.log(err);
@@ -1300,7 +1315,7 @@ export class ListingPage extends Component {
         }
 
         // Reporting
-        if (reporting){
+        if (reporting && !fullscreen){
             leftColumnSize = 5;
             var rightColSize = 4;
             var reportColSize = 3;
@@ -1404,7 +1419,6 @@ export class ListingPage extends Component {
                 propertyTypes={this.state.propertyTypes}
             />
             : null }
-            { !fullscreen ?
 	    <Row className="ml-1 mr-1 bg-success">
 	        <ListingToolbar
                     buttonText="Apply Filters"
@@ -1420,7 +1434,6 @@ export class ListingPage extends Component {
                     showReportView={this.state.showReportView}
                 />
 	    </Row>
-            : null }
             <div className="listing-container">
 	    <Row className="ml-1 mr-1">
 	        <Col xs={leftColumnSize} className={leftColumnClassName}>
@@ -1462,6 +1475,8 @@ export class ListingPage extends Component {
                             // Map
                             markers={this.state.detailMarkers}
                             bounds={this.state.detailBounds}
+                            // Expand
+                            onExpand={this.handleExpand}
                         />
                     </CSSTransition>
                     : null }
