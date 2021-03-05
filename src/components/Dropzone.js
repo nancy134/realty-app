@@ -71,11 +71,17 @@ class Dropzone extends Component {
         if (this.props.disabled) return;
 
         const files = event.dataTransfer.files;
-        if (this.props.onFilesAdded) {
-            const array = this.fileListToArray(files);
-            this.props.onFilesAdded(array);
+
+        var largeFiles = this.checkForFileSize(files);
+        if (largeFiles.length > 0){
+            this.props.onError(files);
+        } else {
+            if (this.props.onFilesAdded) {
+                const array = this.fileListToArray(files);
+                this.props.onFilesAdded(array);
+            }
+            this.setState({ highlight: false });
         }
-        this.setState({ highlight: false });
     }
     render() {
     return (

@@ -33,8 +33,6 @@ import { transitionTypes } from '../constants/transitionTypes';
 export class ListingPage extends Component {
     constructor(props){
         super(props);
-        console.log("location:");
-        console.log(this.props.location);
         var index = null;
         var fullscreen = false;
         var listingMode = "allListings";
@@ -849,7 +847,6 @@ export class ListingPage extends Component {
     }
 
     componentDidMount(){
-        console.log("componentDidMount()");
         var localState = {};
         var that = this;
         if (this.state.fullscreen){
