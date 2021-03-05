@@ -31,6 +31,7 @@ render(){
         render={
             props => (
                 <Home
+                    onLogin={this.handleLogin}
                     loggedIn={this.props.loggedIn}
                     showAddListingWizard={this.props.showAddListingWizard}
                     onAddListingCancel={this.props.onAddListingCancel}

@@ -14,7 +14,6 @@ class App extends React.Component {
   constructor(props){
       super(props);
 
-      console.log(window.location.pathname);
       var minimalTab = false;
       if (window.location.pathname === "/terms")
           minimalTab = true;
@@ -82,7 +81,6 @@ class App extends React.Component {
       });
   }
   render(){
-  console.log("window.location.pathname: "+window.location.pathname);
   return (
       <React.Fragment>
       <div className="mycontainer">

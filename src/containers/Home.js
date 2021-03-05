@@ -20,6 +20,7 @@ export class Home extends Component {
     this.handleFindSpace = this.handleFindSpace.bind(this);
     this.handleAddListingFinish = this.handleAddListingFinish.bind(this);
     this.handleAddListingCancel = this.handleAddListingCancel.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
     this.state = {
         address: ''
     };
@@ -29,16 +30,6 @@ export class Home extends Component {
       listing.owner = authenticationService.getUserEmail();
       listingService.create(listing).then(function(data){
           that.props.onAddListingCancel();
-          console.log("data:");
-          console.log(data);
-          /*
-          var url = 
-              window.location.protocol + 
-              "//" + 
-              window.location.hostname + 
-              "/listing?listingMode=myListings&listing="+data.id;
-          window.location.href = url
-          */
           that.props.history.push({
               pathname: '/listing',
               data: {
@@ -52,6 +43,9 @@ export class Home extends Component {
       }).catch(function(err){
           console.log(err);
       });
+  }
+  handleLogin(){
+      this.props.onLogin();
   }
   handleAddListingCancel(){
       this.props.onAddListingCancel();
