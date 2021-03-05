@@ -170,7 +170,7 @@ class ListingDetailGeneral extends React.Component {
                         {editMode === "edit" || (editMode === "view" && parking) ?
                         <Row>
                         <Col>Parking</Col>
-                        <Col className="font-weight-bold">{parking} space(s)</Col>
+                        <Col className="font-weight-bold">{parking}</Col>
                         </Row>
                         : null}
                         {editMode === "edit" || (editMode === "view" && floors) ?
