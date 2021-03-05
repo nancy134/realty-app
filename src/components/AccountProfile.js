@@ -22,7 +22,9 @@ const UserSchema = Yup.object().shape({
     city: Yup.string(),
     state: Yup.string(),
     zip: Yup.number().integer(),
-    bio: Yup.string()
+    bio: Yup.string(),
+    officePhone: Yup.string(),
+    mobilePhone: Yup.string()
 });
 
 class AccountProfile extends React.Component{
@@ -102,6 +104,12 @@ class AccountProfile extends React.Component{
         if (initialValues.bio !== values.bio){
             profile.bio = values.bio;
         }
+        if (initialValues.officePhone !== values.officePhone){
+            profile.officePhone = values.officePhone;
+        }
+        if (initialValues.mobilePhone !== values.mobilePhone){
+            profile.mobilePhone = values.mobilePhone;
+        }
 
         var that = this;
         this.setState({
@@ -138,7 +146,9 @@ class AccountProfile extends React.Component{
             city: "",
             state: "",
             zip: "",
-            bio: ""
+            bio: "",
+            officePhone: "",
+            mobilePhone: ""
         };
         var profile = this.state.profile;
         if (profile){
@@ -154,6 +164,8 @@ class AccountProfile extends React.Component{
             if (profile.state) initialValues.state = profile.state;
             if (profile.zip) initialValues.zip = profile.zip;
             if (profile.bio) initialValues.bio = profile.bio;
+            if (profile.officePhone) initialValues.officePhone = profile.officePhone;
+            if (profile.mobilePhone) initialValues.mobilePhone = profile.mobilePhone;
         }
         return(
         <div className="profile-view">
@@ -340,14 +352,46 @@ class AccountProfile extends React.Component{
                                 />
                             </Form.Group>
                         </Form.Row>
-                    </Col><Col>
+                    </Col>
+                    <Col>
                         <Form.Row>
-                            <Form.Group as={Col} xs={10}>
-                            <Image src="/broker.jpg" className="img-center" roundedCircle/>
+                            <Form.Group as={Col} xs={4}>
+                                <Image src="/broker.jpg" roundedCircle/>
+                            </Form.Group>
+                            <Form.Group as={Col} xs={8}>
+                                
+                                <Form.Label
+                                    className="font-weight-bold"
+                                >Office Phone</Form.Label>
+                                <Form.Control
+                                    name="officePhone"
+                                    type="text"
+                                    value={values.officePhone}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.officePhone}
+                                    isValid={touched.officePhone && !errors.officePhone && values.officePhone !== ""}
+                                    disabled={isSubmitting}
+                                />
+                                <Form.Label
+                                    className="font-weight-bold"
+                                >Mobile Phone</Form.Label>
+                                <Form.Control
+                                    name="mobilePhone"
+                                    type="text"
+                                    value={values.mobilePhone}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.mobilePhone}
+                                    isValid={touched.mobilePhone && !errors.mobilePhone && values.mobilePhone !== ""}
+                                    disabled={isSubmitting}
+                                />
+
+
                             </Form.Group>
                         </Form.Row>
                         <Form.Row>
-                            <Form.Group as={Col} xs={10}>
+                            <Form.Group as={Col} xs={12}>
                             <Form.Label
                                 className="font-weight-bold"
                             >Bio</Form.Label>

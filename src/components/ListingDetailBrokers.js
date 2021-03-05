@@ -82,6 +82,12 @@ class ListingDetailBrokers extends React.Component {
                             <Col md={4}>
                                 <Row className="font-weight-bold">{listing.owner.first} {listing.owner.middle} {listing.owner.last}</Row>
                                 <Row>{listing.owner.email}</Row>
+                                { listing.owner.officePhone ?
+                                <Row>Office phone: {listing.owner.officePhone}</Row>
+                                : null}
+                                { listing.owner.mobilePhone ?
+                                <Row>Mobile phone: {listing.owner.mobilePhone}</Row>
+                                : null}
                             </Col>
                             <Col md={4}>
                                 <Row className="font-weight-bold">{listing.owner.company}</Row>
