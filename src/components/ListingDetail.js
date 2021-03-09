@@ -23,6 +23,7 @@ import portfolios from '../services/portfolios';
 import authenticationService from '../helpers/authentication';
 import listingService from '../services/listings';
 import imageService from '../services/images';
+import mailService from '../services/mail';
 import attachmentService from '../services/attachments';
 import {formatDateTime} from '../helpers/utilities';
 import ContactModal from './ContactModal';
@@ -152,7 +153,6 @@ class ListingDetail extends React.Component {
         this.props.onEditToggle(value);
     }
     handleListingUpdate(listing){
-        console.log("handleListingUpdate()");
         if (this.props.listingDetail && this.props.listingDetail.listing){
             this.props.onUpdate(listing);
         }
@@ -739,9 +739,15 @@ class ListingDetail extends React.Component {
             showContactModal: false
         });
     }
-    handleSendMessage(){
-        this.setState({
-            showContactModal: false
+    handleSendMessage(body){
+        var that = this;
+        body.ListingVersionId = this.props.listingDetail.listing.id;
+        mailService.listingInquiry(body).then(function(result){
+            that.setState({
+                showContactModal: false
+            });
+        }).catch(function(err){
+            console.log(err);
         });
     }
     componentWillUnmount(){
@@ -779,11 +785,14 @@ class ListingDetail extends React.Component {
         if (showDetail){
             return (
             <div>
+                { this.state.showContactModal ?
                 <ContactModal
+                    listing={listing}
                     show={this.state.showContactModal}
                     onHide={this.handleContactHide}
                     onSendMessage={this.handleSendMessage}
                 />
+                : null }
                 <DeleteModal
                     show={this.state.attachmentsDeleteModal}
                     message={this.state.attachmentDeleteMessage}
