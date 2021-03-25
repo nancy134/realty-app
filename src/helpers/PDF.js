@@ -8,6 +8,7 @@ import {
     Page
 } from '@react-pdf/renderer';
 import {generalNameValuePairs} from '../helpers/utilities';
+import {amenitiesToRowCol} from '../helpers/utilities';
 
 Font.register({
     family: 'Open Sans',
@@ -22,6 +23,48 @@ const BORDER_STYLE = 'solid'
 const COL1_WIDTH = 20
 const COLN_WIDTH = 100/4
 
+const styleColor = StyleSheet.create({
+    White: {
+        color: '#ffffff',
+        fontSize: 14,
+        verticalAlign: 'text-top'
+    },
+    HeaderBar:{
+        marginLeft: 5,
+        marginRight: 5,
+        marginBottom: 0,
+        marginTop: 2, 
+        paddingLeft: 5,
+        paddingTop: 5,
+        paddingBottom: 5,
+        backgroundColor: '#2F3C48',
+        color: '#ffffff',
+        fontSize: 16,
+    },
+    BlockBar:{
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 10, 
+        marginBottom: 0,
+        paddingLeft: 4,
+        paddingTop: 3,
+        paddingBottom: 3,
+        borderTopWidth: 0, 
+        backgroundColor: '#5C8F94',
+        color: '#ffffff',
+        fontSize: 14,
+    },
+    LightBlue: {
+        color: '#5C8F94'
+    },
+  
+    DarkGrey:{
+        color : '#2F3C48',
+        fontSize: 16,
+        marginRight: 15,
+    }
+});
+
 const styles = StyleSheet.create({
     body: {
         padding: 10
@@ -35,8 +78,8 @@ const styles = StyleSheet.create({
         borderRightWidth: 0, 
         borderBottomWidth: 0,
         marginTop: 10,
-        //marginLeft: 20,
-        marginRight: 20
+        marginLeft: 10,
+        marginRight: 10
     }, 
     tableNoBorder: {
         display: "table",
@@ -98,6 +141,48 @@ const styles = StyleSheet.create({
         fontSize: 10 
     }
 });
+export function Logo(props){
+    return(
+        <View style={{
+            marginLeft: 10
+        }}>
+            <Text style={[styleColor.DarkGrey]}>Finding
+                <Text style={[styleColor.LightBlue]}>CRE</Text>
+            </Text>
+            <Text style={[styleColor.LightBlue, { fontSize: 12 }]}>Commercial Real Esate for Lease and Sale</Text>
+        </View>
+    );
+}
+
+export function AddressBar(props){
+    var listing = props.listing;
+    var address = listing.address + ", " + listing.city + ", " + listing.zip;
+    var listingType = listing.listingType;
+    return(
+        <View style={{
+            flex: 1,
+            flexDirection: 'row',
+            backgroundColor: '#2F3C48',
+            marginLeft: 10,
+            marginRight: 10,
+            marginTop: 2,
+            marginBottom: 0,
+            paddingLeft: 5,
+            paddingTop: 5,
+            paddingBottom: 5,
+            paddingRight: 5, 
+            color: '#ffffff',
+            fontSize: 14
+        }}>
+            <View style={{flex: 1}}>
+                <Text>{address}</Text>
+            </View>
+            <View style={{flex: 1}}>
+                <Text style={{textAlign: 'right'}}>{listingType}</Text>
+            </View>
+        </View>       
+    );
+}
 
 export function Header(props){
     var listing = props.listing;
@@ -117,45 +202,50 @@ export function Header(props){
     );
 }
 
+export function propertyTypesString(propertyTypes){
+    var propertyTypeStr = "";
+    for (var i=0; i<propertyTypes.length; i++){
+        if (i !== 0)
+            propertyTypeStr += ", " + propertyTypes[i] + " ";
+        else
+            propertyTypeStr += propertyTypes[i];
+    }
+    return propertyTypeStr;
+}
+
 export function Overview(props){
     var listing = props.listing;
+    var shortDescription = listing.shortDescription;
+    var longDescription = listing.longDescription;
+    var images = listing.images;
+    var propertyTypes = listing.propertyTypes;
+    var propertyTypeStr = propertyTypesString(propertyTypes);
+    console.log(propertyTypeStr);
     return(
-        <View
-            style={{
-                flexDirection: 'column'
-            }}
-        >
-        <Text
-            style={{
-                marginLeft: 20,
-                marginRight: 20,
-                fontSize: 14,
-                backgroundColor: '#e4e4e4'
-            }}
-        >
-            Overview
-        </Text>
-        <Text
-            style={{
-                marginTop: 10,
-                marginLeft: 20,
-                marginRight: 20,
-                fontSize: 10,
-            }}
-        >
-            {listing.shortDescription}
-        </Text>
-        <Text
-            style={{
-                marginTop: 10,
-                fontSize: 10,
-                marginLeft: 20,
-                marginRight: 20
-            }}
-        >
-            {listing.longDescription}
-        </Text>
-        </View>
+        <View style={{
+            flexDirection: 'column'
+        }}>
+            <Text style={styleColor.BlockBar}>Overview</Text>
+            <View style={styles.tableOutside}> 
+                <View style={styles.tableRow} > 
+                    <View style={[styles.tableHead2Col, {marginLeft: 10, width: "55%"}]}> 
+                        <Text style={styles.tableCellHeader}>{shortDescription}</Text>
+                        <Text style={styles.tableCell}>{longDescription}</Text> 
+
+                    </View>
+                    { images ?
+                    <View style={[styles.tableHead2Col, {width: "45%"}, {height: "100%"}]}>
+                        <SabreImage image={images[0]}/>
+                    </View>
+                    : null }
+
+                </View>
+                <View  style={[styles.tableInsideRow, {marginLeft: 10}]}> 
+                    <Text style={styles.tableOneCol}>Property Uses: <Text style={{fontWeight:"bold"}}>{propertyTypeStr}</Text>
+                    </Text>
+                </View>
+            </View>
+        </View>          
     );
 }
 
@@ -164,9 +254,8 @@ export function SabreImage(props){
     return(
         <Image
             style={{
-                width: '20%',
                 marginTop: 10,
-                marginRight: 10
+                marginRight: 10,
             }}
             src={image.url + '?noCache=' + Math.random().toString()}
             source={{
@@ -185,23 +274,16 @@ export function SabreImages(props){
         <View
             style={{
                 flexDirection: 'column',
-                marginLeft: 20
             }}
         >
-            <Text
-                style={{
-                    marginTop: 10,
-                    marginRight: 20,
-                    fontSize: 14,
-                    backgroundColor: '#e4e4e4'
-                }}
-            >
-                Images
-            </Text>
+            <Text style={styleColor.BlockBar}>Images</Text> 
 
             <View
                 style={{
-                    flexDirection: 'row'
+                    flexDirection: 'row',
+                    width: 150,
+                    height: 100,
+                    marginLeft: 5
                 }}
             >
                 {listing.images.map((image, index) =>
@@ -210,6 +292,47 @@ export function SabreImages(props){
                         key={index}
                         image={image}
                     />
+                ))}
+            </View>
+        </View>
+    );
+}
+
+export function AvailableSpace(props){
+    var spaces = props.spaces;
+    return(
+        <View style={{flexDirection: 'column',}} >
+            <Text style={styleColor.BlockBar}>Available Space</Text> 
+            <View style={styles.table}>
+                <View style={styles.tableRow}>
+                    <View style={styles.tableColHeader}>
+                        <Text style={styles.tableCellHeader}>Name</Text>
+                    </View>
+                    <View style={styles.tableColHeader}>
+                        <Text style={styles.tableCellHeader}>Size</Text>
+                    </View>
+                    <View style={styles.tableColHeader}>
+                        <Text style={styles.tableCellHeader}>Price</Text>
+                    </View>
+                    <View style={styles.tableColHeader}>
+                        <Text style={styles.tableCellHeader}>Use</Text>
+                    </View>
+                </View>
+                {spaces.map((space, index) => (
+                    <View key={index} style={styles.tableRow}>
+                        <View style={styles.tableCol}>
+                            <Text style={styles.tableCell}>{space.unit}</Text>
+                        </View>
+                       <View style={styles.tableCol}>
+                           <Text style={styles.tableCell}>{space.size}</Text>
+                       </View>
+                       <View style={styles.tableCol}>
+                           <Text style={styles.tableCell}>{space.price}</Text>
+                       </View>
+                       <View style={styles.tableCol}>
+                           <Text style={styles.tableCell}>{space.use}</Text>
+                       </View>
+                   </View>
                 ))}
             </View>
         </View>
@@ -270,6 +393,87 @@ export function Spaces(props){
       </View>
       );
 }
+export function Amenities(props){
+    console.log(props.listing);
+    console.log(props.listing.amenities);
+    var rowCols = amenitiesToRowCol(props.listing.amenities);
+    console.log(rowCols);
+    return(
+      <React.Fragment>
+      <View style={{flexDirection: 'column',}}      	  >
+            <Text style={styleColor.BlockBar}>Amenities</Text> 
+      </View> 
+        
+      <View style={[styles.tableOutside, {marginLeft: 5}]}>
+        { rowCols.map((col, index) => (
+        <View key={index} style={styles.tableRow} > 
+            <View style={[styles.tableHead2Col, {width: "50%"}]}> 
+                  <Text style={styles.tableCellHeader}>{col.col1}</Text> 
+            </View> 
+            <View style={[styles.tableHead2Col, {width: "50%"}]}> 
+                  <Text style={styles.tableCellHeader}>{col.col2}</Text> 
+            </View>
+        </View>
+        ))}
+      </View>
+      </React.Fragment>
+
+    );
+}
+
+export function ContactBlock(props){
+    var owner = props.listing.owner;
+    return(
+         <React.Fragment>
+             <View style={{flexDirection: 'column',}} >
+                 <Text style={styleColor.BlockBar}>Contact</Text> 
+             </View>            
+        
+             <View style={[styles.tableOutside, {marginLeft: 10, marginTop: 10}]}> 
+                 <View style={styles.tableRow} > 
+                     <View style={[styles.tableHead2Col, {width: "20%"}]}> 
+                     <Image
+                         style={{
+                             marginRight: 10
+                         }}
+                         src='https://local.phowma.com/broker.jpg'
+                     />
+
+                     </View> 
+
+                     <View style={[styles.tableHead2Col, {width: "80%"}, {height: "100%"}]}>
+                         { owner.last ?
+                         <View style={[styles.tableInsideCell]}>
+                             <Text>{owner.first} {owner.last}</Text> 
+                         </View>
+                         : null }
+                         { owner.company ?
+                         <View style={[styles.tableInsideCell]}>
+                             <Text>{owner.company}</Text> 
+                         </View>
+                         : null }
+                         { owner.mobilePhone ?
+                         <View style={[styles.tableInsideCell]}>
+                             <Text>Mobile: {owner.mobilePhone}</Text> 
+                         </View>
+                         : null }
+                         { owner.officePhone ?
+                         <View style={[styles.tableInsideCell]}>
+                             <Text>Office: {owner.officePhone}</Text>
+                         </View>
+                         : null }
+
+                         { owner.email ?
+                         <View style={[styles.tableInsideCell]}>
+                             <Text>{owner.email}</Text> 
+                         </View>
+                         : null }
+                     </View>
+                 </View>
+             </View>  
+         </React.Fragment>
+    );
+}
 
 export function NameValueRows(props){
 
@@ -307,7 +511,6 @@ export function NameValueRows(props){
         };
         tableRows.push(row);
     }
-    console.log(tableRows);
 
     return(
         <View>
@@ -355,21 +558,14 @@ export function General(props){
     <View
         style={{
             flexDirection: 'column',
-            marginLeft: 20
         }}
     >
-        <Text
-            style={{
-                marginTop: 10,
-                marginRight: 20,
-                fontSize: 14,
-                backgroundColor: '#e4e4e4'
-            }}
-        >
-            Building Detail 
-        </Text>
+      <View style={{flexDirection: 'column',}} >
+            <Text style={styleColor.BlockBar}>Building Detail</Text> 
+      </View>            
+
    
-        <View style={styles.tableNoBorder}>
+        <View style={[styles.tableNoBorder, { marginLeft: 10}]}>
             <NameValueRows
                 nvps={props.nvps}
             />
@@ -506,7 +702,6 @@ export function ListingDetail(props){
 
     var listing = props.listing;
     var generalNvps = generalNameValuePairs(listing);
-
     return(
         <Page
             size="A4"
@@ -519,21 +714,18 @@ export function ListingDetail(props){
                     flexDirection: 'column'
                 }}
             >
-                <Header
+                <Logo
+                />
+                <AddressBar
                     listing={listing}
                 />
                 <Overview
                     listing={listing}
                 />
-                {listing.images && listing.images.length ?
-                    <SabreImages
-                        listing={listing}
-                    />
-                : null}
                 {listing.spaces && listing.spaces.length ?
-                    <Spaces
-                        spaces={listing.spaces}
-                    />
+                <AvailableSpace
+                   spaces={listing.spaces}
+                />
                 : null}
                 {generalNvps.length ?
                     <General
@@ -541,9 +733,21 @@ export function ListingDetail(props){
                         nvps={generalNvps}
                     />
                 : null}
-                <Broker
+                { listing.images && listing.images.length ?
+                <SabreImages
                     listing={listing}
                 />
+                : null }
+                { listing.amenities && listing.amenities.length ?
+                <Amenities
+                    listing={listing}
+                />
+                : null }
+                {listing.owner.email ?
+                <ContactBlock
+                    listing={listing}
+                />
+                : null }
             </View>
         </Page>
     );

@@ -18,6 +18,7 @@ export class ReportPage extends React.Component {
     componentDidMount(){
         var that = this;
         listingService.get(this.state.id).then(function(data){
+            console.log(data);
             that.setState({
                 listing: data.listing
             });

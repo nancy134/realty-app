@@ -50,7 +50,28 @@ function addNameValuePair(label, value, prefix, unit, nameValuePairs){
     }
     nameValuePairs.push(nameValuePair);
 }
-
+export function amenitiesToRowCol(amenities){
+    console.log(amenities);
+    var rows = [];
+    console.log("amenities.length: "+amenities.length);
+    for (var i=0; i<amenities.length; i += 2){
+        console.log("i: "+i);
+        var cols = {};
+        if (i+1 === amenities.length){
+            cols = {
+                col1: amenities[i], 
+                col2: null
+            };
+        } else {
+            cols = {
+                col1: amenities[i], 
+                col2: amenities[i+1]
+            };
+        }
+        rows.push(cols);
+    }
+    return rows;
+}
 // Convert Space details to a set of name value pairs
 export function spaceNameValuePairs(space){
     var nameValuePairs = [];
