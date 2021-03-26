@@ -160,7 +160,6 @@ export function AddressBar(props){
     var listingType = listing.listingType;
     return(
         <View style={{
-            flex: 1,
             flexDirection: 'row',
             backgroundColor: '#2F3C48',
             marginLeft: 10,
@@ -174,11 +173,11 @@ export function AddressBar(props){
             color: '#ffffff',
             fontSize: 14
         }}>
-            <View style={{flex: 1}}>
+            <View style={{justifyContent: 'start'}}>
                 <Text>{address}</Text>
             </View>
             <View style={{flex: 1}}>
-                <Text style={{textAlign: 'right'}}>{listingType}</Text>
+                <Text style={{marginLeft: 'auto'}}>{listingType}</Text>
             </View>
         </View>       
     );
@@ -226,7 +225,7 @@ export function Overview(props){
             flexDirection: 'column'
         }}>
             <Text style={styleColor.BlockBar}>Overview</Text>
-            <View style={styles.tableOutside}> 
+            <View style={[styles.tableOutside, {marginRight: 10, marginTop: 10}]}> 
                 <View style={styles.tableRow} > 
                     <View style={[styles.tableHead2Col, {marginLeft: 10, width: "55%"}]}> 
                         <Text style={styles.tableCellHeader}>{shortDescription}</Text>
@@ -235,7 +234,11 @@ export function Overview(props){
                     </View>
                     { images ?
                     <View style={[styles.tableHead2Col, {width: "45%"}, {height: "100%"}]}>
-                        <SabreImage image={images[0]}/>
+                        <SabreImage
+                            image={images[0]}
+                            width='240'
+                            height='180'
+                        />
                     </View>
                     : null }
 
@@ -251,13 +254,16 @@ export function Overview(props){
 
 export function SabreImage(props){
     var image = props.image;
+    console.log(image.url);
     return(
         <Image
             style={{
-                marginTop: 10,
                 marginRight: 10,
+                marginBottom: 10,
+                width: props.width,
+                height: props.height 
             }}
-            src={image.url + '?noCache=' + Math.random().toString()}
+            src={ image.url + '?noCache=' + Math.random().toString()}
             source={{
                 header: {
                     'Access-Control-Allow-Origin': '*'
@@ -281,9 +287,9 @@ export function SabreImages(props){
             <View
                 style={{
                     flexDirection: 'row',
-                    width: 150,
-                    height: 100,
-                    marginLeft: 5
+                    flexWrap: 'wrap',
+                    marginLeft: 10,
+                    marginTop: 10,
                 }}
             >
                 {listing.images.map((image, index) =>
@@ -291,6 +297,8 @@ export function SabreImages(props){
                     <SabreImage
                         key={index}
                         image={image}
+                        height='90'
+                        width='120'
                     />
                 ))}
             </View>
@@ -424,7 +432,7 @@ export function Amenities(props){
 export function ContactBlock(props){
     var owner = props.listing.owner;
     return(
-         <React.Fragment>
+         <View wrap={false}>
              <View style={{flexDirection: 'column',}} >
                  <Text style={styleColor.BlockBar}>Contact</Text> 
              </View>            
@@ -471,7 +479,7 @@ export function ContactBlock(props){
                      </View>
                  </View>
              </View>  
-         </React.Fragment>
+         </View>
     );
 }
 
