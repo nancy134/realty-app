@@ -1002,7 +1002,7 @@ export class ListingPage extends Component {
     handleBoundsChange(bounds, center, zoomLevel){
         var localState = {
             listingMode: this.state.listingMode,
-            page: this.state.page,
+            page: 1,
             updateBounds: false,
         };
 
