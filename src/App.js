@@ -17,9 +17,15 @@ class App extends React.Component {
       var minimalTab = false;
       if (window.location.pathname === "/terms")
           minimalTab = true;
+
+      var showFooter = true;
+      if (window.location.pathname === "/admin")
+          showFooter = false;
+
       this.state = {
           loggedIn: false,
           showAddListingWizard: false,
+          showFooter: showFooter,
 
           // Policy
           showPolicyModal: false,
@@ -133,7 +139,7 @@ class App extends React.Component {
           >
           </Routes>
     </div>
-    { !this.state.minimalTab ?
+    { !this.state.minimalTab && this.state.showFooter ?
     <div className="bg-light ml-1 mr-1">
        <Button
            variant="link"

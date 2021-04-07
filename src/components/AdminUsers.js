@@ -1,7 +1,4 @@
 import React from 'react';
-import {
-    Container
-} from 'react-bootstrap';
 import { forwardRef } from 'react';
 import MaterialTable from 'material-table';
 import AddBox from '@material-ui/icons/AddBox';
@@ -63,7 +60,8 @@ class AdminUsers extends React.Component {
 
     render(){
         return(
-            <Container>
+            <div
+            >
                 <MaterialTable
                     icons={tableIcons}
                     columns={[
@@ -76,8 +74,8 @@ class AdminUsers extends React.Component {
                     data={this.state.users}
                     title="Users"
                 />  
-            </Container>
-        );
+            </div>
+        )
     }
 }
 export default AdminUsers;

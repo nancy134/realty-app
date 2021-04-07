@@ -23,6 +23,9 @@ export class AdminPage extends React.Component {
         var tab = this.state.tab;
         return(
             <React.Fragment>
+                <div
+                    className="m-3"
+                >
                 <AdminToolbar
                     onSwitchTab={this.handleSwitchTab}
                 />
@@ -35,6 +38,7 @@ export class AdminPage extends React.Component {
                 {tab === "billing" ?
                 <AdminBilling />
                 : null }
+                </div>
             </React.Fragment>
         );
     }

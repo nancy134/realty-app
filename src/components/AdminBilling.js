@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    Container,
     Form,
     Row,
     Col,
@@ -104,7 +103,7 @@ class AdminBilling extends React.Component {
         );
 
         return(
-            <Container>
+            <div>
                 <Form>
                     <Form.Group as={Row}>
                         <Form.Label 
@@ -140,7 +139,7 @@ class AdminBilling extends React.Component {
                     data={this.state.billingEvents}
                     title="Listings"
                 />
-            </Container>
+            </div>
         );
     }
 }

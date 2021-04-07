@@ -1,7 +1,4 @@
 import React from 'react';
-import {
-    Container
-} from 'react-bootstrap';
 import { forwardRef } from 'react';
 import MaterialTable from 'material-table';
 import AddBox from '@material-ui/icons/AddBox';
@@ -49,20 +46,9 @@ class AdminListings extends React.Component {
         }
     }
 
-    componentDidMount(){
-        var that = this;
-        listingService.getAll().then(function(result){
-            console.log(result);
-            that.setState({
-                listings: result.listings.rows
-            });
-        }).catch(function(err){
-            console.log(err);
-        });
-    }
     render(){
         return(
-            <Container>
+            <div>
                 <MaterialTable
                     icons={tableIcons}
                     columns={[
@@ -71,10 +57,25 @@ class AdminListings extends React.Component {
                         { title: 'city', field: 'city'},
                         { title: 'state', field: 'state'}
                     ]}
-                    data={this.state.listings}
+                    data={query =>
+                        new Promise((resolve, reject) => {
+                            var page = query.page + 1;
+                            var queryStr = 'perPage='+query.pageSize+'&page='+page;
+                            listingService.getAll(queryStr).then(function(result){
+                                var ret = {
+                                    data: result.listings.rows,
+                                    page: result.page-1,
+                                    totalCount: result.listings.count
+                                }
+                                resolve(ret);
+                            }).catch(function(err){
+                                reject(err);
+                            });
+                        })
+                    }
                     title="Listings"
                 />
-            </Container>
+            </div>
         );
     }
 }

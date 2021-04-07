@@ -17,7 +17,7 @@ class AdminToolbar extends React.Component {
     render(){
         return(
             <Nav
-                variant="pills"
+                variant="tabs"
                 onSelect={this.handleSelectTab}
                 defaultActiveKey="users"
             >
