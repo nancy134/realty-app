@@ -42,6 +42,20 @@ class AdminToolbar extends React.Component {
                         <span>Billing</span>
                     </Nav.Link>
                 </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link
+                        eventKey="promotions"
+                    >
+                        <span>Promotions</span>
+                    </Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link
+                        eventKey="codes"
+                    >
+                        <span>Promotion Codes</span>
+                    </Nav.Link>
+                </Nav.Item>
             </Nav>
         );
     }

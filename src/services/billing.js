@@ -88,6 +88,53 @@ export function getBillingCycles(){
     });
 }
 
+export function getPromotions(){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + "billing/promotions";
+        axiosInstance({
+            method: 'GET',
+            url: url
+        }).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
+export function getCodes(query){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + "billing/codes";
+        if (query) url += "?"+query;
+        axiosInstance({
+            method: 'GET',
+            url: url
+        }).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
+export function createPromotionCode(promotionId, body){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + "billing/promotions/" + promotionId + "/codes";
+        console.log("url: "+url);
+        console.log("body:");
+        console.log(body);
+        axiosInstance({
+            method: 'POST',
+            url: url,
+            data: body
+        }).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
 export function playBillingCycle(id){
     return new Promise(function(resolve, reject){
         var url = process.env.REACT_APP_API + "billing/billingEvents/play/" + id;
@@ -109,6 +156,9 @@ const billing = {
     getBillingEvents,
     getBillingEventsMe,
     getBillingCycles,
+    getPromotions,
+    getCodes,
+    createPromotionCode,
     playBillingCycle
 };
 export default billing;

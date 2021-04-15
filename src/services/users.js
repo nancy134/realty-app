@@ -1,7 +1,10 @@
 import axiosInstance from './axios';
 
-function getUsers(){
+function getUsers(query){
     var url = process.env.REACT_APP_API + '/users';
+    if (query){
+        url += "?"+query;
+    }
     return new Promise(function(resolve, reject){
         axiosInstance.get(url).then(function(response){
             resolve(response.data);

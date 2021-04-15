@@ -1,6 +1,7 @@
 import React from 'react';
 import { forwardRef } from 'react';
 import MaterialTable from 'material-table';
+import {MTableToolbar} from 'material-table';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -16,9 +17,9 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import userService from '../services/users';
+import billingService from '../services/billing';
 import {
-} from 'react-bootstrap';
+} from '@material-ui/core';
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -38,45 +39,48 @@ const tableIcons = {
     SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
     ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
-  };
+};
 
-class AdminUsers extends React.Component {
+class AdminPromotions extends React.Component {
     render(){
         return(
-            <div
-            >
+            <div>
                 <MaterialTable
                     icons={tableIcons}
                     columns={[
                         { title: 'id', field: 'id'},
-                        { title: 'email', field: 'email'},
-                        { title: 'cognitoId', field: 'cognitoId'},
-                        { title: 'first', field: 'first'},
-                        { title: 'last', field: 'last'}
+                        { title: 'Name', field: 'name'},
+                        { title: 'Description', field: 'description'}
                     ]}
                     data={query =>
                         new Promise((resolve, reject) => {
                             var page = query.page + 1;
                             var queryStr = 'perPage='+query.pageSize+'&page='+page;
-                            userService.getUsers(queryStr).then(function(result){
-                                console.log(result);
+                            billingService.getPromotions(queryStr).then(function(result){
                                 var ret = {
-                                    data: result.users.rows,
+                                    data: result.promotions.rows,
                                     page: result.page-1,
-                                    totalCount: result.users.count
-                                };
+                                    totalCount: result.promotions.count
+                                }
                                 resolve(ret);
                             }).catch(function(err){
-                                console.log(err);
                                 reject(err);
                             });
                         })
                     }
-                        
-                    title="Users"
-                />  
+                    components={{
+                        Toolbar: props => (
+                            <div>
+                                <MTableToolbar {...props} />
+                                <div>
+                                </div>
+                            </div>
+                        )
+                    }}
+                    title="Promotions"
+                />
             </div>
-        )
+        );
     }
 }
-export default AdminUsers;
+export default AdminPromotions;
