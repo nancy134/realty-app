@@ -120,9 +120,6 @@ export function getCodes(query){
 export function createPromotionCode(promotionId, body){
     return new Promise(function(resolve, reject){
         var url = process.env.REACT_APP_API + "billing/promotions/" + promotionId + "/codes";
-        console.log("url: "+url);
-        console.log("body:");
-        console.log(body);
         axiosInstance({
             method: 'POST',
             url: url,
@@ -131,6 +128,37 @@ export function createPromotionCode(promotionId, body){
             resolve(response.data);
         }).catch(function(err){
             reject(err);
+        });
+    });
+}
+
+export function validatePromoCode(body){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + "billing/codes/validate";
+        axiosInstance({
+            method: 'POST',
+            url: url,
+            data: body
+        }).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            if (err.response && err.response.data) reject(err.response.data);
+            else reject(err);
+        }); 
+    });
+}
+
+export function getUserCodeMe(){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + "billing/users/codes/me";
+        axiosInstance({
+            method: 'GET',
+            url: url
+        }).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            if (err.response && err.response.data) reject(err.response.data);
+            else reject(err);
         });
     });
 }
@@ -158,7 +186,9 @@ const billing = {
     getBillingCycles,
     getPromotions,
     getCodes,
+    getUserCodeMe,
     createPromotionCode,
+    validatePromoCode,
     playBillingCycle
 };
 export default billing;

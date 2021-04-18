@@ -28,43 +28,62 @@ class PublishWizardPaymentMethod extends React.Component{
             paymentSpinner: false,
             showError: false,
             errorMessage: "",
-            creditCardEntered: false
+            creditCardEntered: false,
+            validPromoCode: false
         };
     }
 
     componentDidMount(){
+
+        // 2. Check if the user a valid promo code
+        // 3. Check if the user has a default payment method
+        // 4. If none of the above, present the enter credit card view
+
         var that = this;
-        billingService.getClientToken().then(function(result){
-            billingService.getPaymentMethod().then(function(paymentMethod){
-                if (paymentMethod.creditCards.length > 0){
-                    var defaultPaymentMethod = null;
-                    for (var i=0; i<paymentMethod.creditCards.length; i++){
-                        if (paymentMethod.creditCards[i].default === true){
-                            defaultPaymentMethod = paymentMethod.creditCards[i];
-                        } 
-                    }
+            console.log("Checking to see if user has a validated promo code");
+            if (that.props.userCode){
                     that.setState({
-                        defaultPaymentMethod: defaultPaymentMethod
+                        validPromoCode: true
                     });
-                }
-            }).catch(function(err){
-                if (err.errorCode === "notFoundError"){
-                    that.setState({
-                        clientToken: result.clientToken
+            } else {
+                billingService.getClientToken().then(function(result){
+                    console.log("Checking to see if user has a stored payment method");
+                    billingService.getPaymentMethod().then(function(paymentMethod){
+                        if (paymentMethod.creditCards.length > 0){
+                            console.log("User has a default payment method");
+                            var defaultPaymentMethod = null;
+                            for (var i=0; i<paymentMethod.creditCards.length; i++){
+                                if (paymentMethod.creditCards[i].default === true){
+                                    defaultPaymentMethod = paymentMethod.creditCards[i];
+                                } 
+                            }
+                            that.setState({
+                                defaultPaymentMethod: defaultPaymentMethod
+                            });
+                        }
+                    }).catch(function(err){
+                        if (err.errorCode === "notFoundError"){
+                            console.log("User does not have a default payment method");
+                            that.setState({
+                                clientToken: result.clientToken
+                            });
+                        } else {
+                            that.setState({
+                                showError: true,
+                                errorMessage: err.message
+                            });
+                        }
                     });
-                } else {
+                }).catch(function(err){
                     that.setState({
                         showError: true,
                         errorMessage: err.message
                     });
-                }
-            });
-        }).catch(function(err){
-            that.setState({
-                showError: true,
-                errorMessage: err.message
-            });
-        });
+                });
+            }
+
+
+
     }
 
     handleNext(){
@@ -74,7 +93,8 @@ class PublishWizardPaymentMethod extends React.Component{
             paymentSpinner: true
         });
 
-        if (!this.state.defaultPaymentMethod && !this.state.creditCardEntered){
+        if (!this.state.defaultPaymentMethod && !this.state.creditCardEntered && !this.state.validPromoCode){
+        console.log("Setting entered payment method"); 
         this.instance.requestPaymentMethod().then(function(result){
             billingService.setPaymentMethod(result.nonce).then(function(paymentResult){
                 that.setState({
@@ -96,6 +116,7 @@ class PublishWizardPaymentMethod extends React.Component{
             });
         });
         } else {
+            console.log("Publishing listing");
             var listingId = that.props.listingDetail.listing.ListingId;
             listingService.publish(listingId).then(function(result){
                 that.setState({
@@ -133,6 +154,22 @@ class PublishWizardPaymentMethod extends React.Component{
         }
     }
     render(){
+
+        // Three flows
+        // 1. Promotion code
+        // 2. Enter credit card
+        // 3. Default payment method
+        var promotionCodeFlow = false;
+        var enterCreditCardFlow = false;
+        var defaultPaymentMethodFlow = false;
+        if (this.props.userCode){
+            promotionCodeFlow = true;
+        } else if (this.state.defaultPaymentMethod){
+            defaultPaymentMethodFlow = true;
+        } else {
+            enterCreditCardFlow = true;
+        }
+        
         return(
             <Modal
                 show={this.props.show}
@@ -154,7 +191,7 @@ class PublishWizardPaymentMethod extends React.Component{
                         <span>{this.state.errorMessage}</span>
                     </Alert>
                     : null }
-                    { !this.state.defaultPaymentMethod ?
+                    { enterCreditCardFlow ?
                     <div style={{'height': '60vh'}}>
                     { this.state.clientToken ?
 		    <DropIn
@@ -177,7 +214,7 @@ class PublishWizardPaymentMethod extends React.Component{
                      }
                     </div>
                     : null}
-                    {this.state.defaultPaymentMethod ?
+                    { defaultPaymentMethodFlow ?
                     <div style={{'height': '60vh'}}>
                             <p>The default credit card on file will be billed according to the payment schedule detailed in the <span>Terms & Conditions</span></p>
                                <Alert variant="info">
@@ -193,6 +230,14 @@ class PublishWizardPaymentMethod extends React.Component{
                              </Alert>
                     </div>
                     : null}
+
+                    { promotionCodeFlow ?
+                    <div>
+                        <p>Your Promotion Code is valid</p>
+                        <p>{this.props.userCode.Code.Promotion.description} from {this.props.userCode.createdAt}</p>
+                    </div>
+                    : null }
+
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
@@ -202,7 +247,7 @@ class PublishWizardPaymentMethod extends React.Component{
                     </Button>
                     <Button
                         onClick={this.handleNext}
-                        disabled={!this.state.paymentMethodRequestable && !this.state.defaultPaymentMethod}
+                        disabled={!this.state.paymentMethodRequestable && !this.state.defaultPaymentMethod && !this.state.validPromoCode}
                     >
                         {this.state.paymentSpinner ?
                         <Spinner

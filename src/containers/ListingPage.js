@@ -591,10 +591,11 @@ export class ListingPage extends Component {
             });
         }
     }
-    handlePublishWizardIntroNext(){
+    handlePublishWizardIntroNext(userCode){
         this.setState({
             showPublishWizardIntro: false,
-            showPublishWizardPaymentMethod: true
+            showPublishWizardPaymentMethod: true,
+            userCode: userCode
         });
     }
     handlePublishWizardPaymentMethodNext(){
@@ -1372,6 +1373,7 @@ export class ListingPage extends Component {
                 onNext={this.handlePublishWizardPaymentMethodNext}
                 onCancel={this.handlePublishWizardClose}
                 listingDetail={listingDetail}
+                userCode={this.state.userCode}
             />
             : null}
             <PublishWizardFinal
