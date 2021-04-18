@@ -1,7 +1,7 @@
 import axiosInstance from './axios';
 
 function getUsers(query){
-    var url = process.env.REACT_APP_API + '/users';
+    var url = process.env.REACT_APP_API + 'users';
     if (query){
         url += "?"+query;
     }
@@ -30,7 +30,7 @@ function getUser(){
 
 function updateUser(id, body){
     return new Promise(function(resolve, reject){
-        var url = process.env.REACT_APP_API + '/user/me';
+        var url = process.env.REACT_APP_API + 'user/me';
 
         axiosInstance.put(url,body).then(function(response){
             resolve(response.data);
@@ -43,7 +43,7 @@ function updateUser(id, body){
 
 function getUserEnums(){
     return new Promise(function(resolve, reject){
-        var url = process.env.REACT_APP_API + '/user/enums';
+        var url = process.env.REACT_APP_API + 'user/enums';
         axiosInstance.get(url).then(function(response){
             resolve(response.data);
         }).catch(function(err){
