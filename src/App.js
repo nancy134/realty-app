@@ -26,7 +26,7 @@ class App extends React.Component {
           loggedIn: false,
           showAddListingWizard: false,
           showFooter: showFooter,
-
+          isAdmin: false,
           // Policy
           showPolicyModal: false,
           policyType: "",
@@ -60,8 +60,15 @@ class App extends React.Component {
           policyType: ""
       });
   }
-  handleLogin(){
-      this.setState({loggedIn: true});
+  handleLogin(user){
+      var isAdmin = false;
+      if (user && user.isAdmin){
+          isAdmin = true;
+      }
+      this.setState({
+          loggedIn: true,
+          isAdmin: isAdmin
+      });
   }
   handleLogout(){
       this.setState({
@@ -119,6 +126,7 @@ class App extends React.Component {
                       <Nav.Link eventKey="link-1">
                           <AccountButton 
                               loggedIn={this.state.loggedIn}
+                              isAdmin={this.state.isAdmin}
                               onLogin={this.handleLogin} 
                               onLogout={this.handleLogout} 
                               onRegister={this.handleRegister}
@@ -133,6 +141,7 @@ class App extends React.Component {
               // Logged in
               onLogin={this.handleLogin}
               loggedIn={this.state.loggedIn}
+              isAdmin={this.state.isAdmin}
               showAddListingWizard={this.state.showAddListingWizard}
               onAddListingCancel={this.handleAddListingCancel}
               onShowPolicyModal={this.handlePolicyModalShow}

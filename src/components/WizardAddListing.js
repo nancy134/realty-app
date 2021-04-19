@@ -165,7 +165,7 @@ export class WizardAddListing extends Component {
                 loginProgress: false,
                 addListingReview: true
             });
-            that.props.onLogin();
+            that.props.onLogin(result);
         }).catch(function(err){
            that.setState({
                loginMessage: err.message,
@@ -256,20 +256,17 @@ export class WizardAddListing extends Component {
     }
 
     handleForgotConfirm(code, password){
-        console.log(this);
         var that=this;
         this.setState({
             forgotConfirmProgress: true
         });
         authenticationService.confirmForgotPasswordResponse(code, password, this.state.email).then(function(result){
-            console.log(result);
             that.setState({
                 modalShowForgotConfirm: false,
                 modalShowLogin: true,
                 forgotConfirmProgress: false
             });
         }).catch(function(err){
-            console.log(err);
             that.setState({
                 forgotPasswordConfirmMessage: err.message,
                 forgotConfirmProgress: false

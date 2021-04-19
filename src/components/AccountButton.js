@@ -68,7 +68,13 @@ export class AccountButton extends Component{
     }
     componentDidMount(){
         if (authenticationService.isAuthenticated()){
-            this.props.onLogin();
+            var result = {};
+            var isAdmin = false;
+            if (authenticationService.isAdmin()){
+                isAdmin = true;
+            }
+            result.isAdmin = isAdmin;
+            this.props.onLogin(result);
         }
     }
     handleLogin(email, password){
@@ -82,7 +88,7 @@ export class AccountButton extends Component{
                 loginMessage: null,
                 loginProgress: false
             });
-            that.props.onLogin();
+            that.props.onLogin(result);
         }).catch(function(err){
            that.setState({
                loginMessage: err.message,
@@ -159,20 +165,17 @@ export class AccountButton extends Component{
         });
     }
     handleForgotConfirm(code, password){
-        console.log(this);
         var that=this;
         this.setState({
             forgotConfirmProgress: true
         });
         authenticationService.confirmForgotPasswordResponse(code, password, this.state.email).then(function(result){
-            console.log(result);
             that.setState({
                 modalShowForgotConfirm: false,
                 modalShowLogin: true,
                 forgotConfirmProgress: false
             });
         }).catch(function(err){
-            console.log(err);
             that.setState({
                 forgotPasswordConfirmMessage: err.message,
                 forgotConfirmProgress: false
@@ -236,11 +239,13 @@ export class AccountButton extends Component{
                         id="account-button-my-account"
                         onClick={() => {this.onMyAccount()}}
                     >My Account</Dropdown.Item>
+                    { this.props.isAdmin ?
                     <Dropdown.Item
                         as="button"
                         id="account-button-administration"
                         onClick={() => {this.onAdministration()}}
                     >Administration</Dropdown.Item>
+                    : null }
                     <Dropdown.Item
                         as="button"
                         id="account-button-logout"

@@ -30,6 +30,16 @@ export function getJwt(){
     return cookies.get('jwt');
 }
 
+export function isAdmin(){
+    const cookies = new Cookies();
+    var isAdminStr = cookies.get('isAdmin');
+    var isAdmin = false;
+    if (isAdminStr === "true"){
+        isAdmin = true;
+    }
+    return isAdmin 
+}
+
 export function isOwner(owner){
   if (isAuthenticated()){
       if (owner === getUserCognitoId()){
@@ -46,6 +56,8 @@ export function deleteUser(){
     cookies.remove('name');
     cookies.remove('email');
     cookies.remove('jwt');
+    cookies.remove('cognitoId');
+    cookies.remove('isAdmin');
     LocalStorageService.clearToken();
 }
 
@@ -59,12 +71,13 @@ export function loginResponse(email, password){
             LocalStorageService.setToken(result);
 
             userService.getUser().then(function(user){
-                console.log(result);
                 const cookies = new Cookies();
                 cookies.set('email',user.email);
                 cookies.set('name', email);
                 cookies.set('jwt',result.IdToken);
                 cookies.set('cognitoId', user.cognitoId);
+                cookies.set('isAdmin', user.isAdmin);
+                result.isAdmin = user.isAdmin;
                 resolve(result);
             }).catch(function(err){
                 reject(err);
@@ -141,6 +154,7 @@ const authentication = {
     getUserName,
     getJwt,
     isOwner,
+    isAdmin,
     deleteUser,
     loginResponse,
     signupResponse,
