@@ -148,12 +148,12 @@ class AccountRegisterModal extends React.Component {
                             />
                             <Row className="text-info">
                                 <Col>
-                                    <li style={{"font-size": "0.75rem"}}>One lowercase letter</li>
-                                    <li style={{"font-size": "0.75rem"}}>One uppercase letter</li>
+                                    <li className="rem75">One lowercase letter</li>
+                                    <li className="rem75">One uppercase letter</li>
                                 </Col>
                                 <Col>
-                                    <li style={{"font-size": "0.75rem"}}>One number</li>
-                                    <li style={{"font-size": "0.75rem"}}>One special charater: ^  $  *  .  ?  - </li>
+                                    <li className="rem75">One number</li>
+                                    <li className="rem75">One special charater: ^  $  *  .  ?  - </li>
                                 </Col>
                             </Row>
                             <Button
@@ -170,7 +170,7 @@ class AccountRegisterModal extends React.Component {
                 </Row>
                 <Row>
                     <Col xs={2}></Col><Col>
-                        <p style={{"font-size":"0.8rem"}}>
+                        <p className="rem80">
                             <span>By selecting Create Account you agree to our </span>
                             <span
                                 onClick={this.handleTerms}

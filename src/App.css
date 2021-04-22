@@ -22,3 +22,10 @@ body {
     overflow-x: hidden;
     height: 78vh;
 }
+
+.rem75 {
+    font-size: 0.75rem;
+}
+.rem80 {
+    font-size: 0.80rem;
+}
