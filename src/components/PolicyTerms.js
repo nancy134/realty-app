@@ -5,7 +5,7 @@ import {
 class PolicyTerms extends React.Component {
     render(){
         return(
-        <div>
+        <div className="m-2">
             <h2>FindingCRE Terms and Conditions</h2>
             <p>Welcome to Finding CRE!</p>
             <p>These terms and conditions outline the rules and regulations for the use of FindingCRE's Website, located at FindingCRE.com.</p>

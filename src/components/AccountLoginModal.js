@@ -5,7 +5,9 @@ import {
     Button,
     Alert,
     Spinner,
-    InputGroup
+    InputGroup,
+    Row,
+    Col
 } from 'react-bootstrap';
 import StepperAddListing from '../components/StepperAddListing';
 
@@ -96,6 +98,7 @@ class AccountLoginModal extends React.Component {
             dialogClassName={className}
             animation={animation}
             show={this.props.show}
+            onHide={this.props.onCancel}
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
@@ -119,6 +122,9 @@ class AccountLoginModal extends React.Component {
                     loginCompleted={loginCompleted}
                 />
                 : null }
+                <Row>
+                <Col xs={2}></Col>
+                <Col>
                 <Form className={formPadding}>
                 { this.props.isWizard ?
                 <h3>Login</h3>
@@ -153,12 +159,21 @@ class AccountLoginModal extends React.Component {
                 </InputGroup>
                 <Button
                     onClick={this.props.onForgotPassword}
-                    variant="link">Forgot password?</Button>
+                    variant="link"
+                    className="pl-0 text-info"><u>Forgot password</u>?</Button>
+                <Button
+                    variant="link"
+                    className="pr-1"
+                >Don't have an account?</Button>
                 <Button 
                     onClick={this.props.onRegisterStart} 
-                    variant="link">Don't have an account? Create one here
+                    variant="link"
+                    className="pl-0 text-info"><u>Create one here</u>
                 </Button>
                 </Form> 
+                </Col>
+                <Col xs={2}></Col>
+                </Row>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={this.props.onCancel}>{cancel}</Button>

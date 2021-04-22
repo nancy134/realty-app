@@ -4,6 +4,7 @@ import {
     Button
 } from 'react-bootstrap';
 import PolicyTerms from '../components/PolicyTerms';
+import PolicyPrivacy from '../components/PolicyPrivacy';
 import PolicyAbout from '../components/PolicyAbout';
 
 class PolicyModal extends React.Component {
@@ -23,6 +24,8 @@ class PolicyModal extends React.Component {
         var title = "";
         if (this.props.type === "terms"){
             title = "Terms & Conditions";
+        } else if (this.props.type === "privacy"){
+            title = "Privacy Policy";
         } else if (this.props.type === "about"){
             title = "About";
         }
@@ -33,6 +36,7 @@ class PolicyModal extends React.Component {
             dialogClassName="modal-80w"
             centered
             show={this.props.show}
+            onHide={this.props.onHide}
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
@@ -42,6 +46,9 @@ class PolicyModal extends React.Component {
             <Modal.Body style={{'max-height': 'calc(100vh - 210px)', 'overflow-y': 'auto'}}>
                 { this.props.type === "terms" ?
                 <PolicyTerms />
+                : null }
+                { this.props.type === "privacy" ?
+                <PolicyPrivacy />
                 : null }
                 { this.props.type === "about" ?
                 <PolicyAbout />

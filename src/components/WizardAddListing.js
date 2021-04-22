@@ -10,6 +10,7 @@ import AccountConfirmModal from './AccountConfirmModal';
 import AccountForgotPasswordModal from './AccountForgotPasswordModal';
 import AccountForgotConfirmModal from './AccountForgotConfirmModal';
 import authenticationService from '../helpers/authentication';
+import PolicyModal from '../components/PolicyModal';
 
 export class WizardAddListing extends Component {
     constructor(props){
@@ -45,6 +46,11 @@ export class WizardAddListing extends Component {
 
         // Forgot Password Confirm
         this.handleForgotConfirm = this.handleForgotConfirm.bind(this)
+
+        // Policy Modal
+        this.handleTerms = this.handleTerms.bind(this);
+        this.handlePrivacy = this.handlePrivacy.bind(this);
+        this.handlePolicyModalHide = this.handlePolicyModalHide.bind(this);
 
         this.state = {
 
@@ -279,6 +285,7 @@ export class WizardAddListing extends Component {
             modalShowRegister:false,
             registerMessage: null
         });
+        this.props.onCancel();
     }
     handleLoginCancel(){
         this.setState({
@@ -286,14 +293,34 @@ export class WizardAddListing extends Component {
             loginMessage: null,
             loginProgress: false
         });
+        this.props.onCancel();
     }
     handleConfirmCancel(){
         this.setState({
             modalShowConfirm:false,
             confirmMessage: null
         });
+        this.props.onCancel();
     }
 
+    handleTerms(){
+        this.setState({
+            showPolicyModal: true,
+            policyType: "terms"
+        });
+    }
+    handlePrivacy(){
+        this.setState({
+            showPolicyModal: true,
+            policyType: "privacy"
+        });
+    }
+    handlePolicyModalHide(){
+        this.setState({
+            showPolicyModal: false,
+            policyType: ""
+        });
+    }
     render(){
         var startWizard = this.props.start && this.state.addListingType;
         return(
@@ -352,7 +379,8 @@ export class WizardAddListing extends Component {
                 onLoginStart={this.handleLoginStart}
                 registerMessage={this.state.registerMessage}
                 progress={this.state.registerProgress}
-
+                onTerms={this.handleTerms}
+                onPrivacy={this.handlePrivacy}
             />
             : null}
             { this.state.modalShowConfirm ?
@@ -397,7 +425,13 @@ export class WizardAddListing extends Component {
                 loggedIn={this.props.loggedIn}
             />
             : null }
-
+            { this.state.showPolicyModal ?
+            <PolicyModal
+                show={this.state.showPolicyModal}
+                type={this.state.policyType}
+                onHide={this.handlePolicyModalHide}
+            />
+            : null }
         </React.Fragment>
         );
     }

@@ -8,6 +8,7 @@ import ReportPage from './containers/ReportPage';
 import ReportListPage from './containers/ReportListPage';
 import AdminPage from './containers/AdminPage';
 import TermsPage from './containers/TermsPage';
+import PrivacyPolicyPage from './containers/PrivacyPolicyPage';
 
 class Routes extends React.Component {
 
@@ -79,6 +80,7 @@ render(){
     <Route path="/admin" exact component={AdminPage} />
     <Route path="/instructions" exact component={InstructionPage} />
     <Route path="/terms" exact component={TermsPage} />
+    <Route path="/privacypolicy" exact component={PrivacyPolicyPage} />
   </Switch>
   );
 }

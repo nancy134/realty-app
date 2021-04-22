@@ -15,7 +15,7 @@ class App extends React.Component {
       super(props);
 
       var minimalTab = false;
-      if (window.location.pathname === "/terms")
+      if (window.location.pathname === "/terms" || window.location.pathname === "/privacypolicy")
           minimalTab = true;
 
       var showFooter = true;
@@ -156,6 +156,13 @@ class App extends React.Component {
            onClick={() => this.handlePolicyModalShow("terms")}
        >
            <span>Terms & Conditions</span>
+       </Button>
+       <Button
+           variant="link"
+           size="sm"
+           onClick={() => this.handlePolicyModalShow("privacy")}
+       >
+           <span>Privacy Policy</span>
        </Button>
        <Button
            variant="link"

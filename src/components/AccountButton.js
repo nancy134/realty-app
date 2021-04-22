@@ -11,6 +11,7 @@ import AccountRegisterModal from './AccountRegisterModal';
 import AccountConfirmModal from './AccountConfirmModal';
 import AccountForgotPasswordModal from './AccountForgotPasswordModal';
 import AccountForgotConfirmModal from './AccountForgotConfirmModal';
+import PolicyModal from './PolicyModal';
 
 export class AccountButton extends Component{
     constructor(props){
@@ -35,6 +36,10 @@ export class AccountButton extends Component{
         // Forgot Password Confirm
         this.handleForgotConfirm = this.handleForgotConfirm.bind(this);
 
+        // Policy
+        this.handleTerms = this.handleTerms.bind(this);
+        this.handlePrivacy = this.handlePrivacy.bind(this);
+        this.handlePolicyModalHide = this.handlePolicyModalHide.bind(this);
         this.state = {
 
             // Login
@@ -63,7 +68,11 @@ export class AccountButton extends Component{
             forgotConfirmMessage: null,
             forgotConfirmProgress: false,
 
-            email: null 
+            email: null,
+
+            // Policy modal
+            showPolicyModal: false,
+            policyType: "" 
         }
     }
     componentDidMount(){
@@ -221,6 +230,24 @@ export class AccountButton extends Component{
             confirmMessage: null
         });
     }
+    handleTerms(){
+        this.setState({
+            showPolicyModal: true,
+            policyType: "terms"
+        });
+    }
+    handlePrivacy(){
+        this.setState({
+            showPolicyModal: true,
+            policyType: "privacy"
+        });
+    }
+    handlePolicyModalHide(){
+        this.setState({
+            showPolicyModal: false,
+            policyType: ""
+        });
+    }
     render(){
         const userName = authenticationService.getUserName();
         return(
@@ -281,10 +308,12 @@ export class AccountButton extends Component{
             <AccountRegisterModal
                 show={this.state.modalShowRegister}
                 onRegister={(email,password) =>{this.handleRegister(email,password);}}
+                onLoginStart={() => {this.setState({modalShowLogin:true,modalShowRegister:false})}}
                 onCancel={this.handleRegisterCancel}
                 registerMessage={this.state.registerMessage}
                 progress={this.state.registerProgress}
-                
+                onTerms={this.handleTerms}
+                onPrivacy={this.handlePrivacy}
             />
             : null}
             { this.state.modalShowConfirm ?
@@ -310,6 +339,13 @@ export class AccountButton extends Component{
                 show={this.state.modalShowForgotConfirm}
                 onForgotPassword={(code, password)=>{this.handleForgotConfirm(code, password)}}
                 progress={this.state.forgotConfirmProgress}
+            />
+            : null}
+            { this.state.showPolicyModal ?
+            <PolicyModal
+                show={this.state.showPolicyModal}
+                type={this.state.policyType}
+                onHide={this.handlePolicyModalHide}
             />
             : null}
         </span>
