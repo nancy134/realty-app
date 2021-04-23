@@ -19,7 +19,6 @@ function getUser(){
     var url = process.env.REACT_APP_API + 'user/me';
     return new Promise(function(resolve, reject){
         axiosInstance.get(url).then(function(response){
-            console.log(response);
             resolve(response.data);
         }).catch(function(err){
             console.log(err);

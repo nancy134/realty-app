@@ -60,7 +60,9 @@ class PublishWizardIntro extends React.Component{
                     hasPromoCode: true,
                     userCode: userCode
                 });
-                that.props.onNext(that.state.hasPromoCode);
+                console.log("userCode:");
+                console.log(userCode);
+                that.props.onNext(userCode);
             }).catch(function(err){
                 console.log(err);
                 that.setState({
@@ -70,6 +72,8 @@ class PublishWizardIntro extends React.Component{
                 });
             });
         } else {
+            console.log("this.state.userCode:");
+            console.log(this.state.userCode);
             this.props.onNext(this.state.userCode);
         }
     }

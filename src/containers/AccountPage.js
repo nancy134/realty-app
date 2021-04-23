@@ -7,6 +7,7 @@ import AccountProfile from '../components/AccountProfile';
 import AccountPaymentMethod from '../components/AccountPaymentMethod';
 import AccountAssociates from '../components/AccountAssociates';
 import AccountBilling from '../components/AccountBilling';
+import AccountSettings from '../components/AccountSettings';
 
 export class AccountPage extends Component {
     constructor(props){
@@ -18,7 +19,6 @@ export class AccountPage extends Component {
     }
 
     handleSwitchTab(key){
-        console.log("key: "+key);
         this.setState({
             tab: key
         });
@@ -37,6 +37,9 @@ export class AccountPage extends Component {
             ): null}
             {tab === "associates" ? (
             <AccountAssociates />
+            ): null}
+            {tab === "settings" ? (
+            <AccountSettings />
             ): null}
             {tab === "payment" ? (
             <AccountBilling />

@@ -49,7 +49,6 @@ class AccountProfile extends React.Component{
                 that.setState({
                     updateProgress: false
                 });
-                console.log(result);
                 that.setState({
                     profile: result,
                     states: enums.states 

@@ -10,18 +10,23 @@ class AccountToolbar extends Component {
     }
 
     onSelectTab(key){
-        console.log("key: "+key);
         this.props.onSwitchTab(key);
     }
 
     render(){
+        var show = false;
         return (
         <Nav justify variant="tabs" onSelect={this.onSelectTab} defaultActiveKey="profile">
             <Nav.Item>
                 <Nav.Link eventKey="profile">Account Profile</Nav.Link>
             </Nav.Item>
+            { show ?
             <Nav.Item>
                 <Nav.Link eventKey="associates" >Associates</Nav.Link>
+            </Nav.Item>
+            : null }
+            <Nav.Item>
+                <Nav.Link eventKey="settings">Settings</Nav.Link>
             </Nav.Item>
             <Nav.Item>
                 <Nav.Link eventKey="billing">Payment Method</Nav.Link>
