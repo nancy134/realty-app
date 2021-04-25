@@ -116,7 +116,6 @@ class PublishWizardPaymentMethod extends React.Component{
             });
         });
         } else {
-            console.log("Publishing listing");
             var listingId = that.props.listingDetail.listing.ListingId;
             listingService.publish(listingId).then(function(result){
                 that.setState({

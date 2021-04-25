@@ -10,7 +10,7 @@ export function uploadFiles(imagesToAdd, table, id, name, progressCB) {
         });
 
         Promise.all(promises).then(function(ret){
-            resolve("1");
+            resolve(ret);
         }).catch(function(err){
             reject(err);
         });
@@ -43,6 +43,7 @@ function sendRequest(file, table, id, order, name, progressCB){
             //const copy = { ...uploadProgress };
             uploadProgress[file.name] = { state: "error", percentage: 0 };
             progressCB(uploadProgress);
+            console.log(req.response);
             reject(req.response);
         });
 
@@ -57,7 +58,8 @@ function sendRequest(file, table, id, order, name, progressCB){
         req.onreadystatechange = function(){
             if (req.readyState === 4){
                 if (req.status === 200) {
-                    resolve(req.status);
+                    var jsonResponse = JSON.parse(req.response);
+                    resolve(jsonResponse);
                 } else {
                     reject(req.status);
                 }

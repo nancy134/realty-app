@@ -64,6 +64,7 @@ class ListingDetail extends React.Component {
             attachmentFiles: [],
             attachmentsUploadProgress: {},
             attachmentsModified: false,
+            attachmentError: null,
 
             // Unit
             unitNew: false,
@@ -471,13 +472,17 @@ class ListingDetail extends React.Component {
        }
        promises.push(uploadAttachmentsPromise);
        Promise.all(promises).then(function(values){
-           that.props.onFetchListing(that.props.listingDetail.listing.id);
+           that.props.onFetchListing(values[0][0].ListingVersionId);
            that.handleAttachmentsModalHide();
+       }).catch(function(err){
+           console.log("error uploading attachment");
+           that.setState({
+               attachmentsError: "error uploading attachment",
+               attachmentsSaving: false
+           });
        });
    }
     handleAttachmentsDelete(){
-        console.log("handleAttachmentsDelete()");
-        console.log("this.state.attachmentToDelete: "+this.state.attachmentToDelete);
         var that = this;;
         attachmentService.deleteFile(this.state.attachmentToDelete).then(function(result){
             console.log(result);
@@ -491,15 +496,11 @@ class ListingDetail extends React.Component {
         });
     }
     handleAttachmentsProgress(uploadProgress){
-        console.log("uploadProgress: "+uploadProgress);
         this.setState({
             attachmentsUploadProgress: uploadProgress
         });
     }
     handleAttachmentsAdded(files){
-        console.log("handleAttachmentsAdded()");
-        console.log("files:");
-        console.log(files);
         this.setState(prevState => ({
             attachmentsModified: true,
             attachmentFiles: prevState.attachmentFiles.concat(files)
@@ -938,6 +939,7 @@ class ListingDetail extends React.Component {
                     onAttachmentsModalHide={this.handleAttachmentsModalHide}
                     onAttachmentsDeleteModalShow={this.handleAttachmentsDeleteModalShow}
                     attachmentsSaving={this.state.attachmentsSaving}
+                    attachmentsError={this.state.attachmentsError}
                 />
                 : null }
                 {(editMode === "edit" && listingType === listingTypes.FORSALE) || 

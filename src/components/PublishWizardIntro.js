@@ -60,11 +60,8 @@ class PublishWizardIntro extends React.Component{
                     hasPromoCode: true,
                     userCode: userCode
                 });
-                console.log("userCode:");
-                console.log(userCode);
                 that.props.onNext(userCode);
             }).catch(function(err){
-                console.log(err);
                 that.setState({
                     validPromoCode: false,
                     validateProgress: false,
@@ -72,8 +69,6 @@ class PublishWizardIntro extends React.Component{
                 });
             });
         } else {
-            console.log("this.state.userCode:");
-            console.log(this.state.userCode);
             this.props.onNext(this.state.userCode);
         }
     }
@@ -82,8 +77,6 @@ class PublishWizardIntro extends React.Component{
         var that = this;
         console.log("Checking to see if user has valid promo code");
         billingService.getUserCodeMe().then(function(userCode){
-            console.log("userCode:");
-            console.log(userCode);
             if (userCode){
                 that.setState({
                     hasPromoCode: true,

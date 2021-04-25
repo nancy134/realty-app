@@ -78,68 +78,68 @@ function EditButton(props) {
 }
 
 class ListingDetailAttachments extends React.Component {
-    constructor(props) {
-        super(props);
+constructor(props) {
+super(props);
 
-        this.handleEdit = this.handleEdit.bind(this);
-        this.handleSave = this.handleSave.bind(this);
-        this.handleAttachmentsAdded = this.handleAttachmentsAdded.bind(this);
-        this.getListing = this.getListing.bind(this);
-        this.handleDeleteAttachment = this.handleDeleteAttachment.bind(this);
-        this.handleDownload = this.handleDownload.bind(this);
-        this.state = {
-            cards: []
-        };
+this.handleEdit = this.handleEdit.bind(this);
+this.handleSave = this.handleSave.bind(this);
+this.handleAttachmentsAdded = this.handleAttachmentsAdded.bind(this);
+this.getListing = this.getListing.bind(this);
+this.handleDeleteAttachment = this.handleDeleteAttachment.bind(this);
+this.handleDownload = this.handleDownload.bind(this);
+this.state = {
+    cards: []
+};
+}
+componentDidMount(){
+var cards = [];
+for (var i=0; i<4; i++){
+    var card = {
+	id: i,
+	url: "https://sabre-images.s3.amazonaws.com/PDF.png",
+	order: i+1,
+	file: null
     }
-    componentDidMount(){
-        var cards = [];
-        for (var i=0; i<4; i++){
-            var card = {
-                id: i,
-                url: "https://sabre-images.s3.amazonaws.com/PDF.png",
-                order: i+1,
-                file: null
-            }
-            cards.push(card);
-        }
-        this.setState({
-            cards: cards
-        });
-    }
-    handleEdit(){
-    }
-    handleSave(attachment){
-        this.props.onAttachmentsAdd(attachment);
-    }
-    handleAttachmentsAdded(files){
-        this.props.onAttachmentsAdded(files);
-    }
-    getListing(){
-        this.props.getListing();
-    }
-    handleDeleteAttachment(id, name){
-        console.log("handleDeleteAttachment()");
-        console.log("id: "+id);
-        this.props.onAttachmentsDeleteModalShow(id, name);
-    }
-    handleDownload(index, url){
-        saveAs(url,"attachment.jpg");
-    }
-    render() {
-        var attachments = [];
-        if (this.props.listing){
-            attachments = this.props.listing.attachments;
-        }
+    cards.push(card);
+}
+this.setState({
+    cards: cards
+});
+}
+handleEdit(){
+}
+handleSave(attachment){
+this.props.onAttachmentsAdd(attachment);
+}
+handleAttachmentsAdded(files){
+this.props.onAttachmentsAdded(files);
+}
+getListing(){
+this.props.getListing();
+}
+handleDeleteAttachment(id, name){
+console.log("handleDeleteAttachment()");
+console.log("id: "+id);
+this.props.onAttachmentsDeleteModalShow(id, name);
+}
+handleDownload(index, url){
+saveAs(url,"attachment.jpg");
+}
+render() {
+var attachments = [];
+if (this.props.listing){
+    attachments = this.props.listing.attachments;
+}
 
-        const listing = this.props.listing;
-        const editMode = this.props.editMode;
+const listing = this.props.listing;
+const editMode = this.props.editMode;
 
-        return (
-            <div className="m-4 shadow border">
-                <Row className="mt-2 ml-0 mr-0">
-                    <Col>
-	                <h3>Attachments {editMode === "edit" ? 
-                            <EditButton 
+return (
+    <div className="m-4 shadow border">
+	<Row className="mt-2 ml-0 mr-0">
+	    <Col>
+		<h3>Attachments {editMode === "edit" ? 
+		    <EditButton 
                                 listing={listing} 
                                 onSave={this.handleSave} 
                                 getListing={this.props.getListing}
@@ -153,7 +153,7 @@ class ListingDetailAttachments extends React.Component {
                                 onHide={this.props.onAttachmentsModalHide}
                                 show={this.props.attachmentsAdd}
                                 saving={this.props.attachmentsSaving}
-                                errorMessage={this.props.errorMessage}
+                                errorMessage={this.props.attachmentsError}
                                 onAttachmentsChanged={this.props.onAttachmentsChanged}
                             /> 
                             : null}</h3>
