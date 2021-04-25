@@ -1,8 +1,7 @@
 import React from 'react';
 import {
     Row,
-    Col,
-    Spinner
+    Col
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -11,34 +10,27 @@ import {
 import ListingEditGeneral from './ListingEditGeneral';
 
 function EditButton(props) {
-    const [modalShow, setModalShow] = React.useState(false);
 
     return (
         <span>
-            {props.showSpinner ?
-            <span
-                id="general_spinner"
-                className="edit-button text-danger"
-            >
-                <Spinner animation="border" size="sm"/>
-            </span>
-            : 
             <span 
                 id="general_edit_button"
-                onClick={() => setModalShow(true)} 
+                onClick={props.onShow} 
                 className="edit-button text-danger"
             >
                 <FontAwesomeIcon size="xs" icon={faPencilAlt} />&nbsp;Edit Building Detail
             </span>
-            }
-            {modalShow ?
+            {props.show ?
             <ListingEditGeneral
                 listing={props.listing}
                 propertyTypes={props.propertyTypes}
-                show={modalShow}
                 getListing={props.getListing}
-                onHide={() => setModalShow(false)}
                 onSave={listing => props.onSave(listing)}
+                saving={props.saving}
+
+                show={props.show}
+                onHide={props.onHide}
+                errorMessage={props.errorMessage} 
             />
             : null}
         </span>
@@ -74,7 +66,7 @@ class ListingDetailGeneral extends React.Component {
         this.getListing = this.getListing.bind(this);
     }
     handleSave(listing){
-        this.props.onListingUpdate(listing);
+        this.props.onGeneralUpdate(listing);
     }
     getListing(){
         this.props.getListing();
@@ -144,6 +136,12 @@ class ListingDetailGeneral extends React.Component {
                                 propertyTypes={propertyTypes}
                                 onSave={this.handleSave}
                                 getListing={this.props.getListing}
+
+                                onShow={this.props.onGeneralModalUpdate}
+                                onHide={this.props.onGeneralModalHide}
+                                show={this.props.generalUpdate}
+                                saving={this.props.generalSaving}
+                                errorMessage={this.props.errorMessage}
                             /> : null}</h3>
                     </Col>
                 </Row>

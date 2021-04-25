@@ -4,7 +4,9 @@ import {
     Form,
     Modal,
     Button,
-    InputGroup
+    InputGroup,
+    Spinner,
+    Alert
 } from 'react-bootstrap';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -28,6 +30,24 @@ const GeneralSchema = Yup.object().shape({
 
 });
 
+function ErrorAlert(props) {
+    const [show, setShow] = React.useState(true);
+
+    if (show) {
+        return (
+        <div className="w-100">
+            <Alert 
+                variant="danger" 
+                onClose={() => setShow(false)} 
+                dismissible
+            >
+                <Alert.Heading>Oh no! You got an error!</Alert.Heading>
+                <p>{props.errorMessage}</p>
+            </Alert>
+        </div>
+        );
+    }
+}
 class ListingEditGeneral extends React.Component {
     constructor(props){
         super(props);
@@ -87,7 +107,6 @@ class ListingEditGeneral extends React.Component {
         }
 
         this.props.onSave(listing);
-        this.props.onHide();
     }
     render()
     {
@@ -294,7 +313,7 @@ class ListingEditGeneral extends React.Component {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         isInvalid={!!errors.driveInDoors}
-                        isValid={touched.driveInDoors && !errors.driveInDoors && values.driveIndoors !== ""}
+                        isValid={touched.driveInDoors && !errors.driveInDoors && values.driveInDoors !== ""}
                         disabled={isSubmitting}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -464,6 +483,11 @@ class ListingEditGeneral extends React.Component {
         </Form>
         </Modal.Body>
         <Modal.Footer>
+            {this.props.errorMessage ?
+            <ErrorAlert
+                errorMessage={this.props.errorMessage}
+            />
+            : null}
             { dirty ?
             <Button
                 id="general_edit_cancel_button" 
@@ -484,7 +508,17 @@ class ListingEditGeneral extends React.Component {
                 id="general_edit_save_button"
                 onClick={handleSubmit}
             >
-                Save
+                { this.props.saving ?
+                <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                />
+                :
+                <span>Save</span>
+                }
             </Button>
         </Modal.Footer>
     </Modal>

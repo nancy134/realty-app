@@ -255,9 +255,6 @@ class ListingItem extends React.Component {
                                 Status: {publishStatus}
                             </div>
                             : null}
-                            {listing.yearBuilt ?
-                            <div>Built in {listing.yearBuilt}</div>
-                            : null}
                             { listing.spaces.length === 1 ?
                             <div>{size} sf for lease</div>
                             : null}

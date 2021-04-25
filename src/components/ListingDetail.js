@@ -39,6 +39,10 @@ class ListingDetail extends React.Component {
             overviewUpdate: false,
             overviewSaving: false,
 
+            // General
+            generalUpdate: false,
+            generalSaving: false,
+
             // Images
             overviewFiles: [],
             uploadProgress: [],
@@ -83,8 +87,8 @@ class ListingDetail extends React.Component {
 
             // Contact
             showContactModal: false,
-
         };
+
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
         this.handleEditToggle = this.handleEditToggle.bind(this);
         this.handleListingUpdate = this.handleListingUpdate.bind(this);
@@ -93,6 +97,11 @@ class ListingDetail extends React.Component {
         this.handleOverviewUpdate = this.handleOverviewUpdate.bind(this);
         this.handleOverviewModalUpdate = this.handleOverviewModalUpdate.bind(this);
         this.handleOverviewModalHide = this.handleOverviewModalHide.bind(this);
+
+        // General
+        this.handleGeneralUpdate = this.handleGeneralUpdate.bind(this);
+        this.handleGeneralModalUpdate = this.handleGeneralModalUpdate.bind(this);
+        this.handleGeneralModalHide = this.handleGeneralModalHide.bind(this);
 
         // Images
         this.handleFilesAdded = this.handleFilesAdded.bind(this);
@@ -239,6 +248,35 @@ class ListingDetail extends React.Component {
             });
         }).catch(function(err){
             console.log(err);
+        });
+    }
+
+    // General
+    handleGeneralModalUpdate(){
+        this.setState({
+            generalUpdate: true
+        });
+    }
+    handleGeneralModalHide(){
+        this.setState({
+            generalUpdate: false,
+            generalSaving: false,
+            generalError: null
+        });
+    }
+    handleGeneralUpdate(listing){
+        this.setState({generalSaving: true});
+        var that = this;
+        listingService.update(listing).then(function(updatedListing){
+            that.props.onFetchListing(updatedListing.listing.id);
+            that.handleGeneralModalHide();
+        }).catch(function(err){
+            var errMsg = "An unknown error occurred";
+            if (err.message) errMsg = err.message;
+            that.setState({
+                generalError: errMsg,
+                generalSaving: false
+            });
         });
     }
 
@@ -873,9 +911,14 @@ class ListingDetail extends React.Component {
                 <ListingDetailGeneral
                     listing={listing}
                     editMode={editMode}
-                    onListingUpdate={this.handleListingUpdate}
                     getListing={this.props.onFetchListing}
                     propertyTypes={propertyTypes}
+                    onGeneralUpdate={this.handleGeneralUpdate}
+                    onGeneralModalUpdate={this.handleGeneralModalUpdate}
+                    onGeneralModalHide={this.handleGeneralModalHide}
+                    generalUpdate={this.state.generalUpdate}
+                    generalSaving={this.state.generalSaving}
+                    errorMessage={this.state.generalError}
                 />
                 { (editMode === "edit") ||
                   (listing && (listing.attachments.length > 0)) ?
