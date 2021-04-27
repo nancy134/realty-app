@@ -57,6 +57,7 @@ export class AccountButton extends Component{
             modalShowConfirm: false,
             confirmMessage: null,
             confirmProgress: false,
+            confirmResend: false,
 
             // Forgot Password
             modalShowForgotPassword: false,
@@ -99,10 +100,29 @@ export class AccountButton extends Component{
             });
             that.props.onLogin(result);
         }).catch(function(err){
-           that.setState({
-               loginMessage: err.message,
-               loginProgress: false
-           });
+           console.log(err);
+           if (err.code === 'UserNotConfirmedException'){
+               console.log("Display resend confirmation request");
+               authenticationService.resendConfirmationCode(email).then(function(result){
+                   that.setState({
+                       modalShowLogin: false,
+                       loginProgress: false,
+                       modalShowConfirm: true,
+                       confirmResend: true,
+                       email: email
+                   });
+               }).catch(function(err){
+                   that.setState({
+                       loginMessage: err.message,
+                       loginProgress: false
+                   });
+               });
+           } else {
+               that.setState({
+                   loginMessage: err.message,
+                   loginProgress: false
+               });
+           }
         });
     }
     handleRegister(email, password){
@@ -325,6 +345,7 @@ export class AccountButton extends Component{
                 confirmMessage={this.state.confirmMessage}
                 progress={this.state.confirmProgress}
                 confirmMessageVariant={this.state.confirmMessageVariant}
+                resend={this.state.confirmResend}
             />
             : null}
             { this.state.modalShowForgotPassword ?

@@ -12,6 +12,7 @@ export function signin(params){
         rp(options).then(function(resp){
             resolve(resp);
         }).catch(function(err){
+            console.log(err);
             if (err && err.response && err.response.body){
                 reject(err.response.body);
             } else {
@@ -84,6 +85,23 @@ export function confirm(params){
     });
 }
 
+export function resendConfirmationCode(params){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API+"resendConfirmationCode";
+        var options = {
+            method: 'POST',
+            uri: url,
+            body: params,
+            json: true
+        };
+        rp(options).then(function(resp){
+            resolve(resp);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
 export function forgotPassword(params){
     return new Promise(function(resolve, reject){
         var url = process.env.REACT_APP_API+"forgotPassword";
@@ -126,7 +144,7 @@ export function confirmForgotPassword(params){
     });
 }
  
-const auth = {signin, signup, confirm, forgotPassword, confirmForgotPassword};
+const auth = {signin, signup, confirm, resendConfirmationCode, forgotPassword, confirmForgotPassword};
 export default auth;
 
 

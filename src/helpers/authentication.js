@@ -118,6 +118,19 @@ export function confirmResponse(email, code){
     });
 }
 
+export function resendConfirmationCode(email){
+    return new Promise(function(resolve, reject){
+        var resendParams = {
+            username: email
+        };
+        auth.resendConfirmationCode(resendParams).then(function(result){
+            resolve(result);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
 export function forgotPasswordResponse(email){
     return new Promise(function(resolve, reject){
         var forgotPasswordParams = {
@@ -159,6 +172,7 @@ const authentication = {
     loginResponse,
     signupResponse,
     confirmResponse,
+    resendConfirmationCode,
     forgotPasswordResponse,
     confirmForgotPasswordResponse
 };

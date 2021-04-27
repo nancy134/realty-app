@@ -98,8 +98,18 @@ class AccountConfirmModal extends React.Component {
                 : null }
                 <Form className={formPadding}>
                 <Alert variant="info">
-                    <p className="text-center">Check your email for verification code.</p>
-                    <p className="text-center">Email was sent to {this.props.email}</p>
+                    { this.props.resend ?
+                    <div>
+                    <div className="text-center">Your account has not yet been verified.</div>
+                    <div className="text-center">Check your email for the verification code to enter below.</div>
+                    <div className="text-center">The confirmation email was sent to {this.props.email}</div>
+                    </div>
+                    :
+                    <div>
+                    <div className="text-center">Check your email for verification code to enter below.</div>
+                    <div className="text-center">The confirmation email was sent to {this.props.email}</div>
+                    </div>
+                    }
                 </Alert>
                 {this.props.confirmMessage ?
                 <Alert variant="danger">
