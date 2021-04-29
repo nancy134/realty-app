@@ -32,6 +32,7 @@ export class AccountButton extends Component{
         // Forgot Password
         this.handleForgotPasswordStart = this.handleForgotPasswordStart.bind(this);
         this.handleForgotPassword = this.handleForgotPassword.bind(this);
+        this.handleForgotPasswordCancel = this.handleForgotPasswordCancel.bind(this);
 
         // Forgot Password Confirm
         this.handleForgotConfirm = this.handleForgotConfirm.bind(this);
@@ -100,7 +101,6 @@ export class AccountButton extends Component{
             });
             that.props.onLogin(result);
         }).catch(function(err){
-           console.log(err);
            if (err.code === 'UserNotConfirmedException'){
                console.log("Display resend confirmation request");
                authenticationService.resendConfirmationCode(email).then(function(result){
@@ -250,6 +250,12 @@ export class AccountButton extends Component{
             confirmMessage: null
         });
     }
+    handleForgotPasswordCancel(){
+        this.setState({
+            modalShowForgotPassword: false,
+            forgotPasswordMessage: null
+        });
+    }
     handleTerms(){
         this.setState({
             showPolicyModal: true,
@@ -352,6 +358,7 @@ export class AccountButton extends Component{
             <AccountForgotPasswordModal
                 show={this.state.modalShowForgotPassword}
                 onForgotPassword={(email)=>{this.handleForgotPassword(email)}}
+                onCancel={this.handleForgotPasswordCancel}
                 progress={this.state.forgotPasswordProgress}
             />
             : null}

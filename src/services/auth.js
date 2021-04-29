@@ -12,7 +12,6 @@ export function signin(params){
         rp(options).then(function(resp){
             resolve(resp);
         }).catch(function(err){
-            console.log(err);
             if (err && err.response && err.response.body){
                 reject(err.response.body);
             } else {

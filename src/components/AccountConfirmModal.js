@@ -77,6 +77,7 @@ class AccountConfirmModal extends React.Component {
             dialogClassName={className}
             animation={animation}
             show={this.props.show}
+            onHide={this.props.onCancel}
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">

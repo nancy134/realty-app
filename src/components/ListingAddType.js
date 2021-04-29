@@ -45,7 +45,7 @@ class ListingAddType extends React.Component{
        return(
         <Modal
           show={this.props.show}
-          onHide={this.props.onHide}
+          onHide={this.props.onCancel}
           aria-labelledby="contained-modal-title-vcenter"
           dialogClassName="modal-80w"
           animation={false}
