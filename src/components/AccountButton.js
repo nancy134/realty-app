@@ -36,6 +36,7 @@ export class AccountButton extends Component{
 
         // Forgot Password Confirm
         this.handleForgotConfirm = this.handleForgotConfirm.bind(this);
+        this.handleForgotConfirmCancel = this.handleForgotConfirmCancel.bind(this);
 
         // Policy
         this.handleTerms = this.handleTerms.bind(this);
@@ -256,6 +257,12 @@ export class AccountButton extends Component{
             forgotPasswordMessage: null
         });
     }
+    handleForgotConfirmCancel(){
+        this.setState({
+            modalShowForgotConfirm: false,
+            forgotConfirmMessage: null
+        });
+    }
     handleTerms(){
         this.setState({
             showPolicyModal: true,
@@ -367,6 +374,7 @@ export class AccountButton extends Component{
                 show={this.state.modalShowForgotConfirm}
                 onForgotPassword={(code, password)=>{this.handleForgotConfirm(code, password)}}
                 progress={this.state.forgotConfirmProgress}
+                onCancel={this.handleForgotConfirmCancel}
             />
             : null}
             { this.state.showPolicyModal ?
