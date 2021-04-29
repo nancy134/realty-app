@@ -168,6 +168,7 @@ export class ListingPage extends Component {
             allAmenities: [],
             propertyTypes: [],
             createListing: createListing,
+            finishProgress: false,
 
             // Spaces
             spaceAccordionText: [],
@@ -385,6 +386,9 @@ export class ListingPage extends Component {
     // Add Listing
 
     handleAddListingFinish(listing){
+        this.setState({
+            finishProgress: true
+        });
         listing.owner = authenticationService.getUserEmail();
         var createPromise = listingService.create(listing);
         var that = this;
@@ -401,7 +405,8 @@ export class ListingPage extends Component {
                     center: null,
                     zoomLevel: null
                 },
-                page: 1
+                page: 1,
+                finishProgress: false
             };
 
             that.fetchListingPromise(localState).then(function(localState){
@@ -413,15 +418,18 @@ export class ListingPage extends Component {
                     that.props.onAddListingCancel();
                 }).catch(function(err){
                     console.log(err);
+                    that.setState({finishProgress: false});
                     that.props.onAddListingCancel();
                 });
             }).catch(function(err){
                 console.log(err);
+                that.setState({finishProgress: false});
                 that.props.onAddListingCancel();
             });
 
         }).catch(function(err){
             console.log(err);
+            that.setState({finishProgress: false});
             that.props.onAddListingCancel();
         });
     }
@@ -1413,6 +1421,7 @@ export class ListingPage extends Component {
                 loggedIn={this.props.loggedIn}
                 start={this.props.showAddListingWizard}
                 onFinish={this.handleAddListingFinish}
+                finishProgress={this.state.finishProgress}
                 onCancel={this.handleAddListingCancel}
                 onLogin={this.handleLogin}
                 propertyTypes={this.state.propertyTypes}

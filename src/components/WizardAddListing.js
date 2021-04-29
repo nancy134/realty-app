@@ -76,6 +76,7 @@ export class WizardAddListing extends Component {
             modalShowConfirm: false,
             confirmMessage: null,
             confirmProgress: false,
+            confirmResend: false,
 
             // Forgot Password
             forgotPassword: false,
@@ -173,10 +174,27 @@ export class WizardAddListing extends Component {
             });
             that.props.onLogin(result);
         }).catch(function(err){
-           that.setState({
-               loginMessage: err.message,
-               loginProgress: false
-           });
+           if (err.code === 'UserNotConfirmedException'){
+               authenticationService.resendConfirmationCode(email).then(function(result){
+                   that.setState({
+                       modalShowLogin: false,
+                       loginProgress: false,
+                       modalShowConfirm: true,
+                       confirmResend: true,
+                       email: email
+                   });
+               }).catch(function(err){
+                   that.setState({
+                       loginMessage: err.message,
+                       loginProgress: false
+                   });
+               });
+           } else {
+               that.setState({
+                   loginMessage: err.message,
+                   loginProgress: false
+               });
+           }
         });
     }
 
@@ -423,6 +441,7 @@ export class WizardAddListing extends Component {
                 listing={this.state.newListing}
                 onCancel={this.handleCancelAddAddress}
                 loggedIn={this.props.loggedIn}
+                finishProgress={this.props.finishProgress}
             />
             : null }
             { this.state.showPolicyModal ?

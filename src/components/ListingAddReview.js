@@ -4,7 +4,8 @@ import {
     Button,
     Row,
     Col,
-    Alert
+    Alert,
+    Spinner
 } from 'react-bootstrap';
 import StepperAddListing from '../components/StepperAddListing';
 
@@ -119,7 +120,17 @@ class ListingAddReview extends React.Component{
                     id="overview_edit_next_button"
                     onClick={() => this.handleNext(listing)}
                 >
+                    { !this.props.finishProgress ?
                     <span>Create Listing</span> 
+                    :
+                    <span><span>Saving...&nbsp;</span><Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                    /></span>
+                    }
                 </Button>
             </Modal.Footer>
        </Modal>

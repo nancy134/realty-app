@@ -185,13 +185,13 @@ class AccountLoginModal extends React.Component {
                     { !this.props.loginProgress ?
                     <span>{nextButton}</span>
                     :
-                    <Spinner
+                    <span><span>{nextButton}&nbsp;</span><Spinner
                         as="span"
                         animation="border"
                         size="sm"
                         role="status"
                         aria-hidden="true"
-                    />
+                    /></span>
                     }
                 </Button>
             </Modal.Footer>
