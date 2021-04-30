@@ -488,8 +488,8 @@ export class ListingPage extends Component {
         if (moreFilters){
             if (moreFilters.minSize) moreQuery += "&minSize="+moreFilters.minSize; 
             if (moreFilters.maxSize) moreQuery += "&maxSize="+moreFilters.maxSize;
-            if (moreFilters.minRate) moreQuery += "&minRate="+moreFilters.minRate;
-            if (moreFilters.maxRate) moreQuery += "&maxRate="+moreFilters.maxRate;
+            if (moreFilters.minPrice) moreQuery += "&minRate="+moreFilters.minPrice;
+            if (moreFilters.maxPrice) moreQuery += "&maxRate="+moreFilters.maxPrice;
         }
 
         var bounds = null;

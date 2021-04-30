@@ -2,7 +2,8 @@ import React from 'react';
 import {
     Form,
     Col,
-    Row
+    Row,
+    InputGroup
 } from 'react-bootstrap';
 
 class FilterMore extends React.Component {
@@ -61,35 +62,59 @@ class FilterMore extends React.Component {
             <Form.Group as={Row} className="mr-1 ml-1">
                 <Form.Label column sm="4">Available Space</Form.Label>
                 <Col sm="4">
-                    <Form.Control 
-                        id="filter_min_size"
-                        placeholder="Min" 
-                        value={this.props.moreFilters.minSize}
-                        onChange={this.handleMinSizeChange} />
+                    <InputGroup>
+                        <Form.Control 
+                            id="filter_min_size"
+                            placeholder="Min" 
+                            value={this.props.moreFilters.minSize}
+                            onChange={this.handleMinSizeChange}
+                        />
+                        <InputGroup.Append>
+                            <InputGroup.Text>sf</InputGroup.Text>
+                        </InputGroup.Append>
+                    </InputGroup>
                 </Col>
                 <Col sm="4">
-                    <Form.Control
-                        id="filter_max_size"
-                        placeholder="Max"
-                        value={this.props.moreFilters.maxSize}
-                        onChange={this.handleMaxSizeChange} />
+                    <InputGroup>
+                        <Form.Control
+                            id="filter_max_size"
+                            placeholder="Max"
+                            value={this.props.moreFilters.maxSize}
+                            onChange={this.handleMaxSizeChange}
+                        />
+                        <InputGroup.Append>
+                            <InputGroup.Text>sf</InputGroup.Text>
+                        </InputGroup.Append>
+                    </InputGroup>
                 </Col>
             </Form.Group>
             <Form.Group as={Row} className="mr-1 ml-1">
                 <Form.Label column sm="4">Lease Rate</Form.Label>
                 <Col sm="4">
-                    <Form.Control
-                        id="filter_min_rate"
-                        placeholder="Min"
-                        value={this.props.moreFilters.minRate}
-                        onChange={this.handleMinRateChange}/>
+                    <InputGroup>
+                        <Form.Control
+                            id="filter_min_rate"
+                            placeholder="Min"
+                            value={this.props.moreFilters.minRate}
+                            onChange={this.handleMinRateChange}
+                        />
+                        <InputGroup.Append>
+                            <InputGroup.Text>sf/yr</InputGroup.Text>
+                        </InputGroup.Append>
+                    </InputGroup>
                 </Col>
                 <Col sm="4">
-                    <Form.Control 
-                        id="filter_max_rate"
-                        placeholder="Max"
-                        value={this.props.moreFilters.maxRate}
-                        onChange={this.handleMaxRateChange}/>
+                    <InputGroup>
+                        <Form.Control 
+                            id="filter_max_rate"
+                            placeholder="Max"
+                            value={this.props.moreFilters.maxRate}
+                            onChange={this.handleMaxRateChange}
+                        />
+                        <InputGroup.Append>
+                            <InputGroup.Text>sf/yr</InputGroup.Text>
+                        </InputGroup.Append>
+                    </InputGroup>
                 </Col>
             </Form.Group>
         </div>
