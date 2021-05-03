@@ -9,6 +9,7 @@ import {
 } from '@react-pdf/renderer';
 import {generalNameValuePairs} from '../helpers/utilities';
 import {amenitiesToRowCol} from '../helpers/utilities';
+import {formatSizeAndPrice} from '../helpers/utilities';
 
 Font.register({
     family: 'Open Sans',
@@ -252,9 +253,49 @@ export function Overview(props){
     );
 }
 
+export function SabreThumbnail(props){
+    var image = props.image;
+    if (image){
+        return(
+        <View
+            key={props.index}
+            style={styles.tableCol}
+        >
+        <Text
+            style={styles.tableCell}
+        >
+        <Image
+            style={{
+                width: props.width,
+                height: props.height
+            }}
+            src = {image.url + '?noCache=' + Math.random().toString()}
+            source = {{
+                header: {
+                    'Access-Control-Allow-Origin' : '*'
+                }
+            }}
+        />
+        </Text>
+        </View>
+        );
+    } else {
+        return(
+        <View
+            key={props.index}
+            style={styles.tableCol}
+        >
+            <Text
+                style={styles.tableCell}
+            ></Text>
+        </View>
+        );
+    }
+}
+
 export function SabreImage(props){
     var image = props.image;
-    console.log(image.url);
+    if (image){
     return(
         <Image
             style={{
@@ -271,7 +312,9 @@ export function SabreImage(props){
             }}
         />
     );
-
+    } else {
+        return null;
+    }
 }
 
 export function SabreImages(props){
@@ -614,12 +657,75 @@ export function Broker(props){
         </View>
     );
 }
+function ListItemSize(props){
+    if (props.spaces.length > 0){
+        var ret = formatSizeAndPrice(props.spaces);
+        console.log("ret:");
+        console.log(ret);
+        return(
+        <View
+            key={props.index}
+            style={styles.tableCol}
+        >
+            <Text
+                 style={styles.tableCell}
+            >
+                {ret.size}
+            </Text>
+        </View>
+        );
+    } else {
+        return(
+        <View
+            key={props.index}
+            style={styles.tableCol}
+        >
+            <Text
+                style={styles.tableCell}
+            ></Text>
+        </View>
+        );
+    }
+}
+
+function ListItemPrice(props){
+    if (props.spaces.length > 0){
+        var ret = formatSizeAndPrice(props.spaces);
+        console.log("ret:");
+        console.log(ret);
+        return(
+        <View
+            key={props.index}
+            style={styles.tableCol}
+        >
+            <Text
+                 style={styles.tableCell}
+            >
+                {ret.price}
+            </Text>
+        </View>
+        );
+    } else {
+        return(
+        <View
+            key={props.index}
+            style={styles.tableCol}
+        >
+            <Text
+                style={styles.tableCell}
+            ></Text>
+        </View>
+        );
+    }
+}
+
 export function ListingSummary(props){
     var listItems = props.listItems;
     var count = props.listItems.length;
     return(
         <Page
             size="A4"
+            orientation="landscape"
         >
             <View
                 style={{
@@ -649,15 +755,15 @@ export function ListingSummary(props){
                             </View>
                          ))}
                          { count < 4 ?
-                            <View key={1} style={styles.tableCol}>
+                            <View key={99} style={styles.tableCol}>
                             </View>
                          : null}
                          { count < 3 ?
-                            <View key={1} style={styles.tableCol}>
+                            <View key={100} style={styles.tableCol}>
                             </View>
                          : null} 
                          { count < 2 ?
-                            <View key={1} style={styles.tableCol}>
+                            <View key={101} style={styles.tableCol}>
                             </View>
                          : null} 
                     </View>
@@ -668,15 +774,15 @@ export function ListingSummary(props){
                             </View>
                          ))}
                          { count < 4 ?
-                            <View key={1} style={styles.tableCol}>
+                            <View key={99} style={styles.tableCol}>
                             </View>
                          : null}
                          { count < 3 ?
-                            <View key={1} style={styles.tableCol}>
+                            <View key={100} style={styles.tableCol}>
                             </View>
                          : null}
                          { count < 2 ?
-                            <View key={1} style={styles.tableCol}>
+                            <View key={101} style={styles.tableCol}>
                             </View>
                          : null}
                     </View>
@@ -688,15 +794,77 @@ export function ListingSummary(props){
                             </View>
                          ))}
                          { count < 4 ?
-                            <View key={1} style={styles.tableCol}>
+                            <View key={99} style={styles.tableCol}>
                             </View>
                          : null}
                          { count < 3 ?
-                            <View key={1} style={styles.tableCol}>
+                            <View key={100} style={styles.tableCol}>
                             </View>
                          : null}
                          { count < 2 ?
-                            <View key={1} style={styles.tableCol}>
+                            <View key={101} style={styles.tableCol}>
+                            </View>
+                         : null}
+                    </View>
+                    <View style={styles.tableRow}>
+                        {listItems.map((listItem, index) => (
+                            <ListItemSize
+                                index={index}
+                                spaces={listItem.listing.versions[0].spaces}
+                            />
+                         ))}
+                         { count < 4 ?
+                            <View key={99} style={styles.tableCol}>
+                            </View>
+                         : null}
+                         { count < 3 ?
+                            <View key={100} style={styles.tableCol}>
+                            </View>
+                         : null}
+                         { count < 2 ?
+                            <View key={101} style={styles.tableCol}>
+                            </View>
+                         : null}
+                    </View>
+                    <View style={styles.tableRow}>
+                        {listItems.map((listItem, index) => (
+                            <ListItemPrice
+                                index={index}
+                                spaces={listItem.listing.versions[0].spaces}
+                            />
+                         ))}
+                         { count < 4 ?
+                            <View key={99} style={styles.tableCol}>
+                            </View>
+                         : null}
+                         { count < 3 ?
+                            <View key={100} style={styles.tableCol}>
+                            </View>
+                         : null}
+                         { count < 2 ?
+                            <View key={101} style={styles.tableCol}>
+                            </View>
+                         : null}
+                    </View>
+                    <View style={styles.tableRow}>
+                        {listItems.map((listItem, index) => (
+                            <SabreThumbnail
+                                image={listItem.listing.versions[0].images[0]}
+                                width='60'
+                                height='45'
+                            />
+
+                         ))}
+                         { count < 4 ?
+                            <View key={99} style={styles.tableCol}>
+                            </View>
+                         : null}
+                         { count < 3 ?
+                            <View key={100} style={styles.tableCol}>
+                            </View>
+                         : null}
+                         { count < 2 ?
+                            <View key={101} style={styles.tableCol}>
                             </View>
                          : null}
                     </View>

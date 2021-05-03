@@ -60,10 +60,11 @@ class FilterMore extends React.Component {
         return(
         <div>
             <Form.Group as={Row} className="mr-1 ml-1">
-                <Form.Label column sm="4">Available Space</Form.Label>
+                <Form.Label column="sm">Available Space</Form.Label>
                 <Col sm="4">
-                    <InputGroup>
+                    <InputGroup size="sm">
                         <Form.Control 
+                            size="sm"
                             id="filter_min_size"
                             placeholder="Min" 
                             value={this.props.moreFilters.minSize}
@@ -75,9 +76,10 @@ class FilterMore extends React.Component {
                     </InputGroup>
                 </Col>
                 <Col sm="4">
-                    <InputGroup>
+                    <InputGroup size="sm">
                         <Form.Control
                             id="filter_max_size"
+                            size="sm"
                             placeholder="Max"
                             value={this.props.moreFilters.maxSize}
                             onChange={this.handleMaxSizeChange}
@@ -89,11 +91,12 @@ class FilterMore extends React.Component {
                 </Col>
             </Form.Group>
             <Form.Group as={Row} className="mr-1 ml-1">
-                <Form.Label column sm="4">Lease Rate</Form.Label>
+                <Form.Label column="sm">Lease Rate</Form.Label>
                 <Col sm="4">
-                    <InputGroup>
+                    <InputGroup size="sm">
                         <Form.Control
                             id="filter_min_rate"
+                            size="sm"
                             placeholder="Min"
                             value={this.props.moreFilters.minRate}
                             onChange={this.handleMinRateChange}
@@ -104,9 +107,10 @@ class FilterMore extends React.Component {
                     </InputGroup>
                 </Col>
                 <Col sm="4">
-                    <InputGroup>
+                    <InputGroup size="sm">
                         <Form.Control 
                             id="filter_max_rate"
+                            size="sm"
                             placeholder="Max"
                             value={this.props.moreFilters.maxRate}
                             onChange={this.handleMaxRateChange}
@@ -115,6 +119,54 @@ class FilterMore extends React.Component {
                             <InputGroup.Text>sf/yr</InputGroup.Text>
                         </InputGroup.Append>
                     </InputGroup>
+                </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mr-1 ml-1">
+                <Col>
+                    <Form.Label
+                        column="sm"
+                        className="p-0">Floors</Form.Label>
+                </Col>
+                <Col>
+                    <Form.Control
+                        as="select"
+                        size="sm"
+                        className="p-0"
+                    >
+                        <option>Any</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>>10</option>
+                    </Form.Control>
+                    
+                </Col>
+                <Col>
+                    <Form.Label column="sm">Loading Docks</Form.Label>
+                </Col>
+                <Col>
+                    <Form.Control
+                        as="select"
+                        size="sm"
+                    >
+                        <option>Any</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>>10</option>
+                    </Form.Control>
+                </Col>
+                <Col>
+                    <Form.Label column="sm">Drive in Doors</Form.Label>
+                </Col>
+                <Col>
+                    <Form.Control
+                        size="sm"
+                        as="select"
+                    >
+                        <option>Any</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>>10</option>
+                    </Form.Control>
                 </Col>
             </Form.Group>
         </div>

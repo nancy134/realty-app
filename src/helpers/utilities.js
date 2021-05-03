@@ -310,3 +310,123 @@ export function abbrState(input, to){
         }    
     }
 }
+
+/////////////////////////////////
+// Size and Price
+/////////////////////////////////
+
+function getMinSize(array){
+    return array.reduce((min, p) => p.size < min ? p.size : min, array[0].size);
+}
+function getMaxSize(array){
+    return array.reduce((max, p) => p.size > max ? p.size : max, array[0].size);
+}
+
+function calculatePrice(price,size, priceUnit){
+    var calculatedPrice;
+    if (priceUnit ===  "/sf/yr"){
+        calculatedPrice = price;
+    }else if (priceUnit === "/sf/mo"){
+        calculatedPrice = price*12;
+    }else if (priceUnit === "/mo"){
+        calculatedPrice = (price/size)*12;
+    }else if (priceUnit === "yr"){
+        calculatedPrice = price/size;
+    }else{
+        calculatedPrice = price;
+    }
+    return calculatedPrice;
+}
+
+function getMinPriceIndex(array){
+    var length = array.length;
+    var minIndex = 0;
+    var minPrice = calculatePrice(
+        array[0].price,
+        array[0].size,
+        array[0].priceUnit); 
+    for (var i=1; i<length; i++){
+       var calculatedPrice = calculatePrice(
+           array[i].price,
+           array[i].size,
+           array[i].priceUnit
+       );
+       if (calculatedPrice < minPrice) minIndex = i; 
+    }
+    return minIndex;
+}
+
+function getMaxPriceIndex(array){
+    var length = array.length;
+    var maxIndex = 0;
+    var maxPrice = calculatePrice(
+        array[0].price,
+        array[0].size,
+        array[0].priceUnit);
+    for (var i=1; i<length; i++){
+       var calculatedPrice = calculatePrice(
+           array[i].price,
+           array[i].size,
+           array[i].priceUnit
+       );
+       if (calculatedPrice > maxPrice) maxIndex = i;
+    }
+    return maxIndex;
+}
+
+export function formatSizeAndPrice(spaces){
+    var size = null;
+    var price = null;
+    if (spaces.length === 1){
+        size = spaces[0].size;
+
+        var priceUnit = spaces[0].priceUnit;
+        if (!priceUnit) priceUnit = "/sf/yr";
+        price = spaces[0].price + " " + priceUnit;
+
+        size += " sf for lease";        
+    } else if (spaces.length > 1){
+        var minSize = getMinSize(spaces);
+        var maxSize = getMaxSize(spaces);
+        if (minSize === maxSize){
+            size = minSize;
+        } else {
+            size = minSize+" - "+maxSize;
+        }
+
+        var minPriceIndex = getMinPriceIndex(spaces);
+        var maxPriceIndex = getMaxPriceIndex(spaces);
+        
+        if (minPriceIndex === maxPriceIndex){
+            var minPrice =  spaces[minPriceIndex].price;
+            priceUnit = spaces[minPriceIndex].priceUnit ?  spaces[minPriceIndex].priceUnit : "/sf/yr";
+            price = minPrice + " " + priceUnit;
+        } else {
+
+            minPrice = spaces[minPriceIndex].price;
+            var maxPrice = spaces[maxPriceIndex].price;
+            var minPriceUnit = spaces[minPriceIndex].priceUnit;
+            var maxPriceUnit = spaces[maxPriceIndex].priceUnit;
+
+            if (minPriceUnit === null) minPriceUnit = "/sf/yr";
+            if (maxPriceUnit === null) maxPriceUnit = "/sf/yr";
+
+            if (minPriceUnit === maxPriceUnit){
+                price = minPrice + " - " + maxPrice + " " + minPriceUnit;
+            } else {
+                price = minPrice + " " + minPriceUnit + " - " +
+                    maxPrice + " " + maxPriceUnit;
+            }
+        }
+        size += " sf (" + spaces.length + " spaces)";
+    } else {
+        return null;
+    }
+    price = "$"+price;
+
+    var ret = {
+        size: size,
+        price: price
+    }
+    return ret;
+}
