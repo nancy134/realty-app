@@ -121,6 +121,7 @@ class FilterMore extends React.Component {
                     </InputGroup>
                 </Col>
             </Form.Group>
+            { false ?
             <Form.Group as={Row} className="mr-1 ml-1">
                 <Col>
                     <Form.Label
@@ -169,6 +170,7 @@ class FilterMore extends React.Component {
                     </Form.Control>
                 </Col>
             </Form.Group>
+            : null}
         </div>
         );
     }

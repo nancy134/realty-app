@@ -6,7 +6,7 @@ import {
 } from '@react-pdf/renderer';
 import {
     ListingSummary,
-} from '../helpers/PDF';
+} from '../components/ReportSummary';
 
 Font.register({
 family: 'Open Sans',
@@ -19,7 +19,6 @@ fonts: [
 export class PDFListSummary extends React.Component{
     render(){
         var listItems = this.props.listItems;
-
         var perPage = 4;
         var count = listItems.length;
         var numPages = Math.floor(count/perPage);
