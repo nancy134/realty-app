@@ -193,7 +193,7 @@ class ListingMap extends React.Component {
                >
                    <div>
                    <div>
-                       {this.state.selectedPlace.name}:{this.state.selectedPlace.listingId}
+                       {this.state.selectedPlace.name}
                    </div>
                    <div>
                        {this.state.selectedPlace.city}, {this.state.selectedPlace.state}
@@ -201,6 +201,7 @@ class ListingMap extends React.Component {
                    <Button
                        variant="link"
                        size="sm"
+                       className="p-0"
                        onClick={() => this.handleInfoWindowClick(this.state.selectedPlace)}
                    >
                     
