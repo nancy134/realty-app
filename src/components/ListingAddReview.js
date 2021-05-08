@@ -103,7 +103,7 @@ class ListingAddReview extends React.Component{
                 </Row>
                 <Row>
                     <Col xs={2} className="font-weight-bold">Long Description</Col>
-                    <Col xs={10}>{longDescription}/></Col>
+                    <Col xs={10}>{longDescription}</Col>
                 </Row>
                 </div>
             </Modal.Body>

@@ -233,7 +233,7 @@ class PublishWizardPaymentMethod extends React.Component{
                     { promotionCodeFlow ?
                     <div>
                         <p>Your Promotion Code is valid</p>
-                        <p>{this.props.userCode.Code.Promotion.description} from {this.props.userCode.createdAt}</p>
+                        <p>{this.props.userCode.Code.Promotion.description}</p>
                     </div>
                     : null }
 
@@ -248,16 +248,17 @@ class PublishWizardPaymentMethod extends React.Component{
                         onClick={this.handleNext}
                         disabled={!this.state.paymentMethodRequestable && !this.state.defaultPaymentMethod && !this.state.validPromoCode}
                     >
-                        {this.state.paymentSpinner ?
-                        <Spinner
-                            as="span"
-                            animation="border"
-                            size="sm"
-                            role="status"
-                            aria-hidden="true"
-                        />
-                        :
-                        <span>Next</span>}
+                        <span>Publish Listing&nbsp;
+                        { this.state.paymentSpinner ?
+                            <Spinner
+                                as="span"
+                                animation="border"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                            />
+                        : null}
+                        </span>
                     </Button>
 
                 </Modal.Footer>
