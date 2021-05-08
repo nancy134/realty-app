@@ -224,3 +224,10 @@
 [data-braintree-id="toggle"] {
   display: none;
 }
+
+.truncate {
+  width: [width];
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

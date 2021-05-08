@@ -169,7 +169,7 @@ class ListingItem extends React.Component {
                             <div>For Sale ${listingPrice}</div>
                             : null }
                             { this.props.showShortDescription ?
-                            <div>{listing.shortDescription}</div>
+                            <div className="truncate">{listing.shortDescription}</div>
                             : null }
                             { this.props.listingMode === "myListings" ?
                             <div>Status: {listing.publishStatus}</div> 
