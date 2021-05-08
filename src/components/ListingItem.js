@@ -19,6 +19,7 @@ import {
 import authenticationService from '../helpers/authentication';
 import {listingTypes} from '../constants/listingTypes';
 import {formatSizeAndPrice} from '../helpers/utilities';
+import {abbrState} from '../helpers/utilities';
 
 class ListingItem extends React.Component {
 
@@ -40,6 +41,7 @@ class ListingItem extends React.Component {
     if (listing.displayAddress !== null && listing.displayAddress !== ""){
         address = listing.displayAddress;
     }
+    var abbr = abbrState(listing.state, "abbr");
     var size = null;
     var price = null;
     var sizeAndPrice = formatSizeAndPrice(listing.spaces);
@@ -96,9 +98,9 @@ class ListingItem extends React.Component {
                 <Col xs={contentColSize}>
                     <Card className="border-0">
                         <Card.Body className="p-1">
-                            <Card.Title 
+                            <h5 
                                 id="listing_title"
-                                className="listing-title text-danger"  
+                                className="text-danger"  
                             >
                                 <span>{address}</span>
                                 { listing.owner === authenticationService.getUserEmail() && this.props.listingMode === "myListings" && !this.props.reporting ?
@@ -149,30 +151,23 @@ class ListingItem extends React.Component {
 
                                 : null }
                                
-                            </Card.Title>
+                            </h5>
                             
                             { listing.city ?
                             <Card.Subtitle>
-                                {listing.city}, {listing.state} {listing.zip}
+                                {listing.city}, {abbr} {listing.zip}
                             </Card.Subtitle>
                             : null }
-                            { listing.owner === authenticationService.getUserEmail() ?
-                            <div 
-                                className="text-danger"
-                            >
-                                Status: {publishStatus}
-                            </div>
-                            : null }
-                            <div>{size}</div>
-                            <div>{price}</div>
+                            <div style={{fontSize: "0.85rem"}}>{size}</div>
+                            <div style={{fontSize: "0.85rem"}}>{price}</div>
                             { listing.listingType === listingTypes.FORSALE && listing.listingPrice?
-                            <div>For Sale ${listingPrice}</div>
+                            <div style={{fontSize:"0.85rem"}}>For Sale ${listingPrice}</div>
                             : null }
                             { this.props.showShortDescription ?
-                            <div className="truncate">{listing.shortDescription}</div>
+                            <div style={{fontSize: "0.85rem"}}className="truncate">{listing.shortDescription}</div>
                             : null }
                             { this.props.listingMode === "myListings" ?
-                            <div>Status: {listing.publishStatus}</div> 
+                            <div style={{fontSize: "0.85rem"}}><span className="font-weight-bold">({listing.publishStatus})</span></div> 
                             : null }
                         </Card.Body>
                     </Card>
