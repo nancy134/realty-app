@@ -2,7 +2,10 @@ import React from 'react';
 import {
     Modal,
     Button,
-    Form
+    Form,
+    Row,
+    Col,
+    Alert
 } from 'react-bootstrap';
 import {listingTypes} from '../constants/listingTypes';
 import StepperAddListing from '../components/StepperAddListing';
@@ -47,7 +50,7 @@ class ListingAddType extends React.Component{
           show={this.props.show}
           onHide={this.props.onCancel}
           aria-labelledby="contained-modal-title-vcenter"
-          dialogClassName="modal-80w"
+          dialogClassName="modal-60w"
           animation={false}
         >
             <Modal.Header closeButton>
@@ -60,8 +63,12 @@ class ListingAddType extends React.Component{
                     addListingTypeActive={addListingTypeActive}
                     loggedIn={loggedIn}
                 />
+                <Row>
+                <Col></Col>
+                <Col xs="auto"> 
+                <Alert variant="primary">
                 <Form className="pl-5 pr-5">
-                    <h3>Select Listing Type</h3>
+                    <h4 className="pb-2">Select Listing Type</h4>
                     <Form.Check
                     >
                         <Form.Check.Input
@@ -73,7 +80,7 @@ class ListingAddType extends React.Component{
                         <Form.Check.Label
                             onClick={() => this.handleListingTypeChange(listingTypes.FORLEASE)}
                         >
-                            For Lease
+                            <h5>{listingTypes.FORLEASE}</h5>
                         </Form.Check.Label> 
                     </Form.Check>
                     <Form.Check
@@ -87,11 +94,14 @@ class ListingAddType extends React.Component{
                         <Form.Check.Label
                             onClick={() => this.handleListingTypeChange(listingTypes.FORSALE)}
                         >
-                            {listingTypes.FORSALE} 
+                            <h5>{listingTypes.FORSALE}</h5>
                         </Form.Check.Label>
                     </Form.Check>
-
                 </Form>
+                </Alert>
+                </Col>
+                <Col></Col>
+                </Row>
             </Modal.Body>
             <Modal.Footer>
                 <Button 
