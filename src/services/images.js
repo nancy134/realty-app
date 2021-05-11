@@ -58,7 +58,8 @@ function sendRequest(file, table, id, order, progressCB){
                 if (req.status === 200) {
                     resolve(req.status);
                 } else {
-                    reject(req.status);
+                    if (!req.status)
+                        reject("Error uploading image");
                 }
             }
         };

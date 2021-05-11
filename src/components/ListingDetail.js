@@ -233,7 +233,6 @@ class ListingDetail extends React.Component {
                             overviewError: err.message,
                             overviewSaving: false
                         });
-                        console.log(err);
                     });
                 } else {
                     that.props.onFetchListing(updatedListing.listing.id);
@@ -241,11 +240,15 @@ class ListingDetail extends React.Component {
                 }
 
             }).catch(function(err){
+                var message = "";
+                if (err.message)
+                    message = err.message;
+                else
+                    message = err;
                 that.setState({
-                    overviewError: err.message,
+                    overviewError: message,
                     overviewSaving: false
                 });
-                console.log(err);
             });
         }).catch(function(err){
             console.log(err);
@@ -435,7 +438,6 @@ class ListingDetail extends React.Component {
    }
 
    handleAttachmentsDeleteModalShow(id, name){
-       console.log("handleAttachmentsDeleteModalShow()");
        var message = "Delete '"+name+"' attachment?"
        this.setState({
            attachmentsDeleteModal: true,
@@ -475,7 +477,6 @@ class ListingDetail extends React.Component {
            that.props.onFetchListing(values[0][0].ListingVersionId);
            that.handleAttachmentsModalHide();
        }).catch(function(err){
-           console.log("error uploading attachment");
            that.setState({
                attachmentsError: "error uploading attachment",
                attachmentsSaving: false
@@ -485,7 +486,6 @@ class ListingDetail extends React.Component {
     handleAttachmentsDelete(){
         var that = this;;
         attachmentService.deleteFile(this.state.attachmentToDelete).then(function(result){
-            console.log(result);
             that.setState({
                attachmentsDeleteModal: false
             });
@@ -883,6 +883,7 @@ class ListingDetail extends React.Component {
                     onImagesChanged={this.handleImagesChanged}
                     overviewSaving={this.state.overviewSaving}
                     propertyTypes={propertyTypes}
+                    errorMessage={this.state.overviewError}
                 />
                 { (editMode === "edit" && listingType === listingTypes.FORLEASE) || 
                   (listing && listing.spaces.length) > 0 ?

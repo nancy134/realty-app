@@ -42,7 +42,7 @@ class Dropzone extends Component {
     checkForFileSize(files){
         var largeFiles = [];
         for (var i=0; i<files.length; i++){
-            if (files[i].size > 3145728){
+            if (files[i].size > 15728640){
                 largeFiles.push(files[i]);
             }
         }

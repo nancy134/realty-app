@@ -91,7 +91,7 @@ class ImageUpload extends Component {
         this.props.onImagesChanged(cards);
     }
     handleError(files){
-        var errorMessage = "Image(s) are too large.  They must be less than 3MB.";
+        var errorMessage = "Image(s) are too large.  They must be less than 15MB.";
         this.setState({
             errorMessage: errorMessage,
             isError: true
@@ -129,7 +129,7 @@ class ImageUpload extends Component {
                 variant="info"
             >
                <span style={{'fontSize': '80%'}}>To upload images, select Upload Images or drag and drop images to the dotted rectangle.<br/></span>
-               <span style={{'fontSize': '80%'}}>To reorder images, drag image to desired location. Maximum image size: 3MB</span>
+               <span style={{'fontSize': '80%'}}>To reorder images, drag image to desired location. Maximum image size: 15MB</span>
             </Alert>
             <DndProvider backend={HTML5Backend}>
                 <ImageContainer
