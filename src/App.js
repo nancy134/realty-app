@@ -19,7 +19,8 @@ class App extends React.Component {
           minimalTab = true;
 
       var showFooter = true;
-      if (window.location.pathname === "/admin")
+      if (window.location.pathname === "/admin" ||
+          window.location.pathname === "/account")
           showFooter = false;
 
       this.state = {

@@ -40,6 +40,17 @@ function updateUser(id, body){
     });
 }
 
+function inviteConfirm(body){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + '/users/invite';
+        axiosInstance.post(url, body).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
 function getUserEnums(){
     return new Promise(function(resolve, reject){
         var url = process.env.REACT_APP_API + 'user/enums';
@@ -51,10 +62,35 @@ function getUserEnums(){
     });
 }
 
+function getAssociatesMe(){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + 'associations/me/users';
+        axiosInstance.get(url).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
+function inviteAssociate(body){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + 'associations/users/invite';
+        axiosInstance.post(url, body).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
 const users = {
     getUser,
     updateUser,
     getUsers,
-    getUserEnums
+    getUserEnums,
+    getAssociatesMe,
+    inviteAssociate,
+    inviteConfirm
 };
 export default users;

@@ -76,7 +76,11 @@ render(){
         path="/report/list/:id"
         exact component={ReportListPage}
     />
-    <Route path="/account" exact component={AccountPage} />
+    <Route
+        path="/account"
+        exact component={AccountPage}
+        loggedIn={this.props.loggedIn}
+    />
     <Route path="/admin" exact component={AdminPage} />
     <Route path="/instructions" exact component={InstructionPage} />
     <Route path="/terms" exact component={TermsPage} />

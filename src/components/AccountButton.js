@@ -75,7 +75,7 @@ export class AccountButton extends Component{
 
             // Policy modal
             showPolicyModal: false,
-            policyType: "" 
+            policyType: "",
         }
     }
     componentDidMount(){
@@ -286,7 +286,7 @@ export class AccountButton extends Component{
         return(
         <span>
             <span className="align-top text-danger">
-            {this.props.loggedIn ? 
+            {this.props.loggedIn ?
                 ( 
                 <DropdownButton id="account-button-dropdown" title={userName}>
                     <Dropdown.Item
@@ -311,10 +311,11 @@ export class AccountButton extends Component{
                         id="account-button-logout"
                         onClick={() => {this.onLogout()}}
                     >Logout</Dropdown.Item>
-                </DropdownButton> 
+                </DropdownButton>
                 )
                 :( 
                 <span>
+                    { !this.props.initialState ?
                     <Button 
                         onClick={() => this.setState({modalShowLogin: true})} 
                         variant="success"
@@ -322,6 +323,23 @@ export class AccountButton extends Component{
                     >
                         Login / Create Account
                     </Button>
+                    : null }
+                    { this.props.initialState === "login" ?
+                    <Button
+                        onClick={() => this.setState({modalShowLogin: true})}
+                        variant="success"
+                    >
+                        <span>Login</span>
+                    </Button>
+                    : null }
+                    { this.props.initialState === "register" ?
+                    <Button
+                        onClick={() => this.setState({modalShowRegister: true})}
+                        variant="success"
+                    >
+                        <span>Register</span>
+                    </Button>
+                    : null }
                 </span> 
                 )}
             </span>

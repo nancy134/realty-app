@@ -3,100 +3,168 @@ import {
     Row,
     Col,
     Button,
-    Image,
     Container,
     Jumbotron,
-    Form
+    Form,
+    Dropdown,
+    DropdownButton
 } from 'react-bootstrap';
+import userService from '../services/users';
 
-class AccountAssociates extends React.Component {
-
-render(){
+function Associate(props){
     return(
-    <React.Fragment>
-        <Container>
-            <Row className="pt-5">
-            </Row>
-                <Jumbotron className="pt-3">
-                <Row>
-                    <Col>
-                    <h1 className="text-center">Account Asssociates</h1>
-                    </Col>
-                </Row> 
-                <Row>
-                    <Col md={4}>
-                        <Row>
-                            <Col md={4}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
-                            <Col md={8}>
-                                <Row>Paul Piedra</Row>
-                                <Row>Sabre Realty Group</Row>
-                                <Row>(203) 388-8030</Row>
-                                <Row><Button className="p-0" variant="link">Contact</Button></Row>
-                            </Col>
-                        </Row>
-                    </Col>
-                    <Col>
-                        <Row>
-                            <Col md={4}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
-                            <Col md={8}>
-                                <Row>Fred Ryon</Row>
-                                <Row>Sabre Realty Group</Row>
-                                <Row>(203) 388-8030</Row>
-                                <Row><Button className="p-0" variant="link">Contact</Button></Row>
-                            </Col>
-                        </Row>
-
-                    </Col>
-                    <Col>
-                        <Row>
-                            <Col md={4}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
-                            <Col md={8}>
-                                <Row>Joe Shmoe</Row>
-                                <Row>Sabre Realty Group</Row>
-                                <Row>(203) 388-8030</Row>
-                                <Row><Button className="p-0" variant="link">Contact</Button></Row>
-                            </Col>
-                        </Row>
-
-                    </Col>
-                </Row>
-                <Row className="mt-5"></Row>
-
-                <Row>
-                <Col>
-                <Row>
-                   <h4>Enter email to invite new associates</h4>
-                </Row>
-                   <Form.Group as={Row} controlId="invite">
-                       <Form.Label className="pl-0" column sm="1">Email</Form.Label>
-                       <Col sm="8">
-                           <Form.Control type="text" />
-                       </Col>
-                       <Col sm="1">
-                           <Button variant="success">Send</Button>
-                       </Col>
-                   </Form.Group>
-                </Col>
-
-                <Col>
-                <Row>
-                    <h4>Awaiting confirmation</h4>
-                </Row>
-                <Row >    
-                    <Col className="pl-0">
-                    nancy.piedra@gmail.com
-                    </Col>
-                    <Col>
-                        <Button variant="link">Resend Invite</Button>
-                    </Col>
-                </Row>
-                </Col>
-                </Row>
-            </Jumbotron> 
-        </Container>
-    </React.Fragment>
+    <Row className="pt-2">
+        <Col>{props.associate.email}</Col>
+        <Col>{props.associate.associationStatus}</Col>
+        <Col>
+            <DropdownButton
+               title="Actions"
+            >
+                <Dropdown.Item>Remove Associate</Dropdown.Item>
+            </DropdownButton>
+        </Col>
+    </Row>
     );
 }
+
+class AccountAssociates extends React.Component {
+    constructor(props){
+        super(props);
+
+        this.handleSendInvite = this.handleSendInvite.bind(this);
+        this.handleAssociationChange = this.handleAssociatonChange.bind(this);
+        this.handleInviteeEmailChange = this.handleInviteeEmailChange.bind(this);
+        this.state = {
+            associates: [],
+            associationName: "",
+            inviteeEmail: ""
+        };
+    }
+
+    handleSendInvite(){
+        var that = this;
+        var body = {
+            associationName: this.state.associationName,
+            inviteeEmail: this.state.inviteeEmail 
+        };
+        console.log(body);
+        userService.inviteAssociate(body).then(function(result){
+            userService.getAssociatesMe().then(function(associates){
+                that.setState({
+                    associates: associates.associates,
+                    associationName: associates.association.name
+                }); 
+            }).catch(function(err){
+            });
+        }).catch(function(err){
+            console.log(err);
+        });
+    }
+    handleInviteeEmailChange(event){
+        this.setState({
+            inviteeEmail: event.target.value
+        });
+    }
+    handleAssociatonChange(event){
+        this.setState({
+            associationName: event.target.value
+        });
+    }
+    componentDidMount(){
+        var that = this;
+        userService.getAssociatesMe().then(function(users){
+            that.setState({
+                associates: users.associates,
+                associationName: users.association.name 
+            });
+        }).catch(function(err){
+            console.log(err);
+        });
+    }
+
+    render(){
+        var show=false;
+        return(
+        <React.Fragment>
+            <Container>
+                <AssociateInviteModal
+                    show={show}
+                />
+                <Row className="pt-5">
+                </Row>
+                <Jumbotron className="pt-3">
+                    <Row>
+                        <Col>
+                            <h1 className="text-center">Account Asssociates</h1>
+                        </Col>
+                    </Row> 
+                    <Row className="mt-5"></Row>
+                    <Form.Group
+                        as={Row}
+                    >
+                        <Form.Label
+                            className="pl-0"
+                            column
+                            sm="2"
+                        >
+                            <span>Association Name</span>
+                        </Form.Label>
+                        <Col sm="8">
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter name for your association"
+                                value={this.state.associationName}
+                                onChange={this.handleAssociationChange}
+                            />
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} controlId="invite">
+                        <Form.Label
+                            className="pl-0" 
+                            column 
+                            sm="2"
+                        >
+                            <span>Email(s)</span>
+                        </Form.Label>
+                        <Col sm="8">
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter email of associate"
+                                value={this.state.inviteeEmail}
+                                onChange={this.handleInviteeEmailChange}
+                            />
+                        </Col>
+                        <Col sm="1">
+                           <Button
+                                variant="success"
+                                onClick={this.handleSendInvite}
+                            >
+                                <span>Send Invite</span>
+                            </Button>
+                        </Col>
+                    </Form.Group>
+                    <Row>
+                        <Col>
+                            <h3>Associate Status</h3>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col><h5>Email</h5></Col>
+                        <Col><h5>Status</h5></Col>
+                        <Col><h5>Actions</h5></Col>
+                    </Row>
+                    { this.state.associates.map((associate, index) => 
+                    (
+                    <Associate
+                        key={index}
+                        associate={associate}
+                    />
+                    ))}
+                </Jumbotron> 
+            </Container>
+        </React.Fragment>
+        );
+    }
 }
 
 export default AccountAssociates;
