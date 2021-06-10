@@ -11,6 +11,7 @@ const LocalStorage = (function(){
     }
 
     function _setToken(data){
+        console.log(data);
         localStorage.setItem('IdToken', data.IdToken);
         localStorage.setItem('RefreshToken', data.RefreshToken);
     }
@@ -37,6 +38,55 @@ const LocalStorage = (function(){
         localStorage.removeItem('RefreshToken');
     }
 
+    //
+    // isAdmin
+    //
+    function _setIsAdmin(isAdmin){
+        localStorage.setItem('isAdmin', isAdmin); 
+    }
+    function _isAdmin(){
+        return localStorage.getItem('isAdmin');
+    }
+
+    //
+    // cognitoId
+    //
+    function _setCognitoId(cognitoId){
+        localStorage.setItem('cognitoId', cognitoId);
+    }
+    function _cognitoId(){
+        return localStorage.getItem('cognitoId');
+    }
+
+    //
+    // email
+    //
+    function _setEmail(email){
+        localStorage.setItem('email', email);
+    }
+    function _email(){
+        return localStorage.getItem('email');
+    }
+
+    //
+    // fullName
+    //
+    function _setFullName(fullName){
+        localStorage.setItem('fullName', fullName);
+    }
+    function _fullName(){
+        return localStorage.getItem('fullName');
+    }
+
+    function _clearAll(){
+        localStorage.removeItem('IdToken');
+        localStorage.removeItem('RefreshToken');
+        localStorage.removeItem('isAdmin');
+        localStorage.removeItem('cognitoId');
+        localStorage.removeItem('email');
+        localStorage.removeItem('fullName');
+    }
+
     return {
         getService: _getService,
         setToken: _setToken,
@@ -44,7 +94,26 @@ const LocalStorage = (function(){
         setRefreshToken: _setRefreshToken,
         getIdToken: _getIdToken,
         getRefreshToken: _getRefreshToken,
-        clearToken: _clearToken
+        clearToken: _clearToken,
+
+        // isAdmin
+        isAdmin: _isAdmin,
+        setIsAdmin: _setIsAdmin,
+
+        // cognitoId
+        cognitoId: _cognitoId,
+        setCognitoId: _setCognitoId,
+
+        // email
+        email: _email,
+        setEmail: _setEmail,
+
+        // fullName
+        fullName: _fullName,
+        setFullName: _setFullName,
+
+        // clearAll
+        clearAll: _clearAll
     }
 }) ();
 

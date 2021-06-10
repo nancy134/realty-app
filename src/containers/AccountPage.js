@@ -57,6 +57,7 @@ export class AccountPage extends Component {
     }
     render(){
         var tab = this.state.tab;
+        console.log("this.props.loggedIn: "+this.props.loggedIn);
         if (this.props.loggedIn){
         return(
         <React.Fragment>

@@ -79,6 +79,7 @@ export class AccountButton extends Component{
         }
     }
     componentDidMount(){
+        /*
         if (authenticationService.isAuthenticated()){
             var result = {};
             var isAdmin = false;
@@ -88,6 +89,7 @@ export class AccountButton extends Component{
             result.isAdmin = isAdmin;
             this.props.onLogin(result);
         }
+        */
     }
     handleLogin(email, password){
         var that = this;

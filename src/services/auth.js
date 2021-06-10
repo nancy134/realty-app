@@ -143,7 +143,15 @@ export function confirmForgotPassword(params){
     });
 }
  
-const auth = {signin, signup, confirm, resendConfirmationCode, forgotPassword, confirmForgotPassword};
+const auth = {
+    signin,
+    signup,
+    confirm,
+    resendConfirmationCode,
+    forgotPassword,
+    confirmForgotPassword,
+    refreshToken
+};
 export default auth;
 
 

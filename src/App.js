@@ -43,11 +43,22 @@ class App extends React.Component {
       this.handlePolicyModalHide = this.handlePolicyModalHide.bind(this);
   }
   componentDidMount(){
+      var that = this;
+      authenticationService.reAuthenticate().then(function(result){
+          console.log(result);
+          that.setState({
+              loggedIn: true
+          }); 
+      }).catch(function(err){
+          console.log(err);
+      });
+      /*
       if (authenticationService.isAuthenticated()){
           this.setState({
               loggedIn: true
           });
       }
+      */
   }
   handlePolicyModalShow(type){
       this.setState({

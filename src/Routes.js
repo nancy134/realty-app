@@ -78,8 +78,13 @@ render(){
     />
     <Route
         path="/account"
-        exact component={AccountPage}
-        loggedIn={this.props.loggedIn}
+        render={
+            props => (
+                <AccountPage {...props}
+                    loggedIn={this.props.loggedIn}
+                />
+            )
+        }
     />
     <Route path="/admin" exact component={AdminPage} />
     <Route path="/instructions" exact component={InstructionPage} />

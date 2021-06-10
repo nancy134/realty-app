@@ -83,13 +83,9 @@ class AccountAssociates extends React.Component {
     }
 
     render(){
-        var show=false;
         return(
         <React.Fragment>
             <Container>
-                <AssociateInviteModal
-                    show={show}
-                />
                 <Row className="pt-5">
                 </Row>
                 <Jumbotron className="pt-3">

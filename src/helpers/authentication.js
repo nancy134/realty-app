@@ -3,36 +3,63 @@ import auth from '../services/auth';
 import LocalStorageService from '../services/localStorage';
 import userService from '../services/users';
 
-export function isAuthenticated(){
-    const cookies = new Cookies();
-    const jwt =  cookies.get('jwt');
-    if (!jwt) return false;
-    else return true;
+export function reAuthenticate(){
+    deleteObsoleteCookies();
+    return new Promise(function(resolve, reject){
+        var refreshToken = LocalStorageService.getRefreshToken();
+        console.log("refreshToken:");
+        console.log(refreshToken);
+        if (refreshToken){
+            var params = {
+                refreshToken: refreshToken
+            };
+            auth.refreshToken(params).then(function(result){
+                console.log(result);
+                LocalStorageService.setIdToken(result.IdToken);
+                userService.getUser().then(function(user){
+                    console.log(user);
+                    LocalStorageService.setIsAdmin(user.isAdmin);
+                    LocalStorageService.setCognitoId(user.cognitoId);
+                    LocalStorageService.setEmail(user.email);
+                    if (user.first || user.last){
+                        LocalStorageService.setFullName(user.first+" "+user.last);
+                    } else {
+                        LocalStorageService.setFullName(user.email);
+                    }
+
+                    resolve(user);
+                }).catch(function(err){
+                    console.log(err);
+                    reject(err);
+                });
+            }).catch(function(err){
+                LocalStorageService.clearAll();
+                console.log(err);
+                reject(err);
+            });
+        } else {
+            var ret = {
+                message: "No token in local storage" 
+            }
+            reject(ret);
+        }
+    });
 }
 
 export function getUserEmail(){
-    const cookies = new Cookies();
-    return cookies.get('email');
+    return LocalStorageService.getEmail();
 }
 
 export function getUserCognitoId(){
-    const cookies = new Cookies();
-    return cookies.get('cognitoId');
+    return LocalStorageService.cognitoId();
 }
 
 export function getUserName(){
-    const cookies = new Cookies();
-    return cookies.get('name');
-}
-
-export function getJwt(){
-    const cookies = new Cookies();
-    return cookies.get('jwt');
+    return LocalStorageService.fullName();
 }
 
 export function isAdmin(){
-    const cookies = new Cookies();
-    var isAdminStr = cookies.get('isAdmin');
+    var isAdminStr = LocalStorageService.isAdmin(); 
     var isAdmin = false;
     if (isAdminStr === "true"){
         isAdmin = true;
@@ -41,24 +68,23 @@ export function isAdmin(){
 }
 
 export function isOwner(owner){
-  if (isAuthenticated()){
-      if (owner === getUserCognitoId()){
-          return true;
-      } else {
-          return false;
-      }
-  }else{
-      return false;
-  }
+    if (owner === getUserCognitoId()){
+        return true;
+    } else {
+        return false;
+    }
 }
 export function deleteUser(){
+    LocalStorageService.clearAll();
+}
+
+export function deleteObsoleteCookies(){
     const cookies = new Cookies();
     cookies.remove('name');
     cookies.remove('email');
     cookies.remove('jwt');
     cookies.remove('cognitoId');
     cookies.remove('isAdmin');
-    LocalStorageService.clearToken();
 }
 
 export function loginResponse(email, password){
@@ -71,12 +97,14 @@ export function loginResponse(email, password){
             LocalStorageService.setToken(result);
 
             userService.getUser().then(function(user){
-                const cookies = new Cookies();
-                cookies.set('email',user.email);
-                cookies.set('name', email);
-                cookies.set('jwt',result.IdToken);
-                cookies.set('cognitoId', user.cognitoId);
-                cookies.set('isAdmin', user.isAdmin);
+                LocalStorageService.setIsAdmin(user.isAdmin);
+                LocalStorageService.setCognitoId(user.cognitoId);
+                LocalStorageService.setEmail(user.email);
+                if (user.first || user.last){
+                    LocalStorageService.setFullName(user.first+" "+user.last);
+                } else {
+                    LocalStorageService.setFullName(user.email);
+                }
                 result.isAdmin = user.isAdmin;
                 resolve(result);
             }).catch(function(err){
@@ -162,10 +190,9 @@ export function confirmForgotPasswordResponse(code, password, email){
 }
 
 const authentication = {
-    isAuthenticated,
+    reAuthenticate,
     getUserEmail,
     getUserName,
-    getJwt,
     isOwner,
     isAdmin,
     deleteUser,
