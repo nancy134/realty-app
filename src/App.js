@@ -31,7 +31,8 @@ class App extends React.Component {
           // Policy
           showPolicyModal: false,
           policyType: "",
-          minimalTab: minimalTab 
+          minimalTab: minimalTab,
+          loading: true
       };
       this.handleLogin = this.handleLogin.bind(this);
       this.handleLogout = this.handleLogout.bind(this);
@@ -45,20 +46,15 @@ class App extends React.Component {
   componentDidMount(){
       var that = this;
       authenticationService.reAuthenticate().then(function(result){
-          console.log(result);
           that.setState({
-              loggedIn: true
+              loggedIn: true,
+              loading: false
           }); 
       }).catch(function(err){
-          console.log(err);
-      });
-      /*
-      if (authenticationService.isAuthenticated()){
-          this.setState({
-              loggedIn: true
+          that.setState({
+              loading: false
           });
-      }
-      */
+      });
   }
   handlePolicyModalShow(type){
       this.setState({
@@ -85,14 +81,6 @@ class App extends React.Component {
   handleLogout(){
       this.setState({
           loggedIn: false
-      },() => {
-          var url =
-              window.location.protocol +
-              "//" +
-              window.location.hostname +
-              window.location.pathname;
-      
-          window.location.href = url;
       });
   }
   handleAddListing(){
@@ -157,6 +145,7 @@ class App extends React.Component {
               showAddListingWizard={this.state.showAddListingWizard}
               onAddListingCancel={this.handleAddListingCancel}
               onShowPolicyModal={this.handlePolicyModalShow}
+              loading={this.state.loading}
           >
           </Routes>
     </div>

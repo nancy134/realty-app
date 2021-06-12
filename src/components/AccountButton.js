@@ -102,6 +102,7 @@ export class AccountButton extends Component{
                 loginMessage: null,
                 loginProgress: false
             });
+            console.log(result);
             that.props.onLogin(result);
         }).catch(function(err){
            if (err.code === 'UserNotConfirmedException'){

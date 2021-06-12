@@ -1,6 +1,8 @@
 import React from 'react';
 import {
-    Modal
+    Modal,
+    Form,
+    Button
 } from 'react-bootstrap';
 
 class ListingEditBrokers extends React.Component {
@@ -26,8 +28,22 @@ class ListingEditBrokers extends React.Component {
                     Edit Brokers 
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body> 
+            <Modal.Body>
+                <Form>
+                    <Form.Group>
+                        <Form.Check type="checkbox" label="Nancy Piedra" defaultChecked={true}/>
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Check type="checkbox" label="Fred Ryon"/>
+                    </Form.Group>
+
+                </Form>
+
             </Modal.Body>
+            <Modal.Footer>
+                <Button>Cancel</Button>
+                <Button>Save</Button>
+            </Modal.Footer>
         </Modal>
         );
     }

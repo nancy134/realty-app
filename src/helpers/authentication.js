@@ -7,17 +7,13 @@ export function reAuthenticate(){
     deleteObsoleteCookies();
     return new Promise(function(resolve, reject){
         var refreshToken = LocalStorageService.getRefreshToken();
-        console.log("refreshToken:");
-        console.log(refreshToken);
         if (refreshToken){
             var params = {
                 refreshToken: refreshToken
             };
             auth.refreshToken(params).then(function(result){
-                console.log(result);
                 LocalStorageService.setIdToken(result.IdToken);
                 userService.getUser().then(function(user){
-                    console.log(user);
                     LocalStorageService.setIsAdmin(user.isAdmin);
                     LocalStorageService.setCognitoId(user.cognitoId);
                     LocalStorageService.setEmail(user.email);
@@ -29,12 +25,10 @@ export function reAuthenticate(){
 
                     resolve(user);
                 }).catch(function(err){
-                    console.log(err);
                     reject(err);
                 });
             }).catch(function(err){
                 LocalStorageService.clearAll();
-                console.log(err);
                 reject(err);
             });
         } else {
@@ -47,7 +41,7 @@ export function reAuthenticate(){
 }
 
 export function getUserEmail(){
-    return LocalStorageService.getEmail();
+    return LocalStorageService.email();
 }
 
 export function getUserCognitoId(){
@@ -116,7 +110,7 @@ export function loginResponse(email, password){
         });
     });
 }
-export function signupResponse(email, password, confirmPassword){
+export function signupResponse(email, password){
     return new Promise(function(resolve,reject){
         var signupParams = {
             username: email,

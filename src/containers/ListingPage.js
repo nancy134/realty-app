@@ -1303,7 +1303,7 @@ export class ListingPage extends Component {
         var owner = this.state.owner;
         var listingDetail = this.state.listingDetail;
         var fullscreen = this.state.fullscreen;
-        var reporting = this.state.showReportView;
+        var reporting = this.state.showReportView && this.props.loggedIn;
         // Layouts
         var leftColumnClassName = "p-0 leftcol";
         var leftColumnSize = 8;

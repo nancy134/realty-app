@@ -82,6 +82,7 @@ export function getVerifiedAddresses(address){
 // Return bounds:
 
 export function calculateBounds(markers){
+    console.log(markers);
     var bounds = new window.google.maps.LatLngBounds();
     var retBounds = {};
     if (markers && markers.length > 0){
@@ -89,6 +90,8 @@ export function calculateBounds(markers){
         for (var i=0; i<len; i++){
             var marker = markers[i];
             if (marker.location){
+                console.log(marker.location);
+                console.log(marker.location.coordinates);
                 //var point = new maps.LatLng(marker.location.coordinates[0],marker.location.coordinates[1]);
                 var point = new window.google.maps.LatLng(marker.location.coordinates[0],marker.location.coordinates[1]);
                 bounds.extend(point);

@@ -2,8 +2,7 @@ import React from 'react';
 import {
     Row,
     Col,
-    Image,
-    Spinner
+    Image
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -15,22 +14,13 @@ function EditButton(props) {
     const [modalShow, setModalShow] = React.useState(false);
     return (
         <span>
-            {props.showSpinner ?
-            <span
-                id="general_spinner"
-                className="edit-button align-top text-danger"
-            >
-                <Spinner animation="border" size="sm"/>
-            </span>
-            : 
             <span 
-                id="general_edit_button"
+                id="broker_edit_button"
                 onClick={() => setModalShow(true)} 
-                className="edit-button align-top text-danger"
+                className="edit-button text-danger"
             >
-                <FontAwesomeIcon size="xs" icon={faPencilAlt} />
+                <FontAwesomeIcon size="xs" icon={faPencilAlt} />&nbsp;Edit Brokers
             </span>
-            }
             {modalShow ?
             <ListingEditBrokers
                 listing={props.listing}
@@ -60,7 +50,7 @@ class ListingDetailBrokers extends React.Component {
     render() {
         const editMode = this.props.editMode;
         const listing = this.props.listing;
-        const enableEdit = false;
+        const enableEdit = true;
         if (listing){
         }
         return (

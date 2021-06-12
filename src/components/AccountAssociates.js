@@ -10,8 +10,12 @@ import {
     DropdownButton
 } from 'react-bootstrap';
 import userService from '../services/users';
+import authenticationService from '../helpers/authentication';
 
 function Associate(props){
+    if (props.associate.email === authenticationService.getUserEmail()){
+        return null;
+    } else {
     return(
     <Row className="pt-2">
         <Col>{props.associate.email}</Col>
@@ -25,6 +29,7 @@ function Associate(props){
         </Col>
     </Row>
     );
+    }
 }
 
 class AccountAssociates extends React.Component {

@@ -82,6 +82,9 @@ render(){
             props => (
                 <AccountPage {...props}
                     loggedIn={this.props.loggedIn}
+                    onLogin={this.handleLogin}
+                    loading={this.props.loading}
+                    
                 />
             )
         }

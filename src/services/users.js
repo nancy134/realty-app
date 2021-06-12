@@ -40,10 +40,21 @@ function updateUser(id, body){
     });
 }
 
-function inviteConfirm(body){
+function getInvite(token){
     return new Promise(function(resolve, reject){
-        var url = process.env.REACT_APP_API + '/users/invite';
-        axiosInstance.post(url, body).then(function(response){
+        var url = process.env.REACT_APP_API + 'users/invitations?token='+token;
+        axiosInstance.get(url).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
+function acceptInvite(body){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + 'users/invitations';
+        axiosInstance.put(url,body).then(function(response){
             resolve(response.data);
         }).catch(function(err){
             reject(err);
@@ -91,6 +102,7 @@ const users = {
     getUserEnums,
     getAssociatesMe,
     inviteAssociate,
-    inviteConfirm
+    getInvite,
+    acceptInvite
 };
 export default users;
