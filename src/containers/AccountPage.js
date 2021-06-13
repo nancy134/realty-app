@@ -71,14 +71,17 @@ export class AccountPage extends Component {
         var that = this;
         if (this.state.token){
             userService.getInvite(this.state.token).then(function(result){
+                console.log(result);
                 that.setState({
                     accountStatus: result.operation,
                     association: result.association,
                     loading: false
                 });
             }).catch(function(err){
+                console.log(err);
                 that.setState({
-                    loading: false
+                    loading: false,
+                    token: null
                 });
             });
         } else {
@@ -134,6 +137,7 @@ export class AccountPage extends Component {
                                 <AccountButton
                                     initialState="login"
                                     onLogin={this.handleLogin}
+                                    onRegister={this.handleRegister}
                                 />
                             </div>
                         </div>
@@ -147,6 +151,7 @@ export class AccountPage extends Component {
                                 <AccountButton
                                     initialState="register"
                                     onRegister={this.handleRegister}
+                                    onLogin={this.handleLogin}
                                 />
                             </div>
                         </div>
@@ -155,7 +160,7 @@ export class AccountPage extends Component {
                 </Container>
                 :
                 <Container>
-                <Alert variant="primary">You need to login first</Alert>
+                <Alert variant="primary">Login to see your Account information</Alert>
                 </Container>
                 }
             </React.Fragment>

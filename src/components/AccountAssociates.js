@@ -52,7 +52,6 @@ class AccountAssociates extends React.Component {
             associationName: this.state.associationName,
             inviteeEmail: this.state.inviteeEmail 
         };
-        console.log(body);
         userService.inviteAssociate(body).then(function(result){
             userService.getAssociatesMe().then(function(associates){
                 that.setState({
@@ -62,7 +61,6 @@ class AccountAssociates extends React.Component {
             }).catch(function(err){
             });
         }).catch(function(err){
-            console.log(err);
         });
     }
     handleInviteeEmailChange(event){

@@ -34,7 +34,6 @@ function updateUser(id, body){
         axiosInstance.put(url,body).then(function(response){
             resolve(response.data);
         }).catch(function(err){
-            console.log(err);
             reject(err);
         }); 
     });
@@ -46,7 +45,10 @@ function getInvite(token){
         axiosInstance.get(url).then(function(response){
             resolve(response.data);
         }).catch(function(err){
-            reject(err);
+            if (err.response && err.response.data)
+                reject(err.response.data);
+            else
+                reject(err);
         });
     });
 }

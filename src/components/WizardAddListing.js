@@ -238,7 +238,7 @@ export class WizardAddListing extends Component {
                 modalShowConfirm:false,
                 modalShowLogin:true,
                 loginMessage:"Your email has been verified. Please login",
-                loginMessageVariant: "success",
+                loginMessageVariant: "info",
                 confirmMessage: null
             });
             that.props.onConfirm();
