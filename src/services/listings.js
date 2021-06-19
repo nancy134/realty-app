@@ -197,6 +197,22 @@ export function findAddress(address, city, state, owner){
     });
 }
 
+export function addListingUser(body){
+    var url = process.env.REACT_APP_API+"listings/users";
+    return new Promise(function(resolve, reject){
+        var options = {
+            url: url,
+            method: 'POST',
+            data: body
+        };
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
 export function getSpaceTypes(cb){
     var url = process.env.REACT_APP_LISTING_SERVICE+"spaceUses";
     fetch(url, {
@@ -239,7 +255,8 @@ const listings = {
     getListingTypes,
     deleteListing,
     deleteDraftListing,
-    findAddress
+    findAddress,
+    addListingUser,
 };
 export default listings;
 

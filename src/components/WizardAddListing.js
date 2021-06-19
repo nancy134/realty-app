@@ -206,14 +206,14 @@ export class WizardAddListing extends Component {
         });
     }
 
-    handleRegister(email, password){
+    handleRegister(body){
         var that = this;
         this.setState({
             registerProgress: true
         });
-        authenticationService.signupResponse(email, password).then(function(result){
+        authenticationService.signupResponse(body).then(function(result){
             that.setState({
-                email:email,
+                email:body.email,
                 modalShowRegister:false,
                 modalShowConfirm:true,
                 registerMessage: null,

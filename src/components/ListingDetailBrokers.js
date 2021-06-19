@@ -11,24 +11,24 @@ import {
 import ListingEditBrokers from './ListingEditBrokers';
 
 function EditButton(props) {
-    const [modalShow, setModalShow] = React.useState(false);
     return (
         <span>
             <span 
                 id="broker_edit_button"
-                onClick={() => setModalShow(true)} 
+                onClick={() => {props.onShow()}} 
                 className="edit-button text-danger"
             >
                 <FontAwesomeIcon size="xs" icon={faPencilAlt} />&nbsp;Edit Brokers
             </span>
-            {modalShow ?
+            {props.show ?
             <ListingEditBrokers
                 listing={props.listing}
-                propertyTypes={props.propertyTypes}
-                show={modalShow}
-                getListing={props.getListing}
-                onHide={() => setModalShow(false)}
+                show={props.show}
+                onHide={props.onHide}
                 onSave={listing => props.onSave(listing)}
+                errorMessage={props.errorMessage}
+                saving={props.saving}
+                associates={props.associates}
             />
             : null}
         </span>
@@ -62,6 +62,12 @@ class ListingDetailBrokers extends React.Component {
                                 listing={listing}
                                 onSave={this.handleSave}
                                 getListing={this.props.getListing}
+                                onHide={this.props.onBrokerModalHide}
+                                onShow={this.props.onBrokerModalUpdate}
+                                errorMessage={this.props.brokerError}
+                                show={this.props.brokerUpdate}
+                                saving={this.props.brokerSaving}
+                                associates={this.props.associates}
                             /> : null}</h3>
                     </Col>
                 </Row>

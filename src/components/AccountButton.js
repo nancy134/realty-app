@@ -129,14 +129,15 @@ export class AccountButton extends Component{
            }
         });
     }
-    handleRegister(email, password){
+    handleRegister(body){
         var that = this;
         this.setState({
             registerProgress: true
         });
-        authenticationService.signupResponse(email, password).then(function(result){
+
+        authenticationService.signupResponse(body).then(function(result){
             that.setState({
-                email:email,
+                email:body.email,
                 modalShowRegister:false,
                 modalShowConfirm:true,
                 registerMessage: null,
@@ -155,18 +156,23 @@ export class AccountButton extends Component{
     }
     handleConfirm(email,code){
         var that = this;
+        this.setState({
+            confirmProgress: true
+        });
         authenticationService.confirmResponse(email, code).then(function(result){
             that.setState({
                 modalShowConfirm:false,
                 modalShowLogin:true,
                 loginMessage:"Your email has been verified. Please login",
                 loginMessageVariant: "info",
-                confirmMessage: null
+                confirmMessage: null,
+                confirmProgress: false
             });
             that.props.onConfirm();
         }).catch(function(err){
             that.setState({
-                confirmMessage: err.message
+                confirmMessage: err.message,
+                confirmProgress: false
             });
         });
     }
@@ -361,7 +367,7 @@ export class AccountButton extends Component{
             { this.state.modalShowRegister ?
             <AccountRegisterModal
                 show={this.state.modalShowRegister}
-                onRegister={(email,password) =>{this.handleRegister(email,password);}}
+                onRegister={this.handleRegister}
                 onLoginStart={() => {this.setState({modalShowLogin:true,modalShowRegister:false})}}
                 onCancel={this.handleRegisterCancel}
                 registerMessage={this.state.registerMessage}

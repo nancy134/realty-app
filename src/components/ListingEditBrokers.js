@@ -9,10 +9,44 @@ class ListingEditBrokers extends React.Component {
     constructor(props){
         super(props);
         this.handleSave = this.handleSave.bind(this);
+        this.handleToggleCheckbox = this.handleToggleCheckbox.bind(this);
+
+        var checkedAssociates = [];
+        if (this.props.listing && this.props.listing.users && this.props.associates){
+            for (var i=0; i<this.props.associates.length; i++){
+                var checkedAssociate = false;
+                for(var j=0; j<this.props.listing.users.length; j++){
+                    console.log(this.props.listing.users[j].email+"==="+this.props.associates[i].email);
+                    if (this.props.listing.users[j].email === this.props.associates[i].email){
+                        checkedAssociate = true;
+                    }
+                }
+                checkedAssociates.push(checkedAssociate); 
+            }
+        }
+        this.state = {
+            checkedAssociates: checkedAssociates
+        };
     }
 
     handleSave(){
         console.log("handleSave");
+        console.log("this.props.associates:");
+        console.log(this.props.associates);
+        console.log("this.props.listing:");
+        console.log(this.props.listing);
+    }
+
+    handleToggleCheckbox(index){
+        var checkedAssociates = this.state.checkedAssociates;
+        checkedAssociates[index] = !checkedAssociates[index];
+        this.setState({
+            checkedAssociates: checkedAssociates,
+            associatesChanged: true
+        });
+    }
+
+    componentDidMount(){
     }
 
     render(){
@@ -30,19 +64,30 @@ class ListingEditBrokers extends React.Component {
             </Modal.Header>
             <Modal.Body>
                 <Form>
-                    <Form.Group>
-                        <Form.Check type="checkbox" label="Nancy Piedra" defaultChecked={true}/>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Check type="checkbox" label="Fred Ryon"/>
-                    </Form.Group>
-
+                    { this.props.associates.map((associate, index) =>
+                    (
+                        <Form.Check
+                            key={index}
+                            type="checkbox"
+                            label={associate.email}
+                            defaultChecked={this.state.checkedAssociates[index]}
+                            onChange={() => this.handleToggleCheckbox(index)}
+                        />
+                    ))}
                 </Form>
 
             </Modal.Body>
             <Modal.Footer>
-                <Button>Cancel</Button>
-                <Button>Save</Button>
+                <Button
+                    onClick={this.props.onHide}
+                >
+                    <span>Cancel</span>
+                </Button>
+                <Button
+                    onClick={this.handleSave}
+                >
+                    <span>Save</span>
+                </Button>
             </Modal.Footer>
         </Modal>
         );

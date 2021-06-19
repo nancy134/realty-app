@@ -7,7 +7,8 @@ import {
     Jumbotron,
     Form,
     Dropdown,
-    DropdownButton
+    DropdownButton,
+    Spinner
 } from 'react-bootstrap';
 import userService from '../services/users';
 import authenticationService from '../helpers/authentication';
@@ -42,7 +43,8 @@ class AccountAssociates extends React.Component {
         this.state = {
             associates: [],
             associationName: "",
-            inviteeEmail: ""
+            inviteeEmail: "",
+            sendInviteProgress: false
         };
     }
 
@@ -52,15 +54,25 @@ class AccountAssociates extends React.Component {
             associationName: this.state.associationName,
             inviteeEmail: this.state.inviteeEmail 
         };
+        this.setState({
+            sendInviteProgress: true
+        });
         userService.inviteAssociate(body).then(function(result){
             userService.getAssociatesMe().then(function(associates){
                 that.setState({
                     associates: associates.associates,
-                    associationName: associates.association.name
+                    associationName: associates.association.name,
+                    sendInviteProgress: false
                 }); 
             }).catch(function(err){
+                that.setState({
+                    sendInviteProgress: false
+                });
             });
         }).catch(function(err){
+            that.setState({
+                sendInviteProgress: false
+            });
         });
     }
     handleInviteeEmailChange(event){
@@ -75,10 +87,14 @@ class AccountAssociates extends React.Component {
     }
     componentDidMount(){
         var that = this;
-        userService.getAssociatesMe().then(function(users){
+        userService.getAssociatesMe().then(function(associates){
+            var associationName = "";
+            if (associates.association){
+                associationName = associates.association.name;
+            }
             that.setState({
-                associates: users.associates,
-                associationName: users.association.name 
+                associates: associates.associates,
+                associationName: associationName 
             });
         }).catch(function(err){
             console.log(err);
@@ -123,7 +139,7 @@ class AccountAssociates extends React.Component {
                             column 
                             sm="2"
                         >
-                            <span>Email(s)</span>
+                            <span>Associate Email</span>
                         </Form.Label>
                         <Col sm="8">
                             <Form.Control
@@ -138,7 +154,20 @@ class AccountAssociates extends React.Component {
                                 variant="success"
                                 onClick={this.handleSendInvite}
                             >
+                                { !this.state.sendInviteProgress ?
                                 <span>Send Invite</span>
+                                :
+                                <span>
+                                    <span>Send Invite&nbsp;</span>
+                                    <Spinner
+                                        as="span"
+                                        animation="border"
+                                        size="sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                    />
+                                </span>
+                                }
                             </Button>
                         </Col>
                     </Form.Group>

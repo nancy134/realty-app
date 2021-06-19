@@ -28,6 +28,7 @@ import attachmentService from '../services/attachments';
 import {formatDateTime} from '../helpers/utilities';
 import ContactModal from './ContactModal';
 import {listingTypes} from '../constants/listingTypes';
+import userService from '../services/users';
 
 class ListingDetail extends React.Component {
     constructor(props) {
@@ -85,6 +86,12 @@ class ListingDetail extends React.Component {
             amenityUpdate: false,
             amenitySaving: false,
             amenityError: null,
+
+            // Brokers
+            brokerUpdate: false,
+            brokerSaving: false,
+            brokerError: null,
+            associates: [],
 
             // Contact
             showContactModal: false,
@@ -149,6 +156,11 @@ class ListingDetail extends React.Component {
         this.handleAmenityModalUpdate = this.handleAmenityModalUpdate.bind(this);
         this.handleAmenityModalHide = this.handleAmenityModalHide.bind(this);
         this.handleAmenityUpdate = this.handleAmenityUpdate.bind(this);
+
+        // Broker
+        this.handleBrokerModalUpdate = this.handleBrokerModalUpdate.bind(this);
+        this.handleBrokerModalHide = this.handleBrokerModalHide.bind(this);
+        this.handleBrokerUpdate = this.handleBrokerUpdate.bind(this);
 
         // Contact
         this.handleContact = this.handleContact.bind(this);
@@ -754,6 +766,26 @@ class ListingDetail extends React.Component {
         }
     }
 
+    // Brokers
+
+    handleBrokerModalUpdate(){
+        this.setState({
+            brokerUpdate: true
+        });
+    }
+
+    handleBrokerModalHide(){
+        this.setState({
+            brokerUpdate: false,
+            brokerSaving: false,
+            brokerError: null
+        });
+    }
+
+    handleBrokerUpdate(users){
+        // Add to ListingUser or remove from ListingUser
+    }
+
     componentDidMount(){
         if (this.props.listingDetail){
             var listingDetail = this.props.listingDetail;
@@ -765,6 +797,14 @@ class ListingDetail extends React.Component {
                 }
             }
         }
+        var that = this;
+        userService.getAssociatesMe().then(function(associates){
+            that.setState({
+                associates: associates.associates
+            });
+        }).catch(function(err){
+            console.log(err);
+        });
 
     }
     // Contact
@@ -1015,6 +1055,13 @@ class ListingDetail extends React.Component {
                 <ListingDetailBrokers
                     listing={listing}
                     editMode={editMode}
+                    onBrokerModalUpdate={this.handleBrokerModalUpdate}
+                    onBrokerUpdate={this.handleBrokerUpdate}
+                    onBrokerModalHide={this.handleBrokerModalHide}
+                    brokerUpdate={this.state.brokerUpdate}
+                    brokerError={this.state.brokerError}
+                    brokerSaving={this.state.brokerSaving}
+                    associates={this.state.associates}
                 />
                 <ListingDetailMap
                     markers={this.props.markers}

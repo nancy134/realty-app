@@ -133,13 +133,16 @@ class AccountConfirmModal extends React.Component {
                     {!this.props.progress ?
                     <span>{nextButton}</span>
                     :
-                    <Spinner
-                        as="span"
-                        animation="border"
-                        size="sm"
-                        role="status"
-                        aria-hidden="true"
-                    />
+                    <span>
+                        <span>{nextButton}&nbsp;</span>
+                        <Spinner
+                            as="span"
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                        />
+                    </span>
                     }
                 </Button>
             </Modal.Footer>

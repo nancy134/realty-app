@@ -9,6 +9,7 @@ import {
     Col
 } from 'react-bootstrap';
 import StepperAddListing from '../components/StepperAddListing';
+import userService from '../services/users';
 
 class AccountRegisterModal extends React.Component {
     constructor(props){
@@ -20,14 +21,22 @@ class AccountRegisterModal extends React.Component {
         this.handleLoginStart = this.handleLoginStart.bind(this);
         this.handleTerms = this.handleTerms.bind(this);
         this.handlePrivacyPolicy = this.handlePrivacyPolicy.bind(this);
+        this.handleRoleChange = this.handleRoleChange.bind(this);
         this.emailRef = React.createRef();
         this.state = {
             email: "",
-            password: ""
+            password: "",
+            roles: [],
+            role: "" 
         };
     }
     handleRegister(){
-        this.props.onRegister(this.state.email, this.state.password);
+        var body = {
+            email: this.state.email,
+            password: this.state.password,
+            role: this.state.role
+        };
+        this.props.onRegister(body);
     }
     handleEmailChange(event){
         this.setState({
@@ -54,10 +63,23 @@ class AccountRegisterModal extends React.Component {
     handlePrivacyPolicy(){
         this.props.onPrivacy();
     }
+    handleRoleChange(e){
+        this.setState({
+            role: e.target.value
+        });
+    }
     componentDidMount(){
-        setTimeout(() => {
-            this.emailRef.current.focus();
-        }, 500)
+        var that = this;
+        userService.getUserEnums().then(function(enums){
+            that.setState({
+                roles: enums.roles,
+                role: enums.roles[0]
+            });
+            setTimeout(() => {
+                that.emailRef.current.focus();
+            }, 500)
+        }).catch(function(err){
+        });
     }
     render(){
 
@@ -156,6 +178,17 @@ class AccountRegisterModal extends React.Component {
                                     <li className="rem75">One special charater: ^  $  *  .  ?  - </li>
                                 </Col>
                             </Row>
+                            <Form.Label>Your Role</Form.Label>
+                            <Form.Control
+                                as="select"
+                                value={this.state.role}
+                                onChange={this.handleRoleChange}
+                            >
+                                {this.state.roles.map((role, index) =>
+                                (
+                                <option key={index}>{role}</option>
+                                ))}
+                            </Form.Control>
                             <Button
                                 className="pl-0 pr-0"
                                 variant="link">Already have an account?
@@ -192,13 +225,16 @@ class AccountRegisterModal extends React.Component {
                     {!this.props.progress ?
                     <span>{nextButton}</span>
                     :
-                    <Spinner
-                        as="span"
-                        animation="border"
-                        size="sm"
-                        role="status"
-                        aria-hidden="true"
-                    />
+                    <span>
+                        <span>{nextButton}&nbsp;</span>
+                        <Spinner
+                            as="span"
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                        />
+                    </span>
                     }
                 </Button>
             </Modal.Footer>

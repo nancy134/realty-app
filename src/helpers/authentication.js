@@ -110,11 +110,12 @@ export function loginResponse(email, password){
         });
     });
 }
-export function signupResponse(email, password){
+export function signupResponse(body){
     return new Promise(function(resolve,reject){
         var signupParams = {
-            username: email,
-            password: password
+            username: body.email,
+            password: body.password,
+            role: body.role
         };
         var signupPromise = auth.signup(signupParams);
         signupPromise.then(function(result){

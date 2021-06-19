@@ -129,7 +129,6 @@ class App extends React.Component {
                               isAdmin={this.state.isAdmin}
                               onLogin={this.handleLogin} 
                               onLogout={this.handleLogout} 
-                              onRegister={this.handleRegister}
                               onConfirm={this.handleConfirm}
                           />
                       </Nav.Link>
