@@ -167,6 +167,7 @@ class AccountLoginModal extends React.Component {
                 >Don't have an account?</Button>
                 <Button 
                     onClick={this.props.onRegisterStart} 
+                    id="account-login-register"
                     variant="link"
                     className="pl-0 text-info"><u>Create one here</u>
                 </Button>

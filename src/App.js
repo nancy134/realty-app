@@ -36,6 +36,7 @@ class App extends React.Component {
       };
       this.handleLogin = this.handleLogin.bind(this);
       this.handleLogout = this.handleLogout.bind(this);
+      this.handleRegister = this.handleRegister.bind(this);
       this.handleAddListing = this.handleAddListing.bind(this);
       this.handleAddListingCancel = this.handleAddListingCancel.bind(this);
 
@@ -83,6 +84,9 @@ class App extends React.Component {
           loggedIn: false
       });
   }
+  handleRegister(body){
+  }
+
   handleAddListing(){
       this.setState({
           showAddListingWizard: true
@@ -130,6 +134,7 @@ class App extends React.Component {
                               onLogin={this.handleLogin} 
                               onLogout={this.handleLogout} 
                               onConfirm={this.handleConfirm}
+                              onRegister={this.handleRegister}
                           />
                       </Nav.Link>
                   </Nav.Item>

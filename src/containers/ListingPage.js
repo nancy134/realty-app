@@ -210,7 +210,7 @@ export class ListingPage extends Component {
             bounds: {lat0:lat0, lng0:lng0, lat1:lat1, lng1:lng1},
             center: null,
             zoomLevel: null,
-            myListings: {
+            myListingsMap: {
                 bounds: {lat0:null, lng0:null, lat1:null, lng1:null},
                 center: null,
                 zoomLevel: null,
@@ -400,7 +400,7 @@ export class ListingPage extends Component {
                 index: data.listing.id,
                 showDetail: true,
                 editMode: "edit",
-                myListings: {
+                myListingsMap: {
                     bounds: myBounds,
                     center: null,
                     zoomLevel: null
@@ -411,8 +411,8 @@ export class ListingPage extends Component {
 
             that.fetchListingPromise(localState).then(function(localState){
                 that.fetchListingsPromise(localState).then(function(localState){
-                    if (localState.myListings.bounds.lat0 === null){
-                        localState.myListings.bounds = geolocationService.calculateBounds(localState.markers);
+                    if (localState.myListingsMap.bounds.lat0 === null){
+                        localState.myListingsMap.bounds = geolocationService.calculateBounds(localState.markers);
                     }
                     that.setState(localState);
                     that.props.onAddListingCancel();
@@ -442,7 +442,7 @@ export class ListingPage extends Component {
             bounds: this.state.bounds,
             center: this.state.center,
             zoomLevel: this.state.zoomLevel,
-            myListings: {
+            myListingsMap: {
                 bounds: {lat0:null,lng0:null,lat1:null,lng1:null},
                 center: null,
                 zoomLevel: null
@@ -458,8 +458,8 @@ export class ListingPage extends Component {
                     }
                 }
                 if (localState.listingMode === "myListings"){
-                    if (localState.myListings.bounds.lat0 === null){
-                        localState.myListings.bounds =
+                    if (localState.myListingsMap.bounds.lat0 === null){
+                        localState.myListingsMap.bounds =
                            geolocationService.calculateBounds(localState.markers);
                     }
                 }
@@ -623,10 +623,10 @@ export class ListingPage extends Component {
             // Close detail view
             showDetail: false,
             // Keep the bounds
-            myListings: {
-               bounds: this.state.myListings.bounds,
-               center: this.state.myListings.center,
-               zoomLevel: this.state.myListings.zoomLevel
+            myListingsMap: {
+               bounds: this.state.myListingsMap.bounds,
+               center: this.state.myListingsMap.center,
+               zoomLevel: this.state.myListingsMap.zoomLevel
            },
            updateBounds: true
         }
@@ -835,13 +835,22 @@ export class ListingPage extends Component {
                 var enumPromise = listingService.getEnumsPromise();
                 enumPromise.then(function(enums){
                     listingService.getMarkers(markerQuery, lMode).then(function(markers){
+
+                        if (lMode === "myListings"){
+                            localState.myListings = listings.listings.rows;
+                            localState.myPage = listings.page;
+                            localState.myPerPage = listings.perPage;
+                            localState.myCount = listings.listings.count;
+                            localState.myMarkers = markers.markers.rows;
+                        } else if (lMode === "allListings"){
+                            localState.listings = listings.listings.rows;
+                            localState.page = listings.page;
+                            localState.perPage = listings.perPage;
+                            localState.count = listings.listings.count;
+                            localState.markers = markers.markers.rows;
+                        }
                         localState.allAmenities = enums.amenities;
                         localState.propertyTypes = enums.propertyTypes;
-                        localState.listings = listings.listings.rows;
-                        localState.page = listings.page;
-                        localState.perPage = listings.perPage;
-                        localState.count = listings.listings.count;
-                        localState.markers = markers.markers.rows;
                         resolve(localState);
                     }).catch(function(err){
                         reject(err);
@@ -871,12 +880,12 @@ export class ListingPage extends Component {
     
         } else {
             var bounds = this.state.bounds;
-            var myBounds = this.state.myListings.bounds;
+            var myBounds = this.state.myListingsMap.bounds;
             localState = {
                 listingMode: this.state.listingMode,
                 page: this.state.page,
                 bounds: bounds,
-                myListings: { bounds: myBounds}
+                myListingsMap: { bounds: myBounds}
             };
             this.fetchListingsPromise(localState).then(function(localState){
                 if (localState.listingMode === "allListings"){
@@ -886,8 +895,8 @@ export class ListingPage extends Component {
                     }
                 }
                 if (localState.listingMode === "myListings"){
-                    if (localState.myListings.bounds.lat0 === null){
-                        localState.myListings.bounds = 
+                    if (localState.myListingsMap.bounds.lat0 === null){
+                        localState.myListingsMap.bounds = 
                            geolocationService.calculateBounds(localState.markers);
                     }
                 }
@@ -1021,10 +1030,10 @@ export class ListingPage extends Component {
             localState.zoomLevel = zoomLevel;
         }
         if (this.state.listingMode === "myListings"){
-            localState.myListings = {};
-            localState.myListings.bounds = bounds;
-            localState.myListings.center = center;
-            localState.myListings.zoomLevel = zoomLevel;
+            localState.myListingsMap = {};
+            localState.myListingsMap.bounds = bounds;
+            localState.myListingsMap.center = center;
+            localState.myListingsMap.zoomLevel = zoomLevel;
         }
         var that = this;
         this.fetchListingsPromise(localState).then(function(localState){
@@ -1295,6 +1304,7 @@ export class ListingPage extends Component {
         }
     }
     render() {
+        console.log(this.state);
         var showDetail = this.state.showDetail;
         var index = this.state.index;
         var editMode = this.state.editMode;
@@ -1304,6 +1314,9 @@ export class ListingPage extends Component {
         var listingDetail = this.state.listingDetail;
         var fullscreen = this.state.fullscreen;
         var reporting = this.state.showReportView && this.props.loggedIn;
+        if (!loggedIn){
+            listingMode = "allListings";
+        }
         // Layouts
         var leftColumnClassName = "p-0 leftcol";
         var leftColumnSize = 8;
@@ -1335,9 +1348,9 @@ export class ListingPage extends Component {
             center = this.state.center;
             zoomLevel = this.state.zoomLevel;
         }else if (listingMode === "myListings"){
-            bounds = this.state.myListings.bounds;
-            center = this.state.myListings.center;
-            zoomLevel = this.state.myListings.zoomLevel;
+            bounds = this.state.myListingsMap.bounds;
+            center = this.state.myListingsMap.center;
+            zoomLevel = this.state.myListingsMap.zoomLevel;
         }
         return (
         <React.Fragment>
@@ -1509,10 +1522,18 @@ export class ListingPage extends Component {
                         onShowDetailChange={this.handleShowDetailChange} 
                         onListingModeChange={this.handleListingToggle}
                         onDelete={this.handleDeleteListing}
+
                         listings={this.state.listings}
                         page={this.state.page}
                         count={this.state.count}
                         perPage={this.state.perPage}
+
+                        myListings={this.state.myListings}
+                        myPage={this.state.myPage}
+                        myCount={this.state.myCount}
+                        myPerPage={this.state.myPerPage}
+
+
                         onNewPage={this.handleNewPage}
                         onNewListing={this.handleAddListing}
                         // Reports

@@ -159,12 +159,14 @@ class AccountRegisterModal extends React.Component {
                             <h6>Creating an account will allow you to publish your listings and to save reports.</h6>
                             <Form.Label>Email</Form.Label>
                             <Form.Control
+                                id="account-register-email"
                                 onChange={this.handleEmailChange}
                                 ref={this.emailRef}
                             />
                             <Form.Label>Password</Form.Label>
                             <Form.Control
                                 type="password"
+                                id="account-register-password"
                                 onChange={this.handlePasswordChange}
                                 onKeyPress={this.handleKeyPress}
                             />
@@ -220,6 +222,7 @@ class AccountRegisterModal extends React.Component {
                 <Button onClick={this.props.onCancel}>{cancel}</Button>
                 <Button
                     disabled={buttonDisabled}
+                    id="account-register-register"
                     onClick={this.handleRegister}
                 >
                     {!this.props.progress ?

@@ -153,7 +153,7 @@ class Listings extends React.Component {
             />
             }
             <div>
-                { listings.length > 0 ?
+                {this.props.listingMode === "allListings" && listings.length > 0 ?
                 <ListGroup>
                     {listings.map((listing, index) =>
                     (
@@ -173,9 +173,33 @@ class Listings extends React.Component {
                         />
                     ))}
                 </ListGroup>
-                :
-                <Alert variant="info">No listings found</Alert>
-                }
+                : null}
+                {this.props.listingMode === "myListings" && this.props.myListings.length > 0 ?
+                <ListGroup>
+                    {this.props.myListings.map((listing, index) =>
+                    (
+                        <ListingItem
+                            index={index}
+                            key={listing.id}
+                            listing={listing}
+                            onDelete={this.handleDelete}
+                            listingMode={this.props.listingMode}
+                            onItemClick={this.showDetailChange}
+                            onSelectFavorite={this.handleSelectFavorite}
+                            reporting={this.props.reporting}
+                            showImage={showImage}
+                            showShortDescription={showShortDescription}
+                            reportListItems={this.props.reportListItems}
+                            onAddToList={this.props.onAddToList}
+                        />
+                    ))}
+                </ListGroup>
+                :null}
+
+                {(this.props.listingMode === "allListings" && listings.length === 0) ||
+                 (this.props.listingMode === "myListings" && this.props.myListings.length === 0) ?
+                     <Alert variant="info">No listings found</Alert>
+                : null}
             </div>
         </div>
 

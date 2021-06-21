@@ -134,7 +134,8 @@ export class AccountButton extends Component{
         this.setState({
             registerProgress: true
         });
-
+        console.log("body:");
+        console.log(body);
         authenticationService.signupResponse(body).then(function(result){
             that.setState({
                 email:body.email,
@@ -146,8 +147,9 @@ export class AccountButton extends Component{
                 loginMessageVariant: "danger"
             });
 
-            that.props.onRegister();
+            that.props.onRegister(body);
         }).catch(function(err){
+            console.log(err);
             that.setState({
                 registerMessage: err.message,
                 registerProgress: false

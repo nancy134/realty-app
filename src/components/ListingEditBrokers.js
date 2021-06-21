@@ -35,6 +35,8 @@ class ListingEditBrokers extends React.Component {
         console.log(this.props.associates);
         console.log("this.props.listing:");
         console.log(this.props.listing);
+        console.log("this.state.checkedAssociates:");
+        console.log(this.state.checkedAssociates);
     }
 
     handleToggleCheckbox(index){

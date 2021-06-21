@@ -54,16 +54,23 @@ export class AccountPage extends Component {
         this.props.onLogin(result);
     }
 
-    handleRegister(){
+    handleRegister(result){
         var that = this;
         var body = {
-            token: this.state.token
+            token: this.state.token,
+            email: result.email
         };
+        console.log("handleRegister()");
+        console.log("body:");
+        console.log(body);
         userService.acceptInvite(body).then(function(user){
-            that.setState({
-                token: null
-            });
+            console.log("user:");
+            console.log(user);
+            //that.setState({
+            //    token: null
+            //});
         }).catch(function(err){
+            console.log(err);
         });
     }
 
