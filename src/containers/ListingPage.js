@@ -1304,7 +1304,6 @@ export class ListingPage extends Component {
         }
     }
     render() {
-        console.log(this.state);
         var showDetail = this.state.showDetail;
         var index = this.state.index;
         var editMode = this.state.editMode;

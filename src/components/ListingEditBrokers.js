@@ -4,6 +4,22 @@ import {
     Form,
     Button
 } from 'react-bootstrap';
+import listingService from '../services/listings';
+
+function Associate(props){
+    var name = props.associate.email + " (" + props.associate.role + ")";
+    if (props.associate.first){
+        name = props.associate.first + " " + props.associate.last + " ("+props.associate.role+") ";
+    }
+    return(
+        <Form.Check
+            type="checkbox"
+            label={name}
+            defaultChecked={props.checkedAssociate}
+            onChange={props.onToggleCheckbox}
+        />
+    );
+}
 
 class ListingEditBrokers extends React.Component {
     constructor(props){
@@ -37,6 +53,44 @@ class ListingEditBrokers extends React.Component {
         console.log(this.props.listing);
         console.log("this.state.checkedAssociates:");
         console.log(this.state.checkedAssociates);
+
+        // Get ListingVersionId
+        var listingVersionId = this.props.listing.id;
+
+        // Find Added Associates
+        for (var i=0; i<this.props.associates.length; i++){
+            // Is this associated Checked?
+            var checked = this.state.checkedAssociates[i];
+            // Are they already in the list of Brokers?
+            var broker = false;
+            for (var j=0; j<this.props.listing.users.length; j++){
+                if (this.props.associates[i].email === this.props.listing.users[j].email){
+                    broker = true;
+                }
+            }
+            if (broker === true && checked === false) {
+                console.log("deleted: "+this.props.associates[i].email);
+                listingService.deleteListingUser(listingVersionId, this.props.associates[i].id).then(function(listingUser){
+                    console.log(listingUser);
+                }).catch(function(err){
+                    console.log(err);
+                }); 
+            }
+            if (broker === false && checked === true) {
+                console.log("added: "+this.props.associates[i].email);
+                var listingUserBody = {
+                    UserId: this.props.associates[i].id,
+                    ListingVersionId: listingVersionId
+                };
+                listingService.addListingUser(listingUserBody).then(function(listingUser){
+                    console.log(listingUser);
+                }).catch(function(err){
+                    console.log(err);
+                });
+            }
+        }
+
+        // Find Deleted Associates
     }
 
     handleToggleCheckbox(index){
@@ -68,12 +122,11 @@ class ListingEditBrokers extends React.Component {
                 <Form>
                     { this.props.associates.map((associate, index) =>
                     (
-                        <Form.Check
+                        <Associate
                             key={index}
-                            type="checkbox"
-                            label={associate.email}
-                            defaultChecked={this.state.checkedAssociates[index]}
-                            onChange={() => this.handleToggleCheckbox(index)}
+                            associate={associate}
+                            checkedAssociate={this.state.checkedAssociates[index]}
+                            onToggleCheckbox={() => this.handleToggleCheckbox(index)}
                         />
                     ))}
                 </Form>

@@ -93,6 +93,10 @@ class Listings extends React.Component {
         if (this.props.listings){
             listings = this.props.listings;
         }
+        var myListings = [];
+        if (this.props.myListings){
+            myListings = this.props.myListings;
+        }
         var showImage = true;
         var showShortDescription = true;
         var showFavorites = false;
@@ -174,7 +178,7 @@ class Listings extends React.Component {
                     ))}
                 </ListGroup>
                 : null}
-                {this.props.listingMode === "myListings" && this.props.myListings.length > 0 ?
+                {this.props.listingMode === "myListings" && myListings.length > 0 ?
                 <ListGroup>
                     {this.props.myListings.map((listing, index) =>
                     (
@@ -197,7 +201,7 @@ class Listings extends React.Component {
                 :null}
 
                 {(this.props.listingMode === "allListings" && listings.length === 0) ||
-                 (this.props.listingMode === "myListings" && this.props.myListings.length === 0) ?
+                 (this.props.listingMode === "myListings" && myListings.length === 0) ?
                      <Alert variant="info">No listings found</Alert>
                 : null}
             </div>

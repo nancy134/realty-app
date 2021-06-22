@@ -213,6 +213,21 @@ export function addListingUser(body){
     });
 }
 
+export function deleteListingUser(listingVersionId, userId){
+    var url = process.env.REACT_APP_API + "listings/"+listingVersionId+"/users/"+userId;
+    return new Promise(function(resolve, reject){
+        var options = {
+            url: url,
+            method: 'DELETE'
+        };
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
 export function getSpaceTypes(cb){
     var url = process.env.REACT_APP_LISTING_SERVICE+"spaceUses";
     fetch(url, {
@@ -257,6 +272,7 @@ const listings = {
     deleteDraftListing,
     findAddress,
     addListingUser,
+    deleteListingUser
 };
 export default listings;
 
