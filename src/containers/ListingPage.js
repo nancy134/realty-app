@@ -65,6 +65,7 @@ export class ListingPage extends Component {
         if (!defaultLocation.formatted_address){
             defaultLocation = geolocationService.getDefaultLocation();
         }
+
         var formatted_address = defaultLocation.formatted_address;
         var lat0 = defaultLocation.lat0;
         var lng0 = defaultLocation.lng0;
@@ -460,7 +461,7 @@ export class ListingPage extends Component {
                 if (localState.listingMode === "myListings"){
                     if (localState.myListingsMap.bounds.lat0 === null){
                         localState.myListingsMap.bounds =
-                           geolocationService.calculateBounds(localState.markers);
+                           geolocationService.calculateBounds(localState.myMarkers);
                     }
                 }
 
@@ -768,7 +769,7 @@ export class ListingPage extends Component {
     }
 
     //
-    // FetchListingsPromise
+    // --fetchListingsPromise
     //
     fetchListingsPromise(localState){
         var that = this;
@@ -835,7 +836,6 @@ export class ListingPage extends Component {
                 var enumPromise = listingService.getEnumsPromise();
                 enumPromise.then(function(enums){
                     listingService.getMarkers(markerQuery, lMode).then(function(markers){
-
                         if (lMode === "myListings"){
                             localState.myListings = listings.listings.rows;
                             localState.myPage = listings.page;
@@ -897,7 +897,7 @@ export class ListingPage extends Component {
                 if (localState.listingMode === "myListings"){
                     if (localState.myListingsMap.bounds.lat0 === null){
                         localState.myListingsMap.bounds = 
-                           geolocationService.calculateBounds(localState.markers);
+                           geolocationService.calculateBounds(localState.myMarkers);
                     }
                 }
                 localState.readyForMap = true;
@@ -906,8 +906,6 @@ export class ListingPage extends Component {
                     localState.showDetail = that.state.showDetail;
                     localState.listingMode = that.state.listingMode;
                     that.fetchListingPromise(localState).then(function(localState){ 
-                        console.log("localState:");
-                        console.log(localState);
                         that.setState(localState);
                     }).catch(function(err){
                         console.log(err);
@@ -921,6 +919,17 @@ export class ListingPage extends Component {
         }
     }
     componentWillUnmount(){
+    }
+    componentDidUpdate(prevProps){
+        if (this.props.loggedIn !== prevProps.loggedIn){
+            if (!this.props.loggedIn){
+                this.setState({
+                    listingMode: "allListings",
+                    showDetail: false,
+                    myListings: null
+                });
+            }
+        }
     }
     shouldComponentUpdate(){
         return true;
@@ -1313,9 +1322,7 @@ export class ListingPage extends Component {
         var listingDetail = this.state.listingDetail;
         var fullscreen = this.state.fullscreen;
         var reporting = this.state.showReportView && this.props.loggedIn;
-        if (!loggedIn){
-            listingMode = "allListings";
-        }
+
         // Layouts
         var leftColumnClassName = "p-0 leftcol";
         var leftColumnSize = 8;
@@ -1342,15 +1349,19 @@ export class ListingPage extends Component {
         // Map
         var bounds = {};
         var center, zoomLevel;
+        var markers = [];
         if (listingMode === "allListings"){
             bounds = this.state.bounds;
             center = this.state.center;
             zoomLevel = this.state.zoomLevel;
+            markers = this.state.markers;
         }else if (listingMode === "myListings"){
             bounds = this.state.myListingsMap.bounds;
             center = this.state.myListingsMap.center;
             zoomLevel = this.state.myListingsMap.zoomLevel;
+            markers = this.state.myMarkers;
         }
+
         return (
         <React.Fragment>
 
@@ -1503,7 +1514,7 @@ export class ListingPage extends Component {
                     { (this.state.readyForMap && !fullscreen) ?
                     <ListingMap 
                         showDetail={showDetail}
-                        markers={this.state.markers}
+                        markers={markers}
                         bounds={bounds}
                         onBoundsChange={this.handleBoundsChange}
                         updateBounds={this.state.updateBounds}
