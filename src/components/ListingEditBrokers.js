@@ -32,7 +32,6 @@ class ListingEditBrokers extends React.Component {
             for (var i=0; i<this.props.associates.length; i++){
                 var checkedAssociate = false;
                 for(var j=0; j<this.props.listing.users.length; j++){
-                    console.log(this.props.listing.users[j].email+"==="+this.props.associates[i].email);
                     if (this.props.listing.users[j].email === this.props.associates[i].email){
                         checkedAssociate = true;
                     }
@@ -46,20 +45,14 @@ class ListingEditBrokers extends React.Component {
     }
 
     handleSave(){
-        console.log("handleSave");
-        console.log("this.props.associates:");
-        console.log(this.props.associates);
-        console.log("this.props.listing:");
-        console.log(this.props.listing);
-        console.log("this.state.checkedAssociates:");
-        console.log(this.state.checkedAssociates);
 
         // Get ListingVersionId
         var listingVersionId = this.props.listing.id;
 
-        // Find Added Associates
+        var brokersToAdd = [];
+        var brokersToDelete = [];
+
         for (var i=0; i<this.props.associates.length; i++){
-            // Is this associated Checked?
             var checked = this.state.checkedAssociates[i];
             // Are they already in the list of Brokers?
             var broker = false;
@@ -69,28 +62,14 @@ class ListingEditBrokers extends React.Component {
                 }
             }
             if (broker === true && checked === false) {
-                console.log("deleted: "+this.props.associates[i].email);
-                listingService.deleteListingUser(listingVersionId, this.props.associates[i].id).then(function(listingUser){
-                    console.log(listingUser);
-                }).catch(function(err){
-                    console.log(err);
-                }); 
+                brokersToDelete.push(this.props.associates[i].id);
             }
             if (broker === false && checked === true) {
-                console.log("added: "+this.props.associates[i].email);
-                var listingUserBody = {
-                    UserId: this.props.associates[i].id,
-                    ListingVersionId: listingVersionId
-                };
-                listingService.addListingUser(listingUserBody).then(function(listingUser){
-                    console.log(listingUser);
-                }).catch(function(err){
-                    console.log(err);
-                });
+                brokersToAdd.push(this.props.associates[i].id);
             }
         }
+        this.props.onSave(listingVersionId, brokersToAdd, brokersToDelete);
 
-        // Find Deleted Associates
     }
 
     handleToggleCheckbox(index){

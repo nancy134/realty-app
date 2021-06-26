@@ -92,7 +92,10 @@ function inviteAssociate(body){
         axiosInstance.post(url, body).then(function(response){
             resolve(response.data);
         }).catch(function(err){
-            reject(err);
+            if (err.response && err.response.data)
+                reject(err.response.data);
+            else
+                reject(err);
         });
     });
 }

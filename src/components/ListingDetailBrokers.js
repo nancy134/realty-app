@@ -25,7 +25,7 @@ function EditButton(props) {
                 listing={props.listing}
                 show={props.show}
                 onHide={props.onHide}
-                onSave={listing => props.onSave(listing)}
+                onSave={props.onSave}
                 errorMessage={props.errorMessage}
                 saving={props.saving}
                 associates={props.associates}
@@ -60,7 +60,7 @@ class ListingDetailBrokers extends React.Component {
                         <h3>Brokers { enableEdit && editMode === "edit" ?
                             <EditButton 
                                 listing={listing}
-                                onSave={this.handleSave}
+                                onSave={this.props.onSave}
                                 getListing={this.props.getListing}
                                 onHide={this.props.onBrokerModalHide}
                                 onShow={this.props.onBrokerModalUpdate}

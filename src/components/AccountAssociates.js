@@ -8,7 +8,8 @@ import {
     Form,
     Dropdown,
     DropdownButton,
-    Spinner
+    Spinner,
+    Alert
 } from 'react-bootstrap';
 import userService from '../services/users';
 import authenticationService from '../helpers/authentication';
@@ -40,22 +41,26 @@ class AccountAssociates extends React.Component {
         this.handleSendInvite = this.handleSendInvite.bind(this);
         this.handleAssociationChange = this.handleAssociatonChange.bind(this);
         this.handleInviteeEmailChange = this.handleInviteeEmailChange.bind(this);
+
         this.state = {
             associates: [],
             associationName: "",
             inviteeEmail: "",
-            sendInviteProgress: false
+            sendInviteProgress: false,
+            errorMessage: null
         };
     }
 
     handleSendInvite(){
+        var inviteeEmail = this.state.inviteeEmail.toLowerCase().trim();
         var that = this;
         var body = {
             associationName: this.state.associationName,
-            inviteeEmail: this.state.inviteeEmail 
+            inviteeEmail: inviteeEmail 
         };
         this.setState({
-            sendInviteProgress: true
+            sendInviteProgress: true,
+            errorMessage: null
         });
         userService.inviteAssociate(body).then(function(result){
             userService.getAssociatesMe().then(function(associates){
@@ -66,11 +71,13 @@ class AccountAssociates extends React.Component {
                 }); 
             }).catch(function(err){
                 that.setState({
+                    errorMessage: err.message,
                     sendInviteProgress: false
                 });
             });
         }).catch(function(err){
             that.setState({
+                errorMessage: err.message,
                 sendInviteProgress: false
             });
         });
@@ -102,6 +109,12 @@ class AccountAssociates extends React.Component {
     }
 
     render(){
+
+        var disableButton = true;
+        if (this.state.associationName.length > 0 && 
+            this.state.inviteeEmail.length > 0)
+            disableButton = false;
+
         return(
         <React.Fragment>
             <Container>
@@ -153,6 +166,7 @@ class AccountAssociates extends React.Component {
                            <Button
                                 variant="success"
                                 onClick={this.handleSendInvite}
+                                disabled={disableButton}
                             >
                                 { !this.state.sendInviteProgress ?
                                 <span>Send Invite</span>
@@ -188,6 +202,19 @@ class AccountAssociates extends React.Component {
                         associate={associate}
                     />
                     ))}
+                    <Row
+                        className="pt-2"
+                    >
+                    <Col>
+                    {this.state.errorMessage ?
+                    <Alert
+                        variant="danger"
+                    >
+                        <span>Error:&nbsp;{this.state.errorMessage}</span>
+                    </Alert>
+                    : null}
+                    </Col>
+                    </Row>
                 </Jumbotron> 
             </Container>
         </React.Fragment>

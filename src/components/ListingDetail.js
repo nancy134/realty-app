@@ -782,8 +782,44 @@ class ListingDetail extends React.Component {
         });
     }
 
-    handleBrokerUpdate(users){
-        // Add to ListingUser or remove from ListingUser
+    handleBrokerUpdate(listingVersionId, brokersToAdd, brokersToDelete){
+        var promises = [];
+        var promise = null;
+        var i;
+        if (brokersToAdd && brokersToAdd.length > 0){
+            for (i=0; i<brokersToAdd.length; i++){
+                var listingUserBody = {
+                    UserId: brokersToAdd[i],
+                    ListingVersionId: listingVersionId
+                } 
+                promise = listingService.addListingUser(listingUserBody);
+                promises.push(promise);
+            }
+        }
+        if (brokersToDelete && brokersToDelete.length > 0){
+            for (i=0; i<brokersToDelete.length; i++){
+                promise = listingService.deleteListingUser(listingVersionId, brokersToDelete[i]);
+                promises.push(promise);
+            }
+        }
+        if (promises.length > 0){
+           var that = this;
+           Promise.all(promises).then(function(values){
+               that.setState({
+                   brokerUpdate: false,
+                   brokerSaving: false,
+                   brokerError: null
+               });
+           }).catch(function(err){
+               console.log(err);
+           });
+        } else {
+            this.setState({
+                brokerUpdate: false,
+                brokerSaving: false,
+                brokerError: null
+            });
+        }
     }
 
     componentDidMount(){
@@ -1056,7 +1092,7 @@ class ListingDetail extends React.Component {
                     listing={listing}
                     editMode={editMode}
                     onBrokerModalUpdate={this.handleBrokerModalUpdate}
-                    onBrokerUpdate={this.handleBrokerUpdate}
+                    onSave={this.handleBrokerUpdate}
                     onBrokerModalHide={this.handleBrokerModalHide}
                     brokerUpdate={this.state.brokerUpdate}
                     brokerError={this.state.brokerError}
