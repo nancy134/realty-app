@@ -95,6 +95,7 @@ export class ListingPage extends Component {
         this.handleAddListingCancel = this.handleAddListingCancel.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
         this.handleFetchListing = this.handleFetchListing.bind(this);
+        this.handleRefreshListingDetail = this.handleRefreshListingDetail.bind(this);
         this.handleGoToListingByIndex = this.handleGoToListingByIndex.bind(this);
         this.handleGoToMyListing = this.handleGoToMyListing.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
@@ -732,6 +733,19 @@ export class ListingPage extends Component {
         });
 
     }
+
+    handleRefreshListingDetail(){
+        var that = this;
+        var localState = {
+            index: this.state.index
+        };
+        this.fetchListingPromise(localState).then(function(localState){
+            that.setState(localState);
+        }).catch(function(err){
+            console.log(err);
+        });
+    }
+
     fetchListingPromise(localState){
         return new Promise(function(resolve, reject){
             var getPromise = listingService.get(localState.index);
@@ -1488,6 +1502,7 @@ export class ListingPage extends Component {
                             onOwnerChange={this.handleOwnerChange} 
                             onUpdate={this.handleUpdate}
                             onFetchListing={this.handleFetchListing}
+                            onRefreshListingDetail={this.handleRefreshListingDetail}
                             showSpinner={this.state.showSpinner}
 
                             // Transition

@@ -810,6 +810,7 @@ class ListingDetail extends React.Component {
                    brokerSaving: false,
                    brokerError: null
                });
+               that.props.onRefreshListingDetail();
            }).catch(function(err){
                console.log(err);
            });

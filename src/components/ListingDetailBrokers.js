@@ -35,6 +35,30 @@ function EditButton(props) {
   );
 }
 
+function Broker(props){
+    var user = props.user;
+    return(
+        <Row >
+            <Col md={2}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
+            <Col md={4}>
+                <Row className="font-weight-bold">{user.first} {user.middle} {user.last}</Row>
+                <Row>{user.email}</Row>
+                { user.officePhone ?
+                <Row>Office phone: {user.officePhone}</Row>
+                : null}
+                { user.mobilePhone ?
+                <Row>Mobile phone: {user.mobilePhone}</Row>
+                : null}
+            </Col>
+            <Col md={4}>
+                <Row className="font-weight-bold">{user.company}</Row>
+                <Row>{user.address1}</Row>
+                <Row>{user.city}, {user.state} {user.zip}</Row>
+            </Col>
+        </Row>
+    );
+}
+
 class ListingDetailBrokers extends React.Component {
     constructor(props){
         super(props);
@@ -73,24 +97,14 @@ class ListingDetailBrokers extends React.Component {
                 </Row>
                 <Row className="pt-2 pb-2 ml-0 mr-0">
                     <Col md={12}>
-                        <Row>
-                            <Col md={2}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
-                            <Col md={4}>
-                                <Row className="font-weight-bold">{listing.owner.first} {listing.owner.middle} {listing.owner.last}</Row>
-                                <Row>{listing.owner.email}</Row>
-                                { listing.owner.officePhone ?
-                                <Row>Office phone: {listing.owner.officePhone}</Row>
-                                : null}
-                                { listing.owner.mobilePhone ?
-                                <Row>Mobile phone: {listing.owner.mobilePhone}</Row>
-                                : null}
-                            </Col>
-                            <Col md={4}>
-                                <Row className="font-weight-bold">{listing.owner.company}</Row>
-                                <Row>{listing.owner.address1}</Row>
-                                <Row>{listing.owner.city}, {listing.owner.state} {listing.owner.zip}</Row>
-                            </Col>
-                        </Row>
+                        {this.props.listing.users.map((user, index) =>
+                        (
+                        <Broker
+                            key={index}
+                            index={index}
+                            user={user}
+                        />
+                        ))} 
                     </Col>
                 </Row>
              </div>
