@@ -46,7 +46,10 @@ export class AccountPage extends Component {
             };
             userService.acceptInvite(body).then(function(user){
                 that.setState({
-                    token: null
+                    token: null,
+                    accountStatus: null,
+                    association: null,
+                    tab: "profile"
                 });
             }).catch(function(err){
             });
@@ -55,7 +58,6 @@ export class AccountPage extends Component {
     }
 
     handleRegister(result){
-        var that = this;
         var body = {
             token: this.state.token,
             email: result.email
@@ -66,9 +68,6 @@ export class AccountPage extends Component {
         userService.acceptInvite(body).then(function(user){
             console.log("user:");
             console.log(user);
-            //that.setState({
-            //    token: null
-            //});
         }).catch(function(err){
             console.log(err);
         });
@@ -79,11 +78,18 @@ export class AccountPage extends Component {
         if (this.state.token){
             userService.getInvite(this.state.token).then(function(result){
                 console.log(result);
-                that.setState({
-                    accountStatus: result.operation,
-                    association: result.association,
-                    loading: false
-                });
+                if (result.operation === "accepted"){
+                    that.setState({
+                        loading: false,
+                        token: null
+                    });
+                } else {
+                    that.setState({
+                        accountStatus: result.operation,
+                        association: result.association,
+                        loading: false
+                    });
+                }
             }).catch(function(err){
                 console.log(err);
                 that.setState({
