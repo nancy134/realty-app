@@ -37,6 +37,9 @@ function EditButton(props) {
 
 function Broker(props){
     var user = props.user;
+    if (user.role === "Administrator" || user.role === "Client"){
+        return null
+    } else {
     return(
         <Row >
             <Col md={2}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
@@ -57,6 +60,7 @@ function Broker(props){
             </Col>
         </Row>
     );
+    }
 }
 
 class ListingDetailBrokers extends React.Component {
