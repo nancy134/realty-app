@@ -11,8 +11,11 @@ import AccountAssociates from '../components/AccountAssociates';
 import AccountBilling from '../components/AccountBilling';
 import AccountSettings from '../components/AccountSettings';
 import AccountButton from '../components/AccountButton';
-
+import WizardAddListing from '../components/WizardAddListing';
 import userService from '../services/users';
+import listingService from '../services/listings';
+import authenticationService from '../helpers/authentication';
+import { GoogleApiWrapper } from 'google-maps-react';
 
 export class AccountPage extends Component {
     constructor(props){
@@ -20,6 +23,9 @@ export class AccountPage extends Component {
         this.handleSwitchTab = this.handleSwitchTab.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
         this.handleRegister = this.handleRegister.bind(this);
+        this.handleAddListingFinish = this.handleAddListingFinish.bind(this);
+        this.handleAddListingCancel = this.handleAddListingCancel.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
 
         const params = new URLSearchParams(props.location.search);
         var token  = params.get('token');
@@ -73,48 +79,91 @@ export class AccountPage extends Component {
         });
     }
 
+  handleAddListingFinish(listing){
+      var that = this;
+      listing.owner = authenticationService.getUserEmail();
+      listingService.create(listing).then(function(data){
+          that.props.onAddListingCancel();
+          that.props.history.push({
+              pathname: '/listing',
+              data: {
+                  listingId: data.listing.id,
+                  showDetail: true,
+                  listingMode: "myListings",
+                  createListing: true,
+                  editMode: "edit"
+              }
+          });
+      }).catch(function(err){
+          console.log(err);
+      });
+  }
+  handleWizardLogin(){
+      this.props.onLogin();
+  }
+  handleAddListingCancel(){
+      this.props.onAddListingCancel();
+  }
     componentDidMount(){
         var that = this;
-        if (this.state.token){
-            userService.getInvite(this.state.token).then(function(result){
-                console.log(result);
-                if (result.operation === "accepted"){
+        listingService.getEnumsPromise().then(function(enums){
+            if (that.state.token){
+                userService.getInvite(this.state.token).then(function(result){
+                    console.log(result);
+                    if (result.operation === "accepted"){
+                        that.setState({
+                            loading: false,
+                            token: null,
+                            propertyTypes: enums.propertyTypes
+                        });
+                    } else {
+                        that.setState({
+                            accountStatus: result.operation,
+                            association: result.association,
+                            loading: false,
+                            propertyTypes: enums.propertyTypes
+                        });
+                    }
+                }).catch(function(err){
+                    console.log(err);
                     that.setState({
                         loading: false,
-                        token: null
+                        token: null,
+                        propertyTypes: enums.propertyTypes
                     });
-                } else {
-                    that.setState({
-                        accountStatus: result.operation,
-                        association: result.association,
-                        loading: false
-                    });
-                }
-            }).catch(function(err){
-                console.log(err);
+                });
+            } else {
                 that.setState({
                     loading: false,
-                    token: null
+                    propertyTypes: enums.propertyTypes
                 });
-            });
-        } else {
-            that.setState({
-                loading: false
-            });
-        }
+            }
+        }).catch(function(err){
+            console.log(err);
+        });
     }
     render(){
         var tab = this.state.tab;
         if (this.state.loading || this.props.loading){
             return(
             <Container>
-            <Alert variant="primary">Initializing Page...</Alert>
+                <Alert variant="primary">Initializing Page...</Alert>
             </Container>
             );
         } else {
         if (this.props.loggedIn){
             return(
             <React.Fragment>
+                { this.props.showAddListingWizard ?
+                <WizardAddListing
+                    loggedIn={this.props.loggedIn}
+                    start={this.props.showAddListingWizard}
+                    onFinish={this.handleAddListingFinish}
+                    onCancel={this.handleAddListingCancel}
+                    onLogin={this.handleWizardLogin}
+                    propertyTypes={this.state.propertyTypes}
+                />
+                : null }
                 <AccountToolbar onSwitchTab={this.handleSwitchTab}/>
                 {tab === "profile" ? (
                 <AccountProfile />
@@ -136,6 +185,17 @@ export class AccountPage extends Component {
         } else {
             return(
             <React.Fragment>
+                { this.props.showAddListingWizard ?
+                <WizardAddListing
+                    loggedIn={this.props.loggedIn}
+                    start={this.props.showAddListingWizard}
+                    onFinish={this.handleAddListingFinish}
+                    onCancel={this.handleAddListingCancel}
+                    onLogin={this.handleWizardLogin}
+                    propertyTypes={this.state.propertyTypes}
+                />
+                : null }
+
                 { this.state.token ?
                 <Container>
                     <Alert
@@ -183,4 +243,6 @@ export class AccountPage extends Component {
     }
 }
 
-export default AccountPage;
+export default GoogleApiWrapper({
+    apiKey: 'AIzaSyB47KccZa8VRlzFuQJAvZ8UPembfW-3gq4'
+})(AccountPage);

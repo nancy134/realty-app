@@ -11,7 +11,6 @@ const LocalStorage = (function(){
     }
 
     function _setToken(data){
-        console.log(data);
         localStorage.setItem('IdToken', data.IdToken);
         localStorage.setItem('RefreshToken', data.RefreshToken);
     }
