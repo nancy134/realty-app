@@ -108,7 +108,7 @@ export class AccountPage extends Component {
         var that = this;
         listingService.getEnumsPromise().then(function(enums){
             if (that.state.token){
-                userService.getInvite(this.state.token).then(function(result){
+                userService.getInvite(that.state.token).then(function(result){
                     console.log(result);
                     if (result.operation === "accepted"){
                         that.setState({
