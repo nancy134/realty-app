@@ -188,6 +188,7 @@ const authentication = {
     reAuthenticate,
     getUserEmail,
     getUserName,
+    getUserCognitoId,
     isOwner,
     isAdmin,
     deleteUser,

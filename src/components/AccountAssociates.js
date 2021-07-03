@@ -15,8 +15,6 @@ import userService from '../services/users';
 import authenticationService from '../helpers/authentication';
 
 function Associate(props){
-    console.log("props.associate:");
-    console.log(props.associate);
     if (props.associate.email === authenticationService.getUserEmail()){
         return null;
     } else {
