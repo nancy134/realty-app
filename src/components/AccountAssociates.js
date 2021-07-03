@@ -58,9 +58,11 @@ class AccountAssociates extends React.Component {
 
     handleSendInvite(){
         var inviteeEmail = this.state.inviteeEmail.toLowerCase().trim();
+        var cognitoId = authenticationService.getUserCognitoId();
+        var associationName = "Created by "+cognitoId;
         var that = this;
         var body = {
-            associationName: this.state.associationName,
+            associationName: associationName,
             inviteeEmail: inviteeEmail 
         };
         this.setState({
@@ -99,9 +101,7 @@ class AccountAssociates extends React.Component {
     }
     handleRemoveAssociate(userId, associationId){
         var that = this;
-        console.log("handleRemoveAssociate: userId: "+userId+" AssociationId: "+associationId);
         userService.removeAssociate(userId, associationId).then(function(associate){
-            console.log(associate);
             userService.getAssociatesMe().then(function(associates){
                 console.log(associates);
                 that.setState({
@@ -133,9 +133,10 @@ class AccountAssociates extends React.Component {
     render(){
 
         var disableButton = true;
-        if (this.state.associationName.length > 0 && 
-            this.state.inviteeEmail.length > 0)
+        if (this.state.inviteeEmail.length > 0)
             disableButton = false;
+
+        var showName = false;
 
         return(
         <React.Fragment>
@@ -149,6 +150,7 @@ class AccountAssociates extends React.Component {
                         </Col>
                     </Row> 
                     <Row className="mt-5"></Row>
+                    {showName ?                    
                     <Form.Group
                         as={Row}
                     >
@@ -168,6 +170,7 @@ class AccountAssociates extends React.Component {
                             />
                         </Col>
                     </Form.Group>
+                    : null }
                     <Form.Group as={Row} controlId="invite">
                         <Form.Label
                             className="pl-0" 
