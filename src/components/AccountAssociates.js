@@ -15,6 +15,8 @@ import userService from '../services/users';
 import authenticationService from '../helpers/authentication';
 
 function Associate(props){
+    console.log("props.associate:");
+    console.log(props.associate);
     if (props.associate.email === authenticationService.getUserEmail()){
         return null;
     } else {
@@ -26,7 +28,9 @@ function Associate(props){
             <DropdownButton
                title="Actions"
             >
-                <Dropdown.Item>Remove Associate</Dropdown.Item>
+                <Dropdown.Item
+                    onClick={() => props.handleRemoveAssociate(props.associate.id, props.associate.AssociationId)}
+                >Remove Associate</Dropdown.Item>
             </DropdownButton>
         </Col>
     </Row>
@@ -41,6 +45,7 @@ class AccountAssociates extends React.Component {
         this.handleSendInvite = this.handleSendInvite.bind(this);
         this.handleAssociationChange = this.handleAssociatonChange.bind(this);
         this.handleInviteeEmailChange = this.handleInviteeEmailChange.bind(this);
+        this.handleRemoveAssociate = this.handleRemoveAssociate.bind(this);
 
         this.state = {
             associates: [],
@@ -90,6 +95,23 @@ class AccountAssociates extends React.Component {
     handleAssociatonChange(event){
         this.setState({
             associationName: event.target.value
+        });
+    }
+    handleRemoveAssociate(userId, associationId){
+        var that = this;
+        console.log("handleRemoveAssociate: userId: "+userId+" AssociationId: "+associationId);
+        userService.removeAssociate(userId, associationId).then(function(associate){
+            console.log(associate);
+            userService.getAssociatesMe().then(function(associates){
+                console.log(associates);
+                that.setState({
+                    associates: associates.associates
+                });
+            }).catch(function(err){
+                console.log(err);
+            });
+        }).catch(function(err){
+            console.log(err);
         });
     }
     componentDidMount(){
@@ -200,6 +222,7 @@ class AccountAssociates extends React.Component {
                     <Associate
                         key={index}
                         associate={associate}
+                        handleRemoveAssociate={this.handleRemoveAssociate}
                     />
                     ))}
                     <Row

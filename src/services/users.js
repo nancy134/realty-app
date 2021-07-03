@@ -100,6 +100,17 @@ function inviteAssociate(body){
     });
 }
 
+function removeAssociate(userId, associationId){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + 'associations/' + associationId + '/users/' + userId;
+        axiosInstance.delete(url).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
 const users = {
     getUser,
     updateUser,
@@ -108,6 +119,7 @@ const users = {
     getAssociatesMe,
     inviteAssociate,
     getInvite,
-    acceptInvite
+    acceptInvite,
+    removeAssociate
 };
 export default users;
