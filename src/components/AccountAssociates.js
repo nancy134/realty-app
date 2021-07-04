@@ -29,6 +29,11 @@ function Associate(props){
                 <Dropdown.Item
                     onClick={() => props.handleRemoveAssociate(props.associate.id, props.associate.AssociationId)}
                 >Remove Associate</Dropdown.Item>
+                { props.associate.associationStatus === "Invite sent" ?
+                <Dropdown.Item
+                    onClick={() => props.handleResendInvite(props.associate.AssociationId, props.associate.id)}
+                >Resend Invite</Dropdown.Item>
+                : null} 
             </DropdownButton>
         </Col>
     </Row>
@@ -44,6 +49,7 @@ class AccountAssociates extends React.Component {
         this.handleAssociationChange = this.handleAssociatonChange.bind(this);
         this.handleInviteeEmailChange = this.handleInviteeEmailChange.bind(this);
         this.handleRemoveAssociate = this.handleRemoveAssociate.bind(this);
+        this.handleResendInvite = this.handleResendInvite.bind(this);
 
         this.state = {
             associates: [],
@@ -112,6 +118,15 @@ class AccountAssociates extends React.Component {
             console.log(err);
         });
     }
+
+    handleResendInvite(associationId, userId){
+        var that = this;
+        userService.resendInvite(associationId, userId).then(function(result){
+        }).catch(function(err){
+            console.log(err);
+        });
+    }
+
     componentDidMount(){
         var that = this;
         userService.getAssociatesMe().then(function(associates){
@@ -224,6 +239,7 @@ class AccountAssociates extends React.Component {
                         key={index}
                         associate={associate}
                         handleRemoveAssociate={this.handleRemoveAssociate}
+                        handleResendInvite={this.handleResendInvite}
                     />
                     ))}
                     <Row
