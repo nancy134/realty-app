@@ -204,8 +204,8 @@ export class AccountPage extends Component {
 
                         { this.state.accountStatus === "login" ?
                         <div className="d-flex flex-column">
-                            <p className="d-flex justify-content-center">You have been invited to become an associate of <b>&nbsp;{this.state.association}</b></p>
-                            <p className="d-flex justify-content-center">Please login with to confirm.</p>
+                            <p className="d-flex justify-content-center">You have been invited to become an associate.</p>
+                            <p className="d-flex justify-content-center">Please login to confirm.</p>
                             <div className="d-flex justify-content-center">
                                 <AccountButton
                                     initialState="login"
@@ -218,7 +218,7 @@ export class AccountPage extends Component {
 
                         { this.state.accountStatus === "register" ?
                         <div className="d-flex flex-column">
-                            <p className="d-flex justify-content-center">You have been invited to become an associate of <b>&nbsp;{this.state.association}</b></p>
+                            <p className="d-flex justify-content-center">You have been invited to become an associate</p>
                             <p className="d-flex justify-content-center">Please register with FindingCRE to join!</p>
                             <div className="d-flex justify-content-center">
                                 <AccountButton
