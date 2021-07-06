@@ -105,13 +105,13 @@ class ListingAddType extends React.Component{
             </Modal.Body>
             <Modal.Footer>
                 <Button 
-                    id="overview_edit_cancel_button"
+                    id="button-add-listing-type-cancel"
                     onClick={this.props.onCancel}
                 >
                     <span>Discard Changes</span> 
                 </Button>
                 <Button 
-                    id="overview_edit_next_button"
+                    id="button-add-listing-type-next"
                     onClick={this.handleNext}
                 >
                     Next 

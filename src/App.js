@@ -119,6 +119,7 @@ class App extends React.Component {
                   <Nav.Item>
                       <Nav.Link eventKey="link-2">
                           <Button
+                              id="button-add-listing"
                               onClick={this.handleAddListing}
                               variant="outline-primary"
                           >

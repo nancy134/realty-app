@@ -16,7 +16,7 @@ function TransitionButton(props) {
       <span>
           { props.type === "button" ?
           <Button
-              id="header_transition_button"
+              id="button-detail-toolbar-transition"
               className="m-1"
               onClick={() => {props.onShow(props.transitionType)}}
           >

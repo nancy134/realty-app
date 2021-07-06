@@ -334,7 +334,7 @@ class ListingAddAddress extends React.Component{
                                                 {...getInputProps({
                                                     placeholder: 'Search address...',
                                                     className: 'form-control location-search-input',
-                                                    id: "header_edit_address_input",
+                                                    id: "input-add-listing-address",
                                                     name: "address",
                                                     onBlur: handleBlur,
                                                     isInvalid: !!errors.address,

@@ -164,7 +164,7 @@ class ListingItem extends React.Component {
                             <div style={{fontSize:"0.85rem"}}>For Sale ${listingPrice}</div>
                             : null }
                             { this.props.showShortDescription ?
-                            <div style={{fontSize: "0.85rem"}}className="truncate">{listing.shortDescription}</div>
+                            <div id="listing-item-short-description" style={{fontSize: "0.85rem"}}className="truncate">{listing.shortDescription}</div>
                             : null }
                             { this.props.listingMode === "myListings" ?
                             <div style={{fontSize: "0.85rem"}}><span className="font-weight-bold">({listing.publishStatus})</span></div> 
