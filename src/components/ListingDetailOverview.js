@@ -46,7 +46,7 @@ function EditButton(props) {
                 className="edit-button text-danger"
             >
 
-                <FontAwesomeIcon size="xs" icon={faPencilAlt} />&nbsp;Edit Overview & Image
+                <FontAwesomeIcon size="xs" icon={faPencilAlt} />&nbsp;Edit Overview & Image(s)
             </span>
             : null}
             {props.show ?

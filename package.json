@@ -38,6 +38,7 @@
     "react-places-autocomplete": "^7.3.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.1",
+    "react-tooltip": "^4.2.21",
     "react-transition-group": "^4.4.1",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",

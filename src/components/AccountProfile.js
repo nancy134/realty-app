@@ -10,6 +10,12 @@ import {
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import userService from '../services/users';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faQuestionCircle
+} from '@fortawesome/free-solid-svg-icons';
+
+import ReactTooltip from 'react-tooltip';
 
 const UserSchema = Yup.object().shape({
     first: Yup.string(),
@@ -24,7 +30,9 @@ const UserSchema = Yup.object().shape({
     zip: Yup.number().integer(),
     bio: Yup.string(),
     officePhone: Yup.string(),
-    mobilePhone: Yup.string()
+    mobilePhone: Yup.string(),
+    website: Yup.string(),
+    role: Yup.string()
 });
 
 class AccountProfile extends React.Component{
@@ -35,6 +43,7 @@ class AccountProfile extends React.Component{
         this.state = {
             profile: null,
             states: null,
+            roles: null,
             updateProgress: false
         };
     }
@@ -51,7 +60,8 @@ class AccountProfile extends React.Component{
                 });
                 that.setState({
                     profile: result,
-                    states: enums.states 
+                    states: enums.states,
+                    roles: enums.roles
                 });
             }).catch(function(err){
                 that.setState({
@@ -100,6 +110,9 @@ class AccountProfile extends React.Component{
         if (initialValues.zip !== values.zip){
             profile.zip = values.zip;
         }
+        if (initialValues.role !== values.role){
+            profile.role = values.role;
+        }
         if (initialValues.bio !== values.bio){
             profile.bio = values.bio;
         }
@@ -108,6 +121,9 @@ class AccountProfile extends React.Component{
         }
         if (initialValues.mobilePhone !== values.mobilePhone){
             profile.mobilePhone = values.mobilePhone;
+        }
+        if (initialValues.website !== values.website){
+            profile.website = values.website;
         }
 
         var that = this;
@@ -133,6 +149,13 @@ class AccountProfile extends React.Component{
                 <option key={key}>{item}</option>
             );
         }
+
+        var roles = null;
+        if (this.state.roles){
+            roles = this.state.roles.map((item, key) =>
+                <option key={key}>{item}</option>
+            );
+        }
         var initialValues = {
             email: "",
             first: "",
@@ -145,9 +168,11 @@ class AccountProfile extends React.Component{
             city: "",
             state: "",
             zip: "",
+            role: "",
             bio: "",
             officePhone: "",
-            mobilePhone: ""
+            mobilePhone: "",
+            website: ""
         };
         var profile = this.state.profile;
         if (profile){
@@ -162,10 +187,13 @@ class AccountProfile extends React.Component{
             if (profile.city) initialValues.city = profile.city;
             if (profile.state) initialValues.state = profile.state;
             if (profile.zip) initialValues.zip = profile.zip;
+            if (profile.role) initialValues.role = profile.role;
             if (profile.bio) initialValues.bio = profile.bio;
             if (profile.officePhone) initialValues.officePhone = profile.officePhone;
             if (profile.mobilePhone) initialValues.mobilePhone = profile.mobilePhone;
+            if (profile.website) initialValues.website = profile.website;
         }
+
         return(
         <div className="profile-view">
             <Formik
@@ -351,6 +379,34 @@ class AccountProfile extends React.Component{
                                 />
                             </Form.Group>
                         </Form.Row>
+                    <Form.Row>
+                    <Form.Group as={Col} xs={10}>
+                    <Form.Label
+                       className="font-weight-bold"
+                    >Role <span data-tip data-for="registerTip"><FontAwesomeIcon icon={faQuestionCircle} /></span>                
+                        <ReactTooltip id="registerTip" place="top" effect="solid">
+                            <div>
+                                <div>Broker</div>
+                                <div>Agent</div>
+                                <div>Principal</div>
+                                <div>Administrator</div>
+                                <div>Client</div>
+                            </div>
+                        </ReactTooltip>
+
+                    </Form.Label>
+                    <Form.Control
+                        as="select"
+                        name="role"
+                        value={values.role}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.role}
+                        disabled={isSubmitting}
+                    >{roles}
+                    </Form.Control>
+                    </Form.Group>
+                    </Form.Row>
                     </Col>
                     <Col>
                         <Form.Row>
@@ -385,7 +441,19 @@ class AccountProfile extends React.Component{
                                     isValid={touched.mobilePhone && !errors.mobilePhone && values.mobilePhone !== ""}
                                     disabled={isSubmitting}
                                 />
-
+                                <Form.Label
+                                    className="font-weight-bold"
+                                >Website</Form.Label>
+                                <Form.Control
+                                    name="website"
+                                    type="text"
+                                    value={values.website}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    isInvalid={!!errors.website}
+                                    isValid={touched.website && !errors.website && values.website !== ""}
+                                    disabled={isSubmitting}
+                                />
 
                             </Form.Group>
                         </Form.Row>
@@ -423,7 +491,6 @@ class AccountProfile extends React.Component{
                                     disabled
                                 />
                             </Form.Group>
-
                         </Form.Row>
                     </Col></Row>
                     <Row>

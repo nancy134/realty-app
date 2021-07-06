@@ -169,7 +169,7 @@ class AccountLoginModal extends React.Component {
                     onClick={this.props.onRegisterStart} 
                     id="account-login-register"
                     variant="link"
-                    className="pl-0 text-info"><u>Create one here</u>
+                    className="pl-0 text-info"><u>Create new account</u>
                 </Button>
                 </Form> 
                 </Col>

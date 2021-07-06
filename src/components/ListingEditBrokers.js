@@ -4,7 +4,6 @@ import {
     Form,
     Button
 } from 'react-bootstrap';
-import listingService from '../services/listings';
 
 function Associate(props){
     var name = props.associate.email + " (" + props.associate.role + ")";

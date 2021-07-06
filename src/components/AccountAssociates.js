@@ -120,7 +120,6 @@ class AccountAssociates extends React.Component {
     }
 
     handleResendInvite(associationId, userId){
-        var that = this;
         userService.resendInvite(associationId, userId).then(function(result){
         }).catch(function(err){
             console.log(err);
