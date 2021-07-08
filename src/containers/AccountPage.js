@@ -68,12 +68,7 @@ export class AccountPage extends Component {
             token: this.state.token,
             email: result.email
         };
-        console.log("handleRegister()");
-        console.log("body:");
-        console.log(body);
         userService.acceptInvite(body).then(function(user){
-            console.log("user:");
-            console.log(user);
         }).catch(function(err){
             console.log(err);
         });
@@ -151,7 +146,7 @@ export class AccountPage extends Component {
             </Container>
             );
         } else {
-        if (this.props.loggedIn){
+        if (this.props.loggedIn && !this.state.token){
             return(
             <React.Fragment>
                 { this.props.showAddListingWizard ?
@@ -202,7 +197,7 @@ export class AccountPage extends Component {
                         variant="primary"
                     >
 
-                        { this.state.accountStatus === "login" ?
+                        { this.state.accountStatus === "login" && !this.props.loggedIn ?
                         <div className="d-flex flex-column">
                             <p className="d-flex justify-content-center">You have been invited to become an associate.</p>
                             <p className="d-flex justify-content-center">Please login to confirm.</p>
@@ -228,6 +223,12 @@ export class AccountPage extends Component {
                                 />
                             </div>
                         </div>
+                        : null }
+                        { this.props.loggedIn && this.state.accountStatus === "login" ?
+                        <div className="d-flex flex-column">
+                            <p className="d-flex justify-content-center">Your invited to become an associate has been accepted!</p>
+                        </div>
+
                         : null }
                     </Alert>
                 </Container>

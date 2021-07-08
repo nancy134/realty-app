@@ -8,6 +8,7 @@ import {
 import Routes from './Routes';
 import AccountButton from './components/AccountButton';
 import authenticationService from './helpers/authentication';
+import userService from './services/users';
 import PolicyModal from './components/PolicyModal';
 
 class App extends React.Component {
@@ -47,10 +48,18 @@ class App extends React.Component {
   componentDidMount(){
       var that = this;
       authenticationService.reAuthenticate().then(function(result){
-          that.setState({
-              loggedIn: true,
-              loading: false
-          }); 
+          userService.getUser().then(function(user){
+              var isAdmin = user.isAdmin;
+              that.setState({
+                  loggedIn: true,
+                  loading: false,
+                  isAdmin: isAdmin
+              });
+          }).catch(function(err){
+              that.setState({
+                  loading:false
+              });
+          });
       }).catch(function(err){
           that.setState({
               loading: false

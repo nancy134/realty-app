@@ -3,6 +3,19 @@ import auth from '../services/auth';
 import LocalStorageService from '../services/localStorage';
 import userService from '../services/users';
 
+function setFullName(user){
+                if (user.first &&  user.last){
+                    LocalStorageService.setFullName(user.first+" "+user.last);
+                } else if (user.first && !user.last){
+                    LocalStorageService.setFullName(user.first);
+                } else if (!user.first && user.last){
+                    LocalStorageService.setFullName(user.last);
+                } else {
+                    LocalStorageService.setFullName(user.email);
+                }
+
+}
+
 export function reAuthenticate(){
     deleteObsoleteCookies();
     return new Promise(function(resolve, reject){
@@ -17,12 +30,7 @@ export function reAuthenticate(){
                     LocalStorageService.setIsAdmin(user.isAdmin);
                     LocalStorageService.setCognitoId(user.cognitoId);
                     LocalStorageService.setEmail(user.email);
-                    if (user.first || user.last){
-                        LocalStorageService.setFullName(user.first+" "+user.last);
-                    } else {
-                        LocalStorageService.setFullName(user.email);
-                    }
-
+                    setFullName(user);
                     resolve(user);
                 }).catch(function(err){
                     reject(err);
@@ -94,11 +102,7 @@ export function loginResponse(email, password){
                 LocalStorageService.setIsAdmin(user.isAdmin);
                 LocalStorageService.setCognitoId(user.cognitoId);
                 LocalStorageService.setEmail(user.email);
-                if (user.first || user.last){
-                    LocalStorageService.setFullName(user.first+" "+user.last);
-                } else {
-                    LocalStorageService.setFullName(user.email);
-                }
+                setFullName(user);
                 result.isAdmin = user.isAdmin;
                 resolve(result);
             }).catch(function(err){
