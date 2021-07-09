@@ -48,7 +48,8 @@ export class AccountPage extends Component {
         var that = this;
         if (this.state.token){
             var body = {
-                token: this.state.token
+                token: this.state.token,
+                email: this.props.email
             };
             userService.acceptInvite(body).then(function(user){
                 that.setState({
@@ -211,7 +212,7 @@ export class AccountPage extends Component {
                         </div>
                         : null }
 
-                        { this.state.accountStatus === "register" ?
+                        { this.state.accountStatus === "register" && !this.props.loggedIn ?
                         <div className="d-flex flex-column">
                             <p className="d-flex justify-content-center">You have been invited to become an associate</p>
                             <p className="d-flex justify-content-center">Please register with FindingCRE to join!</p>
@@ -224,9 +225,15 @@ export class AccountPage extends Component {
                             </div>
                         </div>
                         : null }
+                        { this.state.accountStatus === "register" && this.props.loggedIn ?
+                        <div className="d-flex flex-column">
+                            <p className="d-flex justify-content-center">You have been invited to become an associate under a different account.</p>
+                            <p className="d-flex justify-content-center">You will need to logout of this account and register with the email where you received the invitation.</p>
+                        </div>
+                        : null }
                         { this.props.loggedIn && this.state.accountStatus === "login" ?
                         <div className="d-flex flex-column">
-                            <p className="d-flex justify-content-center">Your invited to become an associate has been accepted!</p>
+                            <p className="d-flex justify-content-center">Your invitation to become an associate has been accepted!</p>
                         </div>
 
                         : null }

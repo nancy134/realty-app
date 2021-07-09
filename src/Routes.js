@@ -81,6 +81,7 @@ render(){
         render={
             props => (
                 <AccountPage {...props}
+                    email={this.props.email}
                     loggedIn={this.props.loggedIn}
                     showAddListingWizard={this.props.showAddListingWizard}
                     onAddListingCancel={this.props.onAddListingCancel}

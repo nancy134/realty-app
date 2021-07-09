@@ -33,7 +33,8 @@ class App extends React.Component {
           showPolicyModal: false,
           policyType: "",
           minimalTab: minimalTab,
-          loading: true
+          loading: true,
+          email: null
       };
       this.handleLogin = this.handleLogin.bind(this);
       this.handleLogout = this.handleLogout.bind(this);
@@ -51,6 +52,7 @@ class App extends React.Component {
           userService.getUser().then(function(user){
               var isAdmin = user.isAdmin;
               that.setState({
+                  email: user.email,
                   loggedIn: true,
                   loading: false,
                   isAdmin: isAdmin
@@ -156,6 +158,7 @@ class App extends React.Component {
               onLogin={this.handleLogin}
               loggedIn={this.state.loggedIn}
               isAdmin={this.state.isAdmin}
+              email={this.state.email}
               showAddListingWizard={this.state.showAddListingWizard}
               onAddListingCancel={this.handleAddListingCancel}
               onShowPolicyModal={this.handlePolicyModalShow}
