@@ -34,7 +34,7 @@ class App extends React.Component {
           policyType: "",
           minimalTab: minimalTab,
           loading: true,
-          email: null
+          email: null,
       };
       this.handleLogin = this.handleLogin.bind(this);
       this.handleLogout = this.handleLogout.bind(this);
@@ -153,6 +153,9 @@ class App extends React.Component {
               </Navbar.Collapse>
           </Navbar>
           : null }
+          { this.state.loading ?
+          <p>Loading...</p>
+          :
           <Routes
               // Logged in
               onLogin={this.handleLogin}
@@ -165,6 +168,7 @@ class App extends React.Component {
               loading={this.state.loading}
           >
           </Routes>
+          }
     </div>
     { !this.state.minimalTab && this.state.showFooter ?
     <div className="bg-light ml-1 mr-1">

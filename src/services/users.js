@@ -9,7 +9,6 @@ function getUsers(query){
         axiosInstance.get(url).then(function(response){
             resolve(response.data);
         }).catch(function(err){
-            console.log(err); 
             reject(err);
         });
     });
@@ -21,7 +20,6 @@ function getUser(){
         axiosInstance.get(url).then(function(response){
             resolve(response.data);
         }).catch(function(err){
-            console.log(err);
             reject(err);
         });
     });
@@ -39,9 +37,13 @@ function updateUser(id, body){
     });
 }
 
-function getInvite(token){
+function getInvite(token, email){
     return new Promise(function(resolve, reject){
+        // pass email
         var url = process.env.REACT_APP_API + 'users/invitations?token='+token;
+        if (email){
+            url = url + '&email=' + email;
+        }
         axiosInstance.get(url).then(function(response){
             resolve(response.data);
         }).catch(function(err){

@@ -25,7 +25,6 @@ export class AccountPage extends Component {
         this.handleRegister = this.handleRegister.bind(this);
         this.handleAddListingFinish = this.handleAddListingFinish.bind(this);
         this.handleAddListingCancel = this.handleAddListingCancel.bind(this);
-        this.handleLogin = this.handleLogin.bind(this);
 
         const params = new URLSearchParams(props.location.search);
         var token  = params.get('token');
@@ -49,7 +48,7 @@ export class AccountPage extends Component {
         if (this.state.token){
             var body = {
                 token: this.state.token,
-                email: this.props.email
+                email: result.email
             };
             userService.acceptInvite(body).then(function(user){
                 that.setState({
@@ -104,9 +103,8 @@ export class AccountPage extends Component {
         var that = this;
         listingService.getEnumsPromise().then(function(enums){
             if (that.state.token){
-                userService.getInvite(that.state.token).then(function(result){
-                    console.log(result);
-                    if (result.operation === "accepted"){
+                userService.getInvite(that.state.token, that.props.email).then(function(result){
+                    if (result.operation === "accepted" && result.emailMatch === true){
                         that.setState({
                             loading: false,
                             token: null,
@@ -117,7 +115,8 @@ export class AccountPage extends Component {
                             accountStatus: result.operation,
                             association: result.association,
                             loading: false,
-                            propertyTypes: enums.propertyTypes
+                            propertyTypes: enums.propertyTypes,
+                            emailMatch: result.emailMatch
                         });
                     }
                 }).catch(function(err){
@@ -196,9 +195,13 @@ export class AccountPage extends Component {
                 <Container>
                     <Alert
                         variant="primary"
-                    >
-
-                        { this.state.accountStatus === "login" && !this.props.loggedIn ?
+                    >   { !this.state.emailMatch ?
+                        <div className="d-flex flex-column">
+                            <p className="d-flex justify-content-center">Your association invite was for a different email address.</p>
+                            <p className="d-flex justify-content-center">Logout of this account to register or login with the email you received the invitation.</p>
+                        </div>
+                        : null }
+                        { this.state.accountStatus === "login" && !this.props.loggedIn && this.state.emailMatch?
                         <div className="d-flex flex-column">
                             <p className="d-flex justify-content-center">You have been invited to become an associate.</p>
                             <p className="d-flex justify-content-center">Please login to confirm.</p>
@@ -212,7 +215,7 @@ export class AccountPage extends Component {
                         </div>
                         : null }
 
-                        { this.state.accountStatus === "register" && !this.props.loggedIn ?
+                        { this.state.accountStatus === "register" && !this.props.loggedIn && this.state.emailMatch ?
                         <div className="d-flex flex-column">
                             <p className="d-flex justify-content-center">You have been invited to become an associate</p>
                             <p className="d-flex justify-content-center">Please register with FindingCRE to join!</p>
@@ -225,13 +228,13 @@ export class AccountPage extends Component {
                             </div>
                         </div>
                         : null }
-                        { this.state.accountStatus === "register" && this.props.loggedIn ?
+                        { this.state.accountStatus === "register" && this.props.loggedIn && this.state.emailMatch ?
                         <div className="d-flex flex-column">
                             <p className="d-flex justify-content-center">You have been invited to become an associate under a different account.</p>
                             <p className="d-flex justify-content-center">You will need to logout of this account and register with the email where you received the invitation.</p>
                         </div>
                         : null }
-                        { this.props.loggedIn && this.state.accountStatus === "login" ?
+                        { this.props.loggedIn && this.state.accountStatus === "login" && this.state.emailMatch?
                         <div className="d-flex flex-column">
                             <p className="d-flex justify-content-center">Your invitation to become an associate has been accepted!</p>
                         </div>
@@ -241,7 +244,11 @@ export class AccountPage extends Component {
                 </Container>
                 :
                 <Container>
-                <Alert variant="primary">Login to see your Account information</Alert>
+                <Alert variant="primary">
+                    <div className="d-flex flex-column"> 
+                        <p className="d-flex justify-content-center">Login to see your Account information</p>
+                    </div>
+                </Alert>
                 </Container>
                 }
             </React.Fragment>

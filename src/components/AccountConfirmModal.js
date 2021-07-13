@@ -126,7 +126,10 @@ class AccountConfirmModal extends React.Component {
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={this.props.onCancel}>{cancel}</Button>
+                <Button
+                    id="account-confirm-cancel"
+                    onClick={this.props.onCancel}
+                >{cancel}</Button>
                 <Button
                     disabled={buttonDisabled}
                     onClick={this.handleConfirm}
