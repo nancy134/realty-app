@@ -6,6 +6,15 @@ import {
 } from 'react-bootstrap';
 
 function Associate(props){
+
+    if (props.associate.cognitoId === null){
+        return null;
+    }
+    if (props.associate.role !== 'Broker' && 
+        props.associate.role !== 'Agent' && 
+        props.associate.role !== 'Principle'){
+        return null;
+    }
     var name = props.associate.email + " (" + props.associate.role + ")";
     if (props.associate.first){
         name = props.associate.first + " " + props.associate.last + " ("+props.associate.role+") ";
@@ -84,7 +93,14 @@ class ListingEditBrokers extends React.Component {
     }
 
     render(){
-
+        var disableSave = true;
+        if (this.state.associatesChanged){
+            for (var i=0; i<this.state.checkedAssociates.length; i++){
+                if (this.state.checkedAssociates[i]){
+                    disableSave=false;
+                } 
+            }
+        }
         return(
         <Modal
             show={this.props.show}
@@ -118,6 +134,7 @@ class ListingEditBrokers extends React.Component {
                 </Button>
                 <Button
                     onClick={this.handleSave}
+                    disabled={disableSave}
                 >
                     <span>Save</span>
                 </Button>

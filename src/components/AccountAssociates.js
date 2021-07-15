@@ -183,7 +183,7 @@ class AccountAssociates extends React.Component {
                         </Col>
                     </Form.Group>
                     : null }
-                    <Form.Group as={Row} controlId="invite">
+                    <Form.Group as={Row} controlId="invite-associate-input">
                         <Form.Label
                             className="pl-0" 
                             column 
@@ -201,6 +201,7 @@ class AccountAssociates extends React.Component {
                         </Col>
                         <Col sm="1">
                            <Button
+                                id="invite-associate-button"
                                 variant="success"
                                 onClick={this.handleSendInvite}
                                 disabled={disableButton}

@@ -17,19 +17,34 @@ class AccountToolbar extends Component {
         return (
         <Nav justify variant="tabs" onSelect={this.onSelectTab} defaultActiveKey="profile">
             <Nav.Item>
-                <Nav.Link eventKey="profile">Account Profile</Nav.Link>
+                <Nav.Link
+                    id="account-profile-tab"
+                    eventKey="profile"
+                >Account Profile</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-                <Nav.Link eventKey="associates" >Associates</Nav.Link>
+                <Nav.Link
+                    id="account-associates-tab"
+                    eventKey="associates"
+                 >Associates</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-                <Nav.Link eventKey="settings">Settings</Nav.Link>
+                <Nav.Link
+                    id="account-settings-tab"
+                    eventKey="settings"
+                >Settings</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-                <Nav.Link eventKey="billing">Payment Method</Nav.Link>
+                <Nav.Link
+                    id="account-payment-method-tab"
+                    eventKey="billing"
+                >Payment Method</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-                <Nav.Link eventKey="payment" >Billing Details</Nav.Link>
+                <Nav.Link
+                    id="account-billing-tab"
+                    eventKey="payment"
+                >Billing Details</Nav.Link>
             </Nav.Item>
         </Nav>
         );
