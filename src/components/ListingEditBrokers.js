@@ -5,16 +5,26 @@ import {
     Button
 } from 'react-bootstrap';
 
+function isValidBroker(role){
+    if (role === 'Broker' ||
+        role === 'Agent' ||
+        role === 'Principle'){
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function Associate(props){
 
     if (props.associate.cognitoId === null){
         return null;
     }
-    if (props.associate.role !== 'Broker' && 
-        props.associate.role !== 'Agent' && 
-        props.associate.role !== 'Principle'){
+
+    if (!isValidBroker(props.associate.role)){
         return null;
     }
+
     var name = props.associate.email + " (" + props.associate.role + ")";
     if (props.associate.first){
         name = props.associate.first + " " + props.associate.last + " ("+props.associate.role+") ";
@@ -96,7 +106,7 @@ class ListingEditBrokers extends React.Component {
         var disableSave = true;
         if (this.state.associatesChanged){
             for (var i=0; i<this.state.checkedAssociates.length; i++){
-                if (this.state.checkedAssociates[i]){
+                if (this.state.checkedAssociates[i] && isValidBroker(this.props.associates[i].role)){
                     disableSave=false;
                 } 
             }
