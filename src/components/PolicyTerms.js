@@ -84,69 +84,13 @@ class PolicyTerms extends React.Component {
             <p>The limitations and prohibitions of liability set in this Section and elsewhere in this disclaimer: (a) are subject to the preceding paragraph; and (b) govern all liabilities arising under the disclaimer, including liabilities arising in contract, in tort and for breach of statutory duty.</p>
             <p>As long as the website and the information and services on the website are provided free of charge, we will not be liable for any loss or damage of any nature.</p>
             <h3>Publishing</h3>
-            <p>By publishing a property on FindingCRE.com, you agree that you have written permission by of the owner of the published property to advertise a listing on the internet and have any licenses that may be required in the jurisdiction of the listing.</p>
-            <p>By posting a listing on FindingCRE.com, you agree to be charged a fee for each listing published.  Each listing published on FindingCRE.com will receive a “30-day free period”. The 30-day free period will begin the day the listing is published.  If the listing is taken Off Market prior to the end of the 30-day free period, no fee will be charged for that listing*. If the listing remains “On Market” after the 30-day free period, fees will automatically be charged to your credit card every 30 days as stated in Schedule A.  If multiple listings are placed under the same account, the 30-day free period will be applied to each listing.  Billing for each additional will be charged to your account on the same day each month from hereon know as the Billing Date.  Any subsequent new published listings will be pro-rated based on the number of days the listing has been On Market beyond the 30-day free period to you Billing Date.</p>
-        <h3>Schedule A</h3>
-        <table style={{'width': '50%'}}>
-            <tr>
-                <td>Listings 1 thru 10</td>
-                <td>$25**</td>
-                <td>per listing, per month</td>
-            </tr>
-            <tr>
-                <td>Listings 11 thru 20</td>
-                <td>$24**</td>
-                <td>per listing, per month</td>
-            </tr>
-            <tr>
-                <td>Listings 21 thru 30</td>
-                <td>$23**</td>
-                <td>per listing, per month</td>
-            </tr>
-            <tr>
-                <td>Listings 31 thru 40</td>
-                <td>$22**</td>
-                <td>per listing, per month</td>
-            </tr>
-            <tr>
-                <td>Listings 41 thru 50</td>
-                <td>$21**</td>
-                <td>per listing, per month</td>
-            </tr>
-            <tr>
-                <td>Listings 51 thru 60</td>
-                <td>$20**</td>
-                <td>per listing, per month</td>
-            </tr>
-            <tr>
-                <td>Listings 61 thru 70</td>
-                <td>$19**</td>
-                <td>per listing, per month</td>
-            </tr>
-            <tr>
-                <td>Listings 71 thru 80</td>
-                <td>$18**</td>
-                <td>per listing, per month</td>
-            </tr>
-            <tr>
-                <td>Listings 81 thru 90</td>
-                <td>$17**</td>
-                <td>per listing, per month</td>
-            </tr>
-            <tr>
-                <td>Listings 91 thru 100</td>
-                <td>$16**</td>
-                <td>per listing, per month</td>
-            </tr>
-            <tr>
-                <td>All Listing over 100</td>
-                <td>$15**</td>
-                <td>per listing, per month</td>
-            </tr>
-        </table>
-        <p>FindingCRE.com reserves the right to remove a listing that may violate any of our terms and conditions.</p>
-        <p>* If a listing taken Off Market, it cannot be Re-Published for 60 days from the date the listing was taken Off Market without monthly fees being applied.  If re-Publishing a listing prior to the 60 days, monthly fees will be charged based on the initial publish date.  After the 60 days, a new “free period” will begin.</p>
-        <p>**Plus any applicable taxes and/or fees</p>
+            <p>By publishing a property on FindingCRE.com, you agree that you have written permission by of the owner of the published property to advertise the property on the internet and have any licenses that may be required in the jurisdiction of the listing.  You also agree that you have the rights to any additional information attached to a listing including, but not limited to documents, plot plans, images, flyers, brochures, etc.</p>
+           
+            <p>By posting a listing on FindingCRE.com, you agree to be charged a fee for each listing published. Each listing published on FindingCRE.com will receive a “30-day free period”. The 30-day free period will begin the day the listing is published and continue for the next 30 calendar days. If the listing is taken Off Market prior to the end of the 30-day free period, no fee will be charged for that listing*. If the listing remains “On Market” after the 30-day free period, fees will automatically be charged to your credit card every 30 days at a rate of $25** per listing. If multiple listings are placed under the same account, the 30-day free period will be applied to each listing. Billing for each additional listing will be charged to your account on the same day each month from hereon known as the Billing Date. Any subsequent new published listings will be pro-rated based on the number of days the listing has been On Market beyond the 30-day free period to you Billing Date.</p>
+ 
+            <p>FindingCRE.com reserves the right to remove a listing that may violate any of our terms and conditions.</p>        
+            <p>* If a listing taken Off Market, it cannot be Re-Published for 60 days from the date the listing was taken Off Market without monthly fees being applied. If re-Publishing a listing prior to the 60 days, monthly fees will be charged based on the initial publish date. After the 60 days, a new “free period” will begin.</p>
+            <p>** Plus any applicable taxes and/or fees</p>
         </div>
         );
     }
