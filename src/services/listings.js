@@ -228,6 +228,21 @@ export function deleteListingUser(listingVersionId, userId){
     });
 }
 
+export function getListingsAdmin(){
+    var url = process.env.REACT_APP_API + "admin/listingVersions";
+    return new Promise(function(resolve, reject){
+        var options = {
+            url: url,
+            method: 'GET'
+        };
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
 export function getSpaceTypes(cb){
     var url = process.env.REACT_APP_LISTING_SERVICE+"spaceUses";
     fetch(url, {
@@ -272,7 +287,8 @@ const listings = {
     deleteDraftListing,
     findAddress,
     addListingUser,
-    deleteListingUser
+    deleteListingUser,
+    getListingsAdmin
 };
 export default listings;
 

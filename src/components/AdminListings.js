@@ -61,7 +61,7 @@ class AdminListings extends React.Component {
                         new Promise((resolve, reject) => {
                             var page = query.page + 1;
                             var queryStr = 'perPage='+query.pageSize+'&page='+page;
-                            listingService.getAll(queryStr).then(function(result){
+                            listingService.getListingsAdmin(queryStr).then(function(result){
                                 var ret = {
                                     data: result.listings.rows,
                                     page: result.page-1,
