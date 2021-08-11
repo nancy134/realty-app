@@ -177,7 +177,7 @@ class AccountRegisterModal extends React.Component {
                                 </Col>
                                 <Col>
                                     <li className="rem75">One number</li>
-                                    <li className="rem75">One special charater: ^  $  *  .  ?  - </li>
+                                    <li className="rem75">One special character: ! @ # $ % ^ & * </li>
                                 </Col>
                             </Row>
                             <Form.Label>Your Role</Form.Label>
