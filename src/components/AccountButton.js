@@ -43,6 +43,8 @@ export class AccountButton extends Component{
         this.handlePrivacy = this.handlePrivacy.bind(this);
         this.handlePolicyModalHide = this.handlePolicyModalHide.bind(this);
         this.state = {
+            //
+            emailVerification: false,
 
             // Login
             modalShowLogin: false,
@@ -137,15 +139,29 @@ export class AccountButton extends Component{
         console.log("body:");
         console.log(body);
         authenticationService.signupResponse(body).then(function(result){
+            if (that.state.emailVerification){
+                that.setState({
+                    email:body.email,
+                    modalShowRegister:false,
+                    modalShowConfirm:true,
+                    registerMessage: null,
+                    registerProgress: false,
+                    loginMessage: "",
+                    loginMessageVariant: "danger"
+                });
+            } else {
             that.setState({
-                email:body.email,
-                modalShowRegister:false,
-                modalShowConfirm:true,
-                registerMessage: null,
-                registerProgress: false,
-                loginMessage: "",
-                loginMessageVariant: "danger"
+                //modalShowConfirm:false,
+                email: body.email,
+                modalShowRegister: false,
+                modalShowLogin:true,
+                loginMessage:"Your email has been verified. Please login",
+                loginMessageVariant: "info",
+                confirmMessage: null,
+                confirmProgress: false
             });
+
+            }
 
             that.props.onRegister(body);
         }).catch(function(err){
