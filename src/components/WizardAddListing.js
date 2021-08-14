@@ -53,6 +53,7 @@ export class WizardAddListing extends Component {
         this.handlePolicyModalHide = this.handlePolicyModalHide.bind(this);
 
         this.state = {
+            disableConfirm: true,
 
             // Add listing
             addListingType: true,
@@ -212,16 +213,29 @@ export class WizardAddListing extends Component {
             registerProgress: true
         });
         authenticationService.signupResponse(body).then(function(result){
-            that.setState({
-                email:body.email,
-                modalShowRegister:false,
-                modalShowConfirm:true,
-                registerMessage: null,
-                registerProgress: false,
-                loginMessage: "",
-                loginMessageVariant: "danger"
-            });
+            if (that.state.disableConfirm){
+                that.setState({
+                    email: body.email,
+                    modalShowRegister: false,
+                    modalShowLogin:true,
+                    registerMessage: null,
+                    registerProgress: false,
+                    loginMessage:"Your email has been verified. Please login",
+                    loginMessageVariant: "info"
+                });
 
+            } else {
+
+                that.setState({
+                    email:body.email,
+                    modalShowRegister:false,
+                    modalShowConfirm:true,
+                    registerMessage: null,
+                    registerProgress: false,
+                    loginMessage: "",
+                    loginMessageVariant: "danger"
+                });
+            }
             that.props.onRegister();
         }).catch(function(err){
             that.setState({

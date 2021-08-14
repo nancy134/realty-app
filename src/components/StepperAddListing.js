@@ -3,6 +3,7 @@ import { Stepper, Step, StepLabel } from '@material-ui/core';
 
 class StepperAddListing extends React.Component {
     render(){
+        var show = false;
         return(
         <React.Fragment>
             <Stepper>
@@ -32,7 +33,7 @@ class StepperAddListing extends React.Component {
                     <StepLabel>Register</StepLabel>
                 </Step>
                 : null }
-                { this.props.notRegistered ?
+                { this.props.notRegistered && show ?
                 <Step
                     active={this.props.confirmActive}
                     completed={this.props.confirmCompleted}
