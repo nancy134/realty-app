@@ -22,7 +22,7 @@ import geolocationService from '../helpers/geolocation';
 import listService from '../services/lists';
 import listItemService from '../services/listItems';
 import PublishWizardIntro from '../components/PublishWizardIntro';
-import PublishWizardPaymentMethod from '../components/PublishWizardPaymentMethod';
+import PublishWizardPaymentMethodStripe from '../components/PublishWizardPaymentMethodStripe';
 import PublishWizardFinal from '../components/PublishWizardFinal';
 import PublishWizardUpdate from '../components/PublishWizardUpdate';
 import UnpublishWizardIntro from '../components/UnpublishWizardIntro';
@@ -1413,7 +1413,7 @@ export class ListingPage extends Component {
             />
             : null }
             { this.state.showPublishWizardPaymentMethod ?
-            <PublishWizardPaymentMethod
+            <PublishWizardPaymentMethodStripe
                 show={this.state.showPublishWizardPaymentMethod}
                 onNext={this.handlePublishWizardPaymentMethodNext}
                 onCancel={this.handlePublishWizardClose}

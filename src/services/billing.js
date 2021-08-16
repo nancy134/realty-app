@@ -11,6 +11,28 @@ export function getClientToken(){
     });
 }
 
+export function getPaymentSecret(){
+    var url = process.env.REACT_APP_API + "billing/paymentSecret/me";
+    return new Promise(function(resolve, reject){
+        axiosInstance.get(url).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
+export function getPaymentMethodMe(){
+    var url = process.env.REACT_APP_API + "billing/paymentMethod/me";
+    return new Promise(function(resolve, reject){
+        axiosInstance.get(url).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
 export function setPaymentMethod(nonce){
     var url = process.env.REACT_APP_API+"billing/paymentMethod";
     return new Promise(function(resolve, reject){
@@ -179,8 +201,10 @@ export function playBillingCycle(id){
 
 const billing = {
     getClientToken,
+    getPaymentSecret,
     setPaymentMethod,
     getPaymentMethod,
+    getPaymentMethodMe,
     getBillingEvents,
     getBillingEventsMe,
     getBillingCycles,
