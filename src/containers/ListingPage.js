@@ -29,6 +29,7 @@ import UnpublishWizardIntro from '../components/UnpublishWizardIntro';
 import {listingTypes} from '../constants/listingTypes';
 import WizardAddListing from '../components/WizardAddListing';
 import { transitionTypes } from '../constants/transitionTypes';
+import tenantService from '../services/tenants';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -114,7 +115,10 @@ export class ListingPage extends Component {
 
         // Space
         this.handleAccordionChange = this.handleAccordionChange.bind(this);
+
+        // Delete Associated Tables
         this.handleDeleteSpace = this.handleDeleteSpace.bind(this);
+        this.handleDeleteTenant = this.handleDeleteTenant.bind(this);
 
         // Delete
         this.handleDeleteHide = this.handleDeleteHide.bind(this);
@@ -974,25 +978,54 @@ export class ListingPage extends Component {
             deleteMessage: "Are you sure you want to delete this space?"
         });
     }
+    handleDeleteTenant(id){
+        this.setState({
+            deleteTable: "Tenant",
+            deleteId: id,
+            showDeleteModal: true,
+            deleteTitle: "Delete Tenant",
+            deleteMessage: "Are you sure you want to delete this tenant?"
+        });
+    }
     handleDeleteConfirm(){
         var that=this;
-        var deleteSpace = spaceService.deletePromise(this.state.deleteId);
-        deleteSpace.then(function(result){
-            that.handleFetchListing(result.latestDraftId);
-            var localState = {
-                listingMode: "myListings",
-                page: that.state.page
-            };
-            that.fetchListingsPromise(localState).then(function(localState){
-                that.setState(localState);
-                that.handleDeleteHide();
+        if (this.state.deleteTable === "Space"){
+            var deleteSpace = spaceService.deletePromise(this.state.deleteId);
+            deleteSpace.then(function(result){
+                that.handleFetchListing(result.latestDraftId);
+                var localState = {
+                    listingMode: "myListings",
+                    page: that.state.page
+                };
+                that.fetchListingsPromise(localState).then(function(localState){
+                    that.setState(localState);
+                    that.handleDeleteHide();
+                }).catch(function(err){
+                    console.log(err);
+                });
+
+            }).catch(function(err){
+                console.log(err);
+            });
+        } else if (this.state.deleteTable === "Tenant"){
+            tenantService.deleteTenant(this.state.index, this.state.deleteId).then(function(result){
+                that.handleFetchListing(result.latestDraftId);
+                var localState = {
+                    listingMode: "myListings",
+                    page: that.state.page
+                };
+                that.fetchListingsPromise(localState).then(function(localState){
+                    that.setState(localState);
+                    that.handleDeleteHide();
+                }).catch(function(err){
+                    console.log(err);
+                });
+
             }).catch(function(err){
                 console.log(err);
             });
 
-        }).catch(function(err){
-            console.log(err);
-        });
+        }
     }
     handleDeleteHide(){
         this.setState({
@@ -1513,7 +1546,6 @@ export class ListingPage extends Component {
                             // Space
                             spaceAccordionText={this.state.spaceAccordionText}
                             onAccordionChange={this.handleAccordionChange}
-                            onDeleteSpace={this.handleDeleteSpace}
                             // Enums
                             allAmenities={this.state.allAmenities}
                             onGoToListingByIndex={this.handleGoToListingByIndex}
@@ -1523,6 +1555,9 @@ export class ListingPage extends Component {
                             bounds={this.state.detailBounds}
                             // Expand
                             onExpand={this.handleExpand}
+                            // Delete associated tables
+                            onDeleteSpace={this.handleDeleteSpace}
+                            onDeleteTenant={this.handleDeleteTenant}
                         />
                     </CSSTransition>
                     : null }

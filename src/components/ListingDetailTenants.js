@@ -44,7 +44,14 @@ function TenantItem(props){
                         </Col>
                         : null }
                         { props.editMode === "edit" ?
-                        <Col><FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} /></Col>
+                        <Col>
+                            <FontAwesomeIcon
+                                className="edit-button text-danger"
+                                size="xs"
+                                onClick={() => {props.onDelete(props.tenant.id)}}
+                                icon={faTrash}
+                            />
+                        </Col>
                         : null }
                     </Row>
                 </Col>
@@ -165,6 +172,7 @@ class ListingDetailTenants extends React.Component {
                 show={this.props.tenantUpdate}
                 saving={this.props.tenantSaving}
                 editMode={editMode}
+                onDelete={this.props.onDelete}
             />
             ))}
         </div>

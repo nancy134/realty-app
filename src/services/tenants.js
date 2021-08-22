@@ -1,70 +1,92 @@
-var rp = require('request-promise');
+import axiosInstance from './axios';
 
-export function getAll(query,cb){
-    var url = "";
-    if (query) {
-        url = process.env.REACT_APP_LISTING_SERVICE+"tenants?"+query;
-    } else {
-        url = process.env.REACT_APP_LISTING_SERVICE+"tenants";
-    }
-    return fetch(url, {
-    }).then(checkStatus).then(parseJSON).then(cb);
-}
-
-export function get(index, cb){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"tenant/"+index;
-    return fetch(url, {
-    }).then(checkStatus).then(parseJSON).then(cb);
-}
-export function createPromise(tenant){
+export function getAll(listingVersionId){
+    var url = process.env.REACT_APP_API+"listings/"+listingVersionId+"/tenants";
     return new Promise(function(resolve, reject){
         var options = {
-            method: 'POST',
-            uri: process.env.REACT_APP_LISTING_SERVICE+"tenants",
-            body: tenant,
-            json: true
-        }
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
+            url: url,
+            method: 'GET'
+        };
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
-            reject(err.error);
+            reject(err);
         });
     });
 }
 
-export function updatePromise(data){
+export function get(listingVersionId, tenantId){
+    var url = process.env.REACT_APP_API+"/listings/"+listingVersionId+"/tenants/"+tenantId;
+    return new Promise(function(resolve, reject){
+        var options = {
+            url: url,
+            method: 'GET'
+        };
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+export function create(listingVersionId, body){
+    var url = process.env.REACT_APP_API+"/listings/"+listingVersionId+"/tenants";
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'POST',
+            url: url,
+            data: body
+        }
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
+export function update(listingVersionId, tenantId, body){
+    var url = process.env.REACT_APP_API+
+        "listings/"+
+        listingVersionId+
+        "/tenants/"+
+        tenantId;
     return new Promise(function(resolve, reject){
         var options = {
             method: 'PUT',
-            uri: process.env.REACT_APP_LISTING_SERVICE+"tenants/"+data.id,
-            body: data,
-            json: true
+            url: url,
+            data: body
          };
-         rp(options).then(function(parsedBody){
-             resolve(parsedBody);
+         axiosInstance(options).then(function(result){
+             resolve(result.data);
          }).catch(function(err){
-             reject(err.error);
+             reject(err);
          });
     });
 }
 
-function checkStatus(response){
-    if (response.status >= 200 && response.status < 300){
-        return response;
-    }
-
-    const error = new Error(`HTTP Error ${response.statusText}`);
-    error.status = response.statusText;
-    error.response = response
-    console.log(error);
-    throw error;
+export function deleteTenant(listingVersionId, tenantId){
+    var url = process.env.REACT_APP_API+"/listings/"+listingVersionId+"/tenants/"+tenantId;
+    return new Promise(function(resolve, reject){
+        var options = {
+            method: 'DELETE',
+            url: url
+        };
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
 }
 
-function parseJSON(response){
-   return response.json();
-}
-
-const tenants = {get, getAll,createPromise, updatePromise};
+const tenants = {
+    get,
+    getAll,
+    create,
+    update,
+    deleteTenant
+};
 export default tenants;
 
 

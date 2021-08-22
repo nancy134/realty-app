@@ -18,7 +18,7 @@ import ListingDetailAttachments from './ListingDetailAttachments';
 import DeleteModal from './DeleteModal';
 import spaces from '../services/spaces';
 import units from '../services/units';
-import tenants from '../services/tenants';
+import tenantService from '../services/tenants';
 import portfolios from '../services/portfolios';
 import authenticationService from '../helpers/authentication';
 import listingService from '../services/listings';
@@ -631,8 +631,7 @@ class ListingDetail extends React.Component {
              var createPromise = listingService.create(listingBody);
              createPromise.then(function(listingVersion){
                  tenant.ListingVersionId = listingVersion.listing.id;
-                 var createPromise = tenants.createPromise(tenant);
-                 createPromise.then(function(data){
+                 tenantService.create(listingVersion.listing.id,tenant).then(function(data){
                      that.props.onFetchListing(data.ListingVersionId);
                      that.handleTenantModalHide();
                  }).catch(function(err){
@@ -645,8 +644,7 @@ class ListingDetail extends React.Component {
              });
         } else {
             if (tenant.id){
-                var updatePromise = tenants.updatePromise(tenant);
-                updatePromise.then(function(data){
+                tenantService.update(tenant.ListingVersionId, tenant.id, tenant).then(function(data){
                     that.props.onFetchListing(data.ListingVersionId);
                     that.handleTenantModalHide();
                 }).catch(function(err){
@@ -658,7 +656,7 @@ class ListingDetail extends React.Component {
 
                 });
             } else {
-                tenants.createPromise(tenant).then(function(data){
+                tenantService.create(tenant.ListingVersionId, tenant).then(function(data){
                     that.props.onFetchListing(data.ListingVersionId);
                     that.handleTenantModalHide();
                 }).catch(function(err){
@@ -1052,6 +1050,7 @@ class ListingDetail extends React.Component {
                         onTenantModalHide={this.handleTenantModalHide}
                         onTenantUpdate={this.handleTenantUpdate}
                         getListing={this.props.onFetchListing}
+                        onDelete={this.props.onDeleteTenant}
                     />
                 : null }
                 {(showPortfolio && editMode === "edit" && listingType === listingTypes.FORSALE) || 
