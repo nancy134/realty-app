@@ -16,7 +16,7 @@ export function getAll(listingVersionId){
 }
 
 export function get(listingVersionId, tenantId){
-    var url = process.env.REACT_APP_API+"/listings/"+listingVersionId+"/tenants/"+tenantId;
+    var url = process.env.REACT_APP_API+"listings/"+listingVersionId+"/tenants/"+tenantId;
     return new Promise(function(resolve, reject){
         var options = {
             url: url,
@@ -30,7 +30,7 @@ export function get(listingVersionId, tenantId){
     });
 }
 export function create(listingVersionId, body){
-    var url = process.env.REACT_APP_API+"/listings/"+listingVersionId+"/tenants";
+    var url = process.env.REACT_APP_API+"listings/"+listingVersionId+"/tenants";
     return new Promise(function(resolve, reject){
         var options = {
             method: 'POST',
@@ -66,7 +66,7 @@ export function update(listingVersionId, tenantId, body){
 }
 
 export function deleteTenant(listingVersionId, tenantId){
-    var url = process.env.REACT_APP_API+"/listings/"+listingVersionId+"/tenants/"+tenantId;
+    var url = process.env.REACT_APP_API+"listings/"+listingVersionId+"/tenants/"+tenantId;
     return new Promise(function(resolve, reject){
         var options = {
             method: 'DELETE',
