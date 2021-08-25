@@ -159,7 +159,9 @@ class ListingItem extends React.Component {
                             </Card.Subtitle>
                             : null }
                             <div style={{fontSize: "0.85rem"}}>{size}</div>
+                            { price ?
                             <div style={{fontSize: "0.85rem"}}>{price}</div>
+                            : null }
                             { listing.listingType === listingTypes.FORSALE && listing.listingPrice?
                             <div style={{fontSize:"0.85rem"}}>For Sale ${listingPrice}</div>
                             : null }

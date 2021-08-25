@@ -118,7 +118,11 @@ function SpaceItem(props){
         <Row className="ml-0 mr-0 border-bottom align-items-center" >
             <Col md={2}>{space.use}</Col>
             <Col md={2}>{space.size} sf</Col>
+            { space.price ?
             <Col md={2}>${space.price} {space.priceUnit}</Col>
+            :
+            <Col md={2}></Col> 
+            }
             <Col md={4}>{space.unit}</Col>
             <Col md={2}>
                 <Row>
@@ -202,7 +206,11 @@ function SpaceItem(props){
         <Row className="ml-0 mr-0 border-bottom align-items-center">
             <Col md={2}>{space.use}</Col>
             <Col md={2}>{space.size} sf</Col>
+            { space.price ?
             <Col md={2}>${space.price} {space.priceUnit}</Col>
+            :
+            <Col md={2}></Col>
+            }
 	    <Col md={4}>{space.unit}</Col>
             <Col md={2}>
                 <Row>

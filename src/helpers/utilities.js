@@ -382,7 +382,10 @@ export function formatSizeAndPrice(spaces){
 
         var priceUnit = spaces[0].priceUnit;
         if (!priceUnit) priceUnit = "/sf/yr";
-        price = spaces[0].price + " " + priceUnit;
+
+        if (spaces[0].price){
+            price = spaces[0].price + " " + priceUnit;
+        }
 
         size += " sf for lease";        
     } else if (spaces.length > 1){
@@ -396,33 +399,38 @@ export function formatSizeAndPrice(spaces){
 
         var minPriceIndex = getMinPriceIndex(spaces);
         var maxPriceIndex = getMaxPriceIndex(spaces);
-        
-        if (minPriceIndex === maxPriceIndex){
-            var minPrice =  spaces[minPriceIndex].price;
-            priceUnit = spaces[minPriceIndex].priceUnit ?  spaces[minPriceIndex].priceUnit : "/sf/yr";
-            price = minPrice + " " + priceUnit;
-        } else {
-
-            minPrice = spaces[minPriceIndex].price;
-            var maxPrice = spaces[maxPriceIndex].price;
-            var minPriceUnit = spaces[minPriceIndex].priceUnit;
-            var maxPriceUnit = spaces[maxPriceIndex].priceUnit;
-
-            if (minPriceUnit === null) minPriceUnit = "/sf/yr";
-            if (maxPriceUnit === null) maxPriceUnit = "/sf/yr";
-
-            if (minPriceUnit === maxPriceUnit){
-                price = minPrice + " - " + maxPrice + " " + minPriceUnit;
+        if (spaces[minPriceIndex].price !== null){
+            if (minPriceIndex === maxPriceIndex){
+                var minPrice =  spaces[minPriceIndex].price;
+                priceUnit = spaces[minPriceIndex].priceUnit ?  spaces[minPriceIndex].priceUnit : "/sf/yr";
+                if (minPrice){
+                    price = minPrice + " " + priceUnit;
+                }
             } else {
-                price = minPrice + " " + minPriceUnit + " - " +
-                    maxPrice + " " + maxPriceUnit;
+
+                minPrice = spaces[minPriceIndex].price;
+                var maxPrice = spaces[maxPriceIndex].price;
+                var minPriceUnit = spaces[minPriceIndex].priceUnit;
+                var maxPriceUnit = spaces[maxPriceIndex].priceUnit;
+
+                if (minPriceUnit === null) minPriceUnit = "/sf/yr";
+                if (maxPriceUnit === null) maxPriceUnit = "/sf/yr";
+
+                if (minPriceUnit === maxPriceUnit){
+                    price = minPrice + " - " + maxPrice + " " + minPriceUnit;
+                } else {
+                    price = minPrice + " " + minPriceUnit + " - " +
+                        maxPrice + " " + maxPriceUnit;
+                }
             }
         }
         size += " sf (" + spaces.length + " spaces)";
     } else {
         return null;
     }
-    price = "$"+price;
+    if (price){
+        price = "$"+price;
+    }
 
     var ret = {
         size: size,

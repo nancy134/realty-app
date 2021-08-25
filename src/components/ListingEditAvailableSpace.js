@@ -22,7 +22,7 @@ import ImageUpload from './ImageUpload';
 const SpaceSchema = Yup.object().shape({
     unit: Yup.string(),
     size: Yup.number().integer().required('Must enter a number').typeError('Must enter a number'),
-    price: Yup.number().required('Must enter a number').typeError('Must enter a number'),
+    price: Yup.number().typeError('Must enter a number'),
     use: Yup.string().required("Must select a Type"),
     driveInDoors: Yup.number().integer().typeError('Must be an integer'),
     floors: Yup.number().integer().typeError('Must be an integer'),
@@ -270,7 +270,7 @@ class ListingEditAvailableSpace extends React.Component {
                                 </InputGroup>
                             </Form.Group>
                             <Form.Group as={Col}>
-                                <Form.Label className="font-weight-bold">Price</Form.Label>
+                                <Form.Label className="font-weight-bold">Price (optional)</Form.Label>
                                 <InputGroup>
                                     <InputGroup.Prepend>
                                         <InputGroup.Text>$</InputGroup.Text>
