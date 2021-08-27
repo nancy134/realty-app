@@ -15,6 +15,10 @@ export function getPublishType(listing){
     }
 }
 
+function numberWithCommas(x){
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 export function formatDate(date){
     var d = new Date(date),
         month = '' + (d.getMonth() + 1),
@@ -375,22 +379,23 @@ function getMaxPriceIndex(array){
 }
 
 export function formatSizeAndPrice(spaces){
+    console.log(spaces);
     var size = null;
     var price = null;
     if (spaces.length === 1){
-        size = spaces[0].size;
+        size = numberWithCommas(spaces[0].size);
 
         var priceUnit = spaces[0].priceUnit;
         if (!priceUnit) priceUnit = "/sf/yr";
 
         if (spaces[0].price){
-            price = spaces[0].price + " " + priceUnit;
+            price = numberWithCommas(spaces[0].price) + " " + priceUnit;
         }
 
         size += " sf for lease";        
     } else if (spaces.length > 1){
-        var minSize = getMinSize(spaces);
-        var maxSize = getMaxSize(spaces);
+        var minSize = numberWithCommas(getMinSize(spaces));
+        var maxSize = numberWithCommas(getMaxSize(spaces));
         if (minSize === maxSize){
             size = minSize;
         } else {
@@ -401,15 +406,16 @@ export function formatSizeAndPrice(spaces){
         var maxPriceIndex = getMaxPriceIndex(spaces);
         if (spaces[minPriceIndex].price !== null){
             if (minPriceIndex === maxPriceIndex){
-                var minPrice =  spaces[minPriceIndex].price;
+                var minPrice =  numberWithCommas(spaces[minPriceIndex].price);
                 priceUnit = spaces[minPriceIndex].priceUnit ?  spaces[minPriceIndex].priceUnit : "/sf/yr";
                 if (minPrice){
                     price = minPrice + " " + priceUnit;
                 }
             } else {
-
-                minPrice = spaces[minPriceIndex].price;
-                var maxPrice = spaces[maxPriceIndex].price;
+       
+                minPrice = numberWithCommas(spaces[minPriceIndex].price);
+                console.log("minPrice: "+minPrice);
+                var maxPrice = numberWithCommas(spaces[maxPriceIndex].price);
                 var minPriceUnit = spaces[minPriceIndex].priceUnit;
                 var maxPriceUnit = spaces[maxPriceIndex].priceUnit;
 
