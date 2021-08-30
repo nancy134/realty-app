@@ -9,10 +9,17 @@
 .leftcol {
    overflow:hidden;
 }
+
 .rightcol {
    overflow-y: auto;
    overflow-x: hidden;
    height: 78vh;
+}
+
+.rightcol-embed {
+   overflow-y: auto;
+   overflow-x: hidden;
+   height: 98vh;
 }
 
 .home-filter {

@@ -30,6 +30,8 @@ import {listingTypes} from '../constants/listingTypes';
 import WizardAddListing from '../components/WizardAddListing';
 import { transitionTypes } from '../constants/transitionTypes';
 import tenantService from '../services/tenants';
+import userService from '../services/users';
+import EmbedModal from '../components/EmbedModal';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -61,6 +63,12 @@ export class ListingPage extends Component {
            listingMode = listingModeParam;
         }
 
+        // Embed
+        if (this.props.embed){
+            listingMode = "embedListings";
+        }
+        var cognitoId  = params.get('user');
+
         // Location
         var defaultLocation = geolocationService.getSavedLocation();
         if (!defaultLocation.formatted_address){
@@ -90,6 +98,8 @@ export class ListingPage extends Component {
         this.handleOwnerChange = this.handleOwnerChange.bind(this);
         this.handleListUpdate = this.handleListUpdate.bind(this);
         this.handleNewPage = this.handleNewPage.bind(this);
+        this.handleEmbedListings = this.handleEmbedListings.bind(this);
+        this.handleEmbedListingsHide = this.handleEmbedListingsHide.bind(this);
 
         // Listing
         this.handleAddListingFinish = this.handleAddListingFinish.bind(this);
@@ -239,7 +249,11 @@ export class ListingPage extends Component {
             listError: "",
             reportPage: 1,
             reportCount: 0,
-            reportPerPage: 5 
+            reportPerPage: 5,
+
+            // Embed
+            showEmbedModal: false,
+            cognitoId: cognitoId
         };
     }
 
@@ -463,7 +477,7 @@ export class ListingPage extends Component {
                             geolocationService.calculateBounds(localState.markers);
                     }
                 }
-                if (localState.listingMode === "myListings"){
+                if (localState.listingMode === "myListings" || localState.listingMode === "embedListings"){
                     if (localState.myListingsMap.bounds.lat0 === null){
                         localState.myListingsMap.bounds =
                            geolocationService.calculateBounds(localState.myMarkers);
@@ -553,6 +567,16 @@ export class ListingPage extends Component {
          }).catch(function(err){
              console.log(err);
          });
+    }
+    handleEmbedListings(){
+        this.setState({
+            showEmbedModal: true
+        });
+    }
+    handleEmbedListingsHide(){
+        this.setState({
+            showEmbedModal: false
+        });
     }
     handleUpdate(listing){
         console.log("handleUpdate");
@@ -849,12 +873,12 @@ export class ListingPage extends Component {
                 }
             }
 
-            var getAllPromise = listingService.getAll(query, lMode);
+            var getAllPromise = listingService.getAll(query, lMode, that.state.cognitoId);
             getAllPromise.then(function(listings){
                 var enumPromise = listingService.getEnumsPromise();
                 enumPromise.then(function(enums){
-                    listingService.getMarkers(markerQuery, lMode).then(function(markers){
-                        if (lMode === "myListings"){
+                    listingService.getMarkers(markerQuery, lMode, that.state.cognitoId).then(function(markers){
+                        if (lMode === "myListings" || lMode === "embedListings"){
                             localState.myListings = listings.listings.rows;
                             localState.myPage = listings.page;
                             localState.myPerPage = listings.perPage;
@@ -912,7 +936,7 @@ export class ListingPage extends Component {
                             geolocationService.calculateBounds(localState.markers);
                     }
                 }
-                if (localState.listingMode === "myListings"){
+                if (localState.listingMode === "myListings" || localState.listingMode === "embedListings"){
                     if (localState.myListingsMap.bounds.lat0 === null){
                         localState.myListingsMap.bounds = 
                            geolocationService.calculateBounds(localState.myMarkers);
@@ -1085,7 +1109,7 @@ export class ListingPage extends Component {
             localState.center = center;
             localState.zoomLevel = zoomLevel;
         }
-        if (this.state.listingMode === "myListings"){
+        if (this.state.listingMode === "myListings" || this.state.listingMode === "embedListings"){
             localState.myListingsMap = {};
             localState.myListingsMap.bounds = bounds;
             localState.myListingsMap.center = center;
@@ -1373,6 +1397,12 @@ export class ListingPage extends Component {
         // Layouts
         var leftColumnClassName = "p-0 leftcol";
         var leftColumnSize = 8;
+        var rightColumnClassName = "rightcol";
+
+        // Embed
+        if (this.props.embed){
+            rightColumnClassName = "rightcol-embed";
+        }
 
 
         // Fullscreen
@@ -1402,16 +1432,20 @@ export class ListingPage extends Component {
             center = this.state.center;
             zoomLevel = this.state.zoomLevel;
             markers = this.state.markers;
-        }else if (listingMode === "myListings"){
+        }else if (listingMode === "myListings" || listingMode === "embedListings"){
             bounds = this.state.myListingsMap.bounds;
             center = this.state.myListingsMap.center;
             zoomLevel = this.state.myListingsMap.zoomLevel;
             markers = this.state.myMarkers;
         }
-
         return (
         <React.Fragment>
-
+            { this.state.showEmbedModal ?
+            <EmbedModal
+                show={this.state.showEmbedModal}
+                onHide={this.handleEmbedListingsHide}
+            />
+            : null }
             <DeleteModal
                 id={this.state.deleteId}
                 show={this.state.showDeleteModal}
@@ -1497,6 +1531,7 @@ export class ListingPage extends Component {
                 propertyTypes={this.state.propertyTypes}
             />
             : null }
+            { !this.props.embed ?
 	    <Row className="ml-1 mr-1 bg-success">
 	        <ListingToolbar
                     buttonText="Apply Filters"
@@ -1505,13 +1540,16 @@ export class ListingPage extends Component {
                     showReportViewButton={this.props.loggedIn}
                     showClearFiltersButton={true}
                     showSpaceTypeButton={true}
+                    showEmbedListingsButton={this.props.loggedIn}
 		    formatted_address={this.state.formatted_address}
                     listingType={this.state.listingType}
                     onSearch={this.handleSearch}
                     onShowReportView={this.handleShowReportView}
                     showReportView={this.state.showReportView}
+                    onEmbedListings={this.handleEmbedListings}
                 />
 	    </Row>
+            : null }
             <div className="listing-container">
 	    <Row className="ml-1 mr-1">
 	        <Col xs={leftColumnSize} className={leftColumnClassName}>
@@ -1575,7 +1613,7 @@ export class ListingPage extends Component {
                     : null }
                 </Col>
                 { !fullscreen ?
-                <Col xs={rightColSize} className="rightcol" >
+                <Col xs={rightColSize} className={rightColumnClassName} >
                     <Listings 
                         loggedIn={loggedIn}
                         listingMode={listingMode} 
@@ -1604,7 +1642,7 @@ export class ListingPage extends Component {
                 </Col>
                 : null}
                 { reporting ?
-                <Col xs={reportColSize} className="rightcol" >
+                <Col xs={reportColSize} className={rightColumnClassName} >
                     <ReportListings
                         loggedIn={loggedIn}
                         onShowDetailChange={this.handleShowDetailChange}

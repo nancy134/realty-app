@@ -102,7 +102,7 @@ class Listings extends React.Component {
         var showFavorites = false;
         return (
         <div>
-            { this.props.loggedIn ?
+            { this.props.loggedIn && this.props.listingMode !== "embedListings" ?
             <div id="stickyHeader" className="bg-white">
                 <Toolbar
                     page={this.props.page}
@@ -178,7 +178,7 @@ class Listings extends React.Component {
                     ))}
                 </ListGroup>
                 : null}
-                {this.props.listingMode === "myListings" && myListings.length > 0 ?
+                {(this.props.listingMode === "myListings" || this.props.listingMode === "embedListings") && myListings.length > 0 ?
                 <ListGroup>
                     {this.props.myListings.map((listing, index) =>
                     (

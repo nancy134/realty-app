@@ -15,13 +15,24 @@ class App extends React.Component {
   constructor(props){
       super(props);
 
+        // Embed
+        const params = new URLSearchParams(window.location.search);
+        var embed = false;
+        var embedParam = params.get('embed');
+        if (embedParam === "true"){
+            embed = true;
+        }
+
       var minimalTab = false;
-      if (window.location.pathname === "/terms" || window.location.pathname === "/privacypolicy")
+      if (window.location.pathname === "/terms" || 
+          window.location.pathname === "/privacypolicy" ||
+          embed)
           minimalTab = true;
 
       var showFooter = true;
       if (window.location.pathname === "/admin" ||
-          window.location.pathname === "/account")
+          window.location.pathname === "/account" ||
+          embed)
           showFooter = false;
 
       this.state = {
@@ -35,6 +46,7 @@ class App extends React.Component {
           minimalTab: minimalTab,
           loading: true,
           email: null,
+          embed: embed
       };
       this.handleLogin = this.handleLogin.bind(this);
       this.handleLogout = this.handleLogout.bind(this);
@@ -166,6 +178,7 @@ class App extends React.Component {
               onAddListingCancel={this.handleAddListingCancel}
               onShowPolicyModal={this.handlePolicyModalShow}
               loading={this.state.loading}
+              embed={this.state.embed}
           >
           </Routes>
           }

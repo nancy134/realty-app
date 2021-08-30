@@ -379,7 +379,6 @@ function getMaxPriceIndex(array){
 }
 
 export function formatSizeAndPrice(spaces){
-    console.log(spaces);
     var size = null;
     var price = null;
     if (spaces.length === 1){

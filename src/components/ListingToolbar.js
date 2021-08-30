@@ -411,6 +411,16 @@ class ListingToolbar extends React.Component {
                             onClick={this.handleSearch}
                         >{this.props.buttonText}</Button>
                     </Col>
+                    { this.props.showEmbedListingsButton ?
+                    <Col>
+                        <Button
+                            variant="warning"
+                            size="sm"
+                            className="float-right"
+                            onClick={this.props.onEmbedListings}
+                        >Embed Listings</Button>
+                    </Col>
+                    : null }
                     { this.props.showReportViewButton && !this.props.showReportView ?
                     <Col>
                         <Button
