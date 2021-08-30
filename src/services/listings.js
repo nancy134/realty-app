@@ -2,12 +2,14 @@ import rp from 'request-promise';
 import fetch from 'node-fetch';
 import axiosInstance from './axios';
 
-export function getAll(query, listingMode){
+export function getAll(query, listingMode, cognitoId){
     var url = "";
     if (listingMode === "myListings"){
         url = process.env.REACT_APP_API+"listings/me";
-    } else {
+    } else if (listingMode === "allListings"){
         url = process.env.REACT_APP_API+"listings";
+    } else if (listingMode === "embedListings"){
+        url = process.env.REACT_APP_API+"users/"+cognitoId+"/listings";
     }
     if (query) {
         url += "?"+query;
@@ -26,12 +28,14 @@ export function getAll(query, listingMode){
     });
 }
 
-export function getMarkers(query, listingMode){
+export function getMarkers(query, listingMode, cognitoId){
     var url = "";
     if (listingMode === "myListings") {
         url = process.env.REACT_APP_API+"listingMarkers/me";
-    } else {
+    } else if (listingMode === "allListings"){
         url = process.env.REACT_APP_API+"listingMarkers";
+    } else if (listingMode === "embedListings"){
+        url = process.env.REACT_APP_API+"users/"+cognitoId+"/listingMarkers";
     }
     if (query){
         url += "?" + query;

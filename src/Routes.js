@@ -9,6 +9,7 @@ import ReportListPage from './containers/ReportListPage';
 import AdminPage from './containers/AdminPage';
 import TermsPage from './containers/TermsPage';
 import PrivacyPolicyPage from './containers/PrivacyPolicyPage';
+import Test from './containers/Test';
 
 class Routes extends React.Component {
 
@@ -64,6 +65,7 @@ render(){
                     showAddListingWizard={this.props.showAddListingWizard}
                     onAddListingCancel={this.props.onAddListingCancel}
                     onShowPolicyModal={this.props.onShowPolicyModal}
+                    embed={this.props.embed}
                 />
             )
         }
@@ -96,6 +98,7 @@ render(){
     <Route path="/instructions" exact component={InstructionPage} />
     <Route path="/terms" exact component={TermsPage} />
     <Route path="/privacypolicy" exact component={PrivacyPolicyPage} />
+    <Route path="/test" exact component={Test} />
   </Switch>
   );
 }

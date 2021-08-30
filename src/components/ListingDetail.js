@@ -838,7 +838,6 @@ class ListingDetail extends React.Component {
                 associates: associates.associates
             });
         }).catch(function(err){
-            console.log(err);
         });
 
     }
