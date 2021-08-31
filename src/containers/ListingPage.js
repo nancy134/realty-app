@@ -824,7 +824,6 @@ export class ListingPage extends Component {
             } else {
                 lMode = that.state.listingMode;
             }
-
             // Pagination
             var query = 'perPage=20&page='+localState.page;
             var markerQuery = "perPage=250&page=1";
@@ -1413,7 +1412,11 @@ export class ListingPage extends Component {
 
         // Listing
         if (showDetail && !fullscreen){
-            leftColumnClassName = "p-0 rightcol";
+            if (this.props.embed){
+                leftColumnClassName = "p-0 rightcol-embed";
+            } else {
+                leftColumnClassName = "p-0 rightcol";
+            }
         }
 
         // Reporting
