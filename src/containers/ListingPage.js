@@ -30,8 +30,8 @@ import {listingTypes} from '../constants/listingTypes';
 import WizardAddListing from '../components/WizardAddListing';
 import { transitionTypes } from '../constants/transitionTypes';
 import tenantService from '../services/tenants';
-import userService from '../services/users';
 import EmbedModal from '../components/EmbedModal';
+import condoService from '../services/condos';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -129,6 +129,7 @@ export class ListingPage extends Component {
         // Delete Associated Tables
         this.handleDeleteSpace = this.handleDeleteSpace.bind(this);
         this.handleDeleteTenant = this.handleDeleteTenant.bind(this);
+        this.handleDeleteCondo = this.handleDeleteCondo.bind(this);
 
         // Delete
         this.handleDeleteHide = this.handleDeleteHide.bind(this);
@@ -1010,6 +1011,17 @@ export class ListingPage extends Component {
             deleteMessage: "Are you sure you want to delete this tenant?"
         });
     }
+
+    handleDeleteCondo(id){
+        this.setState({
+            deleteTable: "Condo",
+            deleteId: id,
+            showDeleteModal: true,
+            deleteTitle: "Delete Condo",
+            deleteMessage: "Are you sure you want to delete this condo?"
+        });
+    }
+
     handleDeleteConfirm(){
         var that=this;
         if (this.state.deleteTable === "Space"){
@@ -1048,6 +1060,24 @@ export class ListingPage extends Component {
                 console.log(err);
             });
 
+        } else if (this.state.deleteTable === "Condo"){
+            condoService.deleteCondo(this.state.index, this.state.deleteId).then(function(result){
+                that.handleFetchListing(result.latestDraftId);
+                var localState = {
+                    listingMode: "myListings",
+                    page: that.state.page
+                };
+                that.fetchListingsPromise(localState).then(function(localState){
+                    that.setState(localState);
+                    that.handleDeleteHide();
+                }).catch(function(err){
+                    console.log(err);
+                });
+
+            }).catch(function(err){
+                console.log(err);
+            });
+ 
         }
     }
     handleDeleteHide(){
@@ -1599,6 +1629,7 @@ export class ListingPage extends Component {
                             // Delete associated tables
                             onDeleteSpace={this.handleDeleteSpace}
                             onDeleteTenant={this.handleDeleteTenant}
+                            onDeleteCondo={this.handleDeleteCondo}
                         />
                     </CSSTransition>
                     : null }

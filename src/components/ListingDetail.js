@@ -12,6 +12,7 @@ import ListingDetailAmenities from './ListingDetailAmenities';
 import ListingDetailBrokers from './ListingDetailBrokers';
 import ListingDetailUnits from './ListingDetailUnits';
 import ListingDetailTenants from './ListingDetailTenants';
+import ListingDetailCondos from './ListingDetailCondos';
 import ListingDetailPortfolio from './ListingDetailPortfolio';
 import ListingDetailMap from './ListingDetailMap';
 import ListingDetailAttachments from './ListingDetailAttachments';
@@ -29,6 +30,7 @@ import {formatDateTime} from '../helpers/utilities';
 import ContactModal from './ContactModal';
 import {listingTypes} from '../constants/listingTypes';
 import userService from '../services/users';
+import condoService from '../services/condos';
 
 class ListingDetail extends React.Component {
     constructor(props) {
@@ -76,6 +78,11 @@ class ListingDetail extends React.Component {
             tenantNew: false,
             tenantUpdate: false,
             tenantSaving: false,
+
+            // Condo
+            condoNew: false,
+            condoUpdate: false,
+            condoSaving: false,
 
             // Portfolio
             portfolioNew: false,
@@ -151,6 +158,12 @@ class ListingDetail extends React.Component {
         this.handleTenantModalNew = this.handleTenantModalNew.bind(this);
         this.handleTenantModalUpdate = this.handleTenantModalUpdate.bind(this);
         this.handleTenantModalHide = this.handleTenantModalHide.bind(this);
+
+        // Condo
+        this.handleCondoUpdate = this.handleCondoUpdate.bind(this);
+        this.handleCondoModalNew = this.handleCondoModalNew.bind(this);
+        this.handleCondoModalUpdate = this.handleCondoModalUpdate.bind(this);
+        this.handleCondoModalHide = this.handleCondoModalHide.bind(this);
 
         // Amenities
         this.handleAmenityModalUpdate = this.handleAmenityModalUpdate.bind(this);
@@ -670,6 +683,74 @@ class ListingDetail extends React.Component {
         }
     }
 
+    // Condo 
+
+    handleCondoModalNew(){
+        this.setState({
+            condoNew: true
+        });
+    }
+    handleCondoModalUpdate(index){
+        this.setState({
+            condoUpdate: true,
+            condoUpdateIndex: index,
+
+        });
+    }
+    handleCondoModalHide(){
+        this.setState({
+            condoNew: false,
+            condoUpdate: false,
+            condoSaving: false,
+            condoError: null
+        });
+    }
+    handleCondoUpdate(condo){
+        var that = this;
+        this.setState({condoSaving: true});
+        if (!condo.ListingVersionId){
+             var listingBody = {publishStatus: 'Draft', owner: authenticationService.getUserEmail()};
+             var createPromise = listingService.create(listingBody);
+             createPromise.then(function(listingVersion){
+                 condo.ListingVersionId = listingVersion.listing.id;
+                 condoService.create(listingVersion.listing.id,condo).then(function(data){
+                     that.props.onFetchListing(data.ListingVersionId);
+                     that.handleCondoModalHide();
+                 }).catch(function(err){
+                     that.setState({
+                         condoError: err.message,
+                         condoSaving: false
+                     });
+                     that.props.onFetchListing(listingVersion.listing.id);
+                 });
+             });
+        } else {
+            if (condo.id){
+                condoService.update(condo.ListingVersionId, condo.id, condo).then(function(data){
+                    that.props.onFetchListing(data.ListingVersionId);
+                    that.handleCondoModalHide();
+                }).catch(function(err){
+                     that.setState({
+                         condoError: err.message,
+                         condoSaving: false
+                     });
+                     that.props.onFetchListing(condo.ListingVersionId);
+
+                });
+            } else {
+                condoService.create(condo.ListingVersionId, condo).then(function(data){
+                    that.props.onFetchListing(data.ListingVersionId);
+                    that.handleCondoModalHide();
+                }).catch(function(err){
+                     that.setState({
+                         condoError: err.message,
+                         condoSaving: false
+                     });
+                     that.props.onFetchListing(condo.listingVersionId);
+                });
+            }
+        }
+    }
     // Portfolio
 
     handlePortfolioModalNew(){
@@ -1051,6 +1132,25 @@ class ListingDetail extends React.Component {
                         getListing={this.props.onFetchListing}
                         onDelete={this.props.onDeleteTenant}
                     />
+                : null }
+                {(editMode === "edit") ||
+                 (listing && listing.condos.length) > 0 ?
+                    <ListingDetailCondos
+                        listing={listing}
+                        editMode={editMode}
+                        condoNew={this.state.condoNew}
+                        condoUpdate={this.state.condoUpdate}
+                        condoError={this.state.condoError}
+                        condoSaving={this.state.condoSaving}
+                        onCondoModalNew={this.handleCondoModalNew}
+                        onCondoModalUpdate={this.handleCondoModalUpdate}
+                        condoUpdateIndex={this.state.condoUpdateIndex}
+                        onCondoModalHide={this.handleCondoModalHide}
+                        onCondoUpdate={this.handleCondoUpdate}
+                        getListing={this.props.onFetchListing}
+                        onDelete={this.props.onDeleteCondo}
+                    />
+
                 : null }
                 {(showPortfolio && editMode === "edit" && listingType === listingTypes.FORSALE) || 
                  (showPortfolio && listing && listing.portfolios.length) > 0 ?
