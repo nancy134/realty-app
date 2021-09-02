@@ -1133,7 +1133,7 @@ class ListingDetail extends React.Component {
                         onDelete={this.props.onDeleteTenant}
                     />
                 : null }
-                {(editMode === "edit") ||
+                {(editMode === "edit" && listingType === listingTypes.FORSALE) ||
                  (listing && listing.condos.length) > 0 ?
                     <ListingDetailCondos
                         listing={listing}

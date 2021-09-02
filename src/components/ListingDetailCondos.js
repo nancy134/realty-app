@@ -81,11 +81,11 @@ function AddButton(props) {
                 onClick={() => {props.onShow()}}
                 className="edit-button text-danger"
             >
-                <FontAwesomeIcon size="xs" icon={faPlus} />&nbsp;Add Condo 
+                <FontAwesomeIcon size="xs" icon={faPlus} />&nbsp;Edit Condo 
             </span>
             {props.show ?
             <ListingEditCondo
-                title="Add New Condo"
+                title="Edit Condo"
                 listing={props.listing}
                 index={props.index}
                 condo={props.condo}
@@ -133,9 +133,19 @@ class ListingDetailCondos extends React.Component {
     constructor(props){
         super(props);
         this.handleSave = this.handleSave.bind(this);
+        this.handleCondoEdit = this.handleCondoEdit.bind(this);
     }
     handleSave(condo){
         this.props.onCondoUpdate(condo);
+    }
+
+    // Limit Condo to 1 per listing
+    handleCondoEdit(){
+        if (this.props.listing.condos.length > 0){
+            this.props.onCondoModalUpdate(0);
+        } else {
+            this.props.onCondoModalNew();
+        }
     }
     render(){
        var listing = this.props.listing;
@@ -146,13 +156,13 @@ class ListingDetailCondos extends React.Component {
         <div className="m-4 shadow border">
             <Row className="mt-2 ml-0 mr-0">
                 <Col>
-                    <h3>Commercial Condos&nbsp; 
+                    <h3>Commercial Condo&nbsp; 
                         {editMode === "edit" ? 
                         <AddButton 
                             listing={listing} 
                             condo={newCondo} 
                             onSave={this.handleSave}
-                            onShow={this.props.onCondoModalNew}
+                            onShow={this.handleCondoEdit}
                             onHide={this.props.onCondoModalHide}
                             errorMessage={this.props.condoError}
                             show={this.props.condoNew}
