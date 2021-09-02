@@ -7,9 +7,73 @@ import {
 } from 'google-maps-react';
 //import geolocationService from '../helpers/geolocation';
 import {
-    Button
+    Button,
+    Image,
+    Row,
+    Col
 } from 'react-bootstrap';
 import InfoWindowEx from '../components/InfoWindowEx';
+
+function MapItem(props) {
+
+    var imageUrl = "";
+    if (props.listing.images && props.listing.images.length > 0){
+        imageUrl = props.listing.images[0].url;
+    }
+
+    var listingPrice = "";
+    if (props.listing.listingPrice) {
+        var floatPrice = parseFloat(props.listing.listingPrice);
+        listingPrice = floatPrice.toLocaleString(undefined, { maximumFractionDigits: 0 });
+    }
+    return (
+            <div style={{ width:`auto`, overflow:`hidden`}}>
+                    <Row>
+                        
+                        <Col xs={4}>
+                        {imageUrl ?
+                            <Image
+                            src={imageUrl}
+                            className="border-0 list-image"
+                            thumbnail
+                            style={{maxHeight:`75px`}}
+                            />
+                        : <Image
+                        src="/default.jpg"
+                        className="border-0 list-image"
+                        thumbnail
+                        style={{maxHeight:`75px`}}
+                        /> }
+                        </Col>
+
+                        <Col xs={8}>
+                            <div style={{ fontSize:`11.5pt`}}>
+                            {props.listing.name}<br />
+                            {props.listing.city}, {props.listing.state}
+                            </div>
+                            { listingPrice ?
+                            <div>${listingPrice}</div>
+                            : null }
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={12}>
+                        {props.listing.desc}
+                        </Col>
+                    </Row>
+            <div style={{display:`flex`,justifyContent:`center`,alignItems:`center`}}>
+                <Button
+                variant="link"
+                size="sm"
+                className="p-0"
+                onClick={() => props.onInfoWindowClick(props.listing)}
+            >
+                View Listing
+            </Button>
+            </div>
+            </div>
+    )
+}
 
 class ListingMap extends React.Component {
     constructor(props) {
@@ -62,16 +126,19 @@ class ListingMap extends React.Component {
             
             return markers.map((marker, index) => {
                 if (marker.location){
-                return <Marker
-                    key={index}
-                    name={marker.address}
-                    city={marker.city}
-                    state={marker.state}
-                    listingId={marker.id}
-                    publishStatus={marker.publishStatus}
-                    onClick={this.onMarkerClick}
-                    position={{ lat: marker.location.coordinates[0], lng: marker.location.coordinates[1] }}
-                />
+                    return <Marker
+                        key={index}
+                        name={marker.address}
+                        city={marker.city}
+                        state={marker.state}
+                        listingId={marker.id}
+                        desc={marker.shortDescription}
+                        listingPrice={marker.listingPrice}
+                        images={marker.images}
+                        publishStatus={marker.publishStatus}
+                        onClick={this.onMarkerClick}
+                        position={{ lat: marker.location.coordinates[0], lng: marker.location.coordinates[1] }}
+                    />
                 } else {
                 return null;
                 }
@@ -173,53 +240,41 @@ class ListingMap extends React.Component {
         ];
         if (!showDetail) {
             return (
-            <Map
-                className="map"
-                google={this.props.google}
-                onReady={this.onReady}
-                onClick={this.onMapClicked}
-                onZoomChanged={this.handleZoomChanged}
-                onDragend={this.handleDragEnd}
-                containerStyle={this.props.style}
-                gestureHandling={this.props.gestureHandling}
-                ref="resultMap"
-            >
-                {this.displayMarkers()}
+                <Map
+                    className="map"
+                    google={this.props.google}
+                    onReady={this.onReady}
+                    onClick={this.onMapClicked}
+                    onZoomChanged={this.handleZoomChanged}
+                    onDragend={this.handleDragEnd}
+                    containerStyle={this.props.style}
+                    gestureHandling={this.props.gestureHandling}
+                    ref="resultMap"
+                >
+                    {this.displayMarkers()}
 
-               <InfoWindowEx
-                   marker={this.state.activeMarker}
-                   onClose={this.onInfoWindowClose}
-                   visible={this.state.showingInfoWindow}
-               >
-                   <div>
-                   <div>
-                       {this.state.selectedPlace.name}
-                   </div>
-                   <div>
-                       {this.state.selectedPlace.city}, {this.state.selectedPlace.state}
-                   </div>
-                   <Button
-                       variant="link"
-                       size="sm"
-                       className="p-0"
-                       onClick={() => this.handleInfoWindowClick(this.state.selectedPlace)}
-                   >
-                    
-                       View Listing
-                   </Button>
-                   </div>
-               </InfoWindowEx>
-               { false ?
-               <Polygon
-                   paths={polygon}
-                   strokeColor="#0000FF"
-                   strokeOpacity={0.8}
-                   strokeWeight={2}
-                   fillColor="#0000FF"
-                   fillOpacity={0.35}
-               />
-               : null}
-            </Map>
+                    <InfoWindowEx
+                        marker={this.state.activeMarker}
+                        onClose={this.onInfoWindowClose}
+                        visible={this.state.showingInfoWindow}
+                    >
+                        <MapItem
+                            listing={this.state.selectedPlace}
+                            onInfoWindowClick={this.handleInfoWindowClick}
+                        />
+                    </InfoWindowEx>
+                    {false ?
+                        <Polygon
+                            paths={polygon}
+                            strokeColor="#0000FF"
+                            strokeOpacity={0.8}
+                            strokeWeight={2}
+                            fillColor="#0000FF"
+                            fillOpacity={0.35}
+                        />
+                        : null}
+                </Map>
+
             );
         } else {
              return null;
