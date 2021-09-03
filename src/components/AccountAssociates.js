@@ -18,11 +18,14 @@ function Associate(props){
     if (props.associate.email === authenticationService.getUserEmail()){
         return null;
     } else {
+    var hostName = window.location.hostname;
+    var inviteLink = "https://" + hostName + "/account?token=" + props.associate.associationToken;
     return(
     <Row className="pt-2">
-        <Col>{props.associate.email}</Col>
-        <Col>{props.associate.associationStatus}</Col>
-        <Col>
+        <Col xs={3}>{props.associate.email}</Col>
+        <Col xs={3}>{props.associate.associationStatus}</Col>
+        <Col xs={5}>{inviteLink}</Col>
+        <Col xs={1}>
             <DropdownButton
                title="Actions"
             >
@@ -155,7 +158,7 @@ class AccountAssociates extends React.Component {
             <Container>
                 <Row className="pt-5">
                 </Row>
-                <Jumbotron className="pt-3">
+                <Jumbotron className="pt-2">
                     <Row>
                         <Col>
                             <h1 className="text-center">Account Asssociates</h1>
@@ -229,9 +232,10 @@ class AccountAssociates extends React.Component {
                         </Col>
                     </Row>
                     <Row>
-                        <Col><h5>Email</h5></Col>
-                        <Col><h5>Status</h5></Col>
-                        <Col><h5>Actions</h5></Col>
+                        <Col xs={3}><h5>Email</h5></Col>
+                        <Col xs={3}><h5>Status</h5></Col>
+                        <Col xs={5}><h5>Invite Link</h5></Col>
+                        <Col xs={1}><h5>Actions</h5></Col>
                     </Row>
                     { this.state.associates.map((associate, index) => 
                     (
