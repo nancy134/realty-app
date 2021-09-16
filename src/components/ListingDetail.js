@@ -102,6 +102,9 @@ class ListingDetail extends React.Component {
 
             // Contact
             showContactModal: false,
+
+            // Share
+            showShareListingWizard: false
         };
 
         this.handleShowDetailChange = this.handleShowDetailChange.bind(this);
@@ -179,6 +182,11 @@ class ListingDetail extends React.Component {
         this.handleContact = this.handleContact.bind(this);
         this.handleContactHide = this.handleContactHide.bind(this);
         this.handleSendMessage = this.handleSendMessage.bind(this);
+
+        // Share
+        this.handleShare = this.handleShare.bind(this);
+        this.handleCancelShareWizard = this.handleCancelShareWizard.bind(this);
+        this.handleFinishShareWizard = this.handleFinishShareWizard.bind(this);
     }
 
     handleShowDetailChange() {
@@ -944,6 +952,24 @@ class ListingDetail extends React.Component {
             console.log(err);
         });
     }
+
+    // Share
+    handleShare(){
+        this.setState({
+            showShareListingWizard: true
+        });
+    }
+    handleCancelShareWizard(){
+        this.setState({
+            showShareListingWizard: false
+        });
+    }
+    handleFinishShareWizard(){
+        this.setState({
+            showShareListingWizard: false
+        });
+    }
+
     componentWillUnmount(){
     }
     render(){
@@ -1008,6 +1034,11 @@ class ListingDetail extends React.Component {
                     onContact={this.handleContact}
                     onGoToMyListing={this.props.onGoToMyListing}
                     onExpand={this.props.onExpand}
+                    onShare={this.handleShare}
+                    showShareListingWizard={this.state.showShareListingWizard}
+                    onCancelShareWizard={this.handleCancelShareWizard}
+                    onFinishShareWizard={this.handleFinishShareWizard}
+         
                 />
                 <ListingDetailToolbar 
                     listing={listing}

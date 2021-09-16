@@ -10,9 +10,24 @@ import {
     faExpand,
     faCompress,
     faAddressBook,
-    faFilePdf
+    faFilePdf,
+    faShare
 } from '@fortawesome/free-solid-svg-icons';
+import WizardShareListing from '../components/WizardShareListing';
 
+function ShareButton(props){
+    return(
+    <span>
+        <Button
+            id="header_share_button"
+            variant="info"
+            onClick={props.onShare}
+        >
+            <span style={{fontSize: "0.8rem"}}><FontAwesomeIcon icon={faShare} /> Share Listing</span>
+        </Button>
+    </span>
+    );
+}
 function ContactButton(props) {
   return (
       <span>
@@ -22,7 +37,7 @@ function ContactButton(props) {
               className=""
               onClick={() => {props.onContact()}}
           >
-             <span><FontAwesomeIcon icon={faAddressBook} /> Contact</span>
+             <span style={{fontSize: "0.8rem"}}><FontAwesomeIcon icon={faAddressBook} /> Contact Broker</span>
           </Button>
       </span>
   );
@@ -37,7 +52,7 @@ function ReportButton(props){
                 className="ml-1"
                 onClick={() => {props.onReport()}}
             >
-                <span><FontAwesomeIcon icon={faFilePdf} /> Brochure</span>
+                <span style={{fontSize: "0.8rem"}}><FontAwesomeIcon icon={faFilePdf} /> View Brochure</span>
             </Button>
         </span>
     );
@@ -91,13 +106,23 @@ class ListingDetailHeader extends React.Component {
             expandButtonIcon = faCompress;
             expandButtonFunction = this.handleCollapse;
         }
-
         return(
             <div className="pb-1">
+            { this.props.showShareListingWizard ?
+            <WizardShareListing
+                listing={listing}
+                start={this.props.showShareListingWizard}
+                onCancel={this.props.onCancelShareWizard}
+                onFinish={this.props.onFinishShareWizard}
+            />
+            : null }
             <Row className="align-items-center bg-info m-0">
 	        <Col md={6}className="text-white">
                         <ContactButton
                             onContact={this.props.onContact}
+                        />
+                        <ShareButton
+                            onShare={this.props.onShare}
                         />
                         <ReportButton
                             onReport={this.handleReport}

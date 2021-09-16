@@ -315,6 +315,32 @@ export function abbrState(input, to){
     }
 }
 
+export function formatAddress(listing){
+    if (!listing) return null;
+    var state = abbrState(listing.state,'abbr');
+    var address =
+        listing.address +
+        " " +
+        listing.city +
+        ", " +
+        state +
+        " " +
+        listing.zip;
+    return(address);
+}
+
+export function getPrimaryImage(listing){
+    if (!listing || !listing.images) return null;
+
+    var src = "/default.jpg";
+
+    if (listing.images.length > 0){
+        src = listing.images[0].url;
+    }
+
+    return src;
+}
+
 /////////////////////////////////
 // Size and Price
 /////////////////////////////////
