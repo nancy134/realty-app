@@ -46,6 +46,13 @@ class AccountToolbar extends Component {
                     eventKey="payment"
                 >Billing Details</Nav.Link>
             </Nav.Item>
+            <Nav.Item>
+                <Nav.Link
+                    id="account-embed-tab"
+                    eventKey="embed"
+                >Embed Listings</Nav.Link>
+            </Nav.Item>
+
         </Nav>
         );
     }
