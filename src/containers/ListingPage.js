@@ -30,7 +30,6 @@ import {listingTypes} from '../constants/listingTypes';
 import WizardAddListing from '../components/WizardAddListing';
 import { transitionTypes } from '../constants/transitionTypes';
 import tenantService from '../services/tenants';
-import EmbedModal from '../components/EmbedModal';
 import condoService from '../services/condos';
 
 export class ListingPage extends Component {
@@ -98,8 +97,6 @@ export class ListingPage extends Component {
         this.handleOwnerChange = this.handleOwnerChange.bind(this);
         this.handleListUpdate = this.handleListUpdate.bind(this);
         this.handleNewPage = this.handleNewPage.bind(this);
-        this.handleEmbedListings = this.handleEmbedListings.bind(this);
-        this.handleEmbedListingsHide = this.handleEmbedListingsHide.bind(this);
 
         // Listing
         this.handleAddListingFinish = this.handleAddListingFinish.bind(this);
@@ -568,16 +565,6 @@ export class ListingPage extends Component {
          }).catch(function(err){
              console.log(err);
          });
-    }
-    handleEmbedListings(){
-        this.setState({
-            showEmbedModal: true
-        });
-    }
-    handleEmbedListingsHide(){
-        this.setState({
-            showEmbedModal: false
-        });
     }
     handleUpdate(listing){
         console.log("handleUpdate");
