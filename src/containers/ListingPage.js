@@ -250,7 +250,6 @@ export class ListingPage extends Component {
             reportPerPage: 5,
 
             // Embed
-            showEmbedModal: false,
             cognitoId: cognitoId
         };
     }
@@ -1460,12 +1459,6 @@ export class ListingPage extends Component {
         }
         return (
         <React.Fragment>
-            { this.state.showEmbedModal ?
-            <EmbedModal
-                show={this.state.showEmbedModal}
-                onHide={this.handleEmbedListingsHide}
-            />
-            : null }
             <DeleteModal
                 id={this.state.deleteId}
                 show={this.state.showDeleteModal}
