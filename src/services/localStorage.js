@@ -76,6 +76,26 @@ const LocalStorage = (function(){
     function _fullName(){
         return localStorage.getItem('fullName');
     }
+    
+    //
+    // Constant Contact Auth Token
+    //
+    function _setCCAccessToken(ccAccessToken){
+        localStorage.setItem('ccAccessToken', ccAccessToken);
+    }
+    function _ccAccessToken(){
+        return localStorage.getItem('ccAccessToken');
+    }
+
+    //
+    // Constant Contact Refresh Token
+    //
+    function _setCCRefreshToken(ccRefreshToken){
+        localStorage.setItem('ccRefreshToken', ccRefreshToken);
+    }
+    function _ccRefreshToken(){
+        return localStorage.getItem('ccRefreshToken');
+    }
 
     function _clearAll(){
         localStorage.removeItem('IdToken');
@@ -110,6 +130,14 @@ const LocalStorage = (function(){
         // fullName
         fullName: _fullName,
         setFullName: _setFullName,
+
+        // Constant Contact accessToken
+        ccAccessToken: _ccAccessToken,
+        setCCAccessToken: _setCCAccessToken,
+
+        // Constant Contact refreshToken
+        ccRefreshToken: _ccRefreshToken,
+        setCCRefreshToken: _setCCRefreshToken,
 
         // clearAll
         clearAll: _clearAll

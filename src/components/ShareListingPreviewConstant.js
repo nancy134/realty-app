@@ -11,8 +11,11 @@ import mailService from '../services/mail';
 import {formatAddress} from '../helpers/utilities';
 import {getPrimaryImage} from '../helpers/utilities';
 import {formatSizeAndPrice} from '../helpers/utilities';
+import {getDomain} from '../helpers/utilities';
+import constantService from '../services/constant';
+import listingService from '../services/listings';
 
-class ShareListingPreview extends React.Component{
+class ShareListingPreviewConstant extends React.Component{
     constructor(props){
         super(props);
         this.handleNext = this.handleNext.bind(this);
@@ -29,9 +32,11 @@ class ShareListingPreview extends React.Component{
         this.props.onSubjectChange(e.target.value);
     }
     componentDidMount(){
+        console.log("ShareListingPreviewConstant");
         var listing = this.props.listing;
-
+        var domain = getDomain(window.location.hostname);
         var address = formatAddress(listing);
+        var name = domain + " "  + address;
         var image = getPrimaryImage(listing);
         var sizeAndPrice = formatSizeAndPrice(listing.spaces); 
         var size = null;
@@ -47,11 +52,14 @@ class ShareListingPreview extends React.Component{
             var listingPrice = floatPrice.toLocaleString(undefined, {maximumFractionDigits:0});
             strListingPrice = "For Sale at $"+listingPrice; 
         }
+
+        var fromName = this.props.user.first + " " + this.props.user.last;
         var body = {
             to: this.props.contactsSelected,
             replyTo: this.props.user.email,
             subject: this.props.subject,
             preview: true,
+            content: true,
             listing: {
                 image: image,
                 address: address,
@@ -61,20 +69,63 @@ class ShareListingPreview extends React.Component{
                 size: size,
                 price: price
             }
+        };
 
-        }
         var that = this;
         mailService.sendListing(body).then(function(html){
             that.setState({
                 src: html.Location,
                 body: body
             });
+            var emailCampaignActivity = {
+                    format_type: 5,
+                    from_email: that.props.user.email,
+                    reply_to_email: that.props.user.email,
+                    from_name: fromName,
+                    subject: address,
+                    html_content: html.content,
+                    preheader: "Exlusive Listing"
+            }
+            var constantBody = {
+                accessToken: that.props.accessToken,
+                name: name,
+                email_campaign_activities: [emailCampaignActivity]
+            };
+            console.log(constantBody);
+            if (!that.props.listing.constantContactId){
+                constantService.createCampaign(JSON.stringify(constantBody)).then(function(campaign){
+                    console.log(campaign);
+                    var listingBody = {
+                        ListingId: that.props.listing.ListingId,
+                        constantContactId: campaign.campaign_id
+                    };
+                    listingService.update(listingBody).then(function(updatedListing){
+                        console.log(updatedListing);
+                    }).catch(function(err){
+                        console.log(err);
+                    });
+                }).catch(function(err){
+                    console.log(err);
+                    console.log("err[0].error_key: "+err[0].error_key);
+                    if (err[0] && err[0].error_key && err[0].error_key === 'email.emailcampaignname.validate.request.notunique'){
+                        console.log(err[0].error_message);
+                    }
+                });
+            } else {
+                console.log(constantBody);
+                //constantBody.email_campaign_activities[0].html_content='<html><body>[[trackingImage]] <a href="http://www.constantcontact.com">Visit ConstantContact.com!</a> </body></html>';
+                constantService.updateCampaign(that.props.listing.constantContactId, constantBody).then(function(campaign){
+                    console.log(campaign);
+                }).catch(function(err){
+                    console.log(err);
+                });
+            }
              
         }).catch(function(err){
+            console.log(err);
         });
     }
     render(){
-        var numContacts = this.props.contactsSelected.length + " Contact(s) [A separate email for each contact]";
         return(
         <Modal
             show={this.props.show}
@@ -107,17 +158,6 @@ class ShareListingPreview extends React.Component{
                                 placeholder={this.props.user.email}
                             />
                         </Col>
-                    </Form.Group>
-                    <Form.Group as={Row}>
-                        <Form.Label column sm={2}>
-                            To:
-                        </Form.Label>
-                        <Col sm={10}>
-                            <Form.Control
-                                disabled={true}
-                                placeholder={numContacts}
-                            />
-                        </Col> 
                     </Form.Group>
                     <Form.Group as={Row}>
                         <Form.Label column sm={2}>
@@ -157,4 +197,4 @@ class ShareListingPreview extends React.Component{
         );
     }
 }
-export default ShareListingPreview;
+export default ShareListingPreviewConstant;

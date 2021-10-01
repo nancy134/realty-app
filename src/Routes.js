@@ -10,6 +10,7 @@ import AdminPage from './containers/AdminPage';
 import TermsPage from './containers/TermsPage';
 import PrivacyPolicyPage from './containers/PrivacyPolicyPage';
 import Test from './containers/Test';
+import ConstantContact from './containers/ConstantContact';
 
 class Routes extends React.Component {
 
@@ -99,6 +100,7 @@ render(){
     <Route path="/terms" exact component={TermsPage} />
     <Route path="/privacypolicy" exact component={PrivacyPolicyPage} />
     <Route path="/test" exact component={Test} />
+    <Route path="/constantcontact" exact component={ConstantContact} />
   </Switch>
   );
 }

@@ -26,12 +26,14 @@ class App extends React.Component {
       var minimalTab = false;
       if (window.location.pathname === "/terms" || 
           window.location.pathname === "/privacypolicy" ||
+          window.location.pathname === "/constantcontact" ||
           embed)
           minimalTab = true;
 
       var showFooter = true;
       if (window.location.pathname === "/admin" ||
           window.location.pathname === "/account" ||
+          window.location.pathname === "/constantcontact" ||
           embed)
           showFooter = false;
 

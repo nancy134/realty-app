@@ -1,3 +1,4 @@
+import axiosInstance from './axios';
 var rp = require('request-promise');
 
 export function signin(params){
@@ -142,6 +143,43 @@ export function confirmForgotPassword(params){
         });
     });
 }
+
+export function getCCAuthUrl(){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + 'cc/authurl';
+        axiosInstance.get(url).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
+export function getCCAuthToken(code, redirect_uri){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + 'cc/authToken' +
+            '?code='+ code +
+            '&redirect_uri=' + redirect_uri;
+        console.log(url);
+        axiosInstance.get(url).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
+export function ccRefreshToken(refreshToken){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + 'cc/refreshToken' +
+            '?refresh_token=' + refreshToken;
+        axiosInstance.get(url).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
  
 const auth = {
     signin,
@@ -150,7 +188,10 @@ const auth = {
     resendConfirmationCode,
     forgotPassword,
     confirmForgotPassword,
-    refreshToken
+    refreshToken,
+    getCCAuthUrl,
+    getCCAuthToken,
+    ccRefreshToken
 };
 export default auth;
 

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import ShareListingMethod from '../components/ShareListingMethod';
 import ShareListingContacts from '../components/ShareListingContacts';
+import ShareListingAuth from '../components/ShareListingAuth';
 import ShareListingPreview from '../components/ShareListingPreview';
+import ShareListingPreviewConstant from '../components/ShareListingPreviewConstant';
 import ShareListingConfirm from '../components/ShareListingConfirm';
 import {shareMethodTypes} from '../constants/shareMethodTypes';
 import userService from '../services/users';
@@ -18,16 +20,24 @@ export class WizardShareListing extends Component {
         this.handleShareContactsCancel = this.handleShareContactsCancel.bind(this);
         this.handleShareContactsSelected = this.handleShareContactsSelected.bind(this);
 
+        this.handleShareAuthNext = this.handleShareAuthNext.bind(this);
+        this.handleShareAuthCancel = this.handleShareAuthCancel.bind(this);
+
         this.handleSharePreviewNext = this.handleSharePreviewNext.bind(this);
         this.handleSharePreviewCancel = this.handleSharePreviewCancel.bind(this);
         this.handleShareSubjectChanged = this.handleShareSubjectChanged.bind(this);
+
+        this.handleSharePreviewConstantNext = this.handleSharePreviewConstantNext.bind(this);
+        this.handleSharePreviewConstantCancel = this.handleSharePreviewConstantCancel.bind(this);
 
         this.handleShareConfirmNext = this.handleShareConfirmNext.bind(this);
 
         this.state = {
             showShareListingMethod: true,
             showShareListingContacts: false,
+            showShareListingAuth: false,
             showShareListingPreview: false,
+            showShareListingPreviewConstant: false,
             showSHareListingConfirm: false,
             contactsSelected: [],
             methodType: shareMethodTypes.EMAILFC,
@@ -38,10 +48,17 @@ export class WizardShareListing extends Component {
     }
 
     handleShareMethodNext(){
-        this.setState({
-            showShareListingMethod: false,
-            showShareListingContacts: true
-        });
+        if (this.state.methodType === shareMethodTypes.EMAILFC){
+            this.setState({
+                showShareListingMethod: false,
+                showShareListingContacts: true
+            });
+        } else {
+            this.setState({
+                showShareListingMethod: false,
+                showShareListingAuth: true
+            });
+        }
     }
 
     handleShareMethodCancel(){
@@ -77,6 +94,25 @@ export class WizardShareListing extends Component {
         });
     }
 
+    handleShareAuthNext(accessToken, refreshToken){
+        console.log("accessToken: "+accessToken);
+        console.log("refreshToken: "+refreshToken);
+        this.setState({
+            showShareListingPreviewConstant: true,
+            showShareListingAuth: false,
+            accessToken: accessToken,
+            refreshToken: refreshToken
+            
+        });
+    }
+
+    handleShareAuthCancel(){
+        this.setState({
+            showShareListingAuth: false
+        });
+        this.props.onCancel();
+    }
+
     handleSharePreviewNext(body){
         this.setState({
             showShareListingPreview: false,
@@ -96,6 +132,21 @@ export class WizardShareListing extends Component {
         this.setState({
             subject: subject
         });
+    }
+
+    handleSharePreviewConstantNext(body){
+        this.setState({
+            showShareListingPreviewConstant: false,
+            showShareListingConfirm: true,
+            body: body
+        });
+    }
+
+    handleSharePreviewConstantCancel(){
+        this.setState({
+            showShareListingPreviewConstant: false
+        });
+        this.props.onCancel();
     }
 
     handleShareConfirmNext(){
@@ -138,6 +189,13 @@ export class WizardShareListing extends Component {
                 user={this.state.user}
             />
             : null }
+            { this.state.showShareListingAuth ?
+            <ShareListingAuth
+                show={this.state.showShareListingAuth}
+                onNext={this.handleShareAuthNext}
+                onCancel={this.handleShareAuthCancel}
+            />
+            : null }
             { this.state.showShareListingPreview ?
             <ShareListingPreview
                 show={this.state.showShareListingPreview}
@@ -149,6 +207,21 @@ export class WizardShareListing extends Component {
                 user={this.state.user}
                 subject={this.state.subject}
                 onSubjectChange={this.handleShareSubjectChanged}
+            />
+            : null }
+            { this.state.showShareListingPreviewConstant ?
+            <ShareListingPreviewConstant
+                show={this.state.showShareListingPreviewConstant}
+                onNext={this.handleSharePreviewConstantNext}
+                onCancel={this.handleSharePreviewConstantCancel}
+                listing={this.props.listing}
+                methodType={this.state.methodType}
+                contactsSelected={this.state.contactsSelected}
+                user={this.state.user}
+                subject={this.state.subject}
+                onSubjectChange={this.handleShareSubjectChanged}
+                accessToken={this.state.accessToken}
+                refreshToken={this.state.refreshToken}
             />
             : null }
             { this.state.showShareListingConfirm ?
