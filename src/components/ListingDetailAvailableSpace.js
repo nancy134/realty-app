@@ -16,6 +16,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import ListingEditAvailableSpace from './ListingEditAvailableSpace';
 import {spaceNameValuePairs} from '../helpers/utilities';
+import {numberWithCommas} from '../helpers/utilities';
 
 function NameValue(props){
     var startIndex = props.index * 3;
@@ -113,11 +114,16 @@ function SpaceItem(props){
        rows.push(3)
        rows.push(nameValuePairs.length - 9);
     }
+    var size = null;
+    if (space.size){
+        size = numberWithCommas(space.size);
+    }
+
     return(
     <Accordion key={space.unit}> 
         <Row className="ml-0 mr-0 border-bottom align-items-center" >
             <Col md={2}>{space.use}</Col>
-            <Col md={2}>{space.size} sf</Col>
+            <Col md={2}>{size} sf</Col>
             { space.price ?
             <Col md={2}>${space.price} {space.priceUnit}</Col>
             :
@@ -202,10 +208,14 @@ function SpaceItem(props){
     </Accordion>
     );
     } else {
+    size = null;
+    if (space.size){
+        size = numberWithCommas(space.size);
+    }
     return(
         <Row className="ml-0 mr-0 border-bottom align-items-center">
             <Col md={2}>{space.use}</Col>
-            <Col md={2}>{space.size} sf</Col>
+            <Col md={2}>{size} sf</Col>
             { space.price ?
             <Col md={2}>${space.price} {space.priceUnit}</Col>
             :

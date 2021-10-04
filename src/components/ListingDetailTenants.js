@@ -12,6 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import ListingEditTenant from './ListingEditTenant';
 import {formatDate} from '../helpers/utilities';
+import {numberWithCommas} from '../helpers/utilities';
 
 function TenantItem(props){
     var tenant = props.tenant;
@@ -19,12 +20,28 @@ function TenantItem(props){
     if (tenant.leaseEnds && tenant.leaseEnds !== ""){
         leaseEnds = formatDate(tenant.leaseEnds);
     }
+    var space = null;
+    if (tenant.space){
+        space = numberWithCommas(tenant.space);
+    }
     return(
             <Row className="ml-0 mr-0" key={tenant.id}>
                 <Col md={3}>{tenant.tenant}</Col>
-                <Col md={2}>{tenant.space} sf</Col>
+                { space ?
+                <Col md={2}>{space} sf</Col>
+                :
+                <Col md={2}></Col>
+                }
+                { tenant.baseRent ?
                 <Col md={2}>${tenant.baseRent}/mo</Col>
+                :
+                <Col md={2}></Col> 
+                }
+                { tenant.leaseEnds ?
                 <Col md={3}>{leaseEnds}</Col>
+                :
+                <Col md={3}></Col> 
+                }
                 <Col md={2}>
                     <Row>
                         { props.editMode === "edit" ?
