@@ -48,7 +48,7 @@ class ShareListingPreview extends React.Component{
             strListingPrice = "For Sale at $"+listingPrice; 
         }
         var body = {
-            to: this.props.contactsSelected,
+            to: this.props.contactsSelected[0].email,
             replyTo: this.props.user.email,
             subject: this.props.subject,
             preview: true,
