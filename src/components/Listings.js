@@ -88,7 +88,7 @@ class Listings extends React.Component {
         e.stopPropagation();
     }
     render() {
-
+    
         var listings = [];
         if (this.props.listings){
             listings = this.props.listings;
@@ -100,14 +100,19 @@ class Listings extends React.Component {
         var showImage = true;
         var showShortDescription = true;
         var showFavorites = false;
+
+        var count = this.props.count ? this.props.count : this.props.myCount;
+        var perPage = this.props.perPage ? this.props.perPage : this.props.myPerPage;
+        var page = this.props.page ? this.props.page : this.props.myPage;
+
         return (
         <div>
             { this.props.loggedIn && this.props.listingMode !== "embedListings" ?
             <div id="stickyHeader" className="bg-white">
                 <Toolbar
-                    page={this.props.page}
-                    count={this.props.count}
-                    perPage={this.props.perPage}
+                    page={page}
+                    count={count}
+                    perPage={perPage}
                     loggedIn={this.props.loggedIn}
                     onNewPage={this.props.onNewPage}
                     listingMode={this.props.listingMode}
@@ -148,9 +153,9 @@ class Listings extends React.Component {
             </div>
             :
             <Toolbar
-                page={this.props.page}
-                count={this.props.count}
-                perPage={this.props.perPage}
+                page={page}
+                count={count}
+                perPage={perPage}
                 onNewPage={this.props.onNewPage}
                 listingMode={this.props.listingMode}
                 onNewListing={this.handleNewListing}

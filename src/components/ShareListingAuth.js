@@ -161,8 +161,6 @@ class ShareListingAuth extends React.Component{
                 <StepperShareListing
                     selectShareMethodComplete={true}
                     selectShareContactsComplete={true}
-                    selectSharePreviewComplete={true}
-                    selectShareConfirmActive={true}
                     methodType={this.props.methodType}
                 />
                 <Row>
