@@ -180,6 +180,31 @@ export function ccRefreshToken(refreshToken){
         });
     });
 }
+
+export function getSparkAuthUrl(){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + 'spark/authurl';
+        console.log("url: "+url);
+        axiosInstance.get(url).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
+export function getSparkAuthToken(body){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + 'spark/authToken';
+        console.log(url);
+        console.log(body);
+        axiosInstance.post(url, body).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
  
 const auth = {
     signin,
@@ -191,7 +216,9 @@ const auth = {
     refreshToken,
     getCCAuthUrl,
     getCCAuthToken,
-    ccRefreshToken
+    ccRefreshToken,
+    getSparkAuthUrl,
+    getSparkAuthToken
 };
 export default auth;
 

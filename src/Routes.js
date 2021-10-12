@@ -11,6 +11,7 @@ import TermsPage from './containers/TermsPage';
 import PrivacyPolicyPage from './containers/PrivacyPolicyPage';
 import Test from './containers/Test';
 import ConstantContact from './containers/ConstantContact';
+import Spark from './containers/Spark';
 
 class Routes extends React.Component {
 
@@ -101,6 +102,7 @@ render(){
     <Route path="/privacypolicy" exact component={PrivacyPolicyPage} />
     <Route path="/test" exact component={Test} />
     <Route path="/constantcontact" exact component={ConstantContact} />
+    <Route path="/sparkauth" exact component={Spark} />
   </Switch>
   );
 }
