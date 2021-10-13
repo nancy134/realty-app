@@ -14,6 +14,7 @@ import {
     faShare
 } from '@fortawesome/free-solid-svg-icons';
 import WizardShareListing from '../components/WizardShareListing';
+import {getDomain} from '../helpers/utilities';
 
 function ShareButton(props){
     return(
@@ -94,6 +95,9 @@ class ListingDetailHeader extends React.Component {
         window.open(url, "_blank");
     }
     render() {
+        var domain = getDomain(window.location.hostname);
+        var showShareListing = true;
+        if (domain === "findingcre") showShareListing = false;
         const listing = this.props.listing;
 
         // Fullscreen
@@ -121,9 +125,11 @@ class ListingDetailHeader extends React.Component {
                         <ContactButton
                             onContact={this.props.onContact}
                         />
+                        { showShareListing ?
                         <ShareButton
                             onShare={this.props.onShare}
                         />
+                        : null }
                         <ReportButton
                             onReport={this.handleReport}
                         />
