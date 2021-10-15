@@ -304,7 +304,7 @@ class ListingToolbar extends React.Component {
                         </Dropdown>
                     </Col>
                     { listingMode === "allListings" ?
-                    <Col xs={3}>
+                    <Col m>
                         <PlacesAutocomplete
                             value={address}
                             onChange={this.handleSearchChange}
