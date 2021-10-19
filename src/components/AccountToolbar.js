@@ -52,12 +52,6 @@ class AccountToolbar extends Component {
                     eventKey="embed"
                 >Embed Listings</Nav.Link>
             </Nav.Item>
-            <Nav.Item>
-                <Nav.Link
-                    id="account-logos-tab"
-                    eventKey="logos"
-                >Logos</Nav.Link>
-            </Nav.Item>
         </Nav>
         );
     }
