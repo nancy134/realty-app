@@ -43,7 +43,7 @@ class PolicyModal extends React.Component {
                     {title} 
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body style={{'max-height': 'calc(100vh - 210px)', 'overflow-y': 'auto'}}>
+            <Modal.Body style={{'maxHeight': 'calc(100vh - 210px)', 'overflowY': 'auto'}}>
                 { this.props.type === "terms" ?
                 <PolicyTerms />
                 : null }

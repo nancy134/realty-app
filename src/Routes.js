@@ -12,6 +12,7 @@ import PrivacyPolicyPage from './containers/PrivacyPolicyPage';
 import Test from './containers/Test';
 import ConstantContact from './containers/ConstantContact';
 import Spark from './containers/Spark';
+import SparkHomePage from './containers/SparkHomePage';
 
 class Routes extends React.Component {
 
@@ -25,11 +26,39 @@ handleLogin(){
 }
 
 render(){
+  var spark = process.env.REACT_APP_SPARK;
+  var home = "/home";
+  if (spark === "true"){
+      home="/spark"; 
+  }
   return(
   <Switch loggedIn={this.props.loggedIn}>
     <Route exact path="/" render={() => (
-      <Redirect to="/home"/>
+      <Redirect to={home}/>
     )}/>
+
+    { spark === "true" ?
+    <React.Fragment>
+    <Route
+        path="/spark"
+        render={
+            props => (
+                <SparkHomePage
+                    accessToken={this.props.sparkAccessToken}
+                    refreshToken={this.props.sparkRefreshToken}
+                    sparkCollections={this.props.sparkCollections}
+                    sparkCollectionListings={this.props.sparkCollectionListings}
+                    onSparkCollectionSelect={this.props.onSparkCollectionSelect}
+                    sparkSelectedCollection={this.props.sparkSelectedCollection}
+                    {...props}
+                />
+            )
+        }
+    />
+    <Route path="/sparkauth" exact component={Spark} />
+    </React.Fragment>
+    :
+    <React.Fragment>
     <Route
         path="/home"
         render={
@@ -103,6 +132,8 @@ render(){
     <Route path="/test" exact component={Test} />
     <Route path="/constantcontact" exact component={ConstantContact} />
     <Route path="/sparkauth" exact component={Spark} />
+    </React.Fragment>
+    }
   </Switch>
   );
 }

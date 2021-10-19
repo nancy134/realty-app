@@ -97,6 +97,26 @@ const LocalStorage = (function(){
         return localStorage.getItem('ccRefreshToken');
     }
 
+    //
+    // Spark Access Token
+    //
+    function _setSparkAccessToken(sparkAccessToken){
+        localStorage.setItem('sparkAccessToken', sparkAccessToken);
+    }
+    function _sparkAccessToken(){
+        return localStorage.getItem('sparkAccessToken');
+    }
+
+    //
+    // Spark Refresh Token
+    //
+    function _setSparkRefreshToken(sparkRefreshToken){
+        localStorage.setItem('sparkRefreshToken', sparkRefreshToken);
+    }
+    function _sparkRefreshToken(){
+        return localStorage.getItem('sparkRefreshToken');
+    }
+
     function _clearAll(){
         localStorage.removeItem('IdToken');
         localStorage.removeItem('RefreshToken');
@@ -138,6 +158,15 @@ const LocalStorage = (function(){
         // Constant Contact refreshToken
         ccRefreshToken: _ccRefreshToken,
         setCCRefreshToken: _setCCRefreshToken,
+
+
+        // Spark accessToken
+        sparkAccessToken: _sparkAccessToken,
+        setSparkAccessToken: _setSparkAccessToken,
+
+        // Spark refreshToken
+        sparkRefreshToken: _sparkRefreshToken,
+        setSparkRefreshToken: _setSparkRefreshToken,
 
         // clearAll
         clearAll: _clearAll
