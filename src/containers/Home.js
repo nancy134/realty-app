@@ -112,6 +112,7 @@ export class Home extends Component {
             propertyTypes={this.state.propertyTypes}
         />
         : null }
+        <div className="spacer">
         <Row className="mx-auto" style={{width: '740px'}}>
             <Col>
                 <h1>Find your commercial property</h1>
@@ -129,6 +130,7 @@ export class Home extends Component {
               showSpaceTypeButton={false}
           />
         </Row>
+        </div>
     </div>
   );
   }
