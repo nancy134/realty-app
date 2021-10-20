@@ -215,7 +215,10 @@ class AccountProfile extends React.Component{
             if (profile.mobilePhone) initialValues.mobilePhone = profile.mobilePhone;
             if (profile.website) initialValues.website = profile.website;
         }
-
+        var anchorOrigin = {
+            horizontal: 'center',
+            vertical: 'top'
+        }
         return(
         <div className="profile-view">
             <Formik
@@ -544,8 +547,8 @@ class AccountProfile extends React.Component{
                     <Row>
                         <Col xs={4}></Col>
                         <Col xs={4}>
-                        <Snackbar open={this.state.snackBarOpen} autoHideDuration={6000} onClose={this.handleSnackBarClose}>
-                            <Alert onClose={this.handleSnackBarClose} severity="success">
+                        <Snackbar open={this.state.snackBarOpen} autoHideDuration={6000} onClose={this.handleSnackBarClose} anchorOrigin={anchorOrigin}>
+                            <Alert onClose={this.handleSnackBarClose} variant="warning">
                                 Your profile has been successfully updated!
                             </Alert>
                         </Snackbar>
