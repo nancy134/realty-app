@@ -5,17 +5,17 @@ import {
     Form,
     Button,
     Image,
-    Spinner
-} from 'react-bootstrap';
-import { Formik, ErrorMessage } from 'formik';
+    Spinner} from 'react-bootstrap';
+import Alert from 'react-bootstrap/Alert';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 import userService from '../services/users';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faQuestionCircle
 } from '@fortawesome/free-solid-svg-icons';
-
 import ReactTooltip from 'react-tooltip';
+import Snackbar from '@mui/material/Snackbar';
 
 const UserSchema = Yup.object().shape({
     first: Yup.string(),
@@ -44,8 +44,11 @@ class AccountProfile extends React.Component{
             profile: null,
             states: null,
             roles: null,
-            updateProgress: false
+            updateProgress: false,
+            snackBarOpen: false
         };
+        this.handleSnackBarClose = this.handleSnackBarClose.bind(this);
+        
     }
 
     componentDidMount(){
@@ -141,7 +144,26 @@ class AccountProfile extends React.Component{
             });
             console.log(err);
         });
+
+        userService.updateUser(this.state.profile.id, profile).then(function(response){
+            that.setState({
+                updateProgress: false,
+                snackBarOpen: true
+            });
+        }).catch(function(err){
+            that.setState({
+                updateProgress: false,
+            });
+            console.log(err);
+        });
     }
+
+    handleSnackBarClose(){
+        this.setState({
+            snackBarOpen: false
+        });
+    }
+
     render(){
         var states = null;
         if (this.state.states){
@@ -501,7 +523,9 @@ class AccountProfile extends React.Component{
                                 disabled={!(isValid && dirty) || isSubmitting}
                                 variant="success"
                                 block
-                                onClick={handleSubmit}
+                                onClick={() => {
+                                    handleSubmit();
+                                 }}
                             >
                                 { this.state.updateProgress ?
                                 <Spinner
@@ -514,6 +538,17 @@ class AccountProfile extends React.Component{
                                 <span>Update Profile</span>
                                 }
                             </Button>
+                        </Col>
+                        <Col xs={4}></Col>
+                    </Row>
+                    <Row>
+                        <Col xs={4}></Col>
+                        <Col xs={4}>
+                        <Snackbar open={this.state.snackBarOpen} autoHideDuration={6000} onClose={this.handleSnackBarClose}>
+                            <Alert onClose={this.handleSnackBarClose} severity="success">
+                                Your profile has been successfully updated!
+                            </Alert>
+                        </Snackbar>
                         </Col>
                         <Col xs={4}></Col>
                     </Row>

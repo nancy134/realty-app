@@ -45,7 +45,7 @@ function Broker(props){
             <Col md={2}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
             <Col md={4}>
                 <Row className="font-weight-bold">{user.first} {user.middle} {user.last}</Row>
-                <Row>{user.email}</Row>
+                <Row><a href={user.email}>Contact Me</a></Row>
                 { user.officePhone ?
                 <Row>Office phone: {user.officePhone}</Row>
                 : null}
@@ -85,7 +85,7 @@ class ListingDetailBrokers extends React.Component {
             <div className="m-4 shadow border">
                 <Row className="mt-2 ml-0 mr-0">
                     <Col>
-                        <h3>Brokers { enableEdit && editMode === "edit" ?
+                        <h3>Contacts { enableEdit && editMode === "edit" ?
                             <EditButton 
                                 listing={listing}
                                 onSave={this.props.onSave}
