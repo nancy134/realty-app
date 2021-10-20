@@ -128,6 +128,7 @@ export class Home extends Component {
               showReportViewButton={false}
               showMoreFiltersButton={false}
               showSpaceTypeButton={false}
+              searchMSize="auto"
           />
         </Row>
         </div>
