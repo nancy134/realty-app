@@ -12,6 +12,7 @@ import AccountBilling from '../components/AccountBilling';
 import AccountSettings from '../components/AccountSettings';
 import AccountButton from '../components/AccountButton';
 import AccountEmbed from '../components/AccountEmbed';
+import AccountLogos from '../components/AccountLogos';
 import WizardAddListing from '../components/WizardAddListing';
 import userService from '../services/users';
 import listingService from '../services/listings';
@@ -179,6 +180,9 @@ export class AccountPage extends Component {
                 {tab === "embed" ? (
                 <AccountEmbed />
                 ): null}
+                {tab === "logos" ? (
+                <AccountLogos />
+                ): null}                
             </React.Fragment>
             );
         } else {
