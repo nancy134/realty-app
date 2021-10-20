@@ -112,12 +112,13 @@ export class Home extends Component {
             propertyTypes={this.state.propertyTypes}
         />
         : null }
-        <Row className="pt-5 pl-5">
+        <div className="spacer">
+        <Row className="mx-auto" style={{width: '740px'}}>
             <Col>
                 <h1>Find your commercial property</h1>
             </Col>
         </Row>
-        <Row className="pl-5">
+        <Row className="mx-auto" style={{width: '740px'}}>
           <ListingToolbar
               buttonText="Search"
               listingMode={"allListings"}
@@ -127,8 +128,10 @@ export class Home extends Component {
               showReportViewButton={false}
               showMoreFiltersButton={false}
               showSpaceTypeButton={false}
+              searchMSize="auto"
           />
         </Row>
+        </div>
     </div>
   );
   }

@@ -1,0 +1,8 @@
+.mx-auto {
+  display: block;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.spacer {
+  padding-top: 50px;
+}

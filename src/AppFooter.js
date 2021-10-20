@@ -28,6 +28,14 @@ class AppFooter extends React.Component {
             >
                 <span>About</span>
             </Button>
+            <Button
+                variant="link"
+                size="sm"
+                onClick={() => this.handlePolicyModalShow("contact")}
+            >
+                <span>Contact Us</span>
+            </Button>
+
         </div>
         );
     }

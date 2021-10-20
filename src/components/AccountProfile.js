@@ -7,7 +7,7 @@ import {
     Image,
     Spinner
 } from 'react-bootstrap';
-import { Formik } from 'formik';
+import { Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import userService from '../services/users';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -204,7 +204,8 @@ class AccountProfile extends React.Component{
                     setSubmitting(true);
                     this.handleUpdate(initialValues, values);
                     setSubmitting(false);
-                }}
+                }
+            }
             >
                 {({
                     values,
