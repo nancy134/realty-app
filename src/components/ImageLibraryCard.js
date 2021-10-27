@@ -1,6 +1,4 @@
 import React, { useRef } from 'react'
-//import { useDrag, useDrop } from 'react-dnd'
-import { ItemTypes } from './ItemTypes'
 import {
     Image
 } from 'react-bootstrap';
@@ -20,7 +18,6 @@ export const ImageLibraryCard = ({ id, url, index, file, onMoveCard, onDeleteCar
   var src = "";
   if (file) src =  URL.createObjectURL(file);
   else src = url;
-  var order = index+1;
   return (
     <span className="border" ref={ref} style={{ ...style }}>
     <span className="img-wrap">

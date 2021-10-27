@@ -1,7 +1,6 @@
 import axiosInstance from './axios';
 import FormData from 'form-data';
 
-var uploadProgress = {};
 function getImages(query){
     return new Promise(function(resolve, reject){
         var url = process.env.REACT_APP_API + 'library/images';
@@ -74,59 +73,6 @@ function sendRequest(file, order, progressCB){
         });
     });
 }
-
-function sendRequest2(file, order, progressCB){
-    return new Promise(function(resolve, reject){
-        const req = new XMLHttpRequest();
-
-        req.upload.addEventListener("progress", event => {
-            if (event.lengthComputable) {
-                uploadProgress[file.name] = {
-                    state: "pending",
-                    percentage: (event.loaded / event.total) * 100
-                };
-                progressCB(uploadProgress);
-            }
-        });
-
-        req.upload.addEventListener("load", event => {
-            uploadProgress[file.name] = {
-                state: "done",
-                percentage: 100
-            };
-            progressCB(uploadProgress);
-        });
-
-        req.upload.addEventListener("error", event => {
-            uploadProgress[file.name] = {
-                state: "error",
-                percentage: 0
-            };
-            progressCB(uploadProgress);
-            reject(req.response);
-        });
-
-
-        uploadProgress = [];
-        const formData = new FormData();
-        formData.append("image", file, file.name);
-        formData.append("order", order);
-
-        var url = process.env.REACT_APP_API + "library/upload";
-        req.open("POST", url);
-        req.onreadystatechange = function(){
-            if (req.readyState === 4){
-                if (req.status === 200){
-                    resolve(JSON.parse(req.response));
-                } else {
-                    reject(req.status);
-                }
-            }
-        };
-        req.send(formData);
-    });
-}
-
 
 const library = {
     getImages,

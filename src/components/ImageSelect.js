@@ -16,7 +16,6 @@ export const ImageSelect = ({ id, url, index, file, selectedCard, onSelectCard }
   var src = "";
   if (file) src =  URL.createObjectURL(file);
   else src = url;
-  var order = index+1;
   return (
     <span className="border" ref={ref} style={{ ...style }}>
     <span className="img-wrap">
