@@ -57,8 +57,10 @@ class App extends React.Component {
           sparkCollections: null,
           sparkCollection: null,
           sparkCollectionListings: null,
+          sparkListings: null,
           sparkSelectedCollection: null,
-          showSparkAddCollection: false
+          showSparkAddCollection: false,
+          sparkSelectedSavedSearch: null
       };
       this.handleLogin = this.handleLogin.bind(this);
       this.handleLogout = this.handleLogout.bind(this);
@@ -70,6 +72,7 @@ class App extends React.Component {
       this.handleSparkLogin = this.handleSparkLogin.bind(this);
       this.handleSparkCollectionSelect = this.handleSparkCollectionSelect.bind(this);
       this.handleSparkAddCollection = this.handleSparkAddCollection.bind(this);
+      this.handleSparkSavedSearchSelect = this.handleSparkSavedSearchSelect.bind(this);
 
       // Policy
       this.handlePolicyModalShow = this.handlePolicyModalShow.bind(this);
@@ -179,6 +182,10 @@ class App extends React.Component {
       var that = this;
       sparkHelper.collectionSelect(that, that.state.sparkAccessToken, id);
   }
+  handleSparkSavedSearchSelect(id){
+      var that = this;
+      sparkHelper.savedSearchSelect(that, that.state.sparkAccessToken, id);
+  }
   handleSparkAddCollection(){
   }
   render(){
@@ -225,9 +232,13 @@ class App extends React.Component {
               sparkCollections={this.state.sparkCollections}
               sparkCollection={this.state.sparkCollection}
               sparkCollectionListings={this.state.sparkCollectionListings}
+              sparkListings={this.state.sparkListings}
               onSparkCollectionSelect={this.handleSparkCollectionSelect}
               sparkSelectedCollection={this.state.sparkSelectedCollection}
               showSparkAddCollection={this.state.showSparkAddCollection}
+              sparkSavedSearches={this.state.sparkSavedSearches}
+              onSparkSavedSearchSelect={this.handleSparkSavedSearchSelect}
+              sparkSelectedSavedSearch={this.state.sparkSelectedSavedSearch}
           >
           </Routes>
           }

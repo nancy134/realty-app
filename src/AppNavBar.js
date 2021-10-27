@@ -2,12 +2,23 @@ import React from 'react';
 import {
     Nav,
     Navbar,
-    Button
+    Button,
+    DropdownButton,
+    Dropdown,
+    Tabs,
+    Tab
 } from 'react-bootstrap';
 import AccountButton from './components/AccountButton';
 import AccountButtonSpark from './components/AccountButtonSpark';
 
 class AppNavBar extends React.Component {
+    constructor(props){
+        super(props);
+        this.handleSelectView = this.handleSelectView.bind(this);
+    }
+    handleSelectView(view){
+        console.log(view);
+    }
     render(){
         var logo = process.env.REACT_APP_IMAGES + "FindingCRELogo.png";
         var spark = process.env.REACT_APP_SPARK;
@@ -23,7 +34,20 @@ class AppNavBar extends React.Component {
             <Navbar.Toggle />
             <Navbar.Collapse className="justify-content-end">
                 { spark === 'true' ?
-                null
+                <Nav.Item>
+                    <Nav.Link eventKey="link-2">
+                        <Tabs
+                            defaultActiveKey="collections"
+                            variant="pills"
+                            onSelect={this.handleSelectView}
+                        >
+                            <Tab eventKey="collections" title="Collections">
+                            </Tab>
+                            <Tab eventKey="savedSearches" title="Saved Searches">
+                            </Tab>
+                        </Tabs>
+                    </Nav.Link>
+                </Nav.Item>
                 :
                 <Nav.Item>
                     <Nav.Link eventKey="link-2">

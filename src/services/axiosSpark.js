@@ -8,7 +8,6 @@ const axiosSpark = axios.create({});
 axiosSpark.interceptors.request.use(
     config => {
         const token = localStorageService.sparkAccessToken();
-        console.log(token);
         if (token){
             config.headers['Authorization'] = 'Bearer ' + token;
         }

@@ -240,11 +240,11 @@ export class AccountButton extends Component{
         });
     }
     onMyAccount(){
-        var url = window.location.protocol + "//" + window.location.hostname + "/account";
+        var url = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/account";
         window.location.href = url;
     }
     onAdministration(){
-        var url = window.location.protocol + "//" + window.location.hostname + "/admin";
+        var url = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port +  "/admin";
         window.location.href = url;
     }
     onLogout(){
@@ -252,11 +252,11 @@ export class AccountButton extends Component{
        this.props.onLogout();
     }
     onMyListings(){
-        var url = window.location.protocol + "//" + window.location.hostname + "/listing?listingMode=myListings";
+        var url = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/listing?listingMode=myListings";
         window.location.href = url;
     }
     onMyReports(){
-        var url = window.location.protocol + "//" + window.location.hostname + "/reporting";
+        var url = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/reporting";
         window.location.href = url;
     }
     handleRegisterCancel(){

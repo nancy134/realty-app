@@ -7,7 +7,6 @@ export function getCollections(){
             url: url,
             method: 'GET'
         };
-        console.log(options);
         axiosSpark(options).then(function(result){
             resolve(result.data);
         }).catch(function(err){
@@ -65,10 +64,42 @@ export function getSystem(){
     });
 }
 
+export function getSavedSearches(){
+    var url = process.env.REACT_APP_API + "spark/savedsearches";
+    return new Promise(function(resolve, reject){
+        var options = {
+            url: url,
+            method: 'GET'
+        };
+        axiosSpark(options).then(function(result){
+            resolve(result.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
+export function getSavedSearchListings(savedSearch){
+    var url = process.env.REACT_APP_API + "spark/listings?_filter=SavedSearch%20Eq%20'"+savedSearch+"'";
+    return new Promise(function(resolve, reject){
+        var options = {
+            url: url,
+            method: 'GET'
+        };
+        axiosSpark(options).then(function(result){
+            resolve(result.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
 const spark = {
     getCollections,
     getCollection,
     getCollectionListings,
-    getSystem
+    getSystem,
+    getSavedSearches,
+    getSavedSearchListings
 };
 export default spark;

@@ -21,6 +21,10 @@ html, body {
 .middle {
     width:30%;
 }
+.spark-listings{
+    height: 100%;
+    overflow-y: auto;
+}
 
 .right {
     flex:1;

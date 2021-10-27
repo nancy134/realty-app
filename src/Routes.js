@@ -50,6 +50,10 @@ render(){
                     sparkCollectionListings={this.props.sparkCollectionListings}
                     onSparkCollectionSelect={this.props.onSparkCollectionSelect}
                     sparkSelectedCollection={this.props.sparkSelectedCollection}
+                    sparkSavedSearches={this.props.sparkSavedSearches}
+                    sparkListings={this.props.sparkListings}
+                    onSparkSavedSearchSelect={this.props.onSparkSavedSearchSelect}
+                    sparkSelectedSavedSearch={this.props.sparkSelectedSavedSearch}
                     {...props}
                 />
             )
