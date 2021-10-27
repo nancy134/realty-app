@@ -30,7 +30,7 @@ class ShareListingPreview extends React.Component{
     }
     componentDidMount(){
         var listing = this.props.listing;
-
+        var logo = this.props.selectedImageUrl;
         var address = formatAddress(listing);
         var image = getPrimaryImage(listing);
         var sizeAndPrice = formatSizeAndPrice(listing.spaces); 
@@ -59,9 +59,9 @@ class ShareListingPreview extends React.Component{
                 longDescription: listing.longDescription,
                 listingPrice: strListingPrice,
                 size: size,
-                price: price
+                price: price,
+                logo: logo
             }
-
         }
         var that = this;
         mailService.sendListing(body).then(function(html){
@@ -93,6 +93,7 @@ class ShareListingPreview extends React.Component{
                 <StepperShareListing
                     selectShareMethodComplete={true}
                     selectShareContactsComplete={true}
+                    selectShareImageComplete={true}
                     selectSharePreviewActive={true}
                     methodType={this.props.methodType}
                 />

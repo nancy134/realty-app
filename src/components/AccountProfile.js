@@ -7,7 +7,7 @@ import {
     Image,
     Spinner
 } from 'react-bootstrap';
-import { Formik, ErrorMessage } from 'formik';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 import userService from '../services/users';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

@@ -53,6 +53,7 @@ class ShareListingConfirm extends React.Component{
                 <StepperShareListing
                     selectShareMethodComplete={true}
                     selectShareContactsComplete={true}
+                    selectShareImageComplete={true}
                     selectSharePreviewComplete={true}
                     selectShareConfirmActive={true}
                     methodType={this.props.methodType}

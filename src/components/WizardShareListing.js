@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ShareListingMethod from '../components/ShareListingMethod';
 import ShareListingContacts from '../components/ShareListingContacts';
 import ShareListingAuth from '../components/ShareListingAuth';
+import ShareListingImages from '../components/ShareListingImages';
 import ShareListingPreview from '../components/ShareListingPreview';
 import ShareListingPreviewConstant from '../components/ShareListingPreviewConstant';
 import ShareListingConfirm from '../components/ShareListingConfirm';
@@ -23,6 +24,10 @@ export class WizardShareListing extends Component {
         this.handleShareAuthNext = this.handleShareAuthNext.bind(this);
         this.handleShareAuthCancel = this.handleShareAuthCancel.bind(this);
 
+        this.handleShareImageNext = this.handleShareImageNext.bind(this);
+        this.handleShareImageCancel = this.handleShareImageCancel.bind(this);
+        this.handleSelectImage = this.handleSelectImage.bind(this);
+
         this.handleSharePreviewNext = this.handleSharePreviewNext.bind(this);
         this.handleSharePreviewCancel = this.handleSharePreviewCancel.bind(this);
         this.handleShareSubjectChanged = this.handleShareSubjectChanged.bind(this);
@@ -36,6 +41,7 @@ export class WizardShareListing extends Component {
             showShareListingMethod: true,
             showShareListingContacts: false,
             showShareListingAuth: false,
+            showShareListingImage: false,
             showShareListingPreview: false,
             showShareListingPreviewConstant: false,
             showSHareListingConfirm: false,
@@ -43,7 +49,9 @@ export class WizardShareListing extends Component {
             methodType: shareMethodTypes.EMAILFC,
             user: null,
             subject: "Exclusive Listing",
-            body: null
+            body: null,
+            selectedImage: null,
+            selectedImageUrl: null
         };
     }
 
@@ -76,7 +84,7 @@ export class WizardShareListing extends Component {
 
     handleShareContactsNext(){
         this.setState({
-            showShareListingPreview: true,
+            showShareListingImage: true,
             showShareListingContacts: false
         });
     }
@@ -95,10 +103,8 @@ export class WizardShareListing extends Component {
     }
 
     handleShareAuthNext(accessToken, refreshToken){
-        console.log("accessToken: "+accessToken);
-        console.log("refreshToken: "+refreshToken);
         this.setState({
-            showShareListingPreviewConstant: true,
+            showShareListingImage: true,
             showShareListingAuth: false,
             accessToken: accessToken,
             refreshToken: refreshToken
@@ -109,6 +115,26 @@ export class WizardShareListing extends Component {
     handleShareAuthCancel(){
         this.setState({
             showShareListingAuth: false
+        });
+        this.props.onCancel();
+    }
+
+    handleShareImageNext(){
+        this.setState({
+            showShareListingPreview: true,
+            showShareListingImage: false
+        });
+    }
+
+    handleSelectImage(id, url){
+        this.setState({
+            selectedImage: id,
+            selectedImageUrl: url
+        });
+    }
+    handleShareImageCancel(){
+        this.setState({
+            showShareListingImage: false
         });
         this.props.onCancel();
     }
@@ -196,6 +222,16 @@ export class WizardShareListing extends Component {
                 onCancel={this.handleShareAuthCancel}
             />
             : null }
+            { this.state.showShareListingImage ?
+            <ShareListingImages
+                show={this.state.showShareListingImage}
+                onNext={this.handleShareImageNext}
+                onCancel={this.handleShareImageCancel}
+                selectedImage={this.state.selectedImage}
+                onSelectImage={this.handleSelectImage}
+            />
+            : null }
+
             { this.state.showShareListingPreview ?
             <ShareListingPreview
                 show={this.state.showShareListingPreview}
@@ -207,6 +243,7 @@ export class WizardShareListing extends Component {
                 user={this.state.user}
                 subject={this.state.subject}
                 onSubjectChange={this.handleShareSubjectChanged}
+                selectedImageUrl={this.state.selectedImageUrl}
             />
             : null }
             { this.state.showShareListingPreviewConstant ?
