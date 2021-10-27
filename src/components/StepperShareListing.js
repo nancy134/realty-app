@@ -33,14 +33,20 @@ class StepperShareListing extends React.Component {
                    <StepLabel>{contactsText}</StepLabel>
                </Step>
                <Step
+                   active={this.props.selectShareImageActive}
+                   completed={this.props.selectShareImageComplete}
+               >
+                   <StepLabel>Images</StepLabel>
+               </Step>
+               <Step
                    active={this.props.selectSharePreviewActive}
                    completed={this.props.selectSharePreviewComplete}
                >
                    <StepLabel>Preview</StepLabel>
                </Step>
                <Step
-                   active={this.props.selectConfirmActive}
-                   completed={this.props.selectConfirmComplete}
+                   active={this.props.selectShareConfirmActive}
+                   completed={this.props.selectShareConfirmComplete}
                >
                    <StepLabel>Confirmation</StepLabel>
                </Step>
