@@ -439,7 +439,6 @@ export function formatSizeAndPrice(spaces){
             } else {
        
                 minPrice = numberWithCommas(spaces[minPriceIndex].price);
-                console.log("minPrice: "+minPrice);
                 var maxPrice = numberWithCommas(spaces[maxPriceIndex].price);
                 var minPriceUnit = spaces[minPriceIndex].priceUnit;
                 var maxPriceUnit = spaces[maxPriceIndex].priceUnit;

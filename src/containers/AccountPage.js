@@ -6,7 +6,7 @@ import {
 } from 'react-bootstrap';
 import AccountToolbar from '../components/AccountToolbar';
 import AccountProfile from '../components/AccountProfile';
-import AccountPaymentMethod from '../components/AccountPaymentMethod';
+import AccountPaymentMethodStripe from '../components/AccountPaymentMethodStripe';
 import AccountAssociates from '../components/AccountAssociates';
 import AccountBilling from '../components/AccountBilling';
 import AccountSettings from '../components/AccountSettings';
@@ -166,7 +166,7 @@ export class AccountPage extends Component {
                 <AccountProfile />
                 ): null}
                 {tab === "billing" ? (
-                <AccountPaymentMethod /> 
+                <AccountPaymentMethodStripe /> 
                 ): null}
                 {tab === "associates" ? (
                 <AccountAssociates />
