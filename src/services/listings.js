@@ -232,8 +232,11 @@ export function deleteListingUser(listingVersionId, userId){
     });
 }
 
-export function getListingsAdmin(){
+export function getListingsAdmin(query){
     var url = process.env.REACT_APP_API + "admin/listingVersions";
+    if (query){
+        url += "?" + query;
+    }
     return new Promise(function(resolve, reject){
         var options = {
             url: url,
