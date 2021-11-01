@@ -113,27 +113,35 @@ export class Home extends Component {
         />
         : null }
         <div className="spacer">
-        <Row className="mx-auto" style={{width: '740px'}}>
-            <Col>
-                <h1>Find your commercial property</h1>
-            </Col>
-        </Row>
-        <Row className="mx-auto" style={{width: '740px'}}>
-          <ListingToolbar
-              buttonText="Search"
-              listingMode={"allListings"}
-              formatted_address={this.state.formatted_address}
-              onSearch={this.handleFindSpace}
-              showClearFiltersButton={false}
-              showReportViewButton={false}
-              showMoreFiltersButton={false}
-              showSpaceTypeButton={false}
-              searchMSize="auto"
-          />
-        </Row>
         </div>
+        <Row>
+            <Col xs={3}></Col>
+            <Col xs={6}>
+                <div className="background">
+                    <Row className="mx-auto" style={{width: '100%'}}>
+                        <Col>
+                            <h1>Find your commercial property</h1>
+                        </Col>
+                    </Row>
+                    <Row className="mx-auto" style={{width: '100%'}}>
+                        <ListingToolbar
+                            buttonText="Search"
+                            listingMode={"allListings"}
+                            formatted_address={this.state.formatted_address}
+                            onSearch={this.handleFindSpace}
+                            showClearFiltersButton={false}
+                            showReportViewButton={false}
+                            showMoreFiltersButton={false}
+                            showSpaceTypeButton={false}
+                            searchMSize="auto"
+                        />
+                    </Row>
+                </div>
+            </Col>
+            <Col xs={3}></Col>
+        </Row>
     </div>
-  );
+    );
   }
 }
 
