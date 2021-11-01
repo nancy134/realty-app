@@ -2,7 +2,8 @@ import React from 'react';
 import {
     Row,
     Col,
-    Image
+    Image,
+    Button
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -41,11 +42,22 @@ function Broker(props){
         return null
     } else {
     return(
-        <Row >
+        <div style={{ marginBottom: '15px' }}><Row>
             <Col md={2}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
             <Col md={4}>
                 <Row className="font-weight-bold">{user.first} {user.middle} {user.last}</Row>
-                <Row>{user.email}</Row>
+                <Row>
+                    <Button
+                    variant="link"
+                    size="sm"
+                    onClick={() => this.handlePolicyModalShow("contact")}
+                    >
+                    Email {user.first}
+                    </Button>
+                </Row>
+                <Row>
+                <a href={user.website}>{user.website}</a>            
+                </Row>
                 { user.officePhone ?
                 <Row>Office phone: {user.officePhone}</Row>
                 : null}
@@ -58,7 +70,7 @@ function Broker(props){
                 <Row>{user.address1}</Row>
                 <Row>{user.city}, {user.state} {user.zip}</Row>
             </Col>
-        </Row>
+        </Row></div>
     );
     }
 }
@@ -85,7 +97,7 @@ class ListingDetailBrokers extends React.Component {
             <div className="m-4 shadow border">
                 <Row className="mt-2 ml-0 mr-0">
                     <Col>
-                        <h3>Brokers { enableEdit && editMode === "edit" ?
+                        <h3>Contacts { enableEdit && editMode === "edit" ?
                             <EditButton 
                                 listing={listing}
                                 onSave={this.props.onSave}
