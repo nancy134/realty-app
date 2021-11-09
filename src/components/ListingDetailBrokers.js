@@ -10,7 +10,7 @@ import {
     faPencilAlt
 } from '@fortawesome/free-solid-svg-icons';
 import ListingEditBrokers from './ListingEditBrokers';
-
+import ContactModal from './ContactModal';
 function EditButton(props) {
     return (
         <span>
@@ -35,7 +35,6 @@ function EditButton(props) {
         </span>
   );
 }
-
 function Broker(props){
     var user = props.user;
     if (user.role === "Administrator" || user.role === "Client"){
@@ -50,7 +49,7 @@ function Broker(props){
                     <Button
                     variant="link"
                     size="sm"
-                    onClick={() => this.handlePolicyModalShow("contact")}
+                    onClick={() => props.onEmail(user.emai)}
                     >
                     Email {user.first}
                     </Button>
@@ -74,15 +73,23 @@ function Broker(props){
     );
     }
 }
-
 class ListingDetailBrokers extends React.Component {
     constructor(props){
         super(props);
         this.handleSave = this.handleSave.bind(this);
         this.getListing = this.getListing.bind(this);
+        this.handleEmail = this.handleEmail.bind(this);
+        this.state = {
+            showContactEmail: false
+        };
     }
     handleSave(listing){
         this.props.onListingUpdate(listing);
+    }
+    handleEmail(email){
+        this.setState({
+           showContactEmail: true
+        }); 
     }
     getListing(){
         this.props.getListing();
@@ -95,6 +102,14 @@ class ListingDetailBrokers extends React.Component {
         }
         return (
             <div className="m-4 shadow border">
+                { this.state.showContactEmail ?
+                <ContactModal
+                    listing={listing}
+                    show={this.state.showContactEmail}
+                    onHide={this.handleContactHide}
+                    onSendMessage={this.handleSendMessage}
+                />
+                : null }
                 <Row className="mt-2 ml-0 mr-0">
                     <Col>
                         <h3>Contacts { enableEdit && editMode === "edit" ?
@@ -119,6 +134,7 @@ class ListingDetailBrokers extends React.Component {
                             key={index}
                             index={index}
                             user={user}
+                            onEmail={this.handleEmail}
                         />
                         ))} 
                     </Col>
@@ -127,5 +143,4 @@ class ListingDetailBrokers extends React.Component {
         );
     }
 }
-
 export default ListingDetailBrokers;

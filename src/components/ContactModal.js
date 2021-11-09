@@ -27,6 +27,7 @@ class ContactModal extends React.Component {
         var client = "";
         if (email) client = email;
         var initialValues = {
+            subject: "Regarding [pull listing address]",
             client: client,
             message: ""
         };
@@ -58,13 +59,25 @@ class ContactModal extends React.Component {
             >
                 <Modal.Header>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        Contact 
+                        Contact [pull broker name]
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
+                    <Form.Row>
+                            <Form.Label>Subject</Form.Label>
+                            <Form.Control
+                                name="subject"
+                                type="text"
+                                value={values.subject}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                isInvalid={!!errors.subject}
+                                isValid={touched.subject && !errors.subject && values.subject !== ""}
+                            />
+                        </Form.Row>                        
                         <Form.Row>
-                            <Form.Label>Your email</Form.Label>
+                            <Form.Label>Your email address</Form.Label>
                             <Form.Control
                                 name="client"
                                 type="text"
