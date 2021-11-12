@@ -141,6 +141,8 @@ class AdminBilling extends React.Component {
                     icons={tableIcons}
                     columns={[
                         { title: 'Listing', field: 'ListingId'},
+                        { title: 'Start', field: 'start'},
+                        { title: 'End', field: 'end'},
                         { title: 'Days on Market', field: 'daysOnMarket'},
                         { title: 'Cost', field: 'cost'}
                     ]}
