@@ -439,7 +439,6 @@ export function formatSizeAndPrice(spaces){
             } else {
        
                 minPrice = numberWithCommas(spaces[minPriceIndex].price);
-                console.log("minPrice: "+minPrice);
                 var maxPrice = numberWithCommas(spaces[maxPriceIndex].price);
                 var minPriceUnit = spaces[minPriceIndex].priceUnit;
                 var maxPriceUnit = spaces[maxPriceIndex].priceUnit;
@@ -478,4 +477,43 @@ export function getDomain(hostname){
     }
     return domain;
 }
+
+export function formatName(user){
+    var name = ""
+    if (user.first && user.middle && user.last){
+        name = 
+            user.first + " " +
+            user.middle + " " +
+            user.last;
+    } else if (user.first && user.last){
+        name =
+            user.first + " " +
+            user.last;
+    } else if (user.last){
+        name = user.last;
+    } else if (user.first){
+        name = user.first;
+    } else {
+        var parts = user.email.split("@");
+        if (parts) name = parts[0]
+    }
+    return name;
+}
+
+export function formatNameList(users){
+    var nameList = ""
+    if (users && users.length > 0){
+        for (var i=0; i<users.length; i++){
+            var name = formatName(users[i]);
+            nameList += name;
+            if (i !== (users.length-1)){
+                nameList += ", ";
+            }
+ 
+        }
+    }
+    return nameList;
+}
+
+
 

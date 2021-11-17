@@ -78,8 +78,14 @@ class AccountBilling extends React.Component {
     }
 
     handleBillingCycleSelect(e){
-        this.setState({
-            selectedBillingCycle: e.target.value
+        var that = this;
+        billingService.getBillingEventsMe(e.target.value).then(function(billingEvents){
+            that.setState({
+                billingEvents: billingEvents.billingEvents.rows,
+                selectedBillingCycle: e.target.value 
+            });
+        }).catch(function(err){
+            console.log(err);
         });
     }
 
@@ -88,6 +94,7 @@ class AccountBilling extends React.Component {
         billingCycles = this.state.billingCycles.map((item, key) =>
             <option
                 key={key}
+                value={item.id}
             >
                 {item.startDate} - {item.endDate}
            </option>
@@ -99,6 +106,7 @@ class AccountBilling extends React.Component {
                     <Form.Label>Billing cycles</Form.Label>
                     <Form.Control
                         as="select"
+                        onChange={this.handleBillingCycleSelect}
                     >
                         {billingCycles}
                     </Form.Control>

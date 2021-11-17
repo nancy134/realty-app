@@ -86,11 +86,19 @@ class AdminBilling extends React.Component {
             console.log(err);
         });
     }
+
     handleBillingCycleSelect(e){
-        this.setState({
-            selectedBillingCycle: e.target.value
+        var that = this;
+        billingService.getBillingEvents(e.target.value).then(function(billingEvents){
+            that.setState({
+                billingEvents: billingEvents.billingEvents.rows,
+                selectedBillingCycle: e.target.value 
+            });
+        }).catch(function(err){
+            console.log(err);
         });
     }
+
     render(){
         var billingCycles = [];
         billingCycles = this.state.billingCycles.map((item, key) =>
@@ -133,6 +141,8 @@ class AdminBilling extends React.Component {
                     icons={tableIcons}
                     columns={[
                         { title: 'Listing', field: 'ListingId'},
+                        { title: 'Start', field: 'start'},
+                        { title: 'End', field: 'end'},
                         { title: 'Days on Market', field: 'daysOnMarket'},
                         { title: 'Cost', field: 'cost'}
                     ]}

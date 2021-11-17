@@ -21,7 +21,7 @@ function PropertyTypeList(props){
     var items = [];
     for (var i=0; i<props.propertyTypes.length; i++){
         if (i !== 0)
-            items.push(<span key={i}>, {props.propertyTypes[i]} </span>);
+            items.push(<span key={i}>, {props.propertyTypes[i]}</span>);
         else
             items.push(<span key={i}>{props.propertyTypes[i]}</span>);
     }
@@ -202,7 +202,7 @@ class ListingDetailOverview extends React.Component {
                 <Row className="pt-2 pb-3 ml-0 mr-0">
                     <Col md={12}>
 
-                        <span className="image-container float-right">
+                        <span className="ml-2 image-container float-right">
                         { hasImages ?
                         <ImageGallery
                           items={galleryImages}

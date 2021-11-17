@@ -11,6 +11,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import ListingEditBrokers from './ListingEditBrokers';
 import ContactModal from './ContactModal';
+import {formatName} from '../helpers/utilities';
+
 function EditButton(props) {
     return (
         <span>
@@ -40,6 +42,7 @@ function Broker(props){
     if (user.role === "Administrator" || user.role === "Client"){
         return null
     } else {
+    var userName = formatName(user);
     return(
         <div style={{ marginBottom: '15px' }}><Row>
             <Col md={2}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
@@ -47,9 +50,10 @@ function Broker(props){
                 <Row className="font-weight-bold">{user.first} {user.middle} {user.last}</Row>
                 <Row>
                     <Button
+                    className="pl-0"
                     variant="link"
                     size="sm"
-                    onClick={() => props.onEmail(user.emai)}
+                    onClick={() => props.onEmail(user.email, userName)}
                     >
                     Email {user.first}
                     </Button>
@@ -79,6 +83,8 @@ class ListingDetailBrokers extends React.Component {
         this.handleSave = this.handleSave.bind(this);
         this.getListing = this.getListing.bind(this);
         this.handleEmail = this.handleEmail.bind(this);
+        this.handleContactHide = this.handleContactHide.bind(this);
+        this.handleSendMessage = this.handleSendMessage.bind(this);
         this.state = {
             showContactEmail: false
         };
@@ -86,10 +92,28 @@ class ListingDetailBrokers extends React.Component {
     handleSave(listing){
         this.props.onListingUpdate(listing);
     }
-    handleEmail(email){
+    handleEmail(email, userName){
+      
+        console.log("email: "+email);
+        console.log("userName: "+userName);
         this.setState({
-           showContactEmail: true
+           showContactEmail: true,
+           toEmail: email,
+           toUserName: userName
         }); 
+    }
+    handleContactHide(){
+        this.setState({
+            showContactEmail: false
+        });
+    }
+    handleSendMessage(body){
+        body.toEmail = this.state.toEmail;
+        body.toUserName = this.state.toUserName;
+        this.props.onSendMessage(body);
+        this.setState({
+            showContactEmail: false
+        });
     }
     getListing(){
         this.props.getListing();
@@ -104,6 +128,8 @@ class ListingDetailBrokers extends React.Component {
             <div className="m-4 shadow border">
                 { this.state.showContactEmail ?
                 <ContactModal
+                    toEmail={this.state.toEmail}
+                    toUserName={this.state.toUserName}
                     listing={listing}
                     show={this.state.showContactEmail}
                     onHide={this.handleContactHide}
