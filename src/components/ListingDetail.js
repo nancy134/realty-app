@@ -942,6 +942,8 @@ class ListingDetail extends React.Component {
         });
     }
     handleSendMessage(body){
+        console.log("handleSendMessage()");
+        console.log(body);
         var that = this;
         body.ListingVersionId = this.props.listingDetail.listing.id;
         mailService.listingInquiry(body).then(function(result){
@@ -1228,6 +1230,7 @@ class ListingDetail extends React.Component {
                     brokerError={this.state.brokerError}
                     brokerSaving={this.state.brokerSaving}
                     associates={this.state.associates}
+                    onSendMessage={this.handleSendMessage}
                 />
                 <ListingDetailMap
                     markers={this.props.markers}
