@@ -62,6 +62,7 @@ class PublishWizardIntro extends React.Component{
                 });
                 that.props.onNext(userCode);
             }).catch(function(err){
+                console.log(err);
                 that.setState({
                     validPromoCode: false,
                     validateProgress: false,

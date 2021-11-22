@@ -2,7 +2,8 @@ import React from 'react';
 import {
     Modal,
     Form,
-    Button
+    Button,
+    Col
 } from 'react-bootstrap';
 import billingService from '../services/billing';
 
@@ -12,11 +13,17 @@ class AdminAddPromotionCode extends React.Component {
         this.state = {
             promotions: null,
             description: "",
-            selectedPromotion: 0
+            selectedPromotion: 0,
+            multiUse: false,
+            autoGenerate: true,
+            code: "" 
         };
         this.handlePromotionSelect = this.handlePromotionSelect.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+        this.handleAutoGenerateChange = this.handleAutoGenerateChange.bind(this);
+        this.handleMultiUseChange = this.handleMultiUseChange.bind(this);
+        this.handleCodeChange = this.handleCodeChange.bind(this);
     }
     componentDidMount(){
         var that = this;
@@ -44,13 +51,35 @@ class AdminAddPromotionCode extends React.Component {
         });
     }
 
+    handleCodeChange(e){
+        this.setState({
+            code: e.target.value
+        });
+    }
+
     handleSave(){
         var body = {
             PromotionId: this.state.selectedPromotion,
-            description: this.state.description
+            description: this.state.description,
+            multiUse: this.state.multiUse,
+            autoGenerate: this.state.autoGenerate,
+            code: this.state.code
         };
         this.props.onSave(body);
     }
+
+    handleAutoGenerateChange(e){
+        this.setState({
+            autoGenerate: e.target.checked
+        });
+    }
+
+    handleMultiUseChange(e){
+        this.setState({
+            multiUse: e.target.checked
+        });
+    }
+
     render(){
         var promotionList = null;
         if (this.state.promotions){
@@ -67,21 +96,75 @@ class AdminAddPromotionCode extends React.Component {
             </Modal.Header>
             <Modal.Body>
                 <Form>
-                    <Form.Label>Description</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Promotion code for abc@gmail.com"
-                        value={this.state.description}
-                        onChange={this.handleDescriptionChange}
-                    >
-                    </Form.Control>
-                    <Form.Label>Promotion</Form.Label>
-                    <Form.Control
-                        as="select"
-                        onChange={this.handlePromotionSelect}
-                    >
-                        {promotionList}
-                    </Form.Control>
+                    <Form.Row>
+                        <Form.Group as={Col} >
+                            <Form.Check
+                                onChange={this.handleAutoGenerateChange}
+                                type="checkbox"
+                                label="Auto-generate code"
+                                checked={this.state.autoGenerate}
+                            />
+                        </Form.Group>
+                    </Form.Row>
+
+                    { !this.state.autoGenerate ?
+                    <Form.Row>
+                        <Form.Group as={Col} >
+                            <Form.Label
+                                className="font-weight-bold"
+                            >Code</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder=""
+                                value={this.state.code}
+                                onChange={this.handleCodeChange}
+                            >
+                            </Form.Control>
+                        </Form.Group>
+                    </Form.Row>
+                    : null }
+
+                    <Form.Row>
+                        <Form.Group as={Col} >
+                            <Form.Label
+                                className="font-weight-bold"
+                            >Description</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Promotion code for abc@gmail.com"
+                                value={this.state.description}
+                                onChange={this.handleDescriptionChange}
+                            >
+                            </Form.Control>
+                        </Form.Group>
+                    </Form.Row>
+
+                    <Form.Row>
+                        <Form.Group as={Col} >
+                            <Form.Label
+                                className="font-weight-bold"
+                            >Promotion</Form.Label>
+                            <Form.Control
+                                as="select"
+                                onChange={this.handlePromotionSelect}
+                            >
+                               {promotionList}
+                            </Form.Control>
+                        </Form.Group>
+                    </Form.Row>
+
+                    <Form.Row>
+                        <Form.Group as={Col} >
+                            <Form.Check
+                                onChange={this.handleMultiUseChange}
+                                type="checkbox"
+                                label="Allow code to be used by multiple users"
+                                checked={this.state.multiUse}
+                            />
+                        </Form.Group>
+                    </Form.Row>
+
+
                 </Form>
             </Modal.Body>
             <Modal.Footer>

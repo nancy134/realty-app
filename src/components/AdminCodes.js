@@ -71,7 +71,10 @@ class AdminCodes extends React.Component {
         console.log(state);
         var that = this;
         var body = {
-            description: state.description
+            description: state.description,
+            autoGenerate: state.autoGenerate,
+            multiUse: state.multiUse,
+            code: state.code
         };
         billingService.createPromotionCode(state.PromotionId, body).then(function(result){
             console.log(result);
