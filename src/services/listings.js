@@ -1,5 +1,4 @@
 import rp from 'request-promise';
-import fetch from 'node-fetch';
 import axiosInstance from './axios';
 
 export function getAll(query, listingMode, cognitoId){
@@ -59,11 +58,10 @@ export function get(index){
     return new Promise(function(resolve, reject){
         var options = {
             method: 'GET',
-            uri: url,
-            json: true
+            url: url
         };
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
             reject(err.error);
         });
@@ -72,22 +70,17 @@ export function get(index){
 
 export function getEnumsPromise(){
     return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_LISTING_SERVICE+"enums"; 
         var options = {
             method: 'GET',
-            uri: process.env.REACT_APP_LISTING_SERVICE+"enums",
-            json: true
+            url: url
         };
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
             reject(err.error);
         });
     });
-}
-export function getEnums(cb){
-    var url = process.env.REACT_APP_LISTING_SERVICE+"enums";
-    return fetch(url, {
-    }).then(checkStatus).then(parseJSON).then(cb);
 }
 
 export function create(listing){
@@ -284,11 +277,10 @@ const listings = {
     getMarkers,
     create, 
     update, 
-    getEnums, 
     getEnumsPromise,
     publish, 
     unpublish, 
-    getSpaceTypes, 
+    getSpaceTypes,
     getListingTypes,
     deleteListing,
     deleteDraftListing,
