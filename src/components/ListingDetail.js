@@ -31,6 +31,7 @@ import ContactModal from './ContactModal';
 import {listingTypes} from '../constants/listingTypes';
 import userService from '../services/users';
 import condoService from '../services/condos';
+import { Helmet } from 'react-helmet';
 
 class ListingDetail extends React.Component {
     constructor(props) {
@@ -1003,10 +1004,15 @@ class ListingDetail extends React.Component {
         if (listing){
             listingType = listing.listingType;
         }
-        var showPortfolio = false;    
+        var showPortfolio = false;
+        var title = "FindingCRE Listing " + listing.listingType;
+
         if (showDetail){
             return (
             <div>
+                <Helmet>
+                    <title>{title}</title>
+                </Helmet>
                 { this.state.showContactModal ?
                 <ContactModal
                     listing={listing}

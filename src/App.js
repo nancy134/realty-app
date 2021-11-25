@@ -10,6 +10,7 @@ import AccountButton from './components/AccountButton';
 import authenticationService from './helpers/authentication';
 import userService from './services/users';
 import PolicyModal from './components/PolicyModal';
+import { Helmet } from 'react-helmet';
 
 class App extends React.Component {
   constructor(props){
@@ -125,6 +126,9 @@ class App extends React.Component {
   render(){
   return (
       <React.Fragment>
+      <Helmet>
+          <title>FindingCRE</title>
+      </Helmet>
       <div className="mycontainer">
           <PolicyModal
               show={this.state.showPolicyModal}

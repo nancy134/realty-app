@@ -31,6 +31,7 @@ import WizardAddListing from '../components/WizardAddListing';
 import { transitionTypes } from '../constants/transitionTypes';
 import tenantService from '../services/tenants';
 import condoService from '../services/condos';
+import { Helmet } from 'react-helmet';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -1459,6 +1460,9 @@ export class ListingPage extends Component {
         }
         return (
         <React.Fragment>
+            <Helmet>
+                <title>FingingCRE Listings</title>
+            </Helmet>
             <DeleteModal
                 id={this.state.deleteId}
                 show={this.state.showDeleteModal}

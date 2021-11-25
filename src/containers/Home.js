@@ -13,6 +13,7 @@ import WizardAddListing from '../components/WizardAddListing';
 import authenticationService from '../helpers/authentication';
 import listingService from '../services/listings';
 import ListingToolbar from '../components/ListingToolbar';
+import { Helmet } from 'react-helmet';
 
 export class Home extends Component { 
   constructor(props, context) {
@@ -102,6 +103,9 @@ export class Home extends Component {
   render(){
   return (
     <div className="ml-1 mr-1 home-filter bimage">
+        <Helmet>
+            <title>FindingCRE Home</title>
+        </Helmet>
         { this.props.showAddListingWizard ?
         <WizardAddListing
             loggedIn={this.props.loggedIn}
