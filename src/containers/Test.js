@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './Home.css';
 import {
 } from 'react-bootstrap';
-import { GoogleApiWrapper } from 'google-maps-react';
 
 export class Test extends Component { 
 
@@ -16,7 +15,4 @@ export class Test extends Component {
   );
   }
 }
-
-export default GoogleApiWrapper({
-    apiKey: 'AIzaSyB47KccZa8VRlzFuQJAvZ8UPembfW-3gq4'
-})(Test);
+export default Test;

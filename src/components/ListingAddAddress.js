@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import ListingMap from '../components/ListingMap';
+import ListingMapNew from '../components/ListingMapNew';
 import listingService from '../services/listings';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import geolocationService from '../helpers/geolocation';
@@ -513,7 +513,7 @@ class ListingAddAddress extends React.Component{
                     </Col>
                     <Col>
                         {this.state.bounds.lat0 ?
-                        <ListingMap
+                        <ListingMapNew
                             showDetail={showDetail}
                             markers={this.state.markers}
                             bounds={this.state.bounds}
@@ -521,7 +521,7 @@ class ListingAddAddress extends React.Component{
                             updateZoomLevel={this.state.updateZoomLevel}
                             center={this.state.center}
                             zoomLevel={this.state.zoomLevel}
-                            style={{width: '90%'}}
+                            style={{width: '90%', height: "100%", position: "absolute"}}
                         />
                         : null}
                     </Col>

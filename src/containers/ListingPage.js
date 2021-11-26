@@ -6,7 +6,7 @@ import {
     Button
 } from 'react-bootstrap';
 import './ListingPage.css';
-import ListingMap from '../components/ListingMap';
+import ListingMapNew from '../components/ListingMapNew';
 import Listings from '../components/Listings';
 import ReportListings from '../components/ReportListings';
 import ListingToolbar from '../components/ListingToolbar';
@@ -17,7 +17,6 @@ import authenticationService from '../helpers/authentication';
 import { CSSTransition } from 'react-transition-group';
 import DeleteModal from '../components/DeleteModal';
 import DeleteListingModal from '../components/DeleteListingModal';
-import { GoogleApiWrapper } from 'google-maps-react';
 import geolocationService from '../helpers/geolocation';
 import listService from '../services/lists';
 import listItemService from '../services/listItems';
@@ -1619,7 +1618,7 @@ export class ListingPage extends Component {
                     </CSSTransition>
                     : null }
                     { (this.state.readyForMap && !fullscreen) ?
-                    <ListingMap 
+                    <ListingMapNew
                         showDetail={showDetail}
                         markers={markers}
                         bounds={bounds}
@@ -1698,7 +1697,4 @@ export class ListingPage extends Component {
         );
     }
 }
-
-export default GoogleApiWrapper({
-    apiKey: 'AIzaSyB47KccZa8VRlzFuQJAvZ8UPembfW-3gq4'
-})(ListingPage);
+export default ListingPage;
