@@ -3,7 +3,8 @@ import {
     Row,
     Col
 } from 'react-bootstrap';
-import ListingMap from '../components/ListingMap';
+import ListingMapNew from '../components/ListingMapNew';
+
 
 class ListingDetailMap extends React.Component {
     constructor(props){
@@ -27,7 +28,7 @@ class ListingDetailMap extends React.Component {
             </Row>
             <Row className="pt-2 ml-0 mr-0">
                 <Col style={{margin: '10px', height: '300px'}}>
-                    <ListingMap
+                    <ListingMapNew
                         showDetail={showDetail}
                         markers={this.props.markers}
                         bounds={this.props.bounds}
@@ -35,7 +36,7 @@ class ListingDetailMap extends React.Component {
                         updateZoomLevel={this.state.updateZoomLevel}
                         center={this.state.center}
                         zoomLevel={this.state.zoomLevel}
-                        style={{width: '95%'}}
+                        style={{width: '95%', height: "100%", position: "absolute"}}
                         gestureHandling='cooperative'
                     />
                 </Col>
