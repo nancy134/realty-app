@@ -1,12 +1,8 @@
 import React from 'react';
 import {
-} from 'google-maps-react';
-
-import {
     GoogleMap,
     Marker,
-    InfoWindow,
-    useJsApiLoader
+    InfoWindow
 } from '@react-google-maps/api';
 
 import {
@@ -169,11 +165,12 @@ function MapItem(props) {
 }
 
 function MyMap(props) {
-
+    /*
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: "AIzaSyB47KccZa8VRlzFuQJAvZ8UPembfW-3gq4"
     })
+    */
     const [map, setMap] = React.useState(null)
     
     const onLoad = React.useCallback(function callback(map, props) {
@@ -217,7 +214,7 @@ function MyMap(props) {
     if (props.style) {
         style = props.style;
     }
-    return isLoaded ? (
+    return  (
         <GoogleMap
             mapContainerStyle={style}
             center={props.center}
@@ -231,7 +228,7 @@ function MyMap(props) {
             { displayMarkers(props) }
         <></>
         </GoogleMap>
-    ) : <></>
+    ); 
 }
 
 class ListingMapNew extends React.Component {

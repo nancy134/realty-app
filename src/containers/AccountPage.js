@@ -17,7 +17,6 @@ import WizardAddListing from '../components/WizardAddListing';
 import userService from '../services/users';
 import listingService from '../services/listings';
 import authenticationService from '../helpers/authentication';
-import { GoogleApiWrapper } from 'google-maps-react';
 
 export class AccountPage extends Component {
     constructor(props){
@@ -265,7 +264,4 @@ export class AccountPage extends Component {
         }
     }
 }
-
-export default GoogleApiWrapper({
-    apiKey: 'AIzaSyB47KccZa8VRlzFuQJAvZ8UPembfW-3gq4'
-})(AccountPage);
+export default AccountPage;

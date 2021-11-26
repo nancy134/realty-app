@@ -7,7 +7,6 @@ import {
 import {
     geocodeByAddress
 } from 'react-places-autocomplete';
-import { GoogleApiWrapper } from 'google-maps-react';
 import geolocationService from '../helpers/geolocation';
 import WizardAddListing from '../components/WizardAddListing';
 import authenticationService from '../helpers/authentication';
@@ -22,10 +21,12 @@ export class Home extends Component {
     this.handleAddListingFinish = this.handleAddListingFinish.bind(this);
     this.handleAddListingCancel = this.handleAddListingCancel.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
+
     this.state = {
         address: ''
     };
   }
+
   handleAddListingFinish(listing){
       var that = this;
       listing.owner = authenticationService.getUserEmail();
@@ -149,6 +150,4 @@ export class Home extends Component {
   }
 }
 
-export default GoogleApiWrapper({
-    apiKey: 'AIzaSyB47KccZa8VRlzFuQJAvZ8UPembfW-3gq4'
-})(Home);
+export default Home;
