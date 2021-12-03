@@ -13,6 +13,7 @@ import authenticationService from '../helpers/authentication';
 import listingService from '../services/listings';
 import ListingToolbar from '../components/ListingToolbar';
 import { Helmet } from 'react-helmet';
+import { getDomain } from '../helpers/utilities';
 
 export class Home extends Component { 
   constructor(props, context) {
@@ -102,10 +103,23 @@ export class Home extends Component {
   }
 
   render(){
+  var domain = getDomain(window.location.hostname);
+  var title = "";
+  if (domain === "findingcre"){
+      title = "FindingCRE Home";
+  }else if (domain === "sabresw"){
+      title = "SabreSW Home";
+  }else if (domain === "murbansw"){
+      title = "MurbanSW Home";
+  }else{
+      title = "Phowma Home";
+  }
+     
+
   return (
     <div className="ml-1 mr-1 home-filter bimage">
         <Helmet>
-            <title>FindingCRE Home</title>
+            <title>{title}</title>
         </Helmet>
         { this.props.showAddListingWizard ?
         <WizardAddListing
