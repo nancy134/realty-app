@@ -32,6 +32,7 @@ import {listingTypes} from '../constants/listingTypes';
 import userService from '../services/users';
 import condoService from '../services/condos';
 import { Helmet } from 'react-helmet';
+import { getDomain } from '../helpers/utilities';
 
 class ListingDetail extends React.Component {
     constructor(props) {
@@ -1005,8 +1006,17 @@ class ListingDetail extends React.Component {
             listingType = listing.listingType;
         }
         var showPortfolio = false;
-        var title = "FindingCRE Listing " + listing.listingType;
-
+        var domain = getDomain(window.location.hostname);
+        var title = "";
+        if (domain === "findingcre"){
+            title = "FindingCRE Listing " + listing.listingType;
+        }else if (domain === "sabresw"){
+            title = "SabreSW Listing " + listing.listingType;
+        }else if (domain === "murbansw"){
+            title = "MurbanSW Listing " + listing.listingType;
+        }else{
+            title = "Phowma Listing " + listing.listingType;
+        }
         if (showDetail){
             return (
             <div>

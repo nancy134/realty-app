@@ -25,8 +25,10 @@ class MapMarker extends React.Component {
     };
 
     onMarkerClick = (props) => {
+        console.log("props:");
+        console.log(props);
         this.setState({
-            showingInfoWindow: true
+            showingInfoWindow: true,
         });
     };
 
@@ -48,7 +50,7 @@ class MapMarker extends React.Component {
                 onLoad={this.onLoad}
                 position={this.props.position}
                 clickable
-                onClick={this.onMarkerClick}
+                onClick={() => this.onMarkerClick(this.props.listingId)}
              >
                 {this.state.showingInfoWindow === true && (
                 <InfoWindow
@@ -63,7 +65,7 @@ class MapMarker extends React.Component {
                         listingPrice={this.props.listingPrice}
                         images={this.props.images}
                         publishStatus={this.props.publishStatus}
-                        onViewListing={this.props.viewListing}
+                        onInfoWindowClick={this.props.onInfoWindowClick}
                     />
                </InfoWindow>
                )}
@@ -89,8 +91,9 @@ function displayMarkers(props){
                     listingPrice={marker.listingPrice}
                     images={marker.images}
                     publishStatus={marker.publishStatus}
-                    onClick={props.onMarkerClick}
+                    onClick={() => props.onMarkerClick(marker.id)}
                     position={{ lat: marker.location.coordinates[0], lng: marker.location.coordinates[1] }}
+                    onInfoWindowClick={props.onInfoWindowClick}
                 >
                 </MapMarker>
             } else {
@@ -155,7 +158,7 @@ function MapItem(props) {
                 variant="link"
                 size="sm"
                 className="p-0"
-                onClick={() => props.onInfoWindowClick(props.listing)}
+                onClick={() => props.onInfoWindowClick(props.listingId, props.publishStatus)}
             >
                 View Listing
             </Button>
@@ -258,13 +261,17 @@ class ListingMapNew extends React.Component {
         this.props.onShowDetailChange(e.target.value);
     }
 
+    /*
     onMarkerClick = (props, marker) => {
+        console.log("props:");
+        console.log(props);
         this.setState({
             activeMarker: marker,
             selectedPlace: props,
             showingInfoWindow: true
         });
     }
+    */
 
     onInfoWindowClose = () => {
         this.setState({
@@ -273,8 +280,10 @@ class ListingMapNew extends React.Component {
         });
     }
 
-    handleInfoWindowClick(selectedPlace){
-        this.props.onShowDetailChange(true, selectedPlace.listingId, selectedPlace.publishStatus);
+    handleInfoWindowClick(id, publishStatus){
+        console.log("id: "+ id);
+        console.log("publishStatus: "+publishStatus);
+        this.props.onShowDetailChange(true,id, publishStatus);
     }
     onMapClicked = () => {
         if (this.state.showingInfoWindow){
@@ -368,6 +377,7 @@ class ListingMapNew extends React.Component {
                     onZoomChanged={this.handleZoomChanged}
                     onDragEnd={this.handleDragEnd}
                     onLoad={this.handleLoad}
+                    onInfoWindowClick={this.handleInfoWindowClick}
                 >
                 </MyMap>
 
