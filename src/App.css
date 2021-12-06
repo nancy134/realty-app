@@ -13,10 +13,11 @@ body {
     flex-direction: column;
     overflow-x: hidden;
 }
+/*
 .mycontainer{
     flex: auto;
 }
-
+*/
 .profile-view {
     overflow-y: auto;
     overflow-x: hidden;

@@ -14,6 +14,8 @@ import listingService from '../services/listings';
 import ListingToolbar from '../components/ListingToolbar';
 import { Helmet } from 'react-helmet';
 import { getDomain } from '../helpers/utilities';
+import Features from '../components/Features';
+import ListingCards from '../components/ListingCards';
 
 export class Home extends Component { 
   constructor(props, context) {
@@ -117,6 +119,7 @@ export class Home extends Component {
      
 
   return (
+    <React.Fragment>
     <div className="ml-1 mr-1 home-filter bimage">
         <Helmet>
             <title>{title}</title>
@@ -160,6 +163,9 @@ export class Home extends Component {
             <Col xs={3}></Col>
         </Row>
     </div>
+    <Features />
+    <ListingCards />
+    </React.Fragment>
     );
   }
 }
