@@ -25,8 +25,6 @@ class MapMarker extends React.Component {
     };
 
     onMarkerClick = (props) => {
-        console.log("props:");
-        console.log(props);
         this.setState({
             showingInfoWindow: true,
         });
@@ -217,9 +215,22 @@ function MyMap(props) {
     if (props.style) {
         style = props.style;
     }
+
+    var gestureHandling = "auto";
+    var zoomControl = true;
+    if (props.boundsChanging){
+        gestureHandling = "none";
+        zoomControl = false;
+    }
+
+    var mapOptions = {
+        gestureHandling: gestureHandling,
+        zoomControl: zoomControl
+    };
     return  (
         <GoogleMap
             mapContainerStyle={style}
+            options={mapOptions}
             center={props.center}
             zoom={props.zoomLevel}
             onLoad={(map) => onLoad(map, props)}
@@ -261,18 +272,6 @@ class ListingMapNew extends React.Component {
         this.props.onShowDetailChange(e.target.value);
     }
 
-    /*
-    onMarkerClick = (props, marker) => {
-        console.log("props:");
-        console.log(props);
-        this.setState({
-            activeMarker: marker,
-            selectedPlace: props,
-            showingInfoWindow: true
-        });
-    }
-    */
-
     onInfoWindowClose = () => {
         this.setState({
             activeMarker: null,
@@ -281,8 +280,6 @@ class ListingMapNew extends React.Component {
     }
 
     handleInfoWindowClick(id, publishStatus){
-        console.log("id: "+ id);
-        console.log("publishStatus: "+publishStatus);
         this.props.onShowDetailChange(true,id, publishStatus);
     }
     onMapClicked = () => {

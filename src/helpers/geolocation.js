@@ -118,6 +118,27 @@ export function addPoint(bounds, point){
     return newBounds;
 }
 
+export function isEqualBounds(bounds1, bounds2){
+
+   if (
+       bounds1.lat0 !== bounds2.lat0 ||
+       bounds1.lng0 !== bounds2.lng0 ||
+       bounds1.lat1 !== bounds2.lat1 ||
+       bounds1.lng1 !== bounds2.lng1
+   ){
+       return false;
+   } else {
+       return true;
+   }
+   
+}
+
+export function isEqualCenter(center1, center2){
+    if (!center1 || !center2) return false;
+    if (center1.equals(center2)) return true;
+    else return false;
+}
+
 const geolocation = {
     geocodeByAddr,
     getVerifiedAddresses,
@@ -125,6 +146,8 @@ const geolocation = {
     addPoint,
     getDefaultLocation,
     getSavedLocation,
-    saveLocation
+    saveLocation,
+    isEqualBounds,
+    isEqualCenter
 };
 export default geolocation;

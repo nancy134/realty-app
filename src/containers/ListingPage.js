@@ -232,6 +232,7 @@ export class ListingPage extends Component {
             },
             readyForMap: false,
             updateBounds: true,
+            boundsChanging: false,
        
 
             // Detail Map
@@ -1114,29 +1115,64 @@ export class ListingPage extends Component {
     }
 
     handleBoundsChange(bounds, center, zoomLevel){
-        var localState = {
-            listingMode: this.state.listingMode,
-            page: 1,
-            updateBounds: false,
-        };
+        if (this.state.boundsChanging) return;
 
+        var geometryChanged = true;
+        var boundsEqual = false;
+        var centerEqual = false;
+        var zoomEqual = false;
+
+        // Check for change in geometry
         if (this.state.listingMode === "allListings"){
-            localState.bounds = bounds;
-            localState.center = center;
-            localState.zoomLevel = zoomLevel;
+            boundsEqual = geolocationService.isEqualBounds(this.state.bounds, bounds);
+            centerEqual = geolocationService.isEqualCenter(this.state.center, center);
+            if (this.state.zoomLevel === zoomLevel) zoomEqual = true;
+            if (
+                boundsEqual &&
+                centerEqual &&
+                zoomEqual
+            ) geometryChanged = false;
         }
         if (this.state.listingMode === "myListings" || this.state.listingMode === "embedListings"){
-            localState.myListingsMap = {};
-            localState.myListingsMap.bounds = bounds;
-            localState.myListingsMap.center = center;
-            localState.myListingsMap.zoomLevel = zoomLevel;
+            boundsEqual = geolocationService.isEqualBounds(this.state.myListingsMap.bounds, bounds);
+            centerEqual = geolocationService.isEqualCenter(this.state.myListingsMap.center, center);
+            if (this.state.myListingsMap.zoomLevel === zoomLevel) zoomEqual = true;
+            if (
+                boundsEqual &&
+                centerEqual &&
+                zoomEqual
+            ) geometryChanged = false;
         }
-        var that = this;
-        this.fetchListingsPromise(localState).then(function(localState){
-            that.setState(localState);
-        }).catch(function(err){
-            console.log(err);
-        });
+        if (geometryChanged || this.state.updateBounds){
+            this.setState({
+                boundsChanging: true
+            });
+
+            var localState = {
+                listingMode: this.state.listingMode,
+                page: 1,
+                updateBounds: false,
+                boundsChanging: false
+            };
+
+            if (this.state.listingMode === "allListings"){
+                localState.bounds = bounds;
+                localState.center = center;
+                localState.zoomLevel = zoomLevel;
+            }
+            if (this.state.listingMode === "myListings" || this.state.listingMode === "embedListings"){
+                localState.myListingsMap = {};
+                localState.myListingsMap.bounds = bounds;
+                localState.myListingsMap.center = center;
+                localState.myListingsMap.zoomLevel = zoomLevel;
+            }
+            var that = this;
+            this.fetchListingsPromise(localState).then(function(localState){
+                that.setState(localState);
+            }).catch(function(err){
+                console.log(err);
+            });
+        }
     }
 
     // Reports
@@ -1641,6 +1677,7 @@ export class ListingPage extends Component {
                         center={center}
                         zoomLevel={zoomLevel}
                         onShowDetailChange={this.handleShowDetailChange}
+                        boundsChanging={this.state.boundsChanging}
                     />
                     : null }
                 </Col>
