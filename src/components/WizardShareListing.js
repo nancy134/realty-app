@@ -5,6 +5,7 @@ import ShareListingAuth from '../components/ShareListingAuth';
 import ShareListingImages from '../components/ShareListingImages';
 import ShareListingPreview from '../components/ShareListingPreview';
 import ShareListingPreviewConstant from '../components/ShareListingPreviewConstant';
+import ShareListingFacebook from '../components/ShareListingFacebook';
 import ShareListingConfirm from '../components/ShareListingConfirm';
 import {shareMethodTypes} from '../constants/shareMethodTypes';
 import userService from '../services/users';
@@ -35,6 +36,9 @@ export class WizardShareListing extends Component {
         this.handleSharePreviewConstantNext = this.handleSharePreviewConstantNext.bind(this);
         this.handleSharePreviewConstantCancel = this.handleSharePreviewConstantCancel.bind(this);
 
+        this.handleShareFacebookNext = this.handleShareFacebookNext.bind(this);
+        this.handleShareFacebookCancel = this.handleShareFacebookCancel.bind(this);
+
         this.handleShareConfirmNext = this.handleShareConfirmNext.bind(this);
 
         this.state = {
@@ -44,6 +48,7 @@ export class WizardShareListing extends Component {
             showShareListingImage: false,
             showShareListingPreview: false,
             showShareListingPreviewConstant: false,
+            showShareListingFacebook: false,
             showSHareListingConfirm: false,
             contactsSelected: [],
             methodType: shareMethodTypes.EMAILFC,
@@ -60,6 +65,11 @@ export class WizardShareListing extends Component {
             this.setState({
                 showShareListingMethod: false,
                 showShareListingContacts: true
+            });
+        } else if (this.state.methodType === shareMethodTypes.FACEBOOK){
+            this.setState({
+                showShareListingMethod: false,
+                showShareListingFacebook: true
             });
         } else {
             this.setState({
@@ -175,6 +185,19 @@ export class WizardShareListing extends Component {
         this.props.onCancel();
     }
 
+    handleShareFacebookNext(){
+        this.setState({
+            showShareFacebook: false,
+            showShareListingConfirm: true
+        });
+    }
+
+    handleShareFacebookCancel(){
+        this.setState({
+            showShareFacebok: false
+        });
+    }
+
     handleShareConfirmNext(){
         this.setState({
             showShareListingConfirm: false
@@ -202,6 +225,11 @@ export class WizardShareListing extends Component {
                 onCancel={this.handleShareMethodCancel}
                 onShareMethodChange={this.handleShareMethodChange}
                 methodType={this.state.methodType}
+            />
+            : null }
+            { this.state.showShareListingFacebook ?
+            <ShareListingFacebook
+                show={this.state.showShareListingFacebook}
             />
             : null }
             { this.state.showShareListingContacts ?
