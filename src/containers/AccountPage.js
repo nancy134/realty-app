@@ -17,6 +17,8 @@ import WizardAddListing from '../components/WizardAddListing';
 import userService from '../services/users';
 import listingService from '../services/listings';
 import authenticationService from '../helpers/authentication';
+import { Helmet } from 'react-helmet';
+import { getTitlePrefix } from '../helpers/utilities';
 
 export class AccountPage extends Component {
     constructor(props){
@@ -139,6 +141,10 @@ export class AccountPage extends Component {
         });
     }
     render(){
+        // title
+        var title  = getTitlePrefix(window.location.hostname);
+        title += " - Account";
+
         var tab = this.state.tab;
         if (this.state.loading || this.props.loading){
             return(
@@ -150,6 +156,9 @@ export class AccountPage extends Component {
         if (this.props.loggedIn && !this.state.token){
             return(
             <React.Fragment>
+                <Helmet>
+                    <title>{title}</title>
+                </Helmet>
                 { this.props.showAddListingWizard ?
                 <WizardAddListing
                     loggedIn={this.props.loggedIn}

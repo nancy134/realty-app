@@ -11,6 +11,7 @@ import authenticationService from './helpers/authentication';
 import userService from './services/users';
 import PolicyModal from './components/PolicyModal';
 import { Helmet } from 'react-helmet';
+import { getTitlePrefix } from './helpers/utilities';
 
 class App extends React.Component {
   constructor(props){
@@ -124,10 +125,13 @@ class App extends React.Component {
       });
   }
   render(){
+  // title
+  var title  = getTitlePrefix(window.location.hostname);
+
   return (
       <React.Fragment>
       <Helmet>
-          <title>FindingCRE</title>
+          <title>{title}</title>
       </Helmet>
       <div className="mycontainer">
           <PolicyModal

@@ -515,5 +515,19 @@ export function formatNameList(users){
     return nameList;
 }
 
+export function getTitlePrefix(hostName){
+    var domain = getDomain(hostName);
+    var title = "";
+    if (domain === "findingcre"){
+        title = "FindingCRE";
+    }else if (domain === "sabresw"){
+        title = "SabreSW";
+    }else if (domain === "murbansw"){
+        title = "MurbanSW";
+    }else{
+        title = "Phowma";
+    }
+    return(title);    
+}
 
 

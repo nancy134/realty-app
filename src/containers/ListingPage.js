@@ -31,7 +31,7 @@ import { transitionTypes } from '../constants/transitionTypes';
 import tenantService from '../services/tenants';
 import condoService from '../services/condos';
 import { Helmet } from 'react-helmet';
-import { getDomain } from '../helpers/utilities';
+import { getTitlePrefix } from '../helpers/utilities';
 
 export class ListingPage extends Component {
     constructor(props){
@@ -1438,17 +1438,9 @@ export class ListingPage extends Component {
     render() {
 
         // title
-        var domain = getDomain(window.location.hostname);
-        var title = "";
-        if (domain === "findingcre"){
-            title = "FindingCRE Listings";
-        }else if (domain === "sabresw"){
-            title = "SabreSW Listings";
-        }else if (domain === "murbansw"){
-            title = "MurbanSW Listings";
-        }else{
-            title = "Phowma Listings";
-        }
+        var title  = getTitlePrefix(window.location.hostname);
+        title += " - Listings";
+
         var showDetail = this.state.showDetail;
         var index = this.state.index;
         var editMode = this.state.editMode;
