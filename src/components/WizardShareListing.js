@@ -4,6 +4,7 @@ import ShareListingContacts from '../components/ShareListingContacts';
 import ShareListingAuth from '../components/ShareListingAuth';
 import ShareListingImages from '../components/ShareListingImages';
 import ShareListingPreview from '../components/ShareListingPreview';
+import ShareListingsPreview from '../components/ShareListingsPreview';
 import ShareListingPreviewConstant from '../components/ShareListingPreviewConstant';
 import ShareListingFacebook from '../components/ShareListingFacebook';
 import ShareListingConfirm from '../components/ShareListingConfirm';
@@ -47,6 +48,7 @@ export class WizardShareListing extends Component {
             showShareListingAuth: false,
             showShareListingImage: false,
             showShareListingPreview: false,
+            showShareListingsPreview: false,
             showShareListingPreviewConstant: false,
             showShareListingFacebook: false,
             showSHareListingConfirm: false,
@@ -130,10 +132,17 @@ export class WizardShareListing extends Component {
     }
 
     handleShareImageNext(){
-        this.setState({
-            showShareListingPreview: true,
-            showShareListingImage: false
-        });
+        if (this.props.listing){
+            this.setState({
+                showShareListingPreview: true,
+                showShareListingImage: false
+            });
+        } else if (this.props.listings){
+            this.setState({
+                showShareListingsPreview: true,
+                showShareListingImage: false
+            });
+        }
     }
 
     handleSelectImage(id, url){
@@ -274,6 +283,21 @@ export class WizardShareListing extends Component {
                 selectedImageUrl={this.state.selectedImageUrl}
             />
             : null }
+            { this.state.showShareListingsPreview ?
+            <ShareListingsPreview
+                show={this.state.showShareListingsPreview}
+                onNext={this.handleSharePreviewNext}
+                onCancel={this.handleSharePreviewCancel}
+                listings={this.props.listings}
+                methodType={this.state.methodType}
+                contactsSelected={this.state.contactsSelected}
+                user={this.state.user}
+                subject={this.state.subject}
+                onSubjectChange={this.handleShareSubjectChanged}
+                selectedImageUrl={this.state.selectedImageUrl}
+            />
+            : null }
+
             { this.state.showShareListingPreviewConstant ?
             <ShareListingPreviewConstant
                 show={this.state.showShareListingPreviewConstant}

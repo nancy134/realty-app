@@ -12,7 +12,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faTrash,
-    faPencilAlt
+    faPencilAlt,
+    faShare
 } from '@fortawesome/free-solid-svg-icons';
 import {
     faFilePdf
@@ -20,6 +21,8 @@ import {
 import ListingPagination from '../components/ListingPagination';
 import ListingItem from '../components/ListingItem';
 import DeleteModal from '../components/DeleteModal';
+import WizardShareListing from '../components/WizardShareListing';
+
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -46,6 +49,15 @@ function Toolbar(props){
                     <FontAwesomeIcon icon={faFilePdf} />&nbsp;Detail
                 </Button>
             </Col>
+            <Col>
+                <Button
+                    size="sm"
+                    onClick={props.onReportListShare}
+                >
+                    <FontAwesomeIcon icon={faShare} />&nbsp;Share
+                </Button>
+            </Col>
+
             <Col>
                 <ListingPagination
                     page={props.page}
@@ -187,11 +199,15 @@ class ReportListings extends React.Component {
         this.handleDeleteListModalHide = this.handleDeleteListModalHide.bind(this);
         this.handleDeleteList = this.handleDeleteList.bind(this);
 
+        // Share
+        this.handleReportListShare = this.handleReportListShare.bind(this);
+
         this.state = {
             listName: "",
             list: {},
             dialogMode: "add",
-            deleteMessage: ""
+            deleteMessage: "",
+            showShareListingWizard: false
         };
     }
     handleAddListStart(){
@@ -287,6 +303,12 @@ class ReportListings extends React.Component {
             "?reportType=summary";
         window.open(url, "_blank");
     }
+
+    handleReportListShare(){
+        this.setState({
+            showShareListingWizard: true
+        });
+    }
     render() {
         if (this.props.lists.length > 0){
 
@@ -305,6 +327,16 @@ class ReportListings extends React.Component {
 
         return (
         <div>
+
+            { this.state.showShareListingWizard ?
+            <WizardShareListing
+                listings={listings}
+                start={this.state.showShareListingWizard}
+                onCancel={this.props.onCancelShareWizard}
+                onFinish={this.props.onFinishShareWizard}
+            />
+            : null }
+
             { this.props.showAddListModal ?
             <AddListModal
                 show={this.props.showAddListModal}
@@ -338,6 +370,7 @@ class ReportListings extends React.Component {
                     listingMode={this.props.listingMode}
                     onReportListDetail={this.handleReportListDetail}
                     onReportListSummary={this.handleReportListSummary}
+                    onReportListShare={this.handleReportListShare}
                 />
                 <Dropdown className="pt-2">
                     <Dropdown.Toggle
