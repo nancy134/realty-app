@@ -1,4 +1,3 @@
-import rp from 'request-promise';
 import axiosInstance from './axios';
 
 export function getAll(query, listingMode, cognitoId){
@@ -104,14 +103,13 @@ export function update(data,cb){
     return new Promise(function(resolve, reject){
         var options = {
             method: 'PUT',
-            uri: url,
-            json: true,
-            body: data
+            url: url,
+            data: data
         };
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
-            reject(err.error);
+            reject(err);
         });
     });
 }
@@ -151,13 +149,12 @@ export function deleteListing(id){
     return new Promise(function(resolve, reject){
         var options = {
             method: 'delete',
-            uri: url,
-            json: true
+            url: url
         };
-        rp(options).then(function(parsedBody){
-           resolve(parsedBody);
+        axiosInstance(options).then(function(result){
+           resolve(result.data);
         }).catch(function(err){
-           reject(err.error);
+           reject(err);
         });
     });
 }
@@ -167,13 +164,12 @@ export function deleteDraftListing(id){
     return new Promise(function(resolve, reject){
         var options = {
             method: 'delete',
-            uri: url,
-            json: true
+            url: url
         };
-        rp(options).then(function(parsedBody){
-           resolve(parsedBody);
+        axiosInstance(options).then(function(result){
+           resolve(result.data);
         }).catch(function(err){
-           reject(err.error);
+           reject(err);
         });
     });
 }
@@ -183,13 +179,12 @@ export function findAddress(address, city, state, owner){
     return new Promise(function(resolve, reject){
         var options = {
             method: 'GET',
-            uri: url,
-            json: true
+            url: url
         };
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
-            reject(err.error);
+            reject(err);
         });
     });
 }

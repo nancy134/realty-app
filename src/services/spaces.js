@@ -1,4 +1,4 @@
-var rp = require('request-promise');
+import axiosInstance from './axios';
 
 export function getAll(query,cb){
     var url = "";
@@ -21,14 +21,13 @@ export function createPromise(space){
     return new Promise(function(resolve, reject){
         var options = {
             method: 'POST',
-            uri: process.env.REACT_APP_LISTING_SERVICE+"spaces",
-            body: space,
-            json: true
+            url: process.env.REACT_APP_LISTING_SERVICE+"spaces",
+            data: space
         }
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
-            reject(err.error);
+            reject(err);
         });
     });
 }
@@ -37,14 +36,13 @@ export function updatePromise(data){
     return new Promise(function(resolve, reject){
         var options = {
             method: 'PUT',
-            uri: process.env.REACT_APP_LISTING_SERVICE+"spaces/"+data.id,
-            body: data,
-            json: true
+            url: process.env.REACT_APP_LISTING_SERVICE+"spaces/"+data.id,
+            data: data
          };
-         rp(options).then(function(parsedBody){
-             resolve(parsedBody);
+         axiosInstance(options).then(function(result){
+             resolve(result.data);
          }).catch(function(err){
-             reject(err.error);
+             reject(err);
          });
     });
 }
@@ -53,11 +51,10 @@ export function deletePromise(id){
     return new Promise(function(resolve, reject){
         var options = {
             method: 'DELETE',
-            uri: process.env.REACT_APP_LISTING_SERVICE+"spaces/"+id,
-            json: true
+            url: process.env.REACT_APP_LISTING_SERVICE+"spaces/"+id
         };
-        rp(options).then(function(result){
-            resolve(result);
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
             reject(err);
         });

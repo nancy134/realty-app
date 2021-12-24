@@ -1,4 +1,4 @@
-var rp = require('request-promise');
+import axiosInstance from './axios';
 
 var uploadProgress = {};
 export function uploadFiles(imagesToAdd, table, id, progressCB) {
@@ -71,12 +71,11 @@ export function update(data){
     return new Promise(function(resolve, reject){
         var options = {
             method: 'PUT',
-            uri: process.env.REACT_APP_LISTING_SERVICE+"images/"+data.id,
-            body: data,
-            json: true
+            url: process.env.REACT_APP_LISTING_SERVICE+"images/"+data.id,
+            data: data
         };
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
             reject(err.error);
         });
@@ -88,11 +87,10 @@ export function deletePromise(id)
     return new Promise(function(resolve, reject){
         var options = {
             method: 'DELETE',
-            uri: process.env.REACT_APP_LISTING_SERVICE+"images/"+id,
-            json: true
+            url: process.env.REACT_APP_LISTING_SERVICE+"images/"+id
         };
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
             reject(err.error);
         });

@@ -1,20 +1,20 @@
 import axiosInstance from './axios';
-var rp = require('request-promise');
 
 export function signin(params){
     return new Promise(function(resolve, reject){
         var url = process.env.REACT_APP_API+"signin";
         var options = {
             method: 'POST',
-            uri: url,
-            body: params,
-            json: true
+            url: url,
+            data: params
         };
-        rp(options).then(function(resp){
-            resolve(resp);
+        axiosInstance(options).then(function(resp){
+            resolve(resp.data);
         }).catch(function(err){
-            if (err && err.response && err.response.body){
-                reject(err.response.body);
+            console.log(err);
+            console.log(err.response.data);
+            if (err && err.response && err.response.data){
+                reject(err.response.data);
             } else {
                 reject(err);
             }
@@ -27,15 +27,14 @@ export function refreshToken(params){
         var url = process.env.REACT_APP_API + "refreshToken";
         var options = {
             method: 'POST',
-            uri: url,
-            body: params,
-            json: true
+            url: url,
+            data: params
         };
-        rp(options).then(function(resp){
-            resolve(resp);
+        axiosInstance(options).then(function(resp){
+            resolve(resp.data);
         }).catch(function(err){
-            if (err && err.response && err.response.body){
-                reject(err.response.body);
+            if (err && err.response && err.response.data){
+                reject(err.response.data);
             } else {
                 reject(err);
             }
@@ -48,15 +47,14 @@ export function signup(params){
         var url = process.env.REACT_APP_API+"signup";
         var options = {
             method: 'POST',
-            uri: url,
-            body: params,
-            json: true
+            url: url,
+            data: params
         };
-        rp(options).then(function(resp){
-            resolve(resp);
+        axiosInstance(options).then(function(resp){
+            resolve(resp.data);
         }).catch(function(err){
-            if (err && err.response && err.response.body){
-                reject(err.response.body);
+            if (err && err.response && err.response.data){
+                reject(err.response.data);
             } else {
                 reject(err);
             }
@@ -69,15 +67,14 @@ export function confirm(params){
         var url = process.env.REACT_APP_API+"confirmSignUp";
         var options = {
             method: 'POST',
-            uri: url,
-            body: params,
-            json: true
+            url: url,
+            data: params
         };
-        rp(options).then(function(resp){
-            resolve(resp);
+        axiosInstance(options).then(function(resp){
+            resolve(resp.data);
         }).catch(function(err){
-            if (err && err.response && err.response.body){
-                reject(err.response.body);
+            if (err && err.response && err.response.data){
+                reject(err.response.data);
             } else {
                 reject(err);
             }
@@ -90,12 +87,11 @@ export function resendConfirmationCode(params){
         var url = process.env.REACT_APP_API+"resendConfirmationCode";
         var options = {
             method: 'POST',
-            uri: url,
-            body: params,
-            json: true
+            url: url,
+            data: params
         };
-        rp(options).then(function(resp){
-            resolve(resp);
+        axiosInstance(options).then(function(resp){
+            resolve(resp.data);
         }).catch(function(err){
             reject(err);
         });
@@ -107,15 +103,14 @@ export function forgotPassword(params){
         var url = process.env.REACT_APP_API+"forgotPassword";
         var options = {
             method: 'POST',
-            uri: url,
-            body: params,
-            json: true
+            url: url,
+            data: params
         };
-        rp(options).then(function(resp){
-            resolve(resp);
+        axiosInstance(options).then(function(resp){
+            resolve(resp.data);
         }).catch(function(err){
-            if (err && err.response && err.response.body){
-                reject(err.response.body);
+            if (err && err.response && err.response.data){
+                reject(err.response.data);
             } else {
                 reject(err);
             }
@@ -128,15 +123,14 @@ export function confirmForgotPassword(params){
         var url = process.env.REACT_APP_API + "confirmForgotPassword";
         var options = {
             method: 'POST',
-            uri: url,
-            body: params,
-            json: true
+            url: url,
+            data: params
         };
-        rp(options).then(function(resp){
+        axiosInstance(options).then(function(resp){
             resolve(resp);
         }).catch(function(err){
-            if (err && err.response && err.response.body){
-                reject(err.response.body);
+            if (err && err.response && err.response.data){
+                reject(err.response.data);
             } else {
                 reject(err);
             }

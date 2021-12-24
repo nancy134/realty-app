@@ -1,4 +1,4 @@
-var rp = require('request-promise');
+var axios = require('axios');
 
 var uploadProgress = {};
 export function uploadFiles(imagesToAdd, table, id, name, progressCB) {
@@ -73,12 +73,11 @@ export function updateFile(data){
     return new Promise(function(resolve, reject){
         var options = {
             method: 'PUT',
-            uri: process.env.REACT_APP_LISTING_SERVICE+"attachments/"+data.id,
-            body: data,
-            json: true
+            url: process.env.REACT_APP_LISTING_SERVICE+"attachments/"+data.id,
+            data: data
         };
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
+        axios(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
             reject(err.error);
         });
@@ -90,11 +89,10 @@ export function deleteFile(id)
     return new Promise(function(resolve, reject){
         var options = {
             method: 'DELETE',
-            uri: process.env.REACT_APP_LISTING_SERVICE+"attachments/"+id,
-            json: true
+            url: process.env.REACT_APP_LISTING_SERVICE+"attachments/"+id
         };
-        rp(options).then(function(parsedBody){
-            resolve(parsedBody);
+        axios(options).then(function(result){
+            resolve(result.data);
         }).catch(function(err){
             reject(err.error);
         });
