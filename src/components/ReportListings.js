@@ -25,11 +25,16 @@ import WizardShareListing from '../components/WizardShareListing';
 
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import {getDomain} from '../helpers/utilities';
 
 const ReportSchema = Yup.object().shape({
     name: Yup.string().max(20).required()
 });
+
 function Toolbar(props){
+    var domain = getDomain(window.location.hostname);
+    var showShareButton = true;
+    if (domain === "findingcre") showShareButton = false; 
     return(
     <div className="pt-1">
         <Row>
@@ -49,6 +54,7 @@ function Toolbar(props){
                     <FontAwesomeIcon icon={faFilePdf} />&nbsp;Detail
                 </Button>
             </Col>
+            { showShareButton ?
             <Col>
                 <Button
                     size="sm"
@@ -57,7 +63,7 @@ function Toolbar(props){
                     <FontAwesomeIcon icon={faShare} />&nbsp;Share
                 </Button>
             </Col>
-
+            : null }
             <Col>
                 <ListingPagination
                     page={props.page}

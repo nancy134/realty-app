@@ -116,8 +116,10 @@ export class Home extends Component {
   }else{
       title = "Phowma Home";
   }
+  var domain = getDomain(window.location.hostname);
+  var showListingCards = true;
+  if (domain === "findingcre") showListingCards = false;
      
-
   return (
     <React.Fragment>
     <div className="ml-1 mr-1 home-filter bimage">
@@ -164,7 +166,9 @@ export class Home extends Component {
         </Row>
     </div>
     <Features />
+    { showListingCards ?
     <ListingCards />
+    : null }
     </React.Fragment>
     );
   }
