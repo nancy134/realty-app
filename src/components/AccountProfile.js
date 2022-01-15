@@ -221,7 +221,7 @@ class AccountProfile extends React.Component{
                 }) => (
                     <Form className="p-5 profile">
                     <Row><Col>
-                        <Form.Row>
+                            <Row>
                             <Form.Group as={Col} xs={4}>
                                 <Form.Label
                                     className="font-weight-bold"
@@ -267,8 +267,8 @@ class AccountProfile extends React.Component{
                                     disabled={isSubmitting}
                                 />
                             </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
+                            </Row>
+                            <Row>
                             <Form.Group as={Col} xs={10}>
                                 <Form.Label
                                     className="font-weight-bold"
@@ -284,8 +284,8 @@ class AccountProfile extends React.Component{
                                     disabled={isSubmitting}
                                 />
                             </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
+                            </Row>
+                            <Row>
                             <Form.Group as={Col} xs={10}>
                                 <Form.Label
                                     className="font-weight-bold"
@@ -301,8 +301,8 @@ class AccountProfile extends React.Component{
                                     disabled={isSubmitting}
                                 />
                             </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
+                            </Row>
+                            <Row>
                             <Form.Group as={Col} xs={10}>
                                 <Form.Label
                                     className="font-weight-bold"
@@ -318,8 +318,8 @@ class AccountProfile extends React.Component{
                                     disabled={isSubmitting}
                                 />
                             </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
+                            </Row>
+                            <Row>
                             <Form.Group as={Col} xs={10}>
                                 <Form.Control
                                     name="address2"
@@ -332,8 +332,8 @@ class AccountProfile extends React.Component{
                                     disabled={isSubmitting}
                                 />
                             </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
+                            </Row>
+                            <Row>
                             <Form.Group as={Col} xs={4}>
                                 <Form.Label
                                     className="font-weight-bold"
@@ -379,8 +379,8 @@ class AccountProfile extends React.Component{
                                     disabled={isSubmitting}
                                 />
                             </Form.Group>
-                        </Form.Row>
-                    <Form.Row>
+                            </Row>`
+                    <Row>
                     <Form.Group as={Col} xs={10}>
                     <Form.Label
                        className="font-weight-bold"
@@ -407,10 +407,10 @@ class AccountProfile extends React.Component{
                     >{roles}
                     </Form.Control>
                     </Form.Group>
-                    </Form.Row>
+                    </Row>
                     </Col>
                     <Col>
-                        <Form.Row>
+                            <Row>
                             <Form.Group as={Col} xs={4}>
                                 <Image src="/broker.jpg" roundedCircle/>
                             </Form.Group>
@@ -457,8 +457,8 @@ class AccountProfile extends React.Component{
                                 />
 
                             </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
+                            </Row>
+                        <Row>
                             <Form.Group as={Col} xs={12}>
                             <Form.Label
                                 className="font-weight-bold"
@@ -475,8 +475,8 @@ class AccountProfile extends React.Component{
                                 disabled={isSubmitting}
                             />
                             </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
+                            </Row>
+                        <Row>
                             <Form.Group as={Col} xs={5}>
                                 <Form.Label
                                     className="font-weight-bold"
@@ -492,15 +492,16 @@ class AccountProfile extends React.Component{
                                     disabled
                                 />
                             </Form.Group>
-                        </Form.Row>
+                            </Row>
                     </Col></Row>
                     <Row>
                         <Col xs={4}></Col>
                         <Col xs={4}>
+                            <div className="d-grid gap-2">
                             <Button
                                 disabled={!(isValid && dirty) || isSubmitting}
                                 variant="success"
-                                block
+                                size="large"
                                 onClick={handleSubmit}
                             >
                                 { this.state.updateProgress ?
@@ -514,6 +515,7 @@ class AccountProfile extends React.Component{
                                 <span>Update Profile</span>
                                 }
                             </Button>
+                            </div>
                         </Col>
                         <Col xs={4}></Col>
                     </Row>

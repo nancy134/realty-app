@@ -32,10 +32,26 @@ import tenantService from '../services/tenants';
 import condoService from '../services/condos';
 import { Helmet } from 'react-helmet';
 import { getTitlePrefix } from '../helpers/utilities';
+import withStyles from 'isomorphic-style-loader/withStyles';
+//import s from './ListingPage.css';
 
 export class ListingPage extends Component {
     constructor(props){
         super(props);
+        console.log("constructor()");
+        var index = null;
+        var fullscreen = false;
+        var parts = null;
+        if (this.props.url){
+            parts = this.props.url.split("/");
+            console.log("parts:");
+            console.log(parts);
+            if (parts.length === 3){
+                index = parts[2];
+                fullscreen = true;
+            }
+        }
+        /*
         var index = null;
         var fullscreen = false;
         var listingMode = "allListings";
@@ -50,43 +66,48 @@ export class ListingPage extends Component {
             createListing = this.props.location.data.createListing;
             editMode = this.props.location.data.editMode; 
         }
-
-        if (props.match.params.id){
+        if (props.match && props.match.params && props.match.params.id){
            fullscreen = true;
            index = props.match.params.id;
         }
-
-        // Listing Type
-        const params = new URLSearchParams(props.location.search);
-        var listingModeParam = params.get('listingMode');
-        if (listingModeParam){
-           listingMode = listingModeParam;
-        }
-
-        // Embed
-        if (this.props.embed){
-            listingMode = "embedListings";
-        }
-        var cognitoId  = params.get('user');
-
+        
         // Location
         var defaultLocation = geolocationService.getSavedLocation();
         if (!defaultLocation.formatted_address){
             defaultLocation = geolocationService.getDefaultLocation();
         }
 
+        // Listing Type
+        var listingMode = "allListings";
+        var listingType = listingTypes.BOTH;
+        if (props.location){
+            const params = new URLSearchParams(props.location.search);
+            if (params){
+                var listingModeParam = params.get('listingMode');
+                if (listingModeParam){
+                    listingMode = listingModeParam;
+                }
+                var cognitoId  = params.get('user');
+                // Listing Type
+                var filterParam = params.get('filter');
+                var listingType = listingTypes.BOTH;
+                if (filterParam === "home"){
+                    listingType = defaultLocation.listingType;
+                }
+            }
+        }
+
+        // Embed
+        if (this.props.embed){
+            listingMode = "embedListings";
+        }
+        
         var formatted_address = defaultLocation.formatted_address;
         var lat0 = defaultLocation.lat0;
         var lng0 = defaultLocation.lng0;
         var lat1 = defaultLocation.lat1;
         var lng1 = defaultLocation.lng1;
-
-        // Listing Type
-        var filterParam = params.get('filter');
-        var listingType = listingTypes.BOTH;
-        if (filterParam === "home"){
-            listingType = defaultLocation.listingType;
-        }
+        */
 
         // Toolbar
         this.handleSearch = this.handleSearch.bind(this);
@@ -162,6 +183,9 @@ export class ListingPage extends Component {
         //Expand
         this.handleExpand = this.handleExpand.bind(this);
 
+        //Initialize
+        this.handleInitialize = this.handleInitialize.bind(this);
+
         this.state = {
 
             // Message Modal 
@@ -182,7 +206,7 @@ export class ListingPage extends Component {
             listingDetail: null,
             allAmenities: [],
             propertyTypes: [],
-            createListing: createListing,
+            createListing: false,
             finishProgress: false,
 
             // Spaces
@@ -190,9 +214,9 @@ export class ListingPage extends Component {
 
             // Controls
             fullscreen: fullscreen,
-            showDetail: showDetail,
-            editMode: editMode,
-            listingMode: listingMode,
+            showDetail: false,
+            editMode: "view",
+            listingMode: "allListings",
             page: 1,
             spaceUseFilter: null,
             enableTransitionTest: false,
@@ -217,12 +241,12 @@ export class ListingPage extends Component {
             deleteDraftListingSaving: false,
 
             // Toolbar 
-            formatted_address: formatted_address,
+            formatted_address: "",
             showReportView: false,
-            listingType: listingType,
+            listingType: listingTypes.BOTH,
 
             // Map
-            bounds: {lat0:lat0, lng0:lng0, lat1:lat1, lng1:lng1},
+            bounds: {lat0:null, lng0:null, lat1:null, lng1:null},
             center: null,
             zoomLevel: null,
             myListingsMap: {
@@ -236,7 +260,7 @@ export class ListingPage extends Component {
        
 
             // Detail Map
-            detailBounds: {lat0:lat0, lng0:lng0, lat1:lat1, lng1:lng1},
+            detailBounds: {lat0:null, lng0:null, lat1:null, lng1:null},
             detailMarkers: null,
 
             // Reports
@@ -252,8 +276,78 @@ export class ListingPage extends Component {
             reportPerPage: 5,
 
             // Embed
-            cognitoId: cognitoId
+            cognitoId: null 
         };
+    }
+
+    handleInitialize(){
+        var index = null;
+        var fullscreen = false;
+        var listingMode = "allListings";
+        var createListing = false;
+        var showDetail = false;
+        var editMode = "view";
+
+        if (this.props.location && this.props.location.data){
+            index = this.props.location.data.listingId;
+            listingMode = this.props.location.data.listingMode;
+            showDetail = this.props.location.data.showDetail;
+            createListing = this.props.location.data.createListing;
+            editMode = this.props.location.data.editMode;
+        }
+
+        if (this.props.match && this.props.match.params && this.props.match.params.id){
+           fullscreen = true;
+           index = this.props.match.params.id;
+        }
+        // Location
+        var defaultLocation = geolocationService.getSavedLocation();
+        if (!defaultLocation.formatted_address){
+            defaultLocation = geolocationService.getDefaultLocation();
+        }
+
+        // Listing Type
+        var listingMode = "allListings";
+        var listingType = listingTypes.BOTH;
+        if (this.props.location){
+            const params = new URLSearchParams(this.props.location.search);
+            if (params){
+                var listingModeParam = params.get('listingMode');
+                if (listingModeParam){
+                    listingMode = listingModeParam;
+                }
+                var cognitoId  = params.get('user');
+                // Listing Type
+                var filterParam = params.get('filter');
+                var listingType = listingTypes.BOTH;
+                if (filterParam === "home"){
+                    listingType = defaultLocation.listingType;
+                }
+            }
+        }
+
+        // Embed
+        if (this.props.embed){
+            listingMode = "embedListings";
+        }
+
+        var formatted_address = defaultLocation.formatted_address;
+        var lat0 = defaultLocation.lat0;
+        var lng0 = defaultLocation.lng0;
+        var lat1 = defaultLocation.lat1;
+        var lng1 = defaultLocation.lng1;
+
+        this.setState({
+            index: index,
+            fullscreen: fullscreen,
+            listingMode: listingMode,
+            createListing: createListing,
+            showDetail: showDetail,
+            listingType: listingType,
+            cognitoId: cognitoId,
+            formatted_address: formatted_address,
+            bounds: {lat0:lat0, lng0:lng0, lat1:lat1, lng1:lng1},
+        });
     }
 
     handleExpand(expand){
@@ -895,6 +989,8 @@ export class ListingPage extends Component {
     }
 
     componentDidMount(){
+        console.log("componentDidMount()");
+        this.handleInitialize();
         var localState = {};
         var that = this;
         if (this.state.fullscreen){
@@ -1438,8 +1534,8 @@ export class ListingPage extends Component {
     render() {
 
         // title
-        var title  = getTitlePrefix(window.location.hostname);
-        title += " - Listings";
+        //var title  = getTitlePrefix(window.location.hostname);
+        var title = " - Listings";
 
         var showDetail = this.state.showDetail;
         var index = this.state.index;
@@ -1503,6 +1599,13 @@ export class ListingPage extends Component {
         <React.Fragment>
             <Helmet>
                 <title>{title}</title>
+                <meta property="og:title" content="492 Concord Street"/>
+                <meta property="og:type" content="website"/>
+                <meta property="og:url" content="https://local.phowma.com/listing/8"/>
+                <meta property="og:image" content="https://ph-s3-images.s3.amazonaws.com/listing/8/image/11/resized400x600.jpg"/>
+                <meta property="og:description"content="Commercial Real Estate for Lease, 492 Concord St, Framingham, MA"/>
+                <meta property="og:site_name" content="local.phowma.com"/>
+                <meta name="twitter:card" content="summary_large_image"/>
             </Helmet>
             <DeleteModal
                 id={this.state.deleteId}

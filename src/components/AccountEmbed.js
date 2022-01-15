@@ -19,9 +19,7 @@ import parse from 'html-react-parser';
 
   const popover = (
     <Popover id="popover-basic">
-      <Popover.Content>
-        HTML copied to clipboard.
-      </Popover.Content>
+        <div>HTML copied to clipboard.</div>
     </Popover>
   );
 

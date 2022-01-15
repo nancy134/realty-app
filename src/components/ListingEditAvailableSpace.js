@@ -224,7 +224,7 @@ class ListingEditAvailableSpace extends React.Component {
                 </Modal.Header>                    
                 <Modal.Body style={{'maxHeight': 'calc(100vh - 210px)', 'overflowY': 'auto'}}>
                     <Form className="pb-5">
-                        <Form.Row>
+                        <Row>
                             <Form.Group as={Col} >
                                 <Form.Label className="font-weight-bold">Type</Form.Label>
                                 <Form.Control
@@ -261,9 +261,7 @@ class ListingEditAvailableSpace extends React.Component {
                                         isValid={touched.size && !errors.size}
                                         disabled={isSubmitting}
                                     />
-                                    <InputGroup.Append>
-                                        <InputGroup.Text id="basic-addon2">sf</InputGroup.Text>
-                                    </InputGroup.Append>
+                                    <InputGroup.Text id="basic-addon2">sf</InputGroup.Text>
                                     <Form.Control.Feedback type="invalid">
                                         {errors.size}
                                     </Form.Control.Feedback>
@@ -272,9 +270,7 @@ class ListingEditAvailableSpace extends React.Component {
                             <Form.Group as={Col}>
                                 <Form.Label className="font-weight-bold">Price (optional)</Form.Label>
                                 <InputGroup>
-                                    <InputGroup.Prepend>
-                                        <InputGroup.Text>$</InputGroup.Text>
-                                    </InputGroup.Prepend>
+                                    <InputGroup.Text>$</InputGroup.Text>
                                     <Form.Control 
                                         id="space_edit_price"
                                         name="price"
@@ -305,8 +301,8 @@ class ListingEditAvailableSpace extends React.Component {
                                     </Form.Control.Feedback>
                                 </InputGroup>
                             </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
+                        </Row>
+                        <Row>
                             <Form.Group as={Col} >
                                 <Form.Label className="font-weight-bold">Lease Type <span className="font-weight-light">(optional)</span></Form.Label>
                                 <Form.Control
@@ -347,9 +343,9 @@ class ListingEditAvailableSpace extends React.Component {
                                 </Form.Control.Feedback>
                             </Form.Group>
 
-                        </Form.Row>
+                        </Row>
                         { !this.props.simple ?
-                        <Form.Row>
+                        <Row>
                             <Form.Group as={Col}>
                                 <Form.Label className="font-weight-bold">Description <span className="font-weight-light">(optional)</span></Form.Label>
                                 <Form.Control 
@@ -367,24 +363,24 @@ class ListingEditAvailableSpace extends React.Component {
                                     {errors.description}
                                 </Form.Control.Feedback>
                             </Form.Group>
-                        </Form.Row>
+                        </Row>
                         : null } 
                         { !this.props.simple ?
-                        <Form.Row>
+                        <Row>
                             <Accordion className="w-100">
                                 <Card>
                                     <Card.Header>
-                                        <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                                        <Accordion.Button as={Button} variant="link" eventKey="1">
                                             Click here to see Additional Parameters 
-                                        </Accordion.Toggle>
+                                        </Accordion.Button>
                                     </Card.Header>
-                                    <Accordion.Collapse eventKey="1">
+                                    <Accordion.Item eventKey="1">
                                         <div className="m-2">
-                                            <Form.Row>
+                                            <Row>
                                                 <Form.Group as={Col}>
                                                 </Form.Group>
-                                            </Form.Row>
-                                            <Form.Row>
+                                            </Row>
+                                            <Row>
                                                 <Form.Group as={Col}>
                                                     <Form.Label className="font-weight-bold">Drive in Doors <span className="font-weight-light">(optional)</span></Form.Label>
                                                     <Form.Control
@@ -435,8 +431,8 @@ class ListingEditAvailableSpace extends React.Component {
                                                         ))}
                                                     </Form.Control>
                                                 </Form.Group>
-                                            </Form.Row>
-                                            <Form.Row>
+                                            </Row>
+                                            <Row>
                                                 <Form.Group as={Col}>
                                                     <Form.Label className="font-weight-bold">Loading Docks <span className="font-weight-light">(optional)</span></Form.Label>
                                                     <Form.Control
@@ -487,8 +483,8 @@ class ListingEditAvailableSpace extends React.Component {
                                                         {errors.ceilingHeight}
                                                     </Form.Control.Feedback>
                                                 </Form.Group>
-                                            </Form.Row>
-                                            <Form.Row>
+                                            </Row>
+                                            <Row>
                                                 <Form.Group as={Col}>
                                                     <Form.Label className="font-weight-bold">Available Date <span className="font-weight-light">(optional)</span></Form.Label>
                                                     <Form.Control
@@ -537,16 +533,16 @@ class ListingEditAvailableSpace extends React.Component {
                                                         {errors.class}
                                                     </Form.Control.Feedback>
                                                 </Form.Group>
-                                            </Form.Row>
+                                            </Row>
 
                                         </div>
-                                    </Accordion.Collapse>
+                                    </Accordion.Item>
                                 </Card>
                             </Accordion>
-                        </Form.Row>
+                        </Row>
                         : null }
                         {showImages ?
-                        <Form.Row>
+                        <Row>
                             <Accordion className="w-100">
                                 <Card>
                                     <Card.Header>
@@ -581,7 +577,7 @@ class ListingEditAvailableSpace extends React.Component {
                                     </Accordion.Collapse>
                                 </Card>
                             </Accordion>
-                        </Form.Row>
+                        </Row>
                         : null}
                     </Form>
                 </Modal.Body>

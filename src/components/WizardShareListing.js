@@ -7,6 +7,8 @@ import ShareListingPreview from '../components/ShareListingPreview';
 import ShareListingsPreview from '../components/ShareListingsPreview';
 import ShareListingPreviewConstant from '../components/ShareListingPreviewConstant';
 import ShareListingFacebook from '../components/ShareListingFacebook';
+import ShareListingTwitter from '../components/ShareListingTwitter';
+import ShareListingLinkedIn from '../components/ShareListingLinkedIn';
 import ShareListingConfirm from '../components/ShareListingConfirm';
 import {shareMethodTypes} from '../constants/shareMethodTypes';
 import userService from '../services/users';
@@ -40,6 +42,12 @@ export class WizardShareListing extends Component {
         this.handleShareFacebookNext = this.handleShareFacebookNext.bind(this);
         this.handleShareFacebookCancel = this.handleShareFacebookCancel.bind(this);
 
+        this.handleShareTwitterNext = this.handleShareTwitterNext.bind(this);
+        this.handleShareTwitterCancel = this.handleShareTwitterCancel.bind(this);
+
+        this.handleShareLinkedInNext = this.handleShareLinkedInNext.bind(this);
+        this.handleShareLinkedInCancel = this.handleShareLinkedInCancel.bind(this);
+
         this.handleShareConfirmNext = this.handleShareConfirmNext.bind(this);
 
         this.state = {
@@ -51,6 +59,8 @@ export class WizardShareListing extends Component {
             showShareListingsPreview: false,
             showShareListingPreviewConstant: false,
             showShareListingFacebook: false,
+            showShareListingTwitter: false,
+            showShareListingLinkedIn: false,
             showSHareListingConfirm: false,
             contactsSelected: [],
             methodType: shareMethodTypes.EMAILFC,
@@ -72,6 +82,16 @@ export class WizardShareListing extends Component {
             this.setState({
                 showShareListingMethod: false,
                 showShareListingFacebook: true
+            });
+        } else if (this.state.methodType === shareMethodTypes.TWITTER){
+            this.setState({
+                showShareListingMethod: false,
+                showShareListingTwitter: true
+            });
+        } else if (this.state.methodType === shareMethodTypes.LINKEDIN){
+            this.setState({
+                showShareListingMethod: false,
+                showShareListingLinkedIn: true
             });
         } else {
             this.setState({
@@ -207,6 +227,32 @@ export class WizardShareListing extends Component {
         });
     }
 
+    handleShareTwitterNext(){
+        this.setState({
+            showShareTwitter: false,
+            showShareListingConfirm: true
+        });
+    }
+
+    handleShareTwitterCancel(){
+        this.setState({
+            showShareTwitter: false
+        });
+    }
+
+    handleShareLinkedInNext(){
+        this.setState({
+            showShareLinkedIn: false,
+            showShareListingConfirm: true
+        });
+    }
+
+    handleShareLinkedInCancel(){
+        this.setState({
+            showShareLinkedIn: false
+        });
+    }
+
     handleShareConfirmNext(){
         this.setState({
             showShareListingConfirm: false
@@ -239,6 +285,16 @@ export class WizardShareListing extends Component {
             { this.state.showShareListingFacebook ?
             <ShareListingFacebook
                 show={this.state.showShareListingFacebook}
+            />
+            : null }
+            { this.state.showShareListingTwitter ?
+            <ShareListingTwitter
+                show={this.state.showShareListingTwitter}
+            />
+            : null }
+            { this.state.showShareListingLinkedIn ?
+            <ShareListingLinkedIn
+                show={this.state.showShareListingLinkedIn}
             />
             : null }
             { this.state.showShareListingContacts ?

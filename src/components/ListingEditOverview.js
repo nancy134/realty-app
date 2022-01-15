@@ -202,7 +202,7 @@ class ListingEditOverview extends React.Component {
             <Form>
             <Row className="mt-2">
                 <Col xs={4}>
-                        <Form.Row>
+                        <Row>
                             <Form.Group as={Col}>
                                 <Form.Label
                                     className="font-weight-bold"
@@ -219,18 +219,16 @@ class ListingEditOverview extends React.Component {
                                     disabled={isSubmitting} 
                                 /> 
                             </Form.Group>
-                        </Form.Row>
+                        </Row>
                         { listing.listingType === listingTypes.FORSALE ?
-                        <Form.Row>
+                        <Row>
                             <Form.Group as={Col}>
                                 <Form.Label
                                     className="font-weight-bold"
                                 >Listing Price</Form.Label>
 
                                 <InputGroup>
-                                    <InputGroup.Prepend>
-                                        <InputGroup.Text>$</InputGroup.Text>
-                                    </InputGroup.Prepend>
+                                    <InputGroup.Text>$</InputGroup.Text>
                                 <Form.Control
                                     id="overview_edit_listing_price"
                                     name="listingPrice"
@@ -244,10 +242,10 @@ class ListingEditOverview extends React.Component {
                                 />
                                 </InputGroup>
                             </Form.Group>
-                        </Form.Row>
+                        </Row>
                         : null}
 
-                        <Form.Row>
+                        <Row>
                             <Form.Group as={Col}>
                                 <Form.Label
                                     className="font-weight-bold"
@@ -266,7 +264,7 @@ class ListingEditOverview extends React.Component {
                                     disabled={isSubmitting}
                                 />
                             </Form.Group>
-                        </Form.Row>
+                        </Row>
                 </Col>
                 <Col xs={2}>
                     <Form.Label

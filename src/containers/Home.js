@@ -105,7 +105,8 @@ export class Home extends Component {
   }
 
   render(){
-  var domain = getDomain(window.location.hostname);
+  //var domain = getDomain(window.location.hostname);
+  var domain = "phowma";
   var title = "";
   if (domain === "findingcre"){
       title = "FindingCRE Home";

@@ -6,7 +6,6 @@ import {
     Col
 } from 'react-bootstrap';
 import StepperShareListing from '../components/StepperShareListing';
-import SearchContacts from '../components/SearchContacts';
 
 class ShareListingContacts extends React.Component{
     constructor(props){
@@ -49,11 +48,6 @@ class ShareListingContacts extends React.Component{
                 />
                 <Row>
                     <Col>
-                        <SearchContacts
-                            onContactsSelected={this.handleContactsSelected}
-                            contactsSelected={this.props.contactsSelected}
-                            user={this.props.user}
-                        />
                     </Col>
                 </Row>
             </Modal.Body>

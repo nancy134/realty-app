@@ -12,8 +12,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import ListingEditOverview from './ListingEditOverview';
 import ImageGallery from 'react-image-gallery';
-//import './image-gallery.css';
-import 'react-image-gallery/styles/css/image-gallery.css';
+import './image-gallery.css';
+//import 'react-image-gallery/styles/css/image-gallery.css';
 import { abbrState } from '../helpers/utilities';
 
 function PropertyTypeList(props){

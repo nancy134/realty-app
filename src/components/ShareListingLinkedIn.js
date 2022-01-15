@@ -3,11 +3,11 @@ import {
     Modal
 } from 'react-bootstrap';
 import {
-    FacebookShareButton,
-    FacebookIcon
+    LinkedinShareButton,
+    LinkedinIcon
 } from 'react-share';
 
-class ShareListingFacebook extends React.Component{
+class ShareListingLinkedIn extends React.Component{
     render(){
         return(
         <Modal
@@ -19,19 +19,19 @@ class ShareListingFacebook extends React.Component{
             <Modal.Header closeButton>
                 <Modal.Title>
                     <span>
-                        Facebook Share 
+                        Twitter Share 
                     </span>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <FacebookShareButton
+                <LinkedinShareButton
                    url="https://local.phowma.com/listing/8"
                 >
-                    <FacebookIcon size={32} round />
-                </FacebookShareButton>
+                    <LinkedinIcon size={32} round />
+                </LinkedinShareButton>
             </Modal.Body>
         </Modal>
         );
     }
 }
-export default ShareListingFacebook;
+export default ShareListingLinkedIn;

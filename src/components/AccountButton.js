@@ -17,6 +17,7 @@ export class AccountButton extends Component{
     constructor(props){
         super(props);
 
+        this.handleLoginCreateAccount = this.handleLoginCreateAccount.bind(this);
         // Login
         this.handleLogin = this.handleLogin.bind(this);
         this.handleLoginCancel = this.handleLoginCancel.bind(this);
@@ -92,6 +93,12 @@ export class AccountButton extends Component{
             this.props.onLogin(result);
         }
         */
+    }
+    handleLoginCreateAccount(){
+        console.log("handleLoginCreateAccount");
+        this.setState({
+            modalShowLogin: true
+        }); 
     }
     handleLogin(email, password){
         var that = this;
@@ -344,7 +351,7 @@ export class AccountButton extends Component{
                 <span>
                     { !this.props.initialState ?
                     <Button 
-                        onClick={() => this.setState({modalShowLogin: true})} 
+                        onClick={this.handleLoginCreateAccount}
                         variant="success"
                         id="account-button"
                     >

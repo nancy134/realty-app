@@ -13,10 +13,11 @@ import {
 } from 'react-bootstrap';
 
 const containerStyle = {
-  position: 'absolute',
+//  position: 'absolute',
   width: '100%',
   height: '100%'
 };
+
 
 class MapMarker extends React.Component {
     state = {
@@ -216,7 +217,7 @@ function MyMap(props) {
         style = props.style;
     }
 
-    var gestureHandling = "auto";
+    var gestureHandling = props.gestureHandling;
     var zoomControl = true;
     if (props.boundsChanging){
         gestureHandling = "none";
@@ -375,6 +376,7 @@ class ListingMapNew extends React.Component {
                     onDragEnd={this.handleDragEnd}
                     onLoad={this.handleLoad}
                     onInfoWindowClick={this.handleInfoWindowClick}
+                    gestureHandling={this.props.gestureHandling}
                 >
                 </MyMap>
 

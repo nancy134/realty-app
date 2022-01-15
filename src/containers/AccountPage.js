@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './AccountPage.css';
+//import './AccountPage.css';
 import {
     Container,
     Alert,
@@ -8,7 +8,7 @@ import AccountToolbar from '../components/AccountToolbar';
 import AccountProfile from '../components/AccountProfile';
 import AccountPaymentMethodStripe from '../components/AccountPaymentMethodStripe';
 import AccountAssociates from '../components/AccountAssociates';
-import AccountBilling from '../components/AccountBilling';
+//import AccountBilling from '../components/AccountBilling';
 import AccountSettings from '../components/AccountSettings';
 import AccountButton from '../components/AccountButton';
 import AccountEmbed from '../components/AccountEmbed';
@@ -29,8 +29,13 @@ export class AccountPage extends Component {
         this.handleAddListingFinish = this.handleAddListingFinish.bind(this);
         this.handleAddListingCancel = this.handleAddListingCancel.bind(this);
 
-        const params = new URLSearchParams(props.location.search);
+        if (props.location){
+        var params = new URLSearchParams(props.location.search);
+       
+        if (params){
         var token  = params.get('token');
+        }
+        }
         this.state = {
             tab: "profile",
             token: token,
@@ -181,9 +186,6 @@ export class AccountPage extends Component {
                 ): null}
                 {tab === "settings" ? (
                 <AccountSettings />
-                ): null}
-                {tab === "payment" ? (
-                <AccountBilling />
                 ): null}
                 {tab === "embed" ? (
                 <AccountEmbed />

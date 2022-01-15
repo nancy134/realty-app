@@ -90,7 +90,7 @@ class AccountLoginModal extends React.Component {
         if (this.state.email !== "" && this.state.password !== ""){
             buttonDisabled = false;
         }
-
+        console.log("this.state.hidden: "+this.state.hidden)
         return(
         <Modal
             size="lg"
@@ -146,16 +146,14 @@ class AccountLoginModal extends React.Component {
                 <InputGroup>
                     <Form.Control
                         id="login-password-input" 
-                        type={this.state.hidden ? 'password' : 'text'} 
+                        type={this.state.hidden ? 'password' : 'text'}
                         onChange={this.handlePasswordChange}
                         onKeyPress={this.handleKeyPress}
                     />
-                    <InputGroup.Append>
-                        <Button
-                            variant="secondary"
-                            onClick={this.toggleShow}
-                        >{this.state.hidden ? 'Show' : 'Hide'}</Button>
-                    </InputGroup.Append>
+                    <Button
+                        variant="secondary"
+                        onClick={this.toggleShow}
+                    >{this.state.hidden ? 'Show' : 'Hide'}</Button>
                 </InputGroup>
                 <Button
                     onClick={this.props.onForgotPassword}

@@ -5,7 +5,7 @@ import {
     Navbar,
     Button
 } from 'react-bootstrap';
-import Routes from './Routes';
+import AppRoutes from './Routes';
 import AccountButton from './components/AccountButton';
 import authenticationService from './helpers/authentication';
 import userService from './services/users';
@@ -16,7 +16,16 @@ import { getTitlePrefix } from './helpers/utilities';
 class App extends React.Component {
   constructor(props){
       super(props);
+        var url;
+        if (typeof window === 'undefined'){
+            url = props.url;
+        } else {
+            url = window.location.pathname;
+        }
+        
+        console.log("url: "+url);
 
+         if (typeof window !== 'undefined'){
         // Embed
         const params = new URLSearchParams(window.location.search);
         var embed = false;
@@ -38,7 +47,7 @@ class App extends React.Component {
           window.location.pathname === "/constantcontact" ||
           embed)
           showFooter = false;
-
+      }
       this.state = {
           loggedIn: false,
           showAddListingWizard: false,
@@ -48,9 +57,10 @@ class App extends React.Component {
           showPolicyModal: false,
           policyType: "",
           minimalTab: minimalTab,
-          loading: true,
+          loading: false,
           email: null,
-          embed: embed
+          embed: embed,
+          url: url
       };
       this.handleLogin = this.handleLogin.bind(this);
       this.handleLogout = this.handleLogout.bind(this);
@@ -126,7 +136,9 @@ class App extends React.Component {
   }
   render(){
   // title
+   if (typeof window !== 'undefined'){
   var title  = getTitlePrefix(window.location.hostname);
+  }
 
   return (
       <React.Fragment>
@@ -178,7 +190,7 @@ class App extends React.Component {
           { this.state.loading ?
           <p>Loading...</p>
           :
-          <Routes
+          <AppRoutes
               // Logged in
               onLogin={this.handleLogin}
               loggedIn={this.state.loggedIn}
@@ -189,9 +201,11 @@ class App extends React.Component {
               onShowPolicyModal={this.handlePolicyModalShow}
               loading={this.state.loading}
               embed={this.state.embed}
+              url={this.state.url}
           >
-          </Routes>
+          </AppRoutes>
           }
+
     </div>
     { !this.state.minimalTab && this.state.showFooter ?
     <div className="bg-light ml-1 mr-1">
