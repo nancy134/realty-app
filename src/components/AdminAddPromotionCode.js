@@ -3,6 +3,7 @@ import {
     Modal,
     Form,
     Button,
+    Row,
     Col
 } from 'react-bootstrap';
 import billingService from '../services/billing';
@@ -96,7 +97,8 @@ class AdminAddPromotionCode extends React.Component {
             </Modal.Header>
             <Modal.Body>
                 <Form>
-                    <Form.Row>
+                    <Form>
+                    <Row>
                         <Form.Group as={Col} >
                             <Form.Check
                                 onChange={this.handleAutoGenerateChange}
@@ -105,10 +107,12 @@ class AdminAddPromotionCode extends React.Component {
                                 checked={this.state.autoGenerate}
                             />
                         </Form.Group>
-                    </Form.Row>
+                    </Row>
+                    </Form>
 
                     { !this.state.autoGenerate ?
-                    <Form.Row>
+                    <Form>
+                    <Row>
                         <Form.Group as={Col} >
                             <Form.Label
                                 className="font-weight-bold"
@@ -121,10 +125,12 @@ class AdminAddPromotionCode extends React.Component {
                             >
                             </Form.Control>
                         </Form.Group>
-                    </Form.Row>
+                    </Row>
+                    </Form>
                     : null }
 
-                    <Form.Row>
+                    <Form>
+                    <Row>
                         <Form.Group as={Col} >
                             <Form.Label
                                 className="font-weight-bold"
@@ -137,9 +143,11 @@ class AdminAddPromotionCode extends React.Component {
                             >
                             </Form.Control>
                         </Form.Group>
-                    </Form.Row>
+                    </Row>
+                    </Form>
 
-                    <Form.Row>
+                    <Form>
+                    <Row>
                         <Form.Group as={Col} >
                             <Form.Label
                                 className="font-weight-bold"
@@ -151,9 +159,11 @@ class AdminAddPromotionCode extends React.Component {
                                {promotionList}
                             </Form.Control>
                         </Form.Group>
-                    </Form.Row>
+                    </Row>
+                    </Form>
 
-                    <Form.Row>
+                    <Form>
+                    <Row>
                         <Form.Group as={Col} >
                             <Form.Check
                                 onChange={this.handleMultiUseChange}
@@ -162,7 +172,8 @@ class AdminAddPromotionCode extends React.Component {
                                 checked={this.state.multiUse}
                             />
                         </Form.Group>
-                    </Form.Row>
+                    </Row>
+                    </Form>
 
 
                 </Form>

@@ -157,7 +157,8 @@ class ListingAddOverview extends React.Component{
                 <Form>
                 <Row className="mt-2">
                     <Col xs={9}>
-                            <Form.Row>
+                            <Form>
+                            <Row>
                                 { this.props.listing.listingType === listingTypes.FORSALE ?
                                 <Col md={6}>
                                     <Form.Label className="font-weight-bold">Listing Price</Form.Label>
@@ -183,8 +184,10 @@ class ListingAddOverview extends React.Component{
                                     </InputGroup>
                                 </Col>
                                 : null}
-                            </Form.Row>
-                            <Form.Row>
+                            </Row>
+                            </Form>
+                            <Form>
+                            <Row>
                                 <Col md={12}>
                                     <Form.Label className="font-weight-bold">Short Description</Form.Label>
                                     <Form.Control
@@ -203,8 +206,10 @@ class ListingAddOverview extends React.Component{
                                         {errors.shortDescription}
                                     </Form.Control.Feedback>
                                 </Col>
-                            </Form.Row>
-                            <Form.Row>
+                            </Row>
+                            </Form>
+                            <Form>
+                            <Row>
                                 <Col md={12}>
                                     <Form.Label className="font-weight-bold">Long Description <span className="font-weight-light">(optional}</span></Form.Label>
                                     <Form.Control 
@@ -224,7 +229,8 @@ class ListingAddOverview extends React.Component{
                                         {errors.longDescription}
                                     </Form.Control.Feedback>
                                 </Col>
-                            </Form.Row>
+                            </Row>
+                            </Form>
                     </Col>
                     <Col xs={3}>
                         <Form.Label

@@ -221,7 +221,8 @@ class AccountProfile extends React.Component{
                 }) => (
                     <Form className="p-5 profile">
                     <Row><Col>
-                        <Form.Row>
+                        <Form>
+                        <Row>
                             <Form.Group as={Col} xs={4}>
                                 <Form.Label
                                     className="font-weight-bold"
@@ -267,8 +268,10 @@ class AccountProfile extends React.Component{
                                     disabled={isSubmitting}
                                 />
                             </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
+                        </Row>
+                        </Form>
+                        <Form>
+                        <Row>
                             <Form.Group as={Col} xs={10}>
                                 <Form.Label
                                     className="font-weight-bold"
@@ -284,8 +287,10 @@ class AccountProfile extends React.Component{
                                     disabled={isSubmitting}
                                 />
                             </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
+                        </Row>
+                        </Form>
+                        <Form>
+                        <Row>
                             <Form.Group as={Col} xs={10}>
                                 <Form.Label
                                     className="font-weight-bold"
@@ -301,8 +306,10 @@ class AccountProfile extends React.Component{
                                     disabled={isSubmitting}
                                 />
                             </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
+                        </Row>
+                        </Form>
+                        <Form>
+                        <Row>
                             <Form.Group as={Col} xs={10}>
                                 <Form.Label
                                     className="font-weight-bold"
@@ -318,8 +325,10 @@ class AccountProfile extends React.Component{
                                     disabled={isSubmitting}
                                 />
                             </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
+                        </Row>
+                        </Form>
+                        <Form>
+                        <Row>
                             <Form.Group as={Col} xs={10}>
                                 <Form.Control
                                     name="address2"
@@ -332,8 +341,10 @@ class AccountProfile extends React.Component{
                                     disabled={isSubmitting}
                                 />
                             </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
+                        </Row>
+                        </Form>
+                        <Form>
+                        <Row>
                             <Form.Group as={Col} xs={4}>
                                 <Form.Label
                                     className="font-weight-bold"
@@ -379,8 +390,10 @@ class AccountProfile extends React.Component{
                                     disabled={isSubmitting}
                                 />
                             </Form.Group>
-                        </Form.Row>
-                    <Form.Row>
+                        </Row>
+                        </Form>
+                    <Form>
+                    <Row>
                     <Form.Group as={Col} xs={10}>
                     <Form.Label
                        className="font-weight-bold"
@@ -407,10 +420,12 @@ class AccountProfile extends React.Component{
                     >{roles}
                     </Form.Control>
                     </Form.Group>
-                    </Form.Row>
+                    </Row>
+                    </Form>
                     </Col>
                     <Col>
-                        <Form.Row>
+                        <Form>
+                        <Row>
                             <Form.Group as={Col} xs={4}>
                                 <Image src="/broker.jpg" roundedCircle/>
                             </Form.Group>
@@ -457,8 +472,10 @@ class AccountProfile extends React.Component{
                                 />
 
                             </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
+                        </Row>
+                        </Form>
+                        <Form>
+                        <Row>
                             <Form.Group as={Col} xs={12}>
                             <Form.Label
                                 className="font-weight-bold"
@@ -475,8 +492,10 @@ class AccountProfile extends React.Component{
                                 disabled={isSubmitting}
                             />
                             </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
+                        </Row>
+                        </Form>
+                        <Form>
+                        <Row>
                             <Form.Group as={Col} xs={5}>
                                 <Form.Label
                                     className="font-weight-bold"
@@ -492,7 +511,8 @@ class AccountProfile extends React.Component{
                                     disabled
                                 />
                             </Form.Group>
-                        </Form.Row>
+                        </Row>
+                        </Form>
                     </Col></Row>
                     <Row>
                         <Col xs={4}></Col>

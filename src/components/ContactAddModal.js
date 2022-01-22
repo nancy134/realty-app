@@ -3,6 +3,7 @@ import {
     Modal,
     Button,
     Form,
+    Row,
     Col
 } from 'react-bootstrap';
 import {Formik} from 'formik';
@@ -92,7 +93,8 @@ class ContactAddModal extends React.Component {
             </Modal.Header>
             <Modal.Body>
                 <Form>
-                <Form.Row>
+                <Form>
+                <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">First</Form.Label>
                         <Form.Control 
@@ -110,8 +112,10 @@ class ContactAddModal extends React.Component {
                             {errors.first}
                         </Form.Control.Feedback>
                     </Form.Group>
-                </Form.Row>
-                <Form.Row>
+                </Row>
+                </Form>
+                <Form>
+                <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Last</Form.Label>
                         <Form.Control
@@ -129,8 +133,10 @@ class ContactAddModal extends React.Component {
                             {errors.last}
                         </Form.Control.Feedback>
                     </Form.Group>
-                </Form.Row>
-                <Form.Row>
+                </Row>
+                </Form>
+                <Form>
+                <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Email</Form.Label>
                         <Form.Control
@@ -148,8 +154,10 @@ class ContactAddModal extends React.Component {
                             {errors.email}
                         </Form.Control.Feedback>
                     </Form.Group>
-                </Form.Row>
-                <Form.Row>
+                </Row>
+                </Form>
+                <Form>
+                <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Mobile Phone</Form.Label>
                         <Form.Control
@@ -167,7 +175,8 @@ class ContactAddModal extends React.Component {
                             {errors.mobilePhone}
                         </Form.Control.Feedback>
                     </Form.Group>
-                </Form.Row>
+                </Row>
+                </Form>
 
                 </Form>
             </Modal.Body>

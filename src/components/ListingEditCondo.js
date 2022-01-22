@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Row,
     Col,
     Form,
     Modal,
@@ -118,7 +119,8 @@ class ListingEditCondo extends React.Component {
             </Modal.Header>
             <Modal.Body>
             <Form>
-                <Form.Row>
+                <Form>
+                <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Unit</Form.Label>
                         <Form.Control 
@@ -136,8 +138,10 @@ class ListingEditCondo extends React.Component {
                             {errors.unit}
                         </Form.Control.Feedback>
                     </Form.Group>
-                </Form.Row>
-                <Form.Row>
+                </Row>
+                </Form>
+                <Form>
+                <Row>
                     <Form.Group as={Col} >
                         <Form.Label  className="font-weight-bold">Size <span className="font-weight-light">(optional)</span></Form.Label>
                         <InputGroup>
@@ -160,8 +164,10 @@ class ListingEditCondo extends React.Component {
                             </Form.Control.Feedback>
                         </InputGroup>
                     </Form.Group>
-                </Form.Row>
-                <Form.Row>
+                </Row>
+                </Form>
+                <Form>
+                <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Fees <span className="font-weight-light">(optional)</span></Form.Label>
                         <InputGroup>
@@ -187,8 +193,10 @@ class ListingEditCondo extends React.Component {
                             </Form.Control.Feedback>
                         </InputGroup>
                     </Form.Group>
-                </Form.Row>
-                <Form.Row>
+                </Row>
+                </Form>
+                <Form>
+                <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Taxes <span className="font-weight-light">(optional)</span></Form.Label>
                         <InputGroup>
@@ -214,7 +222,8 @@ class ListingEditCondo extends React.Component {
                             </Form.Control.Feedback>
                         </InputGroup>
                     </Form.Group>
-                </Form.Row>
+                </Row>
+                </Form>
 
             </Form>
             </Modal.Body>

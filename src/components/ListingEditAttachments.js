@@ -129,7 +129,8 @@ class ListingEditAttachments extends React.Component {
             </Row>
 
             <Form>
-               <Form.Row>
+               <Form>
+               <Row>
                     <Form.Group as={Col}>
                         <Form.Label
                             className="font-weight-bold"
@@ -147,7 +148,8 @@ class ListingEditAttachments extends React.Component {
                             {errors.name}
                         </Form.Control.Feedback>
                     </Form.Group>
-                </Form.Row>
+                </Row>
+                </Form>
             </Form>
             </Modal.Body>
             <Modal.Footer>

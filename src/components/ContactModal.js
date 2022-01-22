@@ -3,6 +3,7 @@ import {
     Modal,
     Button,
     Form,
+    Row,
     Col
 } from 'react-bootstrap';
 import { Formik } from 'formik';
@@ -77,7 +78,8 @@ class ContactModal extends React.Component {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form.Row>
+                        <Form>
+                        <Row>
                         <Form.Group as={Col}>
                             <Form.Label className="font-weight-bold">To</Form.Label>
                             <Form.Control
@@ -87,8 +89,10 @@ class ContactModal extends React.Component {
                                 disabled={true}
                             />
                         </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
+                        </Row>
+                        </Form>
+                        <Form>
+                        <Row>
                         <Form.Group as={Col}>
                             <Form.Label className="font-weight-bold">Subject</Form.Label>
                             <Form.Control
@@ -101,8 +105,10 @@ class ContactModal extends React.Component {
                                 isValid={touched.subject && !errors.subject && values.subject !== ""}
                             />
                         </Form.Group>
-                        </Form.Row>                        
-                        <Form.Row>
+                        </Row>
+                        </Form>                        
+                        <Form>
+                        <Row>
                         <Form.Group as={Col}>
                             <Form.Label className="font-weight-bold">Your email address</Form.Label>
                             <Form.Control
@@ -115,8 +121,10 @@ class ContactModal extends React.Component {
                                 isValid={touched.client && !errors.client && values.client !== ""}
                             />
                         </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
+                        </Row>
+                        </Form>
+                        <Form>
+                        <Row>
                         <Form.Group as={Col}>
                             <Form.Label className="font-weight-bold">Your message</Form.Label>
                             <Form.Control
@@ -130,7 +138,8 @@ class ContactModal extends React.Component {
                                 isValid={touched.message && !errors.message && values.message !== ""}
                             />
                         </Form.Group>
-                        </Form.Row>
+                        </Row>
+                        </Form>
                      </Form>
                 </Modal.Body>
                 <Modal.Footer>

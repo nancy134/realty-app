@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Row,
     Col,
     Form,
     Modal,
@@ -122,7 +123,8 @@ class ListingEditUnit extends React.Component {
             </Modal.Header>
             <Modal.Body>
             <Form>
-                <Form.Row>
+                <Form>
+                    <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Decription</Form.Label>
                         <Form.Control 
@@ -140,8 +142,10 @@ class ListingEditUnit extends React.Component {
                             {errors.description}
                         </Form.Control.Feedback>
                     </Form.Group>
-                </Form.Row>
-                <Form.Row>
+                </Row>
+                </Form>
+                <Form>
+                <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">No. of Units <span className="font-weight-light">(optional)</span></Form.Label>
                         <Form.Control 
@@ -159,8 +163,10 @@ class ListingEditUnit extends React.Component {
                             {errors.numUnits}
                         </Form.Control.Feedback>
                     </Form.Group>
-                </Form.Row>
-                <Form.Row>
+                    </Row>
+                </Form>
+                <Form>
+                <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Square feet <span className="font-weight-light">(optional)</span></Form.Label>
                         <InputGroup>
@@ -183,8 +189,10 @@ class ListingEditUnit extends React.Component {
                             </Form.Control.Feedback>
                         </InputGroup>
                     </Form.Group>
-                </Form.Row>
-                <Form.Row>
+                </Row>
+                </Form>
+                <Form>
+                <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Income <span className="font-weight-light">(optional)</span></Form.Label>
                         <InputGroup>
@@ -211,7 +219,8 @@ class ListingEditUnit extends React.Component {
                             </Form.Control.Feedback>
                         </InputGroup>
                     </Form.Group>
-                </Form.Row>
+                </Row> 
+                </Form>
 
             </Form>
             </Modal.Body>

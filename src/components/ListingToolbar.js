@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Row,
     Form,
     Col,
     Button,
@@ -277,7 +278,8 @@ class ListingToolbar extends React.Component {
         var listingMode = this.props.listingMode;
         return (
             <Form className="toolbar-form m-2">
-                <Form.Row>
+                <Form>
+                    <Row>
                     <Col xs="auto">
                         <Dropdown>
                             <Dropdown.Toggle
@@ -430,7 +432,8 @@ class ListingToolbar extends React.Component {
                         >Close Report Mode</Button>
                     </Col>
                     : null }
-                </Form.Row>
+                </Row>
+                </Form>
             </Form>
         );
     }

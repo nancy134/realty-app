@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Row,
     Col,
     Form,
     Modal,
@@ -182,7 +183,8 @@ class ListingEditGeneral extends React.Component {
         </Modal.Header>
         <Modal.Body style={{'maxHeight': 'calc(100vh - 210px)', 'overflowY': 'auto'}}> 
         <Form>
-            <Form.Row>
+            <Form>
+            <Row>
                 <Form.Group as={Col}>
                     <Form.Label className="font-weight-bold">Building Size <span className="font-weight-light">(optional)</span></Form.Label>
                     <InputGroup>
@@ -248,8 +250,10 @@ class ListingEditGeneral extends React.Component {
                         </Form.Control.Feedback>
                     </InputGroup>
                 </Form.Group>
-            </Form.Row>
-            <Form.Row>
+            </Row>
+            </Form>
+            <Form>
+            <Row>
                 <Form.Group as={Col}>
                     <Form.Label className="font-weight-bold">Number of Units <span className="font-weight-light">(optional)</span></Form.Label>
                     <Form.Control
@@ -301,8 +305,10 @@ class ListingEditGeneral extends React.Component {
                         {errors.parking}
                     </Form.Control.Feedback>
                 </Form.Group>
-            </Form.Row>
-            <Form.Row>
+            </Row>
+            </Form>
+            <Form>
+            <Row>
                 <Form.Group as={Col}>
                     <Form.Label className="font-weight-bold">Drive In Doors <span className="font-weight-light">(optional)</span></Form.Label>
                     <Form.Control
@@ -354,8 +360,10 @@ class ListingEditGeneral extends React.Component {
                         {errors.floors}
                     </Form.Control.Feedback>
                 </Form.Group>
-            </Form.Row>
-            <Form.Row>
+            </Row>
+            </Form>
+            <Form>
+            <Row>
                 <Form.Group as={Col}>
                     <Form.Label className="font-weight-bold">Ceiling Height <span className="font-weight-light">(optional)</span></Form.Label>
                     <InputGroup>
@@ -427,8 +435,10 @@ class ListingEditGeneral extends React.Component {
                         </Form.Control.Feedback>
                     </InputGroup>
                 </Form.Group>
-            </Form.Row>
-            <Form.Row>
+            </Row>
+            </Form>
+            <Form>
+            <Row>
                 { hideForNow ?
                 <Form.Group as={Col}>
                     <Form.Label className="font-weight-bold">Property Type <span className="font-weight-light">(optional)</span></Form.Label>
@@ -478,7 +488,8 @@ class ListingEditGeneral extends React.Component {
                         disabled={isSubmitting}
                     />
                 </Form.Group>
-            </Form.Row>
+            </Row>
+            </Form>
 
         </Form>
         </Modal.Body>

@@ -202,7 +202,8 @@ class ListingEditOverview extends React.Component {
             <Form>
             <Row className="mt-2">
                 <Col xs={4}>
-                        <Form.Row>
+                        <Form>
+                        <Row>
                             <Form.Group as={Col}>
                                 <Form.Label
                                     className="font-weight-bold"
@@ -219,9 +220,11 @@ class ListingEditOverview extends React.Component {
                                     disabled={isSubmitting} 
                                 /> 
                             </Form.Group>
-                        </Form.Row>
+                        </Row>
+                        </Form>
                         { listing.listingType === listingTypes.FORSALE ?
-                        <Form.Row>
+                        <Form>
+                        <Row>
                             <Form.Group as={Col}>
                                 <Form.Label
                                     className="font-weight-bold"
@@ -244,10 +247,12 @@ class ListingEditOverview extends React.Component {
                                 />
                                 </InputGroup>
                             </Form.Group>
-                        </Form.Row>
+                        </Row>
+                        </Form>
                         : null}
 
-                        <Form.Row>
+                        <Form>
+                        <Row>
                             <Form.Group as={Col}>
                                 <Form.Label
                                     className="font-weight-bold"
@@ -266,7 +271,8 @@ class ListingEditOverview extends React.Component {
                                     disabled={isSubmitting}
                                 />
                             </Form.Group>
-                        </Form.Row>
+                        </Row>
+                        </Form>
                 </Col>
                 <Col xs={2}>
                     <Form.Label

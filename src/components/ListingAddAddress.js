@@ -318,7 +318,8 @@ class ListingAddAddress extends React.Component{
                 <Row className="mt-2">
                     <Col>
                         <Form>
-                            <Form.Row>
+                            <Form>
+                            <Row>
                                 <Col md={12}>
                                     <Form.Label className="font-weight-bold">Address</Form.Label>
                                     <PlacesAutocomplete
@@ -375,8 +376,10 @@ class ListingAddAddress extends React.Component{
                                     )}
                                     </PlacesAutocomplete>
                                 </Col>
-                            </Form.Row>
-                            <Form.Row>
+                            </Row>
+                            </Form>
+                            <Form>
+                            <Row>
                                 <Col md={12} className="p-1 smallFont">
                                     <Form.Label className="font-weight-bold">Verification Status:&nbsp;</Form.Label>
                                     { (this.state.geocoded && !this.state.addressInUse) ?
@@ -408,9 +411,11 @@ class ListingAddAddress extends React.Component{
 
                                     }
                                 </Col>
-                            </Form.Row>
+                            </Row>
+                            </Form>
                             {this.state.verifiedAddresses ?
-                            <Form.Row>
+                            <Form>
+                            <Row>
                                 <Alert variant="primary">
                                 Verified address found, select below:
                                 {!this.state.verifiedAddresses ? <span></span> :
@@ -426,9 +431,11 @@ class ListingAddAddress extends React.Component{
                                 </Form.Check>
                                 ))}
                                 </Alert>
-                            </Form.Row>
+                            </Row>
+                            </Form>
                             : null}
-                            <Form.Row>
+                            <Form>
+                            <Row>
                                 <Col md={6}>
                                     <Form.Label className="font-weight-bold">City</Form.Label>
                                     <Form.Control 
@@ -468,8 +475,10 @@ class ListingAddAddress extends React.Component{
                                     {states}
                                     </Form.Control>
                                 </Col>
-                            </Form.Row>
-                            <Form.Row>
+                            </Row>
+                            </Form>
+                            <Form>
+                            <Row>
                                 <Col md={6}>
                                     <Form.Label className="font-weight-bold">Zip</Form.Label>
                                     <Form.Control
@@ -488,9 +497,11 @@ class ListingAddAddress extends React.Component{
                                         {errors.zip}
                                     </Form.Control.Feedback>
                                 </Col>
-                            </Form.Row>
+                            </Row>
+                            </Form>
                             { show ?
-                            <Form.Row>
+                            <Form>
+                            <Row>
                                 <Col md={12}>
                                     <Form.Label className="font-weight-bold">Display Address <span className="font-weight-light">(optional)</span></Form.Label>
                                     <Form.Control 
@@ -507,7 +518,8 @@ class ListingAddAddress extends React.Component{
                                         {errors.displayAddress}
                                     </Form.Control.Feedback>
                                 </Col>
-                            </Form.Row>
+                            </Row>
+                            </Form>
                             : null }
                         </Form>
                     </Col>

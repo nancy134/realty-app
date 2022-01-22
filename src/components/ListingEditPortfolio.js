@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Row,
     Col,
     Form,
     Modal,
@@ -118,7 +119,8 @@ class ListingEditPortfolio extends React.Component {
             <Modal.Body>
 
             <Form noValidate >
-                <Form.Row>
+                <Form>
+                <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Tenant Name</Form.Label>
                         <Form.Control 
@@ -134,8 +136,10 @@ class ListingEditPortfolio extends React.Component {
                         /> 
                         <Form.Control.Feedback type="invalid">{errors.tenant}</Form.Control.Feedback>
                     </Form.Group>
-                </Form.Row>
-                <Form.Row>
+                </Row>
+                </Form>
+                <Form>
+                <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Building Size <span className="font-weight-light">(optional)</span></Form.Label>
                         <InputGroup>
@@ -156,8 +160,10 @@ class ListingEditPortfolio extends React.Component {
                             <Form.Control.Feedback type="invalid">{errors.buildingSize}</Form.Control.Feedback>
                         </InputGroup>
                     </Form.Group>
-                </Form.Row>
-                <Form.Row>
+                </Row>
+                </Form>
+                <Form>
+                <Row>
                     <Form.Group as={Col}>
                         <Form.Label className="font-weight-bold">Lot Size <span className="font-weight-light">(optional)</span></Form.Label>
                         <InputGroup>
@@ -178,8 +184,10 @@ class ListingEditPortfolio extends React.Component {
                             <Form.Control.Feedback type="invalid">{errors.lotSize}</Form.Control.Feedback>
                         </InputGroup>
                     </Form.Group>
-                </Form.Row>
-                <Form.Row>
+                </Row>
+                </Form>
+                <Form>
+                <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Type <span className="font-weight-light">(optional)</span></Form.Label>
                         <Form.Control 
@@ -197,7 +205,8 @@ class ListingEditPortfolio extends React.Component {
                             ))}
                         </Form.Control>
                     </Form.Group>
-                </Form.Row>
+                </Row>
+                </Form>
             </Form>
             </Modal.Body>
             <Modal.Footer>

@@ -17,7 +17,8 @@ class ListingEdit extends React.Component {
             <Row className="mt-2">
                 <Col>
                     <Form>
-                        <Form.Row>
+                        <Form>
+                        <Row>
                             <Col md={6}>
                                 <Form.Label>Address</Form.Label>
                                 <Form.Control />
@@ -34,7 +35,8 @@ class ListingEdit extends React.Component {
                             <Form.Control />
                             <Form.Label>Long Description</Form.Label>
                             <Form.Control as="textarea" />
-                        </Form.Row>
+                        </Row>
+                        </Form>
                     </Form>
                 </Col>
                 <Col>

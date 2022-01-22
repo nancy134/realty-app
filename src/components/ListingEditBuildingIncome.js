@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Row,
     Col,
     Form
 } from 'react-bootstrap';
@@ -34,7 +35,8 @@ class ListingEditBuildingIncome extends React.Component {
     
     return(
         <Form>
-            <Form.Row>
+            <Form>
+            <Row>
                 <Form.Group as={Col}>
                     <Form.Label>Gross Income</Form.Label>
                     <Form.Control value={grossIncome}></Form.Control>
@@ -43,8 +45,10 @@ class ListingEditBuildingIncome extends React.Component {
                     <Form.Label>Maintenant</Form.Label>
                     <Form.Control value={maintenance}></Form.Control>
                 </Form.Group>
-            </Form.Row>
-            <Form.Row>
+            </Row>
+            </Form>
+            <Form>
+            <Row>
                 <Form.Group as={Col}>
                     <Form.Label>Net Income</Form.Label>
                     <Form.Control value={netIncome}></Form.Control>
@@ -53,8 +57,10 @@ class ListingEditBuildingIncome extends React.Component {
                     <Form.Label>Utilities</Form.Label>
                     <Form.Control value={utilities}></Form.Control>
                 </Form.Group>
-            </Form.Row>
-            <Form.Row>
+            </Row>
+            </Form>
+            <Form>
+            <Row>
                 <Form.Group as={Col}>
                     <Form.Label>Cap Rate</Form.Label>
                     <Form.Control value={capRate}></Form.Control>
@@ -63,8 +69,10 @@ class ListingEditBuildingIncome extends React.Component {
                     <Form.Label>HVAC</Form.Label>
                     <Form.Control value={hvac}></Form.Control>
                 </Form.Group>
-            </Form.Row>
-            <Form.Row>
+            </Row>
+            </Form>
+            <Form>
+            <Row>
                 <Form.Group as={Col}>
                     <Form.Label>Taxes</Form.Label>
                     <Form.Control value={taxes}></Form.Control>
@@ -73,8 +81,10 @@ class ListingEditBuildingIncome extends React.Component {
                     <Form.Label>Security</Form.Label>
                     <Form.Control value={security}></Form.Control>
                 </Form.Group>
-            </Form.Row>
-            <Form.Row>
+            </Row>
+            </Form>
+            <Form>
+            <Row>
                 <Form.Group as={Col}>
                     <Form.Label>Price Per Foot</Form.Label>
                     <Form.Control value={pricePerFoot}></Form.Control>
@@ -83,7 +93,8 @@ class ListingEditBuildingIncome extends React.Component {
                     <Form.Label>HOA Fees</Form.Label>
                     <Form.Control value={hoaFees}></Form.Control>
                 </Form.Group>
-            </Form.Row>
+            </Row>
+            </Form>
 
         </Form>
     );

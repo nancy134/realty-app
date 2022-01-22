@@ -105,7 +105,8 @@ class ListingEditHeader extends React.Component {
                 <Row className="mt-2">
                     <Col>
                         <Form>
-                            <Form.Row>
+                            <Form>
+                            <Row>
                                 <Col md={12}>
                                     <Form.Label>Address</Form.Label>
                                     <Form.Control
@@ -120,8 +121,10 @@ class ListingEditHeader extends React.Component {
                                         disabled={isSubmitting}
                                     />
                                 </Col>
-                            </Form.Row>
-                            <Form.Row>
+                            </Row>
+                            </Form>
+                            <Form>
+                            <Row>
                                 <Col md={6}>
                                     <Form.Label>City</Form.Label>
                                     <Form.Control 
@@ -152,8 +155,10 @@ class ListingEditHeader extends React.Component {
                                     {states}
                                     </Form.Control>
                                 </Col>
-                            </Form.Row>
-                            <Form.Row>
+                            </Row>
+                            </Form>
+                            <Form>
+                            <Row>
                                 <Col md={6}>
                                     <Form.Label className="font-weight-bold">Zip</Form.Label>
                                     <Form.Control
@@ -171,8 +176,10 @@ class ListingEditHeader extends React.Component {
                                         {errors.zip}
                                     </Form.Control.Feedback>
                                 </Col>
-                            </Form.Row>
-                            <Form.Row>
+                            </Row>
+                            </Form>
+                            <Form>
+                            <Row>
                                 <Col md={12}>
                                     <Form.Label>Display Address</Form.Label>
                                     <Form.Control 
@@ -188,7 +195,8 @@ class ListingEditHeader extends React.Component {
                                     {errors.displayAddress}
                                     </Form.Control.Feedback>
                                 </Col>
-                            </Form.Row>
+                                </Row>
+                            </Form>
                         </Form>
                     </Col>
                 </Row>
