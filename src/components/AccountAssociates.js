@@ -4,7 +4,6 @@ import {
     Col,
     Button,
     Container,
-    Jumbotron,
     Form,
     Dropdown,
     DropdownButton,
@@ -158,7 +157,7 @@ class AccountAssociates extends React.Component {
             <Container>
                 <Row className="pt-5">
                 </Row>
-                <Jumbotron className="pt-2">
+                <div className="pt-2">
                     <Row>
                         <Col>
                             <h1 className="text-center">Account Asssociates</h1>
@@ -259,7 +258,7 @@ class AccountAssociates extends React.Component {
                     : null}
                     </Col>
                     </Row>
-                </Jumbotron> 
+                </div> 
             </Container>
         </React.Fragment>
         );

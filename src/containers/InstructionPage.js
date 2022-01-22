@@ -1,25 +1,24 @@
 import React, {Component} from 'react';
 import {
-    Jumbotron
 } from 'react-bootstrap';
 
 export class Instructions extends Component {
     render(){
         return(
         <React.Fragment>
-            <Jumbotron className="p-3">
+            <div className="p-3">
                 <h3>URL</h3>
                 <p>https://www.sabresw.com</p>
-            </Jumbotron>
-            <Jumbotron className="p-3">
+            </div>
+            <div className="p-3">
                 <h3>Home page</h3>
                 <p>https://www.sabresw.com/home</p>
                 <ul>
                     <li>Select 'Find Space' to get to the listing page</li>
                     <li>It doesn't matter what you enter into the text field - the search isn't working yet</li>
                 </ul>
-            </Jumbotron>
-            <Jumbotron className="p-3">
+            </div>
+            <div className="p-3">
                 <h3>Listing Page</h3>
                 <p>https://www.sabresw.com/listing</p>
                 <h4>Map</h4>
@@ -47,17 +46,17 @@ export class Instructions extends Component {
                 <ul>
                     <li>By selecting a listing you own you can edit the listing by selecting Edit on the View/Edit toggle</li>
                 </ul>
-            </Jumbotron>
-            <Jumbotron className="p-3">
+            </div>
+            <div className="p-3">
                 <h3>Account Page</h3>
                 <p>https://www.sabresw.com/account</p>
                 <p>Nothing on this page is working yet.</p>
-            </Jumbotron>
-            <Jumbotron className="p-3">
+            </div>
+            <div className="p-3">
                 <h3>Slack</h3>
                 <p>https://sabresw.slack.com</p>
                 <p>Issues and bugs should be documented in Slack</p>
-            </Jumbotron>
+            </div>
         </React.Fragment>
         );
     }
