@@ -225,6 +225,7 @@ export class WizardShareListing extends Component {
         this.setState({
             showShareFacebok: false
         });
+        this.props.onCancel();
     }
 
     handleShareTwitterNext(){
@@ -238,6 +239,7 @@ export class WizardShareListing extends Component {
         this.setState({
             showShareTwitter: false
         });
+        this.props.onCancel();
     }
 
     handleShareLinkedInNext(){
@@ -251,6 +253,7 @@ export class WizardShareListing extends Component {
         this.setState({
             showShareLinkedIn: false
         });
+        this.props.onCancel();
     }
 
     handleShareConfirmNext(){
@@ -285,16 +288,22 @@ export class WizardShareListing extends Component {
             { this.state.showShareListingFacebook ?
             <ShareListingFacebook
                 show={this.state.showShareListingFacebook}
+                onNext={this.handleShareFacebookNext}
+                onCancel={this.handleShareFacebookCancel}
             />
             : null }
             { this.state.showShareListingTwitter ?
             <ShareListingTwitter
                 show={this.state.showShareListingTwitter}
+                onNext={this.handleShareTwitterNext}
+                onCancel={this.handleShareTwitterCancel}
             />
             : null }
             { this.state.showShareListingLinkedIn ?
             <ShareListingLinkedIn
                 show={this.state.showShareListingLinkedIn}
+                onNext={this.handleShareLinkedInNext}
+                onCancel={this.handleShareLinkedInCancel}
             />
             : null }
             { this.state.showShareListingContacts ?

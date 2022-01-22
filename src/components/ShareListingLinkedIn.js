@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-    Modal
+    Modal,
+    Button
 } from 'react-bootstrap';
 import {
     LinkedinShareButton,
@@ -19,7 +20,7 @@ class ShareListingLinkedIn extends React.Component{
             <Modal.Header closeButton>
                 <Modal.Title>
                     <span>
-                        Twitter Share 
+                        LinkedIn Share 
                     </span>
                 </Modal.Title>
             </Modal.Header>
@@ -30,6 +31,20 @@ class ShareListingLinkedIn extends React.Component{
                     <LinkedinIcon size={32} round />
                 </LinkedinShareButton>
             </Modal.Body>
+            <Modal.Footer>
+                <Button
+                    id="button-add-listing-type-cancel"
+                    onClick={this.props.onCancel}
+                >
+                    <span>Cancel</span>
+                </Button>
+                <Button
+                    id="button-add-listing-type-next"
+                    onClick={this.handleNext}
+                >
+                    Next
+                </Button>
+            </Modal.Footer>
         </Modal>
         );
     }

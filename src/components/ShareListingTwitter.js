@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-    Modal
+    Modal,
+    Button
 } from 'react-bootstrap';
 import {
     TwitterShareButton,
@@ -30,6 +31,21 @@ class ShareListingTwitter extends React.Component{
                     <TwitterIcon size={32} round />
                 </TwitterShareButton>
             </Modal.Body>
+            <Modal.Footer>
+                <Button
+                    id="button-add-listing-type-cancel"
+                    onClick={this.props.onCancel}
+                >
+                    <span>Cancel</span>
+                </Button>
+                <Button
+                    id="button-add-listing-type-next"
+                    onClick={this.handleNext}
+                >
+                    Next
+                </Button>
+            </Modal.Footer>
+
         </Modal>
         );
     }

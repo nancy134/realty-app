@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-    Modal
+    Modal,
+    Button
 } from 'react-bootstrap';
 import {
     FacebookShareButton,
@@ -30,6 +31,21 @@ class ShareListingFacebook extends React.Component{
                     <FacebookIcon size={32} round />
                 </FacebookShareButton>
             </Modal.Body>
+            <Modal.Footer>
+                <Button
+                    id="button-add-listing-type-cancel"
+                    onClick={this.props.onCancel}
+                >
+                    <span>Cancel</span>
+                </Button>
+                <Button
+                    id="button-add-listing-type-next"
+                    onClick={this.handleNext}
+                >
+                    Next
+                </Button>
+            </Modal.Footer>
+
         </Modal>
         );
     }
