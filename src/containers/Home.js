@@ -133,6 +133,12 @@ export class Home extends Component {
             onCancel={this.handleAddListingCancel}
             onLogin={this.handleLogin}
             propertyTypes={this.state.propertyTypes}
+
+            // Behalf User
+            isAdmin={this.props.isAdmin}
+            behalfUser={this.props.behalfUser}
+            behalfUserCognitoId={this.props.behalfUserCognitId}
+
         />
         : null }
         <div className="spacer">

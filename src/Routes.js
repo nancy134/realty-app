@@ -39,6 +39,12 @@ render(){
                     loggedIn={this.props.loggedIn}
                     showAddListingWizard={this.props.showAddListingWizard}
                     onAddListingCancel={this.props.onAddListingCancel}
+
+                    // BehalfUser
+                    isAdmin={this.props.isAdmin}
+                    behalfUser={this.props.behalfUser}
+                    behalfUserCognitoId={this.props.behalfUserCognitoId}
+
                     {...props}
                 />
             )

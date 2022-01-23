@@ -31,7 +31,6 @@ class ListingAddReview extends React.Component{
     }
     render()
     {
-
         // Stepper
         var addListingTypeCompleted=true;
         var addListingAddressCompleted=true;
@@ -53,6 +52,11 @@ class ListingAddReview extends React.Component{
         var shortDescription = listing.shortDescription;
         var longDescription = listing.longDescription;
         var propertyTypes = listing.propertyTypes;
+
+        var behalfUser = null;
+        if (this.props.behalfUser && this.props.behalfUser !== ""){
+            behalfUser = this.props.behalfUser;
+        }
        return(
         <Modal
           show={this.props.show}
@@ -85,6 +89,12 @@ class ListingAddReview extends React.Component{
                 <Row>
                     <Col><Alert variant="info">When selecting Create Listing, a draft listing will be created.  This listing will not be seen by the public.  You can edit the listing and add more information.  Once the listing is ready to be seen by the public, select the Publish button.</Alert></Col>
                 </Row>
+                { this.props.isAdmin  && behalfUser ?
+                <Row>
+                    <Col xs={2} className="font-weight-bold">On Behalf Of</Col>
+                    <Col xs={10}>{behalfUser}</Col>
+                </Row>
+                : null }
                 <Row>
                     <Col xs={2} className="font-weight-bold">Listing Type</Col>
                     <Col xs={2}>{listingType}</Col>
