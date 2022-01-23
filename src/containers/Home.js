@@ -116,7 +116,6 @@ export class Home extends Component {
   }else{
       title = "Phowma Home";
   }
-  var domain = getDomain(window.location.hostname);
   var showListingCards = true;
   if (domain === "findingcre") showListingCards = false;
      

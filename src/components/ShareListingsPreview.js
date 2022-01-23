@@ -27,7 +27,6 @@ class ShareListingsPreview extends React.Component{
     }
     componentDidMount(){
         var listings = this.props.listings;
-        var logo = this.props.selectedImageUrl;
         var body = {
             to: this.props.contactsSelected[0].email,
             replyTo: this.props.user.email,

@@ -12,6 +12,7 @@ import userService from './services/users';
 import PolicyModal from './components/PolicyModal';
 import { Helmet } from 'react-helmet';
 import { getTitlePrefix } from './helpers/utilities';
+import UserModal from './components/UserModal';
 
 class App extends React.Component {
   constructor(props){
@@ -50,7 +51,12 @@ class App extends React.Component {
           minimalTab: minimalTab,
           loading: true,
           email: null,
-          embed: embed
+          embed: embed,
+
+          // UserModal
+          showUserModal: false,
+          behalfUser: "",
+          behalfUserError: null
       };
       this.handleLogin = this.handleLogin.bind(this);
       this.handleLogout = this.handleLogout.bind(this);
@@ -61,7 +67,13 @@ class App extends React.Component {
       // Policy
       this.handlePolicyModalShow = this.handlePolicyModalShow.bind(this);
       this.handlePolicyModalHide = this.handlePolicyModalHide.bind(this);
+
+      // UserModal
+      this.handleUserModalShow = this.handleUserModalShow.bind(this);
+      this.handleUserModalHide = this.handleUserModalHide.bind(this);
+      this.handleSetBehalfUser = this.handleSetBehalfUser.bind(this);
   }
+
   componentDidMount(){
       var that = this;
       authenticationService.reAuthenticate().then(function(result){
@@ -124,9 +136,48 @@ class App extends React.Component {
           showAddListingWizard: false
       });
   }
+
+  handleUserModalShow(){
+      this.setState({
+          showUserModal: true
+      });
+  }
+
+  handleUserModalHide(){
+      this.setState({
+          showUserModal: false
+      });
+  }
+
+  handleSetBehalfUser(behalfUser){
+      var that = this;
+      var query = "email="+behalfUser;
+      userService.getUsers(query).then(function(users){
+          if (users.users.rows.length > 0){
+                 that.setState({
+                     behalfUser: behalfUser,
+                     showUserModal: false
+                 });
+          } else {
+              that.setState({
+                  behalfUserError: "Invalid user"
+              });
+          }
+      }).catch(function(err){
+          that.setState({
+              bahalfUserError: "Unknown error"
+          });
+      });
+  }
+
   render(){
   // title
   var title  = getTitlePrefix(window.location.hostname);
+
+  var behalfUser = null;
+  if (this.state.behalfUser && this.state.behalfUser !== ""){
+      behalfUser = this.state.behalfUser;
+  }
 
   return (
       <React.Fragment>
@@ -134,6 +185,14 @@ class App extends React.Component {
           <title>{title}</title>
       </Helmet>
       <div className="mycontainer">
+
+          <UserModal
+              show={this.state.showUserModal}
+              onHide={this.handleUserModalHide}
+              onSetBehalfUser={this.handleSetBehalfUser}
+              behalfUser={this.state.behalfUser}
+              behalfUserError={this.state.behalfUserError}
+          />
           <PolicyModal
               show={this.state.showPolicyModal}
               type={this.state.policyType}
@@ -149,6 +208,22 @@ class App extends React.Component {
                   /></Navbar.Brand>
               <Navbar.Toggle />
               <Navbar.Collapse className="justify-content-end">
+                  { this.state.isAdmin ?
+                  <Nav.Item>
+                      <Nav.Link eventKey="link-3">
+                          <Button
+                              variant="outline-primary"
+                              onClick={this.handleUserModalShow}
+                          >
+                              { behalfUser ?
+                              <span>On Behalf of {behalfUser}</span>
+                              : 
+                              <span>On Behalf of...</span>
+                              }
+                          </Button>
+                      </Nav.Link>
+                  </Nav.Item>
+                  : null}
                   <Nav.Item>
                       <Nav.Link eventKey="link-2">
                           <Button

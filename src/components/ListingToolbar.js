@@ -278,7 +278,6 @@ class ListingToolbar extends React.Component {
         var listingMode = this.props.listingMode;
         return (
             <Form className="toolbar-form m-2">
-                <Form>
                     <Row>
                     <Col xs="auto">
                         <Dropdown>
@@ -433,7 +432,6 @@ class ListingToolbar extends React.Component {
                     </Col>
                     : null }
                 </Row>
-                </Form>
             </Form>
         );
     }

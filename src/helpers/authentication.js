@@ -4,16 +4,21 @@ import LocalStorageService from '../services/localStorage';
 import userService from '../services/users';
 
 function setFullName(user){
-                if (user.first &&  user.last){
-                    LocalStorageService.setFullName(user.first+" "+user.last);
-                } else if (user.first && !user.last){
-                    LocalStorageService.setFullName(user.first);
-                } else if (!user.first && user.last){
-                    LocalStorageService.setFullName(user.last);
-                } else {
-                    LocalStorageService.setFullName(user.email);
-                }
+    var fullName = "";
+    if (user.first &&  user.last){
+        fullName = user.first+" "+user.last;
+    } else if (user.first && !user.last){
+        fullName = user.first;
+    } else if (!user.first && user.last){
+        fullName = user.last;
+    } else {
+        fullName = user.email;
+    }
+    if (user.isAdmin){
+        fullName += " (SU)";
+    }
 
+   LocalStorageService.setFullName(fullName);
 }
 
 export function reAuthenticate(){
