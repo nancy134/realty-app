@@ -318,7 +318,6 @@ class ListingAddAddress extends React.Component{
                 <Row className="mt-2">
                     <Col>
                         <Form>
-                            <Form>
                             <Row>
                                 <Col md={12}>
                                     <Form.Label className="font-weight-bold">Address</Form.Label>
@@ -377,8 +376,6 @@ class ListingAddAddress extends React.Component{
                                     </PlacesAutocomplete>
                                 </Col>
                             </Row>
-                            </Form>
-                            <Form>
                             <Row>
                                 <Col md={12} className="p-1 smallFont">
                                     <Form.Label className="font-weight-bold">Verification Status:&nbsp;</Form.Label>
@@ -412,9 +409,7 @@ class ListingAddAddress extends React.Component{
                                     }
                                 </Col>
                             </Row>
-                            </Form>
                             {this.state.verifiedAddresses ?
-                            <Form>
                             <Row>
                                 <Alert variant="primary">
                                 Verified address found, select below:
@@ -432,9 +427,7 @@ class ListingAddAddress extends React.Component{
                                 ))}
                                 </Alert>
                             </Row>
-                            </Form>
                             : null}
-                            <Form>
                             <Row>
                                 <Col md={6}>
                                     <Form.Label className="font-weight-bold">City</Form.Label>
@@ -476,8 +469,6 @@ class ListingAddAddress extends React.Component{
                                     </Form.Control>
                                 </Col>
                             </Row>
-                            </Form>
-                            <Form>
                             <Row>
                                 <Col md={6}>
                                     <Form.Label className="font-weight-bold">Zip</Form.Label>
@@ -498,9 +489,7 @@ class ListingAddAddress extends React.Component{
                                     </Form.Control.Feedback>
                                 </Col>
                             </Row>
-                            </Form>
                             { show ?
-                            <Form>
                             <Row>
                                 <Col md={12}>
                                     <Form.Label className="font-weight-bold">Display Address <span className="font-weight-light">(optional)</span></Form.Label>
@@ -519,7 +508,6 @@ class ListingAddAddress extends React.Component{
                                     </Form.Control.Feedback>
                                 </Col>
                             </Row>
-                            </Form>
                             : null }
                         </Form>
                     </Col>

@@ -68,6 +68,11 @@ render(){
                     onAddListingCancel={this.props.onAddListingCancel}
                     onShowPolicyModal={this.props.onShowPolicyModal}
                     embed={this.props.embed}
+
+                    // BehalfUser
+                    isAdmin={this.props.isAdmin}
+                    behalfUser={this.props.behalfUser}
+                    behalfUserCognitoId={this.props.behalfUserCognitoId}
                 />
             )
         }

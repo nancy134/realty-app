@@ -456,6 +456,11 @@ export class WizardAddListing extends Component {
                 onCancel={this.handleCancelAddAddress}
                 loggedIn={this.props.loggedIn}
                 finishProgress={this.props.finishProgress}
+
+                // Behalf User
+                isAdmin={this.props.isAdmin}
+                behalfUser={this.props.behalfUser}
+                behalfUserCognitId={this.props.behalfUserCognitoId}
             />
             : null }
             { this.state.showPolicyModal ?

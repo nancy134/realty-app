@@ -157,7 +157,6 @@ class ListingAddOverview extends React.Component{
                 <Form>
                 <Row className="mt-2">
                     <Col xs={9}>
-                            <Form>
                             <Row>
                                 { this.props.listing.listingType === listingTypes.FORSALE ?
                                 <Col md={6}>
@@ -185,8 +184,6 @@ class ListingAddOverview extends React.Component{
                                 </Col>
                                 : null}
                             </Row>
-                            </Form>
-                            <Form>
                             <Row>
                                 <Col md={12}>
                                     <Form.Label className="font-weight-bold">Short Description</Form.Label>
@@ -207,8 +204,6 @@ class ListingAddOverview extends React.Component{
                                     </Form.Control.Feedback>
                                 </Col>
                             </Row>
-                            </Form>
-                            <Form>
                             <Row>
                                 <Col md={12}>
                                     <Form.Label className="font-weight-bold">Long Description <span className="font-weight-light">(optional}</span></Form.Label>
@@ -230,7 +225,6 @@ class ListingAddOverview extends React.Component{
                                     </Form.Control.Feedback>
                                 </Col>
                             </Row>
-                            </Form>
                     </Col>
                     <Col xs={3}>
                         <Form.Label

@@ -1587,6 +1587,10 @@ export class ListingPage extends Component {
                 onCancel={this.handleAddListingCancel}
                 onLogin={this.handleLogin}
                 propertyTypes={this.state.propertyTypes}
+
+                isAdmin={this.props.isAdmin}
+                behalfUser={this.props.behalfUser}
+                behalfUserCognitoId={this.props.behalfUserCognitId}
             />
             : null }
             { !this.props.embed ?

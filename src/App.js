@@ -53,9 +53,10 @@ class App extends React.Component {
           email: null,
           embed: embed,
 
-          // UserModal
+          // behalfUser 
           showUserModal: false,
           behalfUser: "",
+          behalfUserCognitId: "",
           behalfUserError: null
       };
       this.handleLogin = this.handleLogin.bind(this);
@@ -156,6 +157,7 @@ class App extends React.Component {
           if (users.users.rows.length > 0){
                  that.setState({
                      behalfUser: behalfUser,
+                     behalfUserCognitoId: users.users.rows[0].cognitoId,
                      showUserModal: false
                  });
           } else {
@@ -264,6 +266,10 @@ class App extends React.Component {
               onShowPolicyModal={this.handlePolicyModalShow}
               loading={this.state.loading}
               embed={this.state.embed}
+
+              //Behalf User
+              behalfUserCognitoId={this.state.behalfUserCognitId}
+              behalfUser={this.state.behalfUser}
           >
           </Routes>
           }
