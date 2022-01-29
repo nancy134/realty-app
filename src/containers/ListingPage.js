@@ -1590,7 +1590,7 @@ export class ListingPage extends Component {
 
                 isAdmin={this.props.isAdmin}
                 behalfUser={this.props.behalfUser}
-                behalfUserCognitoId={this.props.behalfUserCognitId}
+                behalfUserCognitoId={this.props.behalfUserCognitoId}
             />
             : null }
             { !this.props.embed ?

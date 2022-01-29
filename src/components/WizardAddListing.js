@@ -460,7 +460,7 @@ export class WizardAddListing extends Component {
                 // Behalf User
                 isAdmin={this.props.isAdmin}
                 behalfUser={this.props.behalfUser}
-                behalfUserCognitId={this.props.behalfUserCognitoId}
+                behalfUserCognitoId={this.props.behalfUserCognitoId}
             />
             : null }
             { this.state.showPolicyModal ?

@@ -56,7 +56,7 @@ class App extends React.Component {
           // behalfUser 
           showUserModal: false,
           behalfUser: "",
-          behalfUserCognitId: "",
+          behalfUserCognitoId: "",
           behalfUserError: null
       };
       this.handleLogin = this.handleLogin.bind(this);
@@ -268,7 +268,7 @@ class App extends React.Component {
               embed={this.state.embed}
 
               //Behalf User
-              behalfUserCognitoId={this.state.behalfUserCognitId}
+              behalfUserCognitoId={this.state.behalfUserCognitoId}
               behalfUser={this.state.behalfUser}
           >
           </Routes>

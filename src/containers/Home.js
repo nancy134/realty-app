@@ -137,7 +137,7 @@ export class Home extends Component {
             // Behalf User
             isAdmin={this.props.isAdmin}
             behalfUser={this.props.behalfUser}
-            behalfUserCognitoId={this.props.behalfUserCognitId}
+            behalfUserCognitoId={this.props.behalfUserCognitoId}
 
         />
         : null }
