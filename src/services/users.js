@@ -14,6 +14,29 @@ function getUsers(query){
     });
 }
 
+function optInUser(body){
+    var url = process.env.REACT_APP_API + "users";
+    return new Promise(function(resolve, reject){
+        axiosInstance.post(url, body).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
+
+function optOutUser(body){
+    var url = process.env.REACT_APP_API + "users";
+    return new Promise(function(resolve, reject){
+        axiosInstance.put(url, body).then(function(response){
+            resolve(response.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
 function getUser(){
     var url = process.env.REACT_APP_API + 'user/me';
     return new Promise(function(resolve, reject){
@@ -126,6 +149,8 @@ function resendInvite(associationId, userId){
 
 const users = {
     getUser,
+    optInUser,
+    optOutUser,
     updateUser,
     getUsers,
     getUserEnums,

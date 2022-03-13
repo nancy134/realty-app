@@ -8,6 +8,7 @@ import {
 import StepperShareListing from '../components/StepperShareListing';
 import ImageSelectContainer from '../components/ImageSelectContainer';
 import libraryService from '../services/library';
+import { SketchPicker } from 'react-color';
 
 class ShareListingImages extends React.Component{
     constructor(props){
@@ -15,10 +16,19 @@ class ShareListingImages extends React.Component{
         this.handleNext = this.handleNext.bind(this);
         this.handleSelectCard = this.handleSelectCard.bind(this);
         this.getImages = this.getImages.bind(this);
+        this.handleChangeComplete = this.handleChangeComplete.bind(this);
         this.state = {
             cards: []
         };
     }
+
+    handleChangeComplete(color){
+        console.log("color: ");
+        console.log(color);
+        console.log("color.hex: "+color.hex);
+        this.props.onSelectColor(color.hex);
+    }
+
     getImages(){
         var that = this;
         return new Promise(function(resolve, reject){
@@ -80,10 +90,20 @@ class ShareListingImages extends React.Component{
                 />
                 <Row>
                     <Col>
+                        <p>Select header image</p>
                         <ImageSelectContainer
                             cards={this.state.cards}
                             onSelectCard={this.handleSelectCard}
                             selectedCard={this.props.selectedImage}
+                        />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <p>Select color scheme</p>
+                        <SketchPicker
+                            color={this.props.selectedColor}
+                            onChangeComplete={this.handleChangeComplete}
                         />
                     </Col>
                 </Row>

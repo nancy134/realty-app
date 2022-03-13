@@ -341,6 +341,19 @@ export function getPrimaryImage(listing){
     return src;
 }
 
+export function getImage2and3(listing){
+    if (!listing || !listing.images) return null;
+
+    if (listing.images.length < 3) return null;
+
+    var images = [];
+
+    images.push(listing.images[1].url);
+    images.push(listing.images[2].url);
+
+    return images;
+}
+
 /////////////////////////////////
 // Size and Price
 /////////////////////////////////
@@ -530,4 +543,32 @@ export function getTitlePrefix(hostName){
     return(title);    
 }
 
+export function formatAvailableSpacesForEmail(spaces){
+    var allSpaces = [];
+    for (var i=0; i<spaces.length; i++){
+        var singleSpace = "";
 
+        singleSpace += "<strong>"+spaces[i].use+"</strong>";
+
+        var sizeWithCommas =  numberWithCommas(spaces[i].size);
+        singleSpace += " ~ " + sizeWithCommas + " sq ft";
+
+        if (spaces[i].price){
+             singleSpace += " ~ " + spaces[i].price + " " + spaces[i].priceUnit;
+        }
+        if (spaces[i].type){
+             singleSpace += " ~ " + spaces[i].type;
+        }
+        allSpaces.push(singleSpace);
+    }
+
+    var allHtml = "<ul>";
+    for (i=0; i<spaces.length; i++){
+        allHtml += 
+            "<li>" +
+            allSpaces[i] +
+            "</li>";
+    }
+    allHtml += "</ul>";
+    return allHtml;
+}

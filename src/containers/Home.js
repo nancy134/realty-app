@@ -16,6 +16,7 @@ import { Helmet } from 'react-helmet';
 import { getDomain } from '../helpers/utilities';
 import Features from '../components/Features';
 import ListingCards from '../components/ListingCards';
+import EmailRegistration from '../components/EmailRegistration';
 
 export class Home extends Component { 
   constructor(props, context) {
@@ -152,7 +153,7 @@ export class Home extends Component {
                             <h1>Find your commercial property</h1>
                         </Col>
                     </Row>
-                    <Row className="mx-auto" style={{width: '100%'}}>
+                    <Row className="pb-2 mx-auto" style={{width: '100%'}}>
                         <ListingToolbar
                             buttonText="Search"
                             listingMode={"allListings"}
@@ -169,6 +170,21 @@ export class Home extends Component {
             </Col>
             <Col xs={3}></Col>
         </Row>
+        <div className="spacer"></div>
+        <Row>
+            <Col xs={3}></Col>
+            <Col xs={6}>
+                <div className="background">
+                    <Row className="pt-2 pb-2 mx-auto" style={{width: '100%'}}>
+                        <Col>
+                            <EmailRegistration/>
+                        </Col>
+                    </Row>
+                </div>
+            </Col>
+            <Col xs={3}></Col>
+        </Row>
+
     </div>
     <Features />
     { showListingCards ?

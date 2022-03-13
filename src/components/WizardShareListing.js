@@ -10,6 +10,7 @@ import ShareListingFacebook from '../components/ShareListingFacebook';
 import ShareListingConfirm from '../components/ShareListingConfirm';
 import {shareMethodTypes} from '../constants/shareMethodTypes';
 import userService from '../services/users';
+import {shade} from '../helpers/color';
 
 export class WizardShareListing extends Component {
     constructor(props){
@@ -29,6 +30,7 @@ export class WizardShareListing extends Component {
         this.handleShareImageNext = this.handleShareImageNext.bind(this);
         this.handleShareImageCancel = this.handleShareImageCancel.bind(this);
         this.handleSelectImage = this.handleSelectImage.bind(this);
+        this.handleSelectColor = this.handleSelectColor.bind(this);
 
         this.handleSharePreviewNext = this.handleSharePreviewNext.bind(this);
         this.handleSharePreviewCancel = this.handleSharePreviewCancel.bind(this);
@@ -58,7 +60,9 @@ export class WizardShareListing extends Component {
             subject: "Exclusive Listing",
             body: null,
             selectedImage: null,
-            selectedImageUrl: null
+            selectedImageUrl: null,
+            selectedColor: '#38761d',
+            selectedColorLight: '#d9ead3'
         };
     }
 
@@ -151,6 +155,17 @@ export class WizardShareListing extends Component {
             selectedImageUrl: url
         });
     }
+
+    handleSelectColor(color){
+        console.log("color: "+color);
+        var light = shade(color, 0.4);
+        console.log(light);
+        this.setState({
+            selectedColor: color,
+            selectedColorLight: light
+        });
+    }
+
     handleShareImageCancel(){
         this.setState({
             showShareListingImage: false
@@ -266,6 +281,8 @@ export class WizardShareListing extends Component {
                 onCancel={this.handleShareImageCancel}
                 selectedImage={this.state.selectedImage}
                 onSelectImage={this.handleSelectImage}
+                onSelectColor={this.handleSelectColor}
+                selectedColor={this.state.selectedColor}
             />
             : null }
 
@@ -281,6 +298,8 @@ export class WizardShareListing extends Component {
                 subject={this.state.subject}
                 onSubjectChange={this.handleShareSubjectChanged}
                 selectedImageUrl={this.state.selectedImageUrl}
+                selectedColor={this.state.selectedColor}
+                selectedColorLight={this.state.selectedColorLight}
             />
             : null }
             { this.state.showShareListingsPreview ?
@@ -295,6 +314,7 @@ export class WizardShareListing extends Component {
                 subject={this.state.subject}
                 onSubjectChange={this.handleShareSubjectChanged}
                 selectedImageUrl={this.state.selectedImageUrl}
+                selectedColor={this.state.selectedColor}
             />
             : null }
 

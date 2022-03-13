@@ -10,7 +10,10 @@ import StepperShareListing from '../components/StepperShareListing';
 import mailService from '../services/mail';
 import {formatAddress} from '../helpers/utilities';
 import {getPrimaryImage} from '../helpers/utilities';
+import {getImage2and3} from '../helpers/utilities';
 import {formatSizeAndPrice} from '../helpers/utilities';
+import {formatName} from '../helpers/utilities';
+import {formatAvailableSpacesForEmail} from '../helpers/utilities';
 
 class ShareListingPreview extends React.Component{
     constructor(props){
@@ -32,7 +35,25 @@ class ShareListingPreview extends React.Component{
         var listing = this.props.listing;
         var logo = this.props.selectedImageUrl;
         var address = formatAddress(listing);
+
+        // Href
+        var listingHref = 
+            "https://" +
+            window.location.hostname +
+            "/listing/" +
+            listing.id;
+
+        // Images
         var image = getPrimaryImage(listing);
+        var images = getImage2and3(listing);
+        var image2 = null;
+        var image3 = null;
+        if (images){
+            image2 = images[0];
+            image3 = images[1];
+        }
+
+        // Size and Price
         var sizeAndPrice = formatSizeAndPrice(listing.spaces); 
         var size = null;
         var price = null;
@@ -41,26 +62,68 @@ class ShareListingPreview extends React.Component{
             price = sizeAndPrice.price;
         }
 
+        // Available Space
+        var availableSpace = "";
+        if (listing.spaces.length > 0){
+           availableSpace = formatAvailableSpacesForEmail(listing.spaces);
+        }
+
         var strListingPrice = null;
         if (listing.listingPrice){
             var floatPrice = parseFloat(listing.listingPrice);
             var listingPrice = floatPrice.toLocaleString(undefined, {maximumFractionDigits:0});
             strListingPrice = "For Sale at $"+listingPrice; 
         }
+
+        // Contact
+        var contactName = "";
+        var contactCompany = "";
+        var contactEmail = "";
+        var contactAddress = "";
+        var contactCity = "";
+        var contactOffice = "";
+        var contactMobile = "";
+        if (listing.users.length > 0){
+            contactName = formatName(listing.users[0]);
+            contactEmail = listing.users[0].email;
+            contactCompany = listing.users[0].company;
+            contactAddress = listing.users[0].address;
+            contactCity = 
+                listing.users[0].city +
+                ", " +
+                listing.users[0].state +
+                " " +
+                listing.users[0].zip;
+            contactOffice = listing.users[0].officePhone;
+            contactMobile = listing.users[0].mobilePhone;
+        }
         var body = {
             to: this.props.contactsSelected[0].email,
             replyTo: this.props.user.email,
             subject: this.props.subject,
             preview: true,
+            color: this.props.selectedColor,
+            colorLight: this.props.selectedColorLight,
             listing: {
                 image: image,
+                image2: image2,
+                image3: image3,
                 address: address,
                 shortDescription: listing.shortDescription,
                 longDescription: listing.longDescription,
+                listingHref: listingHref,
+                availableSpace: availableSpace,
                 listingPrice: strListingPrice,
                 size: size,
                 price: price,
-                logo: logo
+                logo: logo,
+                contactName: contactName,
+                contactEmail: contactEmail,
+                contactOffice: contactOffice,
+                contactMobile: contactMobile,
+                contactCompany: contactCompany,
+                contactAddress: contactAddress,
+                contactCity: contactCity,
             }
         }
         var that = this;

@@ -1,0 +1,9 @@
+.listing-container{
+    flex-grow: 1;
+}
+
+.leftcol {
+   height: 85vh;
+   overflow:hidden;
+}
+

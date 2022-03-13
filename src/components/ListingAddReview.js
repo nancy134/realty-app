@@ -34,7 +34,7 @@ class ListingAddReview extends React.Component{
             listing.owner = this.props.behalfUserCognitoId;
         }
         console.log(listing);
-        //this.props.onNext(listing);
+        this.props.onNext(listing);
     }
     render()
     {

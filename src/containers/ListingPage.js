@@ -52,7 +52,8 @@ export class ListingPage extends Component {
         }
 
         if (props.match.params.id){
-           fullscreen = true;
+           //fullscreen = true;
+           showDetail = true;
            index = props.match.params.id;
         }
 
@@ -915,7 +916,9 @@ export class ListingPage extends Component {
                 listingMode: this.state.listingMode,
                 page: this.state.page,
                 bounds: bounds,
-                myListingsMap: { bounds: myBounds}
+                myListingsMap: { bounds: myBounds},
+                showDetail: this.state.showDetail,
+                index: this.state.index
             };
             this.fetchListingsPromise(localState).then(function(localState){
                 if (localState.listingMode === "allListings"){
@@ -931,7 +934,7 @@ export class ListingPage extends Component {
                     }
                 }
                 localState.readyForMap = true;
-                if (that.state.createListing){
+                if (that.state.createListing || that.state.showDetail){
                     localState.index = that.state.index;
                     localState.showDetail = that.state.showDetail;
                     localState.listingMode = that.state.listingMode;
