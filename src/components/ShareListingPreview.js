@@ -83,6 +83,7 @@ class ShareListingPreview extends React.Component{
         var contactCity = "";
         var contactOffice = "";
         var contactMobile = "";
+        var contactWebsite="";
         if (listing.users.length > 0){
             contactName = formatName(listing.users[0]);
             contactEmail = listing.users[0].email;
@@ -96,6 +97,7 @@ class ShareListingPreview extends React.Component{
                 listing.users[0].zip;
             contactOffice = listing.users[0].officePhone;
             contactMobile = listing.users[0].mobilePhone;
+            contactWebsite = listing.users[0].website;
         }
         var body = {
             to: this.props.contactsSelected[0].email,
@@ -124,6 +126,7 @@ class ShareListingPreview extends React.Component{
                 contactCompany: contactCompany,
                 contactAddress: contactAddress,
                 contactCity: contactCity,
+                contactWebsite: contactWebsite
             }
         }
         var that = this;
