@@ -212,6 +212,7 @@ class ShareListingPreview extends React.Component{
                 </Button>
                 <Button 
                     id="button-add-listing-type-next"
+                    disabled={!this.state.body}
                     onClick={this.handleNext}
                 >
                     Send Mail 

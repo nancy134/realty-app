@@ -44,6 +44,10 @@ export class WizardShareListing extends Component {
 
         this.handleShareConfirmNext = this.handleShareConfirmNext.bind(this);
 
+        var subject = "Exclusive Listing";
+        if (this.props.listing){
+            subject = this.props.listing.shortDescription;
+        }
         this.state = {
             showShareListingMethod: true,
             showShareListingContacts: false,
@@ -57,7 +61,7 @@ export class WizardShareListing extends Component {
             contactsSelected: [],
             methodType: shareMethodTypes.EMAILFC,
             user: null,
-            subject: "Exclusive Listing",
+            subject: subject,
             body: null,
             selectedImage: null,
             selectedImageUrl: null,
@@ -174,6 +178,7 @@ export class WizardShareListing extends Component {
     }
 
     handleSharePreviewNext(body){
+        body.subject = this.state.subject;
         this.setState({
             showShareListingPreview: false,
             showShareListingConfirm: true,
