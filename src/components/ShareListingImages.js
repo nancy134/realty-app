@@ -9,6 +9,7 @@ import StepperShareListing from '../components/StepperShareListing';
 import ImageSelectContainer from '../components/ImageSelectContainer';
 import libraryService from '../services/library';
 import { SketchPicker } from 'react-color';
+import userService from '../services/users';
 
 class ShareListingImages extends React.Component{
     constructor(props){
@@ -23,9 +24,6 @@ class ShareListingImages extends React.Component{
     }
 
     handleChangeComplete(color){
-        console.log("color: ");
-        console.log(color);
-        console.log("color.hex: "+color.hex);
         this.props.onSelectColor(color.hex);
     }
 
@@ -42,6 +40,9 @@ class ShareListingImages extends React.Component{
                         url: row.url
                     }
                     library.push(image);
+                    if (row.url === that.props.selectedImageUrl){
+                        that.props.onSelectImage(row.id, row.url);
+                    }
                 }
                 that.setState({
                     cards: library
@@ -57,7 +58,16 @@ class ShareListingImages extends React.Component{
         this.props.onSelectImage(id, url);
     }
     handleNext(){
-        this.props.onNext();
+        var that = this;
+        var body = {
+            emailImage: this.props.selectedImageUrl,
+            emailColor: this.props.selectedColor
+        };
+        userService.updateUser(this.props.user.id, body).then(function(user){
+            that.props.onNext(user);
+        }).catch(function(err){
+            console.log(err);
+        });
     }
 
     componentDidMount(){

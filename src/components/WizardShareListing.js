@@ -161,9 +161,7 @@ export class WizardShareListing extends Component {
     }
 
     handleSelectColor(color){
-        console.log("color: "+color);
-        var light = shade(color, 0.4);
-        console.log(light);
+        var light = shade(color, 0.2);
         this.setState({
             selectedColor: color,
             selectedColorLight: light
@@ -237,8 +235,15 @@ export class WizardShareListing extends Component {
     componentDidMount(){
         var that = this;
         userService.getUser().then(function(user){
+            var selectedColor = '#38761d';
+            var selectedImageUrl = null;
+
+            if (user.emailColor) selectedColor = user.emailColor;
+            if (user.emailImage) selectedImageUrl = user.emailImage;
             that.setState({
-                user: user
+                user: user,
+                selectedImageUrl: selectedImageUrl,
+                selectedColor: selectedColor,
             });
         }).catch(function(err){
         });
@@ -285,9 +290,11 @@ export class WizardShareListing extends Component {
                 onNext={this.handleShareImageNext}
                 onCancel={this.handleShareImageCancel}
                 selectedImage={this.state.selectedImage}
+                selectedImageUrl={this.state.selectedImageUrl}
                 onSelectImage={this.handleSelectImage}
                 onSelectColor={this.handleSelectColor}
                 selectedColor={this.state.selectedColor}
+                user={this.state.user}
             />
             : null }
 
