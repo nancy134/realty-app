@@ -171,20 +171,15 @@ export class Home extends Component {
             <Col xs={3}></Col>
         </Row>
         <div className="spacer"></div>
-        <Row>
-            <Col xs={3}></Col>
-            <Col xs={6}>
-                <div className="background">
-                    <Row className="pt-2 pb-2 mx-auto" style={{width: '100%'}}>
-                        <Col>
-                            <EmailRegistration/>
-                        </Col>
-                    </Row>
-                </div>
+    </div>
+    <div className="background">
+        <Row className="pt-2 pb-2 mx-auto" style={{width: '100%'}}>
+            <Col xs={4}></Col>
+            <Col className="border p-2" xs={4}>
+                <EmailRegistration/>
             </Col>
-            <Col xs={3}></Col>
+            <Col xs={4}></Col>
         </Row>
-
     </div>
     <Features />
     { showListingCards ?

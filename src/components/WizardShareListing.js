@@ -161,7 +161,7 @@ export class WizardShareListing extends Component {
     }
 
     handleSelectColor(color){
-        var light = shade(color, 0.2);
+        var light = shade(color, 0.85);
         this.setState({
             selectedColor: color,
             selectedColorLight: light
@@ -236,14 +236,20 @@ export class WizardShareListing extends Component {
         var that = this;
         userService.getUser().then(function(user){
             var selectedColor = '#38761d';
+            var selectedColorLight = '#d9ead3';
+
             var selectedImageUrl = null;
 
-            if (user.emailColor) selectedColor = user.emailColor;
+            if (user.emailColor){
+                selectedColor = user.emailColor;
+                selectedColorLight = shade(selectedColor, 0.85);
+            }
             if (user.emailImage) selectedImageUrl = user.emailImage;
             that.setState({
                 user: user,
                 selectedImageUrl: selectedImageUrl,
                 selectedColor: selectedColor,
+                selectedColorLight: selectedColorLight
             });
         }).catch(function(err){
         });
