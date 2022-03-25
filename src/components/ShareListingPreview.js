@@ -100,6 +100,7 @@ class ShareListingPreview extends React.Component{
             contactWebsite = listing.users[0].website;
         }
         var body = {
+            contacts: this.props.contactsSelected,
             to: this.props.contactsSelected[0].email,
             replyTo: this.props.user.email,
             subject: this.props.subject,
