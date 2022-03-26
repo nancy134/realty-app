@@ -34,6 +34,9 @@ class ShareListingPreview extends React.Component{
     componentDidMount(){
         var listing = this.props.listing;
         var logo = this.props.selectedImageUrl;
+        if (!logo){
+            logo = "https://sabre-images.s3.amazonaws.com/FindingCRELogo.png";
+        }
         var address = formatAddress(listing);
 
         // Href
