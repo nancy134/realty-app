@@ -56,6 +56,9 @@ class ShareListingContacts extends React.Component{
                             user={this.props.user}
                             selectedGroup={this.props.selectedGroup}
                             groups={this.props.groups}
+                            showAddGroup={this.props.showAddGroup}
+                            onShowAddGroup={this.props.onShowAddGroup}
+                            onHideAddGroup={this.props.onHideAddGroup}
                             onAddGroup={this.props.onAddGroup}
                             getContacts={this.props.getContacts}
                         />

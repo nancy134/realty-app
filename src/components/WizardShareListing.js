@@ -25,6 +25,8 @@ export class WizardShareListing extends Component {
         this.handleShareContactsCancel = this.handleShareContactsCancel.bind(this);
         this.handleShareContactsSelected = this.handleShareContactsSelected.bind(this);
         this.handleSelectGroup = this.handleSelectGroup.bind(this);
+        this.handleShowAddGroup = this.handleShowAddGroup.bind(this);
+        this.handleHideAddGroup = this.handleHideAddGroup.bind(this);
         this.handleAddGroup = this.handleAddGroup.bind(this);
         this.getContacts = this.getContacts.bind(this);
 
@@ -73,7 +75,8 @@ export class WizardShareListing extends Component {
             selectedColorLight: '#d9ead3',
             selectedGroup: -1,
             groups: [],
-            groupContacts: []
+            groupContacts: [],
+            showAddGroup: false
         };
     }
 
@@ -135,18 +138,35 @@ export class WizardShareListing extends Component {
         });
     }
 
+    handleShowAddGroup(){
+        this.setState({
+            showAddGroup: true
+        });
+    }
+    handleHideAddGroup(){
+        this.setState({
+            showAddGroup: false
+        });
+    }
     handleAddGroup(group){
         var that = this;
         contactService.createGroup(group).then(function(result){
             contactService.getGroups().then(function(groups){
                 that.setState({
                     selectedGroup: result.id,
-                    groups: groups.groups.rows
+                    groups: groups.groups.rows,
+                    showAddGroup: false
                 });
             }).catch(function(err){
+                that.setState({
+                    showAddGroup: false
+                });
                 console.log(err);
             });
         }).catch(function(err){
+            that.setState({
+                showAddGroup: false
+            });
             console.log(err);
         });
     }
@@ -355,6 +375,9 @@ export class WizardShareListing extends Component {
                 onSelectGroup={this.handleSelectGroup}
                 selectedGroup={this.state.selectedGroup}
                 groups={this.state.groups}
+                showAddGroup={this.state.showAddGroup}
+                onShowAddGroup={this.handleShowAddGroup}
+                onHideAddGroup={this.handleHideAddGroup}
                 onAddGroup={this.handleAddGroup}
                 getContacts={this.getContacts}
                 groupContacts={this.state.groupContacts}

@@ -177,9 +177,6 @@ class SearchContacts extends React.Component {
         this.props.onAddGroup(group);
         sleep(250).then(function(result){
             that.tableRef.current.onQueryChange();
-            that.setState({
-                showGroupModal: false
-            });
         }).catch(function(err){
             console.log(err);
         });
@@ -192,15 +189,11 @@ class SearchContacts extends React.Component {
     }
 
     handleShowGroupModal(){
-        this.setState({
-            showGroupModal: true
-        });
+        this.props.onShowAddGroup();
     }
 
     handleHideGroupModal(){
-        this.setState({
-            showGroupModal: false
-        });
+        this.props.onHideAddGroup();
     }
 
     handleShowSelectGroupModal(){
@@ -242,10 +235,10 @@ class SearchContacts extends React.Component {
     render(){
         return(
             <React.Fragment>
-                { this.state.showGroupModal ?
+                { this.props.showAddGroup ?
                 <GroupAddModal
-                    show={this.state.showGroupModal}
-                    onHide={this.handleHideGroupModal}
+                    show={this.props.showAddGroup}
+                    onHide={this.props.onHideAddGroup}
                     onSave={this.handleSaveGroup}
                 />
                 : null }
@@ -257,9 +250,9 @@ class SearchContacts extends React.Component {
                     onSave={this.handleSaveContact}
                     onHide={this.handleHideContact}
                     onSaveGroup={this.handleSaveGroup}
-                    onShowGroupModal={this.handleShowGroupModal}
-                    onHideGroupModal={this.handleHideGroupModal}
-                    showGroupModal={this.state.showGroupModal}
+                    onShowGroupModal={this.props.onShowAddGroup}
+                    onHideGroupModal={this.props.onHideAddGroup}
+                    showGroupModal={this.props.showAddGroup}
                     groups={this.props.groups}
                     onShowSelectGroupModal={this.handleShowSelectGroupModal}
                     onHideSelectGroupModal={this.handleHideSelectGroupModal}
