@@ -23,7 +23,7 @@ class ShareListingContacts extends React.Component{
     render(){
         var disableButton = true;
 
-        if (this.props.contactsSelected.length > 0){
+        if (this.props.groupContacts.length > 0){
             disableButton = false;
         }
 
@@ -52,7 +52,12 @@ class ShareListingContacts extends React.Component{
                         <SearchContacts
                             onContactsSelected={this.handleContactsSelected}
                             contactsSelected={this.props.contactsSelected}
+                            onSelectGroup={this.props.onSelectGroup}
                             user={this.props.user}
+                            selectedGroup={this.props.selectedGroup}
+                            groups={this.props.groups}
+                            onAddGroup={this.props.onAddGroup}
+                            getContacts={this.props.getContacts}
                         />
                     </Col>
                 </Row>

@@ -11,6 +11,7 @@ import ShareListingConfirm from '../components/ShareListingConfirm';
 import {shareMethodTypes} from '../constants/shareMethodTypes';
 import userService from '../services/users';
 import {shade} from '../helpers/color';
+import contactService from '../services/contacts';
 
 export class WizardShareListing extends Component {
     constructor(props){
@@ -23,6 +24,9 @@ export class WizardShareListing extends Component {
         this.handleShareContactsNext = this.handleShareContactsNext.bind(this);
         this.handleShareContactsCancel = this.handleShareContactsCancel.bind(this);
         this.handleShareContactsSelected = this.handleShareContactsSelected.bind(this);
+        this.handleSelectGroup = this.handleSelectGroup.bind(this);
+        this.handleAddGroup = this.handleAddGroup.bind(this);
+        this.getContacts = this.getContacts.bind(this);
 
         this.handleShareAuthNext = this.handleShareAuthNext.bind(this);
         this.handleShareAuthCancel = this.handleShareAuthCancel.bind(this);
@@ -66,7 +70,10 @@ export class WizardShareListing extends Component {
             selectedImage: null,
             selectedImageUrl: null,
             selectedColor: '#38761d',
-            selectedColorLight: '#d9ead3'
+            selectedColorLight: '#d9ead3',
+            selectedGroup: -1,
+            groups: [],
+            groupContacts: []
         };
     }
 
@@ -120,6 +127,51 @@ export class WizardShareListing extends Component {
         this.setState({
             contactsSelected: rows
         });
+    }
+
+    handleSelectGroup(group){
+        this.setState({
+            selectedGroup: group
+        });
+    }
+
+    handleAddGroup(group){
+        var that = this;
+        contactService.createGroup(group).then(function(result){
+            contactService.getGroups().then(function(groups){
+                that.setState({
+                    selectedGroup: result.id,
+                    groups: groups.groups.rows
+                });
+            }).catch(function(err){
+                console.log(err);
+            });
+        }).catch(function(err){
+            console.log(err);
+        });
+    }
+
+    getContacts(query){
+        var that = this;
+        return new Promise(function(resolve, reject){
+            var page = query.page + 1;
+            var queryStr = 'perPage='+query.pageSize+'&page='+page;
+
+            contactService.getGroupClients(that.state.selectedGroup, queryStr).then(function(groupClients){
+                that.setState({
+                    groupContacts: groupClients.clientGroups.rows
+                });
+                var ret = {
+                    data: groupClients.clientGroups.rows,
+                    page: groupClients.page-1,
+                    totalCount: groupClients.clientGroups.count
+                };
+                resolve(ret);
+            }).catch(function(err){
+                reject(err);
+            });
+        });
+
     }
 
     handleShareAuthNext(accessToken, refreshToken){
@@ -177,6 +229,11 @@ export class WizardShareListing extends Component {
 
     handleSharePreviewNext(body){
         body.subject = this.state.subject;
+        body.contacts = [];
+        for (var i=0; i<this.state.groupContacts.length; i++){
+            var contact = this.state.groupContacts[i];
+            body.contacts.push(contact.email); 
+        }
         this.setState({
             showShareListingPreview: false,
             showShareListingConfirm: true,
@@ -235,23 +292,37 @@ export class WizardShareListing extends Component {
     componentDidMount(){
         var that = this;
         userService.getUser().then(function(user){
-            var selectedColor = '#38761d';
-            var selectedColorLight = '#d9ead3';
+            contactService.getGroups().then(function(groups){
+                var selectedColor = '#38761d';
+                var selectedColorLight = '#d9ead3';
 
-            var selectedImageUrl = null;
+                var selectedImageUrl = null;
 
-            if (user.emailColor){
-                selectedColor = user.emailColor;
-                selectedColorLight = shade(selectedColor, 0.85);
-            }
-            if (user.emailImage) selectedImageUrl = user.emailImage;
-            that.setState({
-                user: user,
-                selectedImageUrl: selectedImageUrl,
-                selectedColor: selectedColor,
-                selectedColorLight: selectedColorLight
+                if (user.emailColor){
+                    selectedColor = user.emailColor;
+                    selectedColorLight = shade(selectedColor, 0.85);
+                }
+                if (user.emailImage) selectedImageUrl = user.emailImage;
+
+                var selectedGroup = -1;
+                var allGroups = [];
+                if (groups.groups.rows.length > 0){
+                    selectedGroup = groups.groups.rows[0].id;
+                    allGroups = groups.groups.rows 
+                }
+                that.setState({
+                    user: user,
+                    selectedImageUrl: selectedImageUrl,
+                    selectedColor: selectedColor,
+                    selectedColorLight: selectedColorLight,
+                    selectedGroup: selectedGroup,
+                    groups: allGroups
+                });
+            }).catch(function(err){
+                console.log(err);
             });
         }).catch(function(err){
+            console.log(err);
         });
     }
     render(){
@@ -281,6 +352,12 @@ export class WizardShareListing extends Component {
                 methodType={this.state.methodType}
                 contactsSelected={this.state.contactsSelected}
                 user={this.state.user}
+                onSelectGroup={this.handleSelectGroup}
+                selectedGroup={this.state.selectedGroup}
+                groups={this.state.groups}
+                onAddGroup={this.handleAddGroup}
+                getContacts={this.getContacts}
+                groupContacts={this.state.groupContacts}
             />
             : null }
             { this.state.showShareListingAuth ?
@@ -318,6 +395,7 @@ export class WizardShareListing extends Component {
                 selectedImageUrl={this.state.selectedImageUrl}
                 selectedColor={this.state.selectedColor}
                 selectedColorLight={this.state.selectedColorLight}
+                groupContacts={this.state.groupContacts}
             />
             : null }
             { this.state.showShareListingsPreview ?
@@ -349,6 +427,7 @@ export class WizardShareListing extends Component {
                 onSubjectChange={this.handleShareSubjectChanged}
                 accessToken={this.state.accessToken}
                 refreshToken={this.state.refreshToken}
+                groupContacts={this.state.groupContacts}
             />
             : null }
             { this.state.showShareListingConfirm ?

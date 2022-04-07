@@ -55,7 +55,6 @@ class ShareListingPreviewConstant extends React.Component{
 
         var fromName = this.props.user.first + " " + this.props.user.last;
         var body = {
-            to: this.props.contactsSelected,
             replyTo: this.props.user.email,
             subject: this.props.subject,
             preview: true,

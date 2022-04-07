@@ -11,6 +11,7 @@ import * as Yup from 'yup';
 import authenticationService from '../helpers/authentication';
 import {formatNameList} from '../helpers/utilities';
 import {abbrState} from '../helpers/utilities';
+import contactService from '../services/contacts';
 
 const ContactSchema = Yup.object().shape({
     client: Yup.string(),
@@ -23,6 +24,13 @@ class ContactModal extends React.Component {
         this.handleSendMessage = this.handleSendMessage.bind(this);
     }
 
+    componentDidMount(){
+        contactService.getGroups().then(function(groups){
+            console.log(groups);
+        }).catch(function(err){
+            console.log(err);
+        });
+    }
     handleSendMessage(initialValues, values){
         this.props.onSendMessage(values);
     }
@@ -78,7 +86,6 @@ class ContactModal extends React.Component {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form>
                         <Row>
                         <Form.Group as={Col}>
                             <Form.Label className="font-weight-bold">To</Form.Label>
@@ -90,8 +97,6 @@ class ContactModal extends React.Component {
                             />
                         </Form.Group>
                         </Row>
-                        </Form>
-                        <Form>
                         <Row>
                         <Form.Group as={Col}>
                             <Form.Label className="font-weight-bold">Subject</Form.Label>
@@ -106,8 +111,6 @@ class ContactModal extends React.Component {
                             />
                         </Form.Group>
                         </Row>
-                        </Form>                        
-                        <Form>
                         <Row>
                         <Form.Group as={Col}>
                             <Form.Label className="font-weight-bold">Your email address</Form.Label>
@@ -122,8 +125,6 @@ class ContactModal extends React.Component {
                             />
                         </Form.Group>
                         </Row>
-                        </Form>
-                        <Form>
                         <Row>
                         <Form.Group as={Col}>
                             <Form.Label className="font-weight-bold">Your message</Form.Label>
@@ -139,7 +140,6 @@ class ContactModal extends React.Component {
                             />
                         </Form.Group>
                         </Row>
-                        </Form>
                      </Form>
                 </Modal.Body>
                 <Modal.Footer>

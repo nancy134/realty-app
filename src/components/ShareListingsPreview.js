@@ -28,7 +28,7 @@ class ShareListingsPreview extends React.Component{
     componentDidMount(){
         var listings = this.props.listings;
         var body = {
-            to: this.props.contactsSelected[0].email,
+            contacts: this.props.groupContacts,
             replyTo: this.props.user.email,
             subject: this.props.subject,
             preview: true,
@@ -54,7 +54,7 @@ class ShareListingsPreview extends React.Component{
         });
     }
     render(){
-        var numContacts = this.props.contactsSelected.length + " Contact(s) [A separate email for each contact]";
+        var numContacts = this.props.groupContacts.length + " Contact(s) [A separate email for each contact]";
         return(
         <Modal
             show={this.props.show}
