@@ -6,6 +6,7 @@ import {
 import PolicyTerms from '../components/PolicyTerms';
 import PolicyPrivacy from '../components/PolicyPrivacy';
 import PolicyAbout from '../components/PolicyAbout';
+import PolicyContact from '../components/PolicyContact';
 
 class PolicyModal extends React.Component {
     constructor(props){
@@ -28,6 +29,8 @@ class PolicyModal extends React.Component {
             title = "Privacy Policy";
         } else if (this.props.type === "about"){
             title = "About";
+        } else if (this.props.type === "contact"){
+            title = "Contact Us";
         }
         
         return(
@@ -52,6 +55,9 @@ class PolicyModal extends React.Component {
                 : null }
                 { this.props.type === "about" ?
                 <PolicyAbout />
+                : null }
+                { this.props.type === "contact" ?
+                <PolicyContact />
                 : null }
             </Modal.Body>
             <Modal.Footer>

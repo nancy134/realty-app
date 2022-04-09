@@ -133,6 +133,8 @@ class ShareListingPreview extends React.Component{
             }
         }
         var that = this;
+
+        console.log(body);
         mailService.sendListing(body).then(function(html){
             that.setState({
                 src: html.Location,
@@ -140,10 +142,11 @@ class ShareListingPreview extends React.Component{
             });
              
         }).catch(function(err){
+            console.log(err);
         });
     }
     render(){
-        var numContacts = this.props.groupContacts.length + " Contact(s) [A separate email for each contact]";
+        var numContacts = this.props.groupContactsCount + " Contact(s) [A separate email for each contact]";
         return(
         <Modal
             show={this.props.show}

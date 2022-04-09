@@ -179,7 +179,8 @@ export class WizardShareListing extends Component {
 
             contactService.getGroupClients(that.state.selectedGroup, queryStr).then(function(groupClients){
                 that.setState({
-                    groupContacts: groupClients.clientGroups.rows
+                    groupContacts: groupClients.clientGroups.rows,
+                    groupContactsCount: groupClients.clientGroups.count
                 });
                 var ret = {
                     data: groupClients.clientGroups.rows,
@@ -248,16 +249,28 @@ export class WizardShareListing extends Component {
     }
 
     handleSharePreviewNext(body){
+        var that = this;
         body.subject = this.state.subject;
+        body.groupId = this.state.selectedGroup;
+
         body.contacts = [];
-        for (var i=0; i<this.state.groupContacts.length; i++){
-            var contact = this.state.groupContacts[i];
-            body.contacts.push(contact.email); 
-        }
-        this.setState({
-            showShareListingPreview: false,
-            showShareListingConfirm: true,
-            body: body
+
+        var queryStr = 'perPage=' + this.state.groupContactsCount + '&page=1';
+        contactService.getGroupClients(that.state.selectedGroup, queryStr).then(function(result){
+
+            var rows = result.clientGroups.rows;
+            for (var i=0; i<rows.length; i++){
+                var contact = rows[i];
+                body.contacts.push(contact.email); 
+            }
+
+            that.setState({
+                showShareListingPreview: false,
+                showShareListingConfirm: true,
+                body: body
+            });
+        }).catch(function(err){
+            console.log(err);
         });
     }
 
@@ -419,6 +432,7 @@ export class WizardShareListing extends Component {
                 selectedColor={this.state.selectedColor}
                 selectedColorLight={this.state.selectedColorLight}
                 groupContacts={this.state.groupContacts}
+                groupContactsCount={this.state.groupContactsCount}
             />
             : null }
             { this.state.showShareListingsPreview ?
