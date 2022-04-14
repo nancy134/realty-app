@@ -27,7 +27,11 @@ export function sendListing(body){
         axiosInstance(options).then(function(result){
             resolve(result.data);
         }).catch(function(err){
-            reject(err);
+            if (err && err.response && err.response.data){
+                reject(err.response.data);
+            } else {
+                reject(err);
+            }
         });
     });
 }

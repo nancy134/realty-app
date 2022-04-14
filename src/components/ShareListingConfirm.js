@@ -29,9 +29,15 @@ class ShareListingConfirm extends React.Component{
                 result: "Success" 
             }); 
         }).catch(function(err){
-            that.setState({
-                result: "Error" 
-            });
+            if (err.message){
+                that.setState({
+                    result: err.message 
+                });
+            } else {
+                that.setState({
+                    result: "An error occurred while trying to send the email"
+                });
+            }
         });
     }
     render(){
