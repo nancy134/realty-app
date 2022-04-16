@@ -52,9 +52,26 @@ export function findingcreEmails(body){
     });
 }
 
+export function contactUs(body){
+    return new Promise(function(resolve, reject){
+        var url = process.env.REACT_APP_API + "mail/contactUs";
+        var options = {
+            method: 'POST',
+            url: url,
+            data: body
+        };
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
 const mail = {
     listingInquiry,
     sendListing,
-    findingcreEmails
+    findingcreEmails,
+    contactUs
 };
 export default mail;
