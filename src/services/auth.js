@@ -11,8 +11,6 @@ export function signin(params){
         axiosInstance(options).then(function(resp){
             resolve(resp.data);
         }).catch(function(err){
-            console.log(err);
-            console.log(err.response.data);
             if (err && err.response && err.response.data){
                 reject(err.response.data);
             } else {
