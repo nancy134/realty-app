@@ -1045,6 +1045,7 @@ class ListingDetail extends React.Component {
                     owner={owner} 
                     editMode={editMode}
                     listingMode={listingMode} 
+                    isAdmin={this.props.isAdmin}
                     onShowDetailChange={this.handleShowDetailChange} 
                     onEditToggle={this.handleEditToggle} 
                     onListingUpdate={this.handleListingUpdate} 

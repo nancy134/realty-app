@@ -1641,6 +1641,7 @@ export class ListingPage extends Component {
                             onFetchListing={this.handleFetchListing}
                             onRefreshListingDetail={this.handleRefreshListingDetail}
                             showSpinner={this.state.showSpinner}
+                            isAdmin={this.props.isAdmin}
 
                             // Transition
                             onTransitionStart={this.handleTransitionStart}
