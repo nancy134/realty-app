@@ -92,16 +92,17 @@ class ListingAddAddress extends React.Component{
     }
 
     handleVerifyAddress(values){
-        var fullAddress = this.state.address+", "+values.city+", "+values.state;
-        var that = this;
-        geolocationService.getVerifiedAddresses(fullAddress, values).then(function(results){
-            that.setState({
-                verifiedAddresses: results 
+        if (this.state.address.length > 0){
+            var fullAddress = this.state.address+", "+values.city+", "+values.state;
+            var that = this;
+            geolocationService.getVerifiedAddresses(fullAddress, values).then(function(results){
+                that.setState({
+                    verifiedAddresses: results 
+                });
+            }).catch(function(err){
+                console.log("err: "+err);
             });
-        }).catch(function(err){
-            console.log("err: "+err);
-        });
-
+        }
     }
     updateValues(results, values, setFieldValue){
         var that=this;
