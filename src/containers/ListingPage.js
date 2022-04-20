@@ -546,7 +546,8 @@ export class ListingPage extends Component {
     handleNewPage(goToPage){
         var localState = {
             listingMode: this.state.listingMode,
-            page: goToPage
+            page: goToPage,
+            bounds: this.state.bounds
          };
          var that = this;
          that.fetchListingsPromise(localState).then(function(localState){

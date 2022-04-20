@@ -375,6 +375,7 @@ class ListingMapNew extends React.Component {
                     onDragEnd={this.handleDragEnd}
                     onLoad={this.handleLoad}
                     onInfoWindowClick={this.handleInfoWindowClick}
+                    boundsChanging={this.props.boundsChanging}
                 >
                 </MyMap>
 
