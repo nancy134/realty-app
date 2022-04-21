@@ -11,7 +11,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import ListingEditBrokers from './ListingEditBrokers';
 import ContactModal from './ContactModal';
-import {formatName} from '../helpers/utilities';
+import {
+    formatName,
+    formatWebsite
+} from '../helpers/utilities';
 
 function EditButton(props) {
     return (
@@ -43,6 +46,9 @@ function Broker(props){
         return null
     } else {
     var userName = formatName(user);
+
+    var website = formatWebsite(user.website);
+
     return(
         <div style={{ marginBottom: '15px' }}><Row>
             <Col md={2}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
@@ -59,7 +65,9 @@ function Broker(props){
                     </Button>
                 </Row>
                 <Row>
-                <a href={user.website}>{user.website}</a>            
+                { user.website ?
+                <a href={website} target="_blank">{user.website}</a>
+                : null }
                 </Row>
                 { user.officePhone ?
                 <Row>Office phone: {user.officePhone}</Row>

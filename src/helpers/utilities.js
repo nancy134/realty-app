@@ -572,3 +572,19 @@ export function formatAvailableSpacesForEmail(spaces){
     allHtml += "</ul>";
     return allHtml;
 }
+
+export function formatWebsite(website){
+    var newWebsite = website.trim();
+
+    if (newWebsite.startsWith("http://")){
+        return newWebsite;
+    }
+
+    if (newWebsite.startsWith("https://")){
+        return newWebsite;
+    }
+
+    newWebsite = "https://" + newWebsite;
+    return newWebsite;
+}
+
