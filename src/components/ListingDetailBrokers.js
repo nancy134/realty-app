@@ -48,7 +48,15 @@ function Broker(props){
     var userName = formatName(user);
 
     var website = formatWebsite(user.website);
-
+    
+    var showWebsite = false;
+    var companyLinkToWebsite = false;
+    if (!user.company && user.website){
+        showWebsite = true;
+    } else if (user.company && user.website){
+        companyLinkToWebsite = true;
+    }
+    
     return(
         <div style={{ marginBottom: '15px' }}><Row>
             <Col md={2}><Image src="/broker.jpg" className="broker-image"  roundedCircle /></Col>
@@ -65,8 +73,8 @@ function Broker(props){
                     </Button>
                 </Row>
                 <Row>
-                { user.website ?
-                <a href={website} target="_blank">{user.website}</a>
+                { showWebsite ?
+                <a href={website} target="_blank" rel="noreferrer">{user.website}</a>
                 : null }
                 </Row>
                 { user.officePhone ?
@@ -77,7 +85,11 @@ function Broker(props){
                 : null}
             </Col>
             <Col md={4}>
+                { companyLinkToWebsite ?
+                <Row className="font-weight-bold"><a href={website} target="_blank" rel="noreferrer">{user.company}</a></Row>
+                :
                 <Row className="font-weight-bold">{user.company}</Row>
+                }
                 <Row>{user.address1}</Row>
                 <Row>{user.city}, {user.state} {user.zip}</Row>
             </Col>
