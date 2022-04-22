@@ -574,6 +574,7 @@ export function formatAvailableSpacesForEmail(spaces){
 }
 
 export function formatWebsite(website){
+    if (!website) return null;`
     var newWebsite = website.trim();
 
     if (newWebsite.startsWith("http://")){
