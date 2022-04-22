@@ -1456,7 +1456,7 @@ export class ListingPage extends Component {
         var reporting = this.state.showReportView && this.props.loggedIn;
 
         // Layouts
-        var leftColumnClassName = "p-0 leftcol";
+        var leftColumnClassName = "p-0 leftcol d-none d-lg-block d-xl-block";
         var leftColumnSize = 8;
         var rightColumnClassName = "rightcol";
 
@@ -1598,6 +1598,7 @@ export class ListingPage extends Component {
             />
             : null }
             { !this.props.embed ?
+            <div className="d-none d-lg-block d-xl-block">
 	    <Row className="ml-1 mr-1 bg-success">
 	        <ListingToolbar
                     buttonText="Apply Filters"
@@ -1616,10 +1617,11 @@ export class ListingPage extends Component {
                     searchXSSize="3"
                 />
 	    </Row>
+            </div>
             : null }
             <div className="listing-container">
 	    <Row className="ml-1 mr-1">
-	        <Col xs={leftColumnSize} className={leftColumnClassName}>
+	        <Col lg={leftColumnSize} className={leftColumnClassName}>
                     { listingDetail ?
                     <CSSTransition
 		        in={showDetail}
@@ -1683,7 +1685,7 @@ export class ListingPage extends Component {
                     : null }
                 </Col>
                 { !fullscreen ?
-                <Col xs={rightColSize} className={rightColumnClassName} >
+                <Col className={rightColumnClassName} >
                     <Listings 
                         loggedIn={loggedIn}
                         listingMode={listingMode} 
