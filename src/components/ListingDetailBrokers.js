@@ -47,7 +47,8 @@ function Broker(props){
     } else {
     var userName = formatName(user);
 
-    var website = formatWebsite(user.website);
+    var website = null;
+    if (user.website) website = formatWebsite(user.website);
     
     var showWebsite = false;
     var companyLinkToWebsite = false;
