@@ -16,6 +16,7 @@ class AccountRegisterModal extends React.Component {
         super(props);
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.handleConfirmPasswordChange = this.handleConfirmPasswordChange.bind(this);
         this.handleRegister = this.handleRegister.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
         this.handleLoginStart = this.handleLoginStart.bind(this);
@@ -27,7 +28,8 @@ class AccountRegisterModal extends React.Component {
             email: "",
             password: "",
             roles: [],
-            role: "" 
+            role: "",
+            localRegisterMessage: null
         };
     }
     handleRegister(){
@@ -36,7 +38,17 @@ class AccountRegisterModal extends React.Component {
             password: this.state.password,
             role: this.state.role
         };
-        this.props.onRegister(body);
+
+        if (this.state.password !== this.state.confirmPassword){
+            this.setState({
+                localRegisterMessage: "Password and Confirm Password do not match."
+            });
+        } else {
+            this.setState({
+                localRegisterMessage: null
+            });
+            this.props.onRegister(body);
+        }
     }
     handleEmailChange(event){
         this.setState({
@@ -48,7 +60,11 @@ class AccountRegisterModal extends React.Component {
             password: event.target.value
         });
     }
-
+    handleConfirmPasswordChange(event){
+        this.setState({
+            confirmPassword: event.target.value
+        });
+    }
     handleKeyPress(target){
         if (target.charCode === 13){
             this.handleRegister();
@@ -156,6 +172,11 @@ class AccountRegisterModal extends React.Component {
                                {this.props.registerMessage}
                             </Alert>
                             : null }
+                            { this.state.localRegisterMessage ?
+                            <Alert variant="danger">
+                               {this.state.localRegisterMessage}
+                            </Alert>
+                            : null }
                             <h6>Creating an account will allow you to publish your listings and to save reports.</h6>
                             <Form.Label>Email</Form.Label>
                             <Form.Control
@@ -168,8 +189,15 @@ class AccountRegisterModal extends React.Component {
                                 type="password"
                                 id="account-register-password"
                                 onChange={this.handlePasswordChange}
+                            />
+                            <Form.Label>Confirm Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                id="account-register-confirm-password"
+                                onChange={this.handleConfirmPasswordChange}
                                 onKeyPress={this.handleKeyPress}
                             />
+
                             <Row className="text-info">
                                 <Col>
                                     <li className="rem75">One lowercase letter</li>
