@@ -1121,6 +1121,9 @@ export class ListingPage extends Component {
     handleBoundsChange(bounds, center, zoomLevel){
         if (this.state.boundsChanging) return;
 
+        // If map not shown
+        if (bounds.lat0 === bounds.lat1) return;
+
         var geometryChanged = true;
         var boundsEqual = false;
         var centerEqual = false;
