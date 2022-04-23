@@ -28,6 +28,7 @@ class MapMarker extends React.Component {
         this.setState({
             showingInfoWindow: true,
         });
+        this.props.onMarkerClicked(this);
     };
 
     onInfoWindowClose = () =>
@@ -92,6 +93,7 @@ function displayMarkers(props){
                     onClick={() => props.onMarkerClick(marker.id)}
                     position={{ lat: marker.location.coordinates[0], lng: marker.location.coordinates[1] }}
                     onInfoWindowClick={props.onInfoWindowClick}
+                    onMarkerClicked={props.onMarkerClicked}
                 >
                 </MapMarker>
             } else {
@@ -250,7 +252,7 @@ class ListingMapNew extends React.Component {
         super(props);
 
         this.state = {
-            activeMarker: {},
+            activeMarker: null,
             selectedPlace: {},
             showingInfoWindow: false,
             map: null
@@ -260,6 +262,18 @@ class ListingMapNew extends React.Component {
         this.handleDragEnd = this.handleDragEnd.bind(this);
         this.handleInfoWindowClick = this.handleInfoWindowClick.bind(this);
         this.handleLoad = this.handleLoad.bind(this);
+        this.handleMarkerClicked = this.handleMarkerClicked.bind(this);
+    }
+
+    handleMarkerClicked(marker){
+        if (this.state.activeMarker){
+            this.state.activeMarker.setState({
+                showingInfoWindow: false
+            });
+        }
+        this.setState({
+            activeMarker: marker
+        });
     }
 
     handleLoad(map){
@@ -368,7 +382,7 @@ class ListingMapNew extends React.Component {
                     center={this.props.center}
                     zoomLevel={this.props.zoomLevel}
                     markers={this.props.markers}
-                    onMarkerClick={this.onMarkerClick}
+                    onMarkerClicked={this.handleMarkerClicked}
                     onInfoWindowClose={this.onInfoWindowClose}
                     showingInfoWindow={this.state.showingInfoWindow}
                     onZoomChanged={this.handleZoomChanged}
