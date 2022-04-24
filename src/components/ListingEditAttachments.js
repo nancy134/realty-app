@@ -49,6 +49,7 @@ class ListingEditAttachments extends React.Component {
         super(props);
         this.handleSave = this.handleSave.bind(this);
         this.handleAttachmentsAdded = this.handleAttachmentsAdded.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
         this.state = {
             attachmentsAdded: false,
             imagesToDelete: []
@@ -65,6 +66,11 @@ class ListingEditAttachments extends React.Component {
     handleAttachmentsAdded(files){
         this.setState({attachmentsAdded: true});
         this.props.onAttachmentsAdded(files);
+    }
+    handleKeyDown(keyEvent){
+        if ((keyEvent.charCode || keyEvent.keyCode) === 13){
+            keyEvent.preventDefault();
+        }
     }
     render(){
 
@@ -128,8 +134,9 @@ class ListingEditAttachments extends React.Component {
                  </Col>
             </Row>
 
-            <Form>
-               <Form>
+            <Form
+                onKeyDown={this.handleKeyDown}
+            >
                <Row>
                     <Form.Group as={Col}>
                         <Form.Label
@@ -149,7 +156,6 @@ class ListingEditAttachments extends React.Component {
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Row>
-                </Form>
             </Form>
             </Modal.Body>
             <Modal.Footer>
