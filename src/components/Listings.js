@@ -101,10 +101,15 @@ class Listings extends React.Component {
         var showShortDescription = true;
         var showFavorites = false;
 
-        var count = this.props.count ? this.props.count : this.props.myCount;
-        var perPage = this.props.perPage ? this.props.perPage : this.props.myPerPage;
-        var page = this.props.page ? this.props.page : this.props.myPage;
+        var count = this.props.count;
+        var perPage = this.props.perPage;
+        var page = this.props.page;
 
+        if (this.props.listingMode === "myListings"){
+           count = this.props.myCount;
+           perPage = this.props.perPage;
+           page = this.props.page;
+        }
         return (
         <div>
             { this.props.loggedIn && this.props.listingMode !== "embedListings" ?
