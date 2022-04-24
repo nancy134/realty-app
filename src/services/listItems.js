@@ -5,7 +5,7 @@ export function getAll(ListId){
         process.env.REACT_APP_API +
         "lists/" +
         ListId +
-        "/listItems/me";
+        "/listItems/me?perPage=500&page=1";
     return new Promise(function(resolve, reject){
         var options = {
             method: 'GET',
