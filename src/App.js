@@ -57,7 +57,10 @@ class App extends React.Component {
           showUserModal: false,
           behalfUser: "",
           behalfUserCognitoId: "",
-          behalfUserError: null
+          behalfUserError: null,
+
+          // Navbar
+          expanded: false
       };
       this.handleLogin = this.handleLogin.bind(this);
       this.handleLogout = this.handleLogout.bind(this);
@@ -73,6 +76,9 @@ class App extends React.Component {
       this.handleUserModalShow = this.handleUserModalShow.bind(this);
       this.handleUserModalHide = this.handleUserModalHide.bind(this);
       this.handleSetBehalfUser = this.handleSetBehalfUser.bind(this);
+
+      // Navbar
+      this.handleNavbarExpand = this.handleNavbarExpand.bind(this);
   }
 
   componentDidMount(){
@@ -96,6 +102,10 @@ class App extends React.Component {
               loading: false
           });
       });
+  }
+
+  handleNavbarExpand(e){
+      console.log(e.target);
   }
   handlePolicyModalShow(type){
       this.setState({
@@ -201,7 +211,7 @@ class App extends React.Component {
               onHide={this.handlePolicyModalHide}
           />
           { !this.state.minimalTab ?
-          <Navbar>
+          <Navbar expand="lg">
               <Navbar.Brand href="./home">
                   <img
                   alt="logo" 
