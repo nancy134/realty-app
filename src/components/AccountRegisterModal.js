@@ -6,7 +6,8 @@ import {
     Alert,
     Spinner,
     Row,
-    Col
+    Col,
+    InputGroup
 } from 'react-bootstrap';
 import StepperAddListing from '../components/StepperAddListing';
 import userService from '../services/users';
@@ -23,14 +24,29 @@ class AccountRegisterModal extends React.Component {
         this.handleTerms = this.handleTerms.bind(this);
         this.handlePrivacyPolicy = this.handlePrivacyPolicy.bind(this);
         this.handleRoleChange = this.handleRoleChange.bind(this);
+        this.toggleShowPassword = this.toggleShowPassword.bind(this);
+        this.toggleShowConfirm = this.toggleShowConfirm.bind(this);
         this.emailRef = React.createRef();
         this.state = {
             email: "",
             password: "",
             roles: [],
             role: "",
-            localRegisterMessage: null
+            localRegisterMessage: null,
+            hiddenPassword: true,
+            hiddenConfirm: true
         };
+    }
+
+    toggleShowPassword(){
+        this.setState({
+            hiddenPassword: !this.state.hiddenPassword
+        });
+    }
+    toggleShowConfirm(){
+        this.setState({
+            hiddenConfirm: !this.state.hiddenConfirm
+        }); 
     }
     handleRegister(){
         var body = {
@@ -185,19 +201,34 @@ class AccountRegisterModal extends React.Component {
                                 ref={this.emailRef}
                             />
                             <Form.Label>Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                id="account-register-password"
-                                onChange={this.handlePasswordChange}
-                            />
+                            <InputGroup>
+                                <Form.Control
+                                    type={this.state.hiddenPassword ? "password" : "text"}
+                                    id="account-register-password"
+                                    onChange={this.handlePasswordChange}
+                                />
+                                <InputGroup.Append>
+                                    <Button
+                                        variant="secondary"
+                                        onClick={this.toggleShowPassword}
+                                    >{this.state.hiddenPassword ? 'Show' : 'Hide'}</Button>
+                                </InputGroup.Append>
+                            </InputGroup>
                             <Form.Label>Confirm Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                id="account-register-confirm-password"
-                                onChange={this.handleConfirmPasswordChange}
-                                onKeyPress={this.handleKeyPress}
-                            />
-
+                            <InputGroup>
+                                <Form.Control
+                                    type={this.state.hiddenConfirm ? "password" : "text"}
+                                    id="account-register-confirm-password"
+                                    onChange={this.handleConfirmPasswordChange}
+                                    onKeyPress={this.handleKeyPress}
+                                />
+                                <InputGroup.Append>
+                                    <Button
+                                        variant="secondary"
+                                        onClick={this.toggleShowConfirm}
+                                    >{this.state.hiddenConfirm ? 'Show' : 'Hide'}</Button>
+                                </InputGroup.Append>
+                            </InputGroup> 
                             <Row className="text-info">
                                 <Col>
                                     <li className="rem75">One lowercase letter</li>
