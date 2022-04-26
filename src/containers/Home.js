@@ -117,7 +117,7 @@ export class Home extends Component {
   }else{
       title = "Phowma Home";
   }
-  var showListingCards = true;
+  var showListingCards = false;
   if (domain === "findingcre") showListingCards = false;
      
   return (
@@ -145,12 +145,12 @@ export class Home extends Component {
         <div className="spacer">
         </div>
         <Row>
-            <Col xs={3}></Col>
-            <Col xs={6}>
+            <Col xs={0} md={3}></Col>
+            <Col xs={12} md={6}>
                 <div className="background">
                     <Row className="mx-auto" style={{width: '100%'}}>
                         <Col>
-                            <h1>Find your commercial property</h1>
+                            <h2>Find your commercial property</h2>
                         </Col>
                     </Row>
                     <Row className="pb-2 mx-auto" style={{width: '100%'}}>
@@ -163,22 +163,22 @@ export class Home extends Component {
                             showReportViewButton={false}
                             showMoreFiltersButton={false}
                             showSpaceTypeButton={false}
-                            searchMSize="auto"
+                            searchMSize="7"
                         />
                     </Row>
                 </div>
             </Col>
-            <Col xs={3}></Col>
+            <Col xs={0} md={3}></Col>
         </Row>
         <div className="spacer"></div>
     </div>
     <div className="background">
         <Row className="pt-2 pb-2 mx-auto" style={{width: '100%'}}>
-            <Col xs={4}></Col>
-            <Col className="border p-2" xs={4}>
+            <Col xs={0} md={4}></Col>
+            <Col className="border p-2" xs={12} md={4}>
                 <EmailRegistration/>
             </Col>
-            <Col xs={4}></Col>
+            <Col xs={0} md={4}></Col>
         </Row>
     </div>
     <Features />

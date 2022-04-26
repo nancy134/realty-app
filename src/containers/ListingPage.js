@@ -1617,7 +1617,7 @@ export class ListingPage extends Component {
                     onShowReportView={this.handleShowReportView}
                     showReportView={this.state.showReportView}
                     onEmbedListings={this.handleEmbedListings}
-                    searchXSSize="3"
+                    searchMSize="3"
                 />
 	    </Row>
             </div>

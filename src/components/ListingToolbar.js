@@ -279,7 +279,7 @@ class ListingToolbar extends React.Component {
         return (
             <Form className="toolbar-form m-2">
                     <Row>
-                    <Col xs="auto">
+                    <Col xs={12} md="auto">
                         <Dropdown>
                             <Dropdown.Toggle
                                 size="sm"
@@ -304,7 +304,7 @@ class ListingToolbar extends React.Component {
                         </Dropdown>
                     </Col>
                     { listingMode === "allListings" ?
-                    <Col m={this.props.searchMSize} xs={this.props.searchXSSize}>
+                    <Col xs={12} md={this.props.searchMSize}>
                         <PlacesAutocomplete
                             value={address}
                             onChange={this.handleSearchChange}
