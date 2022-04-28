@@ -11,7 +11,6 @@ import * as Yup from 'yup';
 import authenticationService from '../helpers/authentication';
 import {formatNameList} from '../helpers/utilities';
 import {abbrState} from '../helpers/utilities';
-import contactService from '../services/contacts';
 
 const ContactSchema = Yup.object().shape({
     client: Yup.string(),
@@ -25,13 +24,14 @@ class ContactModal extends React.Component {
     }
 
     componentDidMount(){
-        contactService.getGroups().then(function(groups){
-            console.log(groups);
-        }).catch(function(err){
-            console.log(err);
-        });
     }
     handleSendMessage(initialValues, values){
+        var to = [];
+        var users = this.props.listing.users;
+        for (var i=0; i<users.length; i++){
+            to.push(users[i].email);
+        }
+        values.to = to;
         this.props.onSendMessage(values);
     }
     render(){

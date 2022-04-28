@@ -509,6 +509,7 @@ export function formatName(user){
     } else {
         var parts = user.email.split("@");
         if (parts) name = parts[0]
+        name = user.email;
     }
     return name;
 }
