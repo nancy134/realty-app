@@ -1487,7 +1487,6 @@ export class ListingPage extends Component {
         // Reporting
         if (reporting && !fullscreen){
             leftColumnSize = 5;
-            var rightColSize = 4;
             var reportColSize = 3;
         }
     

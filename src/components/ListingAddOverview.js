@@ -15,7 +15,7 @@ import StepperAddListing from '../components/StepperAddListing';
 const OverviewSchemaForSale = Yup.object().shape({
     shortDescription: Yup.string().required('Short Description is required'),
     longDescription: Yup.string(),
-    listingPrice: Yup.number().required('Listing Price is required').positive().integer()
+    listingPrice: Yup.number().required('Listing Price is required')
 });
 
 const OverviewSchemaForLease = Yup.object().shape({
