@@ -1466,6 +1466,7 @@ export class ListingPage extends Component {
         // Embed
         if (this.props.embed){
             rightColumnClassName = "rightcol-embed";
+            leftColumnClassName = "p-0 rightcol-embed";
         }
 
 
