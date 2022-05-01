@@ -118,6 +118,7 @@ export class Home extends Component {
       title = "Phowma Home";
   }
   var showListingCards = false;
+  var showFeatures = false;
   if (domain === "findingcre") showListingCards = false;
      
   return (
@@ -181,7 +182,9 @@ export class Home extends Component {
             <Col xs={0} md={4}></Col>
         </Row>
     </div>
+    { showFeatures ?
     <Features />
+    : null }
     { showListingCards ?
     <ListingCards />
     : null }
