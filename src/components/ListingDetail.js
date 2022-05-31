@@ -33,6 +33,7 @@ import userService from '../services/users';
 import condoService from '../services/condos';
 import { Helmet } from 'react-helmet';
 import { getDomain } from '../helpers/utilities';
+import gtag from 'ga-gtag';
 
 class ListingDetail extends React.Component {
     constructor(props) {
@@ -913,6 +914,14 @@ class ListingDetail extends React.Component {
     }
 
     componentDidMount(){
+        gtag('event', 'view_item', {
+            value: 25,
+            currency: 'USD',
+            items: [{
+                item_id: this.props.listingDetail.id,
+                item_name: this.props.listingDetail.address
+            }]
+        });
         if (this.props.listingDetail){
             var listingDetail = this.props.listingDetail;
             if (this.props.listingDetail.listing){
