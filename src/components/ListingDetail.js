@@ -914,9 +914,8 @@ class ListingDetail extends React.Component {
     }
 
     componentDidMount(){
-        gtag('event', 'view_item', {
-            value: 25,
-            currency: 'USD',
+        gtag('event', 'select_item', {
+            item_list_id: this.props.listingMode,
             items: [{
                 item_id: this.props.listingDetail.id,
                 item_name: this.props.listingDetail.address
