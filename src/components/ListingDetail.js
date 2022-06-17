@@ -932,7 +932,7 @@ class ListingDetail extends React.Component {
             }
         }
         var that = this;
-        userService.getAssociatesMe().then(function(associates){
+        listingService.getListingsUsersAssociatesMe().then(function(associates){
             that.setState({
                 associates: associates.associates
             });

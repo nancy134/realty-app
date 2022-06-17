@@ -238,6 +238,21 @@ export function getListingsAdmin(query){
     });
 }
 
+export function getListingsUsersAssociatesMe(){
+    var url = process.env.REACT_APP_API + "listings/users/associates/me";
+    return new Promise(function(resolve, reject){
+        var options = {
+            url: url,
+            method: 'GET'
+        };
+        axiosInstance(options).then(function(result){
+            resolve(result.data);
+        }).catch(function(err){
+            reject(err);
+        });
+    });
+}
+
 export function getSpaceTypes(cb){
     var url = process.env.REACT_APP_LISTING_SERVICE+"spaceUses";
     fetch(url, {
@@ -282,7 +297,8 @@ const listings = {
     findAddress,
     addListingUser,
     deleteListingUser,
-    getListingsAdmin
+    getListingsAdmin,
+    getListingsUsersAssociatesMe
 };
 export default listings;
 
