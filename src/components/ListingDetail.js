@@ -29,7 +29,6 @@ import attachmentService from '../services/attachments';
 import {formatDateTime} from '../helpers/utilities';
 import ContactModal from './ContactModal';
 import {listingTypes} from '../constants/listingTypes';
-import userService from '../services/users';
 import condoService from '../services/condos';
 import { Helmet } from 'react-helmet';
 import { getDomain } from '../helpers/utilities';

@@ -432,23 +432,20 @@ export class ListingPage extends Component {
             that.fetchListingPromise(localState).then(function(localState){
                 that.fetchListingsPromise(localState).then(function(localState){
                     if (localState.myListingsMap.bounds.lat0 === null){
-                        localState.myListingsMap.bounds = geolocationService.calculateBounds(localState.markers);
+                        localState.myListingsMap.bounds = geolocationService.calculateBounds(localState.myMarkers);
                     }
                     that.setState(localState);
                     that.props.onAddListingCancel();
                 }).catch(function(err){
-                    console.log(err);
                     that.setState({finishProgress: false});
                     that.props.onAddListingCancel();
                 });
             }).catch(function(err){
-                console.log(err);
                 that.setState({finishProgress: false});
                 that.props.onAddListingCancel();
             });
 
         }).catch(function(err){
-            console.log(err);
             that.setState({finishProgress: false});
             that.props.onAddListingCancel();
         });
@@ -486,7 +483,6 @@ export class ListingPage extends Component {
 
             that.setState(localState);
         }).catch(function(err){
-            console.log(err);
         });
     }
 
@@ -570,7 +566,6 @@ export class ListingPage extends Component {
          });
     }
     handleUpdate(listing){
-        console.log("handleUpdate");
         var updatePromise = listingService.update(listing);
         var that = this;
         updatePromise.then(function(data){

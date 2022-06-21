@@ -47,6 +47,7 @@ class ListingAddAddress extends React.Component{
             geocoded: false,
             verifiedAddresses: false,
             addressInUse: false,
+            addressNotFound: false,
             showVerifyAddressModal: false,
             // Map
             bounds: {
@@ -59,7 +60,7 @@ class ListingAddAddress extends React.Component{
             center: null,
             zoomLevel: 18,
             updateBounds: true,
-            updateZoomLevel: false
+            updateZoomLevel: false,
         };
     }
     handleNext(initialValues, values){
@@ -73,7 +74,7 @@ class ListingAddAddress extends React.Component{
                 });
                 this.goNext(initialValues, values);
             }).catch(function(err){
-                console.log("err: "+err);
+                console.log(err);
             });
         } else {
             this.goNext(initialValues, values);
@@ -100,7 +101,7 @@ class ListingAddAddress extends React.Component{
                     verifiedAddresses: results 
                 });
             }).catch(function(err){
-                console.log("err: "+err);
+                console.log(err);
             });
         }
     }
@@ -166,7 +167,6 @@ class ListingAddAddress extends React.Component{
                     that.zipRef.current.focus();
                 });
             }).catch(function(err){
-                console.log(err);
                 that.setState({
                     showVerifyAddressModal: false
                 });
@@ -187,7 +187,7 @@ class ListingAddAddress extends React.Component{
                 this.setState({
                     showVerifyAddressModal: false
                 });
-                console.log("err: "+err);
+                console.log(err);
             });
     }
 
@@ -211,11 +211,15 @@ class ListingAddAddress extends React.Component{
         geolocationService.geocodeByAddr(address, values).then(function(results){
             that.updateValues(results, values, setFieldValue);
         }).catch(function(err){
-            console.log("err: "+err);
+            that.setState({
+                showVerifyAddressModal: false,
+                addressNotFound: true
+            });
+            console.log(err);
         });
     }
     handleFocus(target, values, setFieldValue){
-        if (!this.state.geocoded){
+        if (!this.state.geocoded && !this.state.addressNotFound){
             this.verifyAddress(this.state.address, values, setFieldValue);
         }
     }
@@ -236,7 +240,7 @@ class ListingAddAddress extends React.Component{
                 bounds: bounds
             });
         }).catch(function(err){
-            console.log("err: "+err);
+            console.log(err);
         });
     }
     render()
