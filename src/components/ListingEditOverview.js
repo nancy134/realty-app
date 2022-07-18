@@ -202,7 +202,6 @@ class ListingEditOverview extends React.Component {
             <Form>
             <Row className="mt-2">
                 <Col xs={4}>
-                        <Form>
                         <Row>
                             <Form.Group as={Col}>
                                 <Form.Label
@@ -221,9 +220,7 @@ class ListingEditOverview extends React.Component {
                                 /> 
                             </Form.Group>
                         </Row>
-                        </Form>
                         { listing.listingType === listingTypes.FORSALE ?
-                        <Form>
                         <Row>
                             <Form.Group as={Col}>
                                 <Form.Label
@@ -248,10 +245,8 @@ class ListingEditOverview extends React.Component {
                                 </InputGroup>
                             </Form.Group>
                         </Row>
-                        </Form>
                         : null}
 
-                        <Form>
                         <Row>
                             <Form.Group as={Col}>
                                 <Form.Label
@@ -272,7 +267,6 @@ class ListingEditOverview extends React.Component {
                                 />
                             </Form.Group>
                         </Row>
-                        </Form>
                 </Col>
                 <Col xs={2}>
                     <Form.Label

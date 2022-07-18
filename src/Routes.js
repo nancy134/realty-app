@@ -1,5 +1,9 @@
 import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import {
+    Routes,
+    Route,
+    Navigate
+} from 'react-router-dom';
 import Home from './containers/Home';
 import ListingPage from './containers/ListingPage';
 import AccountPage from './containers/AccountPage';
@@ -14,7 +18,7 @@ import ConstantContact from './containers/ConstantContact';
 import Spark from './containers/Spark';
 import Unsubscribe from './containers/Unsubscribe';
 
-class Routes extends React.Component {
+class AppRoutes extends React.Component {
 
 constructor(props){
     super(props);
@@ -27,48 +31,41 @@ handleLogin(){
 
 render(){
   return(
-  <Switch loggedIn={this.props.loggedIn}>
-    <Route exact path="/" render={() => (
-      <Redirect to="/home"/>
-    )}/>
+  <Routes loggedIn={this.props.loggedIn}>
+    <Route exact path="/" element={
+      <Navigate replace to="/home"/>
+    }/>
     <Route
         path="/home"
-        render={
-            props => (
-                <Home
-                    onLogin={this.handleLogin}
-                    loggedIn={this.props.loggedIn}
-                    showAddListingWizard={this.props.showAddListingWizard}
-                    onAddListingCancel={this.props.onAddListingCancel}
+        element={ 
+            <Home
+                onLogin={this.handleLogin}
+                loggedIn={this.props.loggedIn}
+                showAddListingWizard={this.props.showAddListingWizard}
+                onAddListingCancel={this.props.onAddListingCancel}
 
-                    // BehalfUser
-                    isAdmin={this.props.isAdmin}
-                    behalfUser={this.props.behalfUser}
-                    behalfUserCognitoId={this.props.behalfUserCognitoId}
+                // BehalfUser
+                isAdmin={this.props.isAdmin}
+                behalfUser={this.props.behalfUser}
+                behalfUserCognitoId={this.props.behalfUserCognitoId}
 
-                    {...props}
-                />
-            )
+            />
         }
     />
     <Route
         path="/listing/:id"
-        render={
-            props => (
+        element={
                 <ListingPage
-                    {...props}
                     onLogin={this.handleLogin}
                     loggedIn={this.props.loggedIn}
                     onShowPolicyModal={this.props.onShowPolicyModal}
                 />
-            )
         }
     />
     <Route
         path="/listing"
-        render={
-            props => (
-                <ListingPage {...props}
+        element={
+                <ListingPage
                     onLogin={this.handleLogin} 
                     loggedIn={this.props.loggedIn}
                     showAddListingWizard={this.props.showAddListingWizard}
@@ -81,12 +78,11 @@ render(){
                     behalfUser={this.props.behalfUser}
                     behalfUserCognitoId={this.props.behalfUserCognitoId}
                 />
-            )
         }
     />
     <Route
         path="/report/:id"
-        exact component={ReportPage}
+        exact element={<ReportPage/>}
     />
     <Route
         path="/report/list/:id"
@@ -94,9 +90,8 @@ render(){
     />
     <Route
         path="/account"
-        render={
-            props => (
-                <AccountPage {...props}
+        element={
+                <AccountPage
                     email={this.props.email}
                     loggedIn={this.props.loggedIn}
                     showAddListingWizard={this.props.showAddListingWizard}
@@ -105,19 +100,18 @@ render(){
                     loading={this.props.loading}
                     
                 />
-            )
         }
     />
-    <Route path="/admin" exact component={AdminPage} />
-    <Route path="/instructions" exact component={InstructionPage} />
-    <Route path="/terms" exact component={TermsPage} />
-    <Route path="/privacypolicy" exact component={PrivacyPolicyPage} />
-    <Route path="/test" exact component={Test} />
-    <Route path="/constantcontact" exact component={ConstantContact} />
-    <Route path="/sparkauth" exact component={Spark} />
-    <Route path="/unsubscribe" exact component={Unsubscribe} />
-  </Switch>
+    <Route path="/admin" element={<AdminPage/>} />
+    <Route path="/instructions" element={<InstructionPage/>} />
+    <Route path="/terms" element={<TermsPage/>} />
+    <Route path="/privacypolicy" element={<PrivacyPolicyPage/>} />
+    <Route path="/test" element={<Test/>} />
+    <Route path="/constantcontact" element={<ConstantContact/>} />
+    <Route path="/sparkauth" element={<Spark/>} />
+    <Route path="/unsubscribe" element={<Unsubscribe/>} />
+  </Routes>
   );
 }
 }
-export default Routes;
+export default AppRoutes;

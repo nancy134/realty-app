@@ -60,7 +60,6 @@ export class EmailRegistration extends Component {
     }
 
     render(){
-        console.log("this.state.confirmation: "+this.state.confirmation);
         return(
         <React.Fragment>
             { !this.state.confirmation ?

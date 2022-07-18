@@ -137,8 +137,10 @@ class ListingToolbar extends React.Component {
                     searchClass: "",
                     searchVariant: "warning",
                     needsGeocoding: false
+                },() => { 
+                    this.props.onSearch(this.state);
                 });
-                this.props.onSearch(this.state);
+                
             }).catch(error => {
                 console.log(error);
             });

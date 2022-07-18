@@ -49,7 +49,7 @@ function EditButton(props){
             <span
                 id="unit_edit_button"
                 onClick={() => {props.onShow(props.index)}}
-                className="edit-button align-top text-danger"
+                className="edit-button text-danger"
             >
                 <FontAwesomeIcon icon={faPencilAlt} />
             </span>
@@ -115,28 +115,34 @@ class ListingDetailUnits extends React.Component {
                 <Col md={2}>{unit.space} sf</Col>
                 <Col md={2}>${unit.income}/mo</Col>
                 <Col md={3}>
-                           <Row>
-                               { editMode === "edit" ?
-                               <Col>
-                                   <EditButton
-                                       title="Add New Unit"
-                                       listing={listing}
-                                       index={index}
-                                       unitUpdateIndex={this.props.unitUpdateIndex}
-                                       unit={unit}
-                                       onSave={this.handleSave}
-                                       onShow={this.props.onUnitModalUpdate}
-                                       onHide={this.props.onUnitModalHide}
-                                       errorMessage={this.props.unitError}
-                                       show={this.props.unitUpdate}
-                                       saving={this.props.unitSaving}
-                                   />
-                               </Col>
-                               : null }
-                               { editMode === "edit" ?
-                               <Col><FontAwesomeIcon className="text-danger" size="xs" icon={faTrash} /></Col>
-                                : null }
-                           </Row>
+                    <Row>
+                        { editMode === "edit" ?
+                        <Col>
+                            <EditButton
+                                title="Add New Unit"
+                                listing={listing}
+                                index={index}
+                                unitUpdateIndex={this.props.unitUpdateIndex}
+                                unit={unit}
+                                onSave={this.handleSave}
+                                onShow={this.props.onUnitModalUpdate}
+                                onHide={this.props.onUnitModalHide}
+                                errorMessage={this.props.unitError}
+                                show={this.props.unitUpdate}
+                                saving={this.props.unitSaving}
+                            />
+                        </Col>
+                        : null }
+                        { editMode === "edit" ?
+                        <Col>
+                            <FontAwesomeIcon 
+                                className="edit-button text-danger"
+                                size="xs"
+                                icon={faTrash}
+                            />
+                        </Col>
+                        : null }
+                    </Row>
                 </Col>
             </Row>
             ))}

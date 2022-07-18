@@ -123,7 +123,6 @@ class ListingEditTenant extends React.Component {
             </Modal.Header>
             <Modal.Body>
             <Form>
-                <Form>
                 <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Tenant Name</Form.Label>
@@ -143,8 +142,6 @@ class ListingEditTenant extends React.Component {
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Row>
-                </Form>
-                <Form>
                 <Row>
                     <Form.Group as={Col} >
                         <Form.Label  className="font-weight-bold">Size <span className="font-weight-light">(optional)</span></Form.Label>
@@ -160,24 +157,18 @@ class ListingEditTenant extends React.Component {
                                 isValid={touched.space && !errors.space && values.space !== ""}
                                 disabled={isSubmitting}
                             />
-                            <InputGroup.Append>
-                                <InputGroup.Text id="basic-addon2">sf</InputGroup.Text>
-                            </InputGroup.Append>
+                            <InputGroup.Text id="basic-addon2">sf</InputGroup.Text>
                             <Form.Control.Feedback type="invalid">
                                 {errors.space}
                             </Form.Control.Feedback>
                         </InputGroup>
                     </Form.Group>
                 </Row>
-                </Form>
-                <Form>
                 <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Base Rent <span className="font-weight-light">(optional)</span></Form.Label>
                         <InputGroup>
-                            <InputGroup.Prepend>
-                                <InputGroup.Text>$</InputGroup.Text>
-                            </InputGroup.Prepend>
+                            <InputGroup.Text>$</InputGroup.Text>
                             <Form.Control 
                                 id="tenant_edit_base_rent"
                                 name="baseRent"
@@ -189,17 +180,13 @@ class ListingEditTenant extends React.Component {
                                 isValid={touched.baseRent && !errors.baseRent && values.baseRent !== ""}
                                 disabled={isSubmitting}
                             />
-                            <InputGroup.Append>
-                                <InputGroup.Text id="basic-addon2">mo</InputGroup.Text>
-                            </InputGroup.Append>
+                            <InputGroup.Text id="basic-addon2">mo</InputGroup.Text>
                             <Form.Control.Feedback type="invalid">
                                 {errors.baseRent}
                             </Form.Control.Feedback>
                         </InputGroup>
                     </Form.Group>
                 </Row>
-                </Form>
-                <Form>
                 <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Lease Ends <span className="font-weight-light">(optional)</span></Form.Label>
@@ -219,8 +206,6 @@ class ListingEditTenant extends React.Component {
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Row>
-                </Form>
-
             </Form>
             </Modal.Body>
             <Modal.Footer>

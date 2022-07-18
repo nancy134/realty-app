@@ -36,7 +36,7 @@ class ListingDetailMap extends React.Component {
                         updateZoomLevel={this.state.updateZoomLevel}
                         center={this.state.center}
                         zoomLevel={this.state.zoomLevel}
-                        style={{width: '95%', height: "100%", position: "absolute"}}
+                        style={{width: '95%', height: "100%"}}
                         gestureHandling='cooperative'
                     />
                 </Col>

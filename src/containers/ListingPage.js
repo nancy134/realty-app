@@ -5,6 +5,7 @@ import {
     Modal,
     Button
 } from 'react-bootstrap';
+import withRouter from '../helpers/withRouter';
 import './ListingPage.css';
 import ListingMapNew from '../components/ListingMapNew';
 import Listings from '../components/Listings';
@@ -43,32 +44,41 @@ export class ListingPage extends Component {
         var showDetail = false;
         var editMode = "view";
 
-        if (this.props.location && this.props.location.data){
-            index = this.props.location.data.listingId;
-            listingMode = this.props.location.data.listingMode;
-            showDetail = this.props.location.data.showDetail;
-            createListing = this.props.location.data.createListing;
-            editMode = this.props.location.data.editMode; 
+        console.log(this.props);
+        if (this.props.location && this.props.location.state){
+            index = this.props.location.state.listingId;
+            listingMode = this.props.location.state.listingMode;
+            showDetail = this.props.location.state.showDetail;
+            createListing = this.props.location.state.createListing;
+            editMode = this.props.location.state.editMode; 
         }
 
-        if (props.match.params.id){
+        if (props.match && props.match.params && props.match.params.id){
            //fullscreen = true;
            showDetail = true;
            index = props.match.params.id;
         }
 
         // Listing Type
-        const params = new URLSearchParams(props.location.search);
-        var listingModeParam = params.get('listingMode');
-        if (listingModeParam){
-           listingMode = listingModeParam;
+        var params = null;
+        if (props.location){
+            params = new URLSearchParams(props.location.search);
+            if (params){
+                var listingModeParam = params.get('listingMode');
+                if (listingModeParam){
+                    listingMode = listingModeParam;
+                }
+            }
         }
 
         // Embed
         if (this.props.embed){
             listingMode = "embedListings";
         }
-        var cognitoId  = params.get('user');
+        var cognitoId = null;
+        if (params){
+            cognitoId  = params.get('user');
+        }
 
         // Location
         var defaultLocation = geolocationService.getSavedLocation();
@@ -83,10 +93,15 @@ export class ListingPage extends Component {
         var lng1 = defaultLocation.lng1;
 
         // Listing Type
-        var filterParam = params.get('filter');
+
+        var filterParam = null;
         var listingType = listingTypes.BOTH;
-        if (filterParam === "home"){
-            listingType = defaultLocation.listingType;
+
+        if (params){
+            filterParam = params.get('filter');
+            if (filterParam === "home"){
+                listingType = defaultLocation.listingType;
+            }
         }
 
         // Toolbar
@@ -1749,4 +1764,4 @@ export class ListingPage extends Component {
         );
     }
 }
-export default ListingPage;
+export default withRouter(ListingPage);

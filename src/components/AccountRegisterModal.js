@@ -207,12 +207,10 @@ class AccountRegisterModal extends React.Component {
                                     id="account-register-password"
                                     onChange={this.handlePasswordChange}
                                 />
-                                <InputGroup.Append>
-                                    <Button
-                                        variant="secondary"
-                                        onClick={this.toggleShowPassword}
-                                    >{this.state.hiddenPassword ? 'Show' : 'Hide'}</Button>
-                                </InputGroup.Append>
+                                <Button
+                                    variant="secondary"
+                                    onClick={this.toggleShowPassword}
+                                >{this.state.hiddenPassword ? 'Show' : 'Hide'}</Button>
                             </InputGroup>
                             <Form.Label>Confirm Password</Form.Label>
                             <InputGroup>
@@ -222,12 +220,10 @@ class AccountRegisterModal extends React.Component {
                                     onChange={this.handleConfirmPasswordChange}
                                     onKeyPress={this.handleKeyPress}
                                 />
-                                <InputGroup.Append>
-                                    <Button
-                                        variant="secondary"
-                                        onClick={this.toggleShowConfirm}
-                                    >{this.state.hiddenConfirm ? 'Show' : 'Hide'}</Button>
-                                </InputGroup.Append>
+                                <Button
+                                    variant="secondary"
+                                    onClick={this.toggleShowConfirm}
+                                >{this.state.hiddenConfirm ? 'Show' : 'Hide'}</Button>
                             </InputGroup> 
                             <Row className="text-info">
                                 <Col>

@@ -123,8 +123,7 @@ class ListingEditUnit extends React.Component {
             </Modal.Header>
             <Modal.Body>
             <Form>
-                <Form>
-                    <Row>
+                <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Decription</Form.Label>
                         <Form.Control 
@@ -143,8 +142,6 @@ class ListingEditUnit extends React.Component {
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Row>
-                </Form>
-                <Form>
                 <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">No. of Units <span className="font-weight-light">(optional)</span></Form.Label>
@@ -164,8 +161,6 @@ class ListingEditUnit extends React.Component {
                         </Form.Control.Feedback>
                     </Form.Group>
                     </Row>
-                </Form>
-                <Form>
                 <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Square feet <span className="font-weight-light">(optional)</span></Form.Label>
@@ -181,24 +176,18 @@ class ListingEditUnit extends React.Component {
                                 isValid={touched.space && !errors.space && values.space !== ""}
                                 disabled={isSubmitting}
                             />
-                            <InputGroup.Append>
-                                <InputGroup.Text id="basic-addon2">sq ft</InputGroup.Text>
-                            </InputGroup.Append>
+                            <InputGroup.Text id="basic-addon2">sq ft</InputGroup.Text>
                             <Form.Control.Feedback type="invalid">
                                 {errors.space}
                             </Form.Control.Feedback>
                         </InputGroup>
                     </Form.Group>
                 </Row>
-                </Form>
-                <Form>
                 <Row>
                     <Form.Group as={Col} >
                         <Form.Label className="font-weight-bold">Income <span className="font-weight-light">(optional)</span></Form.Label>
                         <InputGroup>
-                            <InputGroup.Prepend>
-                                <InputGroup.Text>$</InputGroup.Text>
-                            </InputGroup.Prepend>
+                            <InputGroup.Text>$</InputGroup.Text>
                             <Form.Control 
                                 id="unit_edit_income"
                                 name="income"
@@ -210,9 +199,7 @@ class ListingEditUnit extends React.Component {
                                 isValid={touched.income && !errors.income && values.income !== ""}
                                 disabled={isSubmitting}
                             />
-                            <InputGroup.Append>
-                                <InputGroup.Text id="basic-addon2">mo</InputGroup.Text>
-                            </InputGroup.Append>
+                            <InputGroup.Text id="basic-addon2">mo</InputGroup.Text>
 
                             <Form.Control.Feedback type="invalid">
                                 {errors.income}
@@ -220,7 +207,6 @@ class ListingEditUnit extends React.Component {
                         </InputGroup>
                     </Form.Group>
                 </Row> 
-                </Form>
 
             </Form>
             </Modal.Body>
