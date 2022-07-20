@@ -44,13 +44,12 @@ export class ListingPage extends Component {
         var showDetail = false;
         var editMode = "view";
 
-        console.log(this.props);
-        if (this.props.location && this.props.location.state){
-            index = this.props.location.state.listingId;
-            listingMode = this.props.location.state.listingMode;
-            showDetail = this.props.location.state.showDetail;
-            createListing = this.props.location.state.createListing;
-            editMode = this.props.location.state.editMode; 
+        if (this.props.router && this.props.router.location && this.props.router.location.state){
+            index = this.props.router.location.state.listingId;
+            listingMode = this.props.router.location.state.listingMode;
+            showDetail = this.props.router.location.state.showDetail;
+            createListing = this.props.router.location.state.createListing;
+            editMode = this.props.router.location.state.editMode; 
         }
 
         if (props.match && props.match.params && props.match.params.id){
