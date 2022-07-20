@@ -60,10 +60,11 @@ class AdminUsers extends React.Component {
                     detailPanel={rowData => {
                         return (
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <table class="table table-striped">
+<div className="container">
+    <div className="row">
+        <div className="col">
+            <table className="table table-striped">
+                <tbody> 
                 <tr>
                     <th>Association</th>
                     <th>Association Status</th>
@@ -76,24 +77,26 @@ class AdminUsers extends React.Component {
                 </tr>
                 <tr>
                     <th>Title</th>
-                    <th colspan="2">Company</th>
+                    <th colSpan="2">Company</th>
                 </tr>
                 <tr>
                     <td>{rowData.title}</td>
-                    <td colspan="2">{rowData.company}</td>
+                    <td colSpan="2">{rowData.company}</td>
                 </tr>
 
                 <tr>
-                    <th colspan="3">Address</th>
+                    <th colSpan="3">Address</th>
                 </tr>
 
                 <tr>
-                    <td colspan="3">{rowData.address1} {rowData.address1}<br />{rowData.city}, {rowData.state} {rowData.zip}</td>
+                    <td colSpan="3">{rowData.address1} {rowData.address1}<br />{rowData.city}, {rowData.state} {rowData.zip}</td>
                 </tr>
+                </tbody>
             </table>
         </div>
-        <div class="col">
-            <table class="table table-striped">
+        <div className="col">
+            <table className="table table-striped">
+                <tbody>
                 <tr>
                     <th>Website</th>
                     <th>Phone (Mobile)</th>
@@ -105,23 +108,24 @@ class AdminUsers extends React.Component {
                     <td>{rowData.officePhone}</td>
                 </tr>
                 <tr>
-                    <th colspan="3">Bio</th>
+                    <th colSpan="3">Bio</th>
                 </tr>
 
                 <tr>
-                    <td colspan="3">{rowData.bio}</td>
+                    <td colSpan="3">{rowData.bio}</td>
                 </tr>
+                </tbody>
             </table>
         </div>
     </div>
-    <div class="row">
-        <div class="col">
+    <div className="row">
+        <div className="col">
             <strong>Role:</strong> {rowData.role}
         </div>
-        <div class="col">
+        <div className="col">
             <strong>Account Created:</strong> {rowData.createdAt}
         </div>
-        <div class="col">
+        <div className="col">
             <strong>Account Updated:</strong> {rowData.updatedAt}
         </div>
     </div>
