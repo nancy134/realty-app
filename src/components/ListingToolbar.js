@@ -317,6 +317,7 @@ class ListingToolbar extends React.Component {
                             <InputGroup>                
                                 <Form.Control
                                     size="sm"
+                                    id="toolbar-input-address"
                                     onFocus={this.handleSearchFocus}
                                     {...getInputProps({
                                         placeholder: address,
