@@ -44,24 +44,25 @@ export class ListingPage extends Component {
         var showDetail = false;
         var editMode = "view";
 
-        if (this.props.router && this.props.router.location && this.props.router.location.state){
-            index = this.props.router.location.state.listingId;
-            listingMode = this.props.router.location.state.listingMode;
-            showDetail = this.props.router.location.state.showDetail;
-            createListing = this.props.router.location.state.createListing;
-            editMode = this.props.router.location.state.editMode; 
+        console.log(props);
+        if (props.router && props.router.location && props.router.location.state){
+            index = props.router.location.state.listingId;
+            listingMode = props.router.location.state.listingMode;
+            showDetail = props.router.location.state.showDetail;
+            createListing = props.router.location.state.createListing;
+            editMode = props.router.location.state.editMode; 
         }
 
-        if (props.match && props.match.params && props.match.params.id){
+        if (props.router && props.router.params && props.router.params.id){
            //fullscreen = true;
            showDetail = true;
-           index = props.match.params.id;
+           index = props.router.params.id;
         }
 
         // Listing Type
         var params = null;
-        if (props.location){
-            params = new URLSearchParams(props.location.search);
+        if (props.router && props.router.location){
+            params = new URLSearchParams(props.router.location.search);
             if (params){
                 var listingModeParam = params.get('listingMode');
                 if (listingModeParam){
