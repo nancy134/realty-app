@@ -221,7 +221,6 @@ class AccountProfile extends React.Component{
                 }) => (
                     <Form className="p-5 profile">
                     <Row><Col>
-                        <Form>
                         <Row>
                             <Form.Group as={Col} xs={4}>
                                 <Form.Label
@@ -269,8 +268,6 @@ class AccountProfile extends React.Component{
                                 />
                             </Form.Group>
                         </Row>
-                        </Form>
-                        <Form>
                         <Row>
                             <Form.Group as={Col} xs={10}>
                                 <Form.Label
@@ -288,8 +285,6 @@ class AccountProfile extends React.Component{
                                 />
                             </Form.Group>
                         </Row>
-                        </Form>
-                        <Form>
                         <Row>
                             <Form.Group as={Col} xs={10}>
                                 <Form.Label
@@ -307,8 +302,6 @@ class AccountProfile extends React.Component{
                                 />
                             </Form.Group>
                         </Row>
-                        </Form>
-                        <Form>
                         <Row>
                             <Form.Group as={Col} xs={10}>
                                 <Form.Label
@@ -326,8 +319,6 @@ class AccountProfile extends React.Component{
                                 />
                             </Form.Group>
                         </Row>
-                        </Form>
-                        <Form>
                         <Row>
                             <Form.Group as={Col} xs={10}>
                                 <Form.Control
@@ -342,8 +333,6 @@ class AccountProfile extends React.Component{
                                 />
                             </Form.Group>
                         </Row>
-                        </Form>
-                        <Form>
                         <Row>
                             <Form.Group as={Col} xs={4}>
                                 <Form.Label
@@ -391,8 +380,6 @@ class AccountProfile extends React.Component{
                                 />
                             </Form.Group>
                         </Row>
-                        </Form>
-                    <Form>
                     <Row>
                     <Form.Group as={Col} xs={10}>
                     <Form.Label
@@ -421,10 +408,8 @@ class AccountProfile extends React.Component{
                     </Form.Control>
                     </Form.Group>
                     </Row>
-                    </Form>
                     </Col>
                     <Col>
-                        <Form>
                         <Row>
                             <Form.Group as={Col} xs={4}>
                                 <Image src="/broker.jpg" roundedCircle/>
@@ -473,8 +458,6 @@ class AccountProfile extends React.Component{
 
                             </Form.Group>
                         </Row>
-                        </Form>
-                        <Form>
                         <Row>
                             <Form.Group as={Col} xs={12}>
                             <Form.Label
@@ -493,8 +476,6 @@ class AccountProfile extends React.Component{
                             />
                             </Form.Group>
                         </Row>
-                        </Form>
-                        <Form>
                         <Row>
                             <Form.Group as={Col} xs={5}>
                                 <Form.Label
@@ -512,15 +493,14 @@ class AccountProfile extends React.Component{
                                 />
                             </Form.Group>
                         </Row>
-                        </Form>
                     </Col></Row>
                     <Row>
                         <Col xs={4}></Col>
                         <Col xs={4}>
+                            <div className="d-grid gap-2 pt-2">
                             <Button
                                 disabled={!(isValid && dirty) || isSubmitting}
                                 variant="success"
-                                block
                                 onClick={handleSubmit}
                             >
                                 { this.state.updateProgress ?
@@ -534,6 +514,7 @@ class AccountProfile extends React.Component{
                                 <span>Update Profile</span>
                                 }
                             </Button>
+                            </div>
                         </Col>
                         <Col xs={4}></Col>
                     </Row>
