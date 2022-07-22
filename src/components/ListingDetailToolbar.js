@@ -134,13 +134,20 @@ class ListingDetailToolbar extends React.Component {
                <Row className="pt-2 ml-0 mr-0 bg-white">
                    <Col xs={3}>
                        <Tabs
+                           id="listing-detail-toolbar"
                            className="listing-tabs pb-1"
                            variant="pills"
                            activeKey={editMode}
                            onSelect={editMode => this.handleEditModeChange(editMode)}
                        >
-                           <Tab eventKey="edit" title="Edit"></Tab>
-                           <Tab eventKey="view" title="Preview"></Tab>
+                           <Tab
+                               eventKey="edit"
+                               title="Edit"
+                           ></Tab>
+                           <Tab
+                               eventKey="view"
+                               title="Preview"
+                           ></Tab>
                        </Tabs>
                    </Col>
                    <Col xs={6}>
