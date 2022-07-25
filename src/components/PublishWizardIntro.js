@@ -120,6 +120,7 @@ class PublishWizardIntro extends React.Component{
                     >
                         <Form.Check.Input
                             type="checkbox"
+                            id="wizard-publish-checkbox-terms"
                             checked={this.state.termsAgreed}
                             onChange={this.handleTermsChanged}
                         />
@@ -162,6 +163,7 @@ class PublishWizardIntro extends React.Component{
                     <Button
                         disabled={!this.state.termsAgreed}
                         onClick={this.handleNext}
+                        id="wizard-publish-intro-next"
                     >
                         { !this.props.validateProgress?
                         <span>Next</span>
