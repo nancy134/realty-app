@@ -1634,7 +1634,7 @@ export class ListingPage extends Component {
             : null }
             <div className="listing-container">
 	    <Row className="ml-1 mr-1">
-	        <Col lg={leftColumnSize} className={leftColumnClassName}>
+	        <Col lg={leftColumnSize} id="leftcol-listing-detail" className={leftColumnClassName}>
                     { listingDetail ?
                     <CSSTransition
 		        in={showDetail}
