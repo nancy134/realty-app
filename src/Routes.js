@@ -82,11 +82,11 @@ render(){
     />
     <Route
         path="/report/:id"
-        exact element={<ReportPage/>}
+        element={<ReportPage/>}
     />
     <Route
         path="/report/list/:id"
-        exact component={ReportListPage}
+        element={<ReportListPage/>}
     />
     <Route
         path="/account"
