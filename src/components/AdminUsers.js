@@ -57,9 +57,10 @@ class AdminUsers extends React.Component {
                     ]}
                     options={{
                       }}
-                    detailPanel={rowData => {
+                    detailPanel={[{
+                        render: rowData => {
+                        var row = rowData.rowData;
                         return (
-
 <div className="container">
     <div className="row">
         <div className="col">
@@ -71,17 +72,17 @@ class AdminUsers extends React.Component {
                     <th>Association Token</th>
                 </tr>
                 <tr>
-                    <td>{rowData.AssociationId}</td>
-                    <td>{rowData.associationStatus}</td>
-                    <td>{rowData.associationToken}</td>
+                    <td>{row.AssociationId}</td>
+                    <td>{row.associationStatus}</td>
+                    <td>{row.associationToken}</td>
                 </tr>
                 <tr>
                     <th>Title</th>
                     <th colSpan="2">Company</th>
                 </tr>
                 <tr>
-                    <td>{rowData.title}</td>
-                    <td colSpan="2">{rowData.company}</td>
+                    <td>{row.title}</td>
+                    <td colSpan="2">{row.company}</td>
                 </tr>
 
                 <tr>
@@ -89,7 +90,7 @@ class AdminUsers extends React.Component {
                 </tr>
 
                 <tr>
-                    <td colSpan="3">{rowData.address1} {rowData.address1}<br />{rowData.city}, {rowData.state} {rowData.zip}</td>
+                    <td colSpan="3">{row.address1} {row.address2}<br />{row.city}, {row.state} {row.zip}</td>
                 </tr>
                 </tbody>
             </table>
@@ -103,16 +104,16 @@ class AdminUsers extends React.Component {
                     <th>Phone (Office)</th>
                 </tr>
                 <tr>
-                    <td>{rowData.website}</td>
-                    <td>{rowData.mobilePhone}</td>
-                    <td>{rowData.officePhone}</td>
+                    <td>{row.website}</td>
+                    <td>{row.mobilePhone}</td>
+                    <td>{row.officePhone}</td>
                 </tr>
                 <tr>
                     <th colSpan="3">Bio</th>
                 </tr>
 
                 <tr>
-                    <td colSpan="3">{rowData.bio}</td>
+                    <td colSpan="3">{row.bio}</td>
                 </tr>
                 </tbody>
             </table>
@@ -120,19 +121,19 @@ class AdminUsers extends React.Component {
     </div>
     <div className="row">
         <div className="col">
-            <strong>Role:</strong> {rowData.role}
+            <strong>Role:</strong> {row.role}
         </div>
         <div className="col">
-            <strong>Account Created:</strong> {rowData.createdAt}
+            <strong>Account Created:</strong> {row.createdAt}
         </div>
         <div className="col">
-            <strong>Account Updated:</strong> {rowData.updatedAt}
+            <strong>Account Updated:</strong> {row.updatedAt}
         </div>
     </div>
 </div>
                               
                         )
-                      }}
+                      }}]}
 
                       onSelectionChange={rows => {
                         alert("Selected id is:  " + rows[0].id);
@@ -143,7 +144,6 @@ class AdminUsers extends React.Component {
                             var page = query.page + 1;
                             var queryStr = 'perPage='+query.pageSize+'&page='+page;
                             userService.getUsers(queryStr).then(function(result){
-                                console.log(result);
                                 var ret = {
                                     data: result.users.rows,
                                     page: result.page-1,
@@ -151,7 +151,6 @@ class AdminUsers extends React.Component {
                                 };
                                 resolve(ret);
                             }).catch(function(err){
-                                console.log(err);
                                 reject(err);
                             });
                         })

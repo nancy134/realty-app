@@ -68,6 +68,7 @@ class AdminPromotions extends React.Component {
                             });
                         })
                     }
+                    /*
                     components={{
                         Toolbar: props => (
                             <div>
@@ -77,6 +78,7 @@ class AdminPromotions extends React.Component {
                             </div>
                         )
                     }}
+                    */
                     title="Promotions"
                 />
             </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { forwardRef } from 'react';
 import MaterialTable from '@material-table/core';
-import {MTableToolbar} from 'material-table';
+import {MTableToolbar} from '@material-table/core';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -62,7 +62,6 @@ class AdminCodes extends React.Component {
         });
     }
     handleAddPromotionCodeCancel(){
-        console.log("handleAddPromotionCodeCancel()");
         this.setState({
             addPromotionCodeShow: false
         });
@@ -116,8 +115,6 @@ class AdminCodes extends React.Component {
                                     page: result.page-1,
                                     totalCount: result.codes.count
                                 }
-                                console.log("ret:");
-                                console.log(ret);
                                 resolve(ret);
                             }).catch(function(err){
                                 reject(err);

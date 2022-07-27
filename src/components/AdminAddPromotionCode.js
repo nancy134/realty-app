@@ -97,7 +97,6 @@ class AdminAddPromotionCode extends React.Component {
             </Modal.Header>
             <Modal.Body>
                 <Form>
-                    <Form>
                     <Row>
                         <Form.Group as={Col} >
                             <Form.Check
@@ -108,10 +107,8 @@ class AdminAddPromotionCode extends React.Component {
                             />
                         </Form.Group>
                     </Row>
-                    </Form>
 
                     { !this.state.autoGenerate ?
-                    <Form>
                     <Row>
                         <Form.Group as={Col} >
                             <Form.Label
@@ -126,10 +123,8 @@ class AdminAddPromotionCode extends React.Component {
                             </Form.Control>
                         </Form.Group>
                     </Row>
-                    </Form>
                     : null }
 
-                    <Form>
                     <Row>
                         <Form.Group as={Col} >
                             <Form.Label
@@ -144,9 +139,6 @@ class AdminAddPromotionCode extends React.Component {
                             </Form.Control>
                         </Form.Group>
                     </Row>
-                    </Form>
-
-                    <Form>
                     <Row>
                         <Form.Group as={Col} >
                             <Form.Label
@@ -160,9 +152,6 @@ class AdminAddPromotionCode extends React.Component {
                             </Form.Control>
                         </Form.Group>
                     </Row>
-                    </Form>
-
-                    <Form>
                     <Row>
                         <Form.Group as={Col} >
                             <Form.Check
@@ -173,9 +162,6 @@ class AdminAddPromotionCode extends React.Component {
                             />
                         </Form.Group>
                     </Row>
-                    </Form>
-
-
                 </Form>
             </Modal.Body>
             <Modal.Footer>
