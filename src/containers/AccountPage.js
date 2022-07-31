@@ -30,7 +30,15 @@ export class AccountPage extends Component {
         this.handleAddListingFinish = this.handleAddListingFinish.bind(this);
         this.handleAddListingCancel = this.handleAddListingCancel.bind(this);
 
-        var token  = this.props.router.params.token;
+        var params = null;
+        var token = null;
+        if (props.router && props.router.location){
+            params = new URLSearchParams(props.router.location.search);
+            if (params){
+                token = params.get('token');
+            }
+        }
+
         this.state = {
             tab: "profile",
             token: token,

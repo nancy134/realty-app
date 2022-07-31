@@ -18,11 +18,22 @@ function Associate(props){
         return null;
     } else {
     var hostName = window.location.hostname;
-    var inviteLink = "https://" + hostName + "/account?token=" + props.associate.associationToken;
+    var inviteLink = null;
+    var associationStatus = props.associate.associationStatus;
+    if (props.associate.associationToken){
+        inviteLink = "https://" + hostName + "/account?token=" + props.associate.associationToken;
+    } else {
+        associationStatus = "Association creator";
+    }
+
+    if (associationStatus === "Invite accepted"){
+        inviteLink = null;
+    }
+
     return(
     <Row className="pt-2">
         <Col xs={3}>{props.associate.email}</Col>
-        <Col xs={3}>{props.associate.associationStatus}</Col>
+        <Col xs={3}>{associationStatus}</Col>
         <Col xs={5}>{inviteLink}</Col>
         <Col xs={1}>
             <DropdownButton
