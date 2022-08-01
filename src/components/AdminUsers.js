@@ -60,6 +60,8 @@ class AdminUsers extends React.Component {
                     detailPanel={[{
                         render: rowData => {
                         var row = rowData.rowData;
+                        var optout = "No";
+                        if (row.optout) optout = "Yes"
                         return (
 <div className="container">
     <div className="row">
@@ -114,6 +116,12 @@ class AdminUsers extends React.Component {
 
                 <tr>
                     <td colSpan="3">{row.bio}</td>
+                </tr>
+                <tr>
+                    <th>Opt Out</th>
+                </tr>
+                <tr>
+                    <td>{optout}</td>
                 </tr>
                 </tbody>
             </table>
