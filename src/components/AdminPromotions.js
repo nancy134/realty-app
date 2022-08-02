@@ -1,7 +1,6 @@
 import React from 'react';
 import { forwardRef } from 'react';
 import MaterialTable from '@material-table/core';
-import {MTableToolbar} from 'material-table';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -68,17 +67,6 @@ class AdminPromotions extends React.Component {
                             });
                         })
                     }
-                    /*
-                    components={{
-                        Toolbar: props => (
-                            <div>
-                                <MTableToolbar {...props} />
-                                <div>
-                                </div>
-                            </div>
-                        )
-                    }}
-                    */
                     title="Promotions"
                 />
             </div>

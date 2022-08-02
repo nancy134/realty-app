@@ -5,8 +5,7 @@ import {
     Button,
     OverlayTrigger,
     Popover,
-    Accordion,
-    Card
+    Accordion
 } from 'react-bootstrap';
 import userService from '../services/users';
 import copy from 'copy-to-clipboard';
