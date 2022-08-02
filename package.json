@@ -65,9 +65,6 @@
     "test": "react-scripts --openssl-legacy-provider test",
     "eject": "react-scripts --openssl-legacy-provider eject"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",
