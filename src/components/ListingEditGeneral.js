@@ -183,7 +183,6 @@ class ListingEditGeneral extends React.Component {
         </Modal.Header>
         <Modal.Body style={{'maxHeight': 'calc(100vh - 210px)', 'overflowY': 'auto'}}> 
         <Form>
-            <Form>
             <Row>
                 <Form.Group as={Col}>
                     <Form.Label className="font-weight-bold">Building Size <span className="font-weight-light">(optional)</span></Form.Label>
@@ -198,9 +197,7 @@ class ListingEditGeneral extends React.Component {
                             isInvalid={!!errors.totalBuildingSize}
                             isValid={touched.totalBuildingSize && !errors.totalBuildingSize && values.totalBuildingSize !== ""}
                         />
-                        <InputGroup.Append>
-                            <InputGroup.Text id="basic-addon2">sq ft</InputGroup.Text>
-                        </InputGroup.Append> 
+                        <InputGroup.Text id="basic-addon2">sq ft</InputGroup.Text>
                         <Form.Control.Feedback type="invalid">
                             {errors.totalBuildingSize}
                         </Form.Control.Feedback>
@@ -220,9 +217,7 @@ class ListingEditGeneral extends React.Component {
                             isValid={touched.totalAvailableSpace && values.totalAvailableSpace && values.totalAvailableSpace !== ""}
                             disabled={isSubmitting}
                         />
-                        <InputGroup.Append>
-                            <InputGroup.Text id="basic-addon2">sq ft</InputGroup.Text>
-                        </InputGroup.Append>
+                        <InputGroup.Text id="basic-addon2">sq ft</InputGroup.Text>
                         <Form.Control.Feedback type="invalid">
                             {errors.totalAvailableSpace}
                         </Form.Control.Feedback>
@@ -242,17 +237,13 @@ class ListingEditGeneral extends React.Component {
                             isValid={touched.lotSize && !errors.lotSize && values.lotSize !== ""}
                             disabled={isSubmitting}
                         />
-                        <InputGroup.Append>
-                            <InputGroup.Text id="basic-addon2">acres</InputGroup.Text>
-                        </InputGroup.Append>
+                        <InputGroup.Text id="basic-addon2">acres</InputGroup.Text>
                         <Form.Control.Feedback type="invalid">
                             {errors.lotSize}
                         </Form.Control.Feedback>
                     </InputGroup>
                 </Form.Group>
             </Row>
-            </Form>
-            <Form>
             <Row>
                 <Form.Group as={Col}>
                     <Form.Label className="font-weight-bold">Number of Units <span className="font-weight-light">(optional)</span></Form.Label>
@@ -306,8 +297,6 @@ class ListingEditGeneral extends React.Component {
                     </Form.Control.Feedback>
                 </Form.Group>
             </Row>
-            </Form>
-            <Form>
             <Row>
                 <Form.Group as={Col}>
                     <Form.Label className="font-weight-bold">Drive In Doors <span className="font-weight-light">(optional)</span></Form.Label>
@@ -361,8 +350,6 @@ class ListingEditGeneral extends React.Component {
                     </Form.Control.Feedback>
                 </Form.Group>
             </Row>
-            </Form>
-            <Form>
             <Row>
                 <Form.Group as={Col}>
                     <Form.Label className="font-weight-bold">Ceiling Height <span className="font-weight-light">(optional)</span></Form.Label>
@@ -377,9 +364,7 @@ class ListingEditGeneral extends React.Component {
                             isInvalid={!!errors.ceilingHeight}
                             isValid={touched.ceilingHeight && !errors.ceilingHeight && values.ceilingHeight !== ""}
                         />
-                        <InputGroup.Append>
-                            <InputGroup.Text>ft</InputGroup.Text>
-                        </InputGroup.Append>
+                        <InputGroup.Text>ft</InputGroup.Text>
                         <Form.Control.Feedback type="invalid">
                             {errors.ceilingHeight}
                         </Form.Control.Feedback>
@@ -388,9 +373,7 @@ class ListingEditGeneral extends React.Component {
                 <Form.Group as={Col}>
                     <Form.Label className="font-weight-bold">Taxes <span className="font-weight-light">(optional)</span></Form.Label>
                     <InputGroup>
-                        <InputGroup.Prepend>
-                            <InputGroup.Text>$</InputGroup.Text>
-                        </InputGroup.Prepend>
+                        <InputGroup.Text>$</InputGroup.Text>
                         <Form.Control
                             id="general_edit_taxes"
                             name="taxes"
@@ -402,9 +385,7 @@ class ListingEditGeneral extends React.Component {
                             isValid={touched.taxes && !errors.taxes && values.taxes !== ""}
                             disabled={isSubmitting}
                         />
-                        <InputGroup.Append>
-                            <InputGroup.Text>/ yr</InputGroup.Text>
-                        </InputGroup.Append>
+                        <InputGroup.Text>/ yr</InputGroup.Text>
                         <Form.Control.Feedback type="invalid">
                             {errors.taxes}
                         </Form.Control.Feedback>
@@ -413,9 +394,7 @@ class ListingEditGeneral extends React.Component {
                 <Form.Group as={Col}>
                     <Form.Label className="font-weight-bold">Nets <span className="font-weight-light">(optional)</span></Form.Label>
                     <InputGroup>
-                        <InputGroup.Prepend>
-                            <InputGroup.Text>$</InputGroup.Text>
-                        </InputGroup.Prepend>
+                        <InputGroup.Text>$</InputGroup.Text>
                         <Form.Control
                             id="general_edit_nets"
                             name="nets"
@@ -427,17 +406,13 @@ class ListingEditGeneral extends React.Component {
                             isValid={touched.nets && !errors.nets && values.nets !== ""}
                             disabled={isSubmitting}
                         />
-                        <InputGroup.Append>
-                            <InputGroup.Text>/ mo</InputGroup.Text>
-                        </InputGroup.Append>
+                        <InputGroup.Text>/ mo</InputGroup.Text>
                         <Form.Control.Feedback type="invalid">
                             {errors.nets}
                         </Form.Control.Feedback>
                     </InputGroup>
                 </Form.Group>
             </Row>
-            </Form>
-            <Form>
             <Row>
                 { hideForNow ?
                 <Form.Group as={Col}>
@@ -489,8 +464,6 @@ class ListingEditGeneral extends React.Component {
                     />
                 </Form.Group>
             </Row>
-            </Form>
-
         </Form>
         </Modal.Body>
         <Modal.Footer>

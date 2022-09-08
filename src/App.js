@@ -5,7 +5,7 @@ import {
     Navbar,
     Button
 } from 'react-bootstrap';
-import Routes from './Routes';
+import AppRoutes from './Routes';
 import AccountButton from './components/AccountButton';
 import authenticationService from './helpers/authentication';
 import userService from './services/users';
@@ -265,7 +265,7 @@ class App extends React.Component {
           { this.state.loading ?
           <p>Loading...</p>
           :
-          <Routes
+          <AppRoutes
               // Logged in
               onLogin={this.handleLogin}
               loggedIn={this.state.loggedIn}
@@ -281,7 +281,7 @@ class App extends React.Component {
               behalfUserCognitoId={this.state.behalfUserCognitoId}
               behalfUser={this.state.behalfUser}
           >
-          </Routes>
+          </AppRoutes>
           }
     </div>
     { !this.state.minimalTab && this.state.showFooter ?

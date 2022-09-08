@@ -268,8 +268,9 @@ function SpaceItem(props){
 
 function AddButton(props) {
     return (
-        <span id="span_space_add_button">
+        <span>
             <span
+                id="span_space_add_button"
                 className="edit-button text-danger"
                 onClick={() => {props.onShow()}}
             >

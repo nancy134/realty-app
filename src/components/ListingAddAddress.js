@@ -526,7 +526,7 @@ class ListingAddAddress extends React.Component{
                             updateZoomLevel={this.state.updateZoomLevel}
                             center={this.state.center}
                             zoomLevel={this.state.zoomLevel}
-                            style={{width: '90%', height: "100%", position: "absolute"}}
+                            style={{width: '90%', height: "100%"}}
                         />
                         : null}
                     </Col>

@@ -2,17 +2,23 @@ import React from 'react';
 import PDFListDetail from '../components/PDFListDetail';
 import PDFListSummary from '../components/PDFListSummary';
 import listItemService from '../services/listItems';
+import withRouter from '../helpers/withRouter';
 
 export class ReportListPage extends React.Component {
     constructor(props){
         super(props);
+
         var id = null;
-        if (props.match.params.id){
-            id = props.match.params.id;
+        if (props.router && props.router.params && props.router.params.id){
+            id = props.router.params.id;
         }
-        const params = new URLSearchParams(props.location.search);
-        var reportType = params.get('reportType');
-        console.log("reportType: "+reportType);
+
+        var params = null;
+        var reportType = null;
+        if (props.router && props.router.location){
+            params = new URLSearchParams(props.router.location.search);
+            reportType = params.get('reportType');
+        }
         this.state = {
             id: id,
             listItems: null,
@@ -57,4 +63,4 @@ export class ReportListPage extends React.Component {
     }
 }
 
-export default ReportListPage;
+export default withRouter(ReportListPage);

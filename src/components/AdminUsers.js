@@ -1,6 +1,6 @@
 import React from 'react';
 import { forwardRef } from 'react';
-import MaterialTable from 'material-table';
+import MaterialTable from '@material-table/core';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -57,78 +57,91 @@ class AdminUsers extends React.Component {
                     ]}
                     options={{
                       }}
-                    detailPanel={rowData => {
+                    detailPanel={[{
+                        render: rowData => {
+                        var row = rowData.rowData;
+                        var optout = "No";
+                        if (row.optout) optout = "Yes"
                         return (
-
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <table class="table table-striped">
+<div className="container">
+    <div className="row">
+        <div className="col">
+            <table className="table table-striped">
+                <tbody> 
                 <tr>
                     <th>Association</th>
                     <th>Association Status</th>
                     <th>Association Token</th>
                 </tr>
                 <tr>
-                    <td>{rowData.AssociationId}</td>
-                    <td>{rowData.associationStatus}</td>
-                    <td>{rowData.associationToken}</td>
+                    <td>{row.AssociationId}</td>
+                    <td>{row.associationStatus}</td>
+                    <td>{row.associationToken}</td>
                 </tr>
                 <tr>
                     <th>Title</th>
-                    <th colspan="2">Company</th>
+                    <th colSpan="2">Company</th>
                 </tr>
                 <tr>
-                    <td>{rowData.title}</td>
-                    <td colspan="2">{rowData.company}</td>
+                    <td>{row.title}</td>
+                    <td colSpan="2">{row.company}</td>
                 </tr>
 
                 <tr>
-                    <th colspan="3">Address</th>
+                    <th colSpan="3">Address</th>
                 </tr>
 
                 <tr>
-                    <td colspan="3">{rowData.address1} {rowData.address1}<br />{rowData.city}, {rowData.state} {rowData.zip}</td>
+                    <td colSpan="3">{row.address1} {row.address2}<br />{row.city}, {row.state} {row.zip}</td>
                 </tr>
+                </tbody>
             </table>
         </div>
-        <div class="col">
-            <table class="table table-striped">
+        <div className="col">
+            <table className="table table-striped">
+                <tbody>
                 <tr>
                     <th>Website</th>
                     <th>Phone (Mobile)</th>
                     <th>Phone (Office)</th>
                 </tr>
                 <tr>
-                    <td>{rowData.website}</td>
-                    <td>{rowData.mobilePhone}</td>
-                    <td>{rowData.officePhone}</td>
+                    <td>{row.website}</td>
+                    <td>{row.mobilePhone}</td>
+                    <td>{row.officePhone}</td>
                 </tr>
                 <tr>
-                    <th colspan="3">Bio</th>
+                    <th colSpan="3">Bio</th>
                 </tr>
 
                 <tr>
-                    <td colspan="3">{rowData.bio}</td>
+                    <td colSpan="3">{row.bio}</td>
                 </tr>
+                <tr>
+                    <th>Opt Out</th>
+                </tr>
+                <tr>
+                    <td>{optout}</td>
+                </tr>
+                </tbody>
             </table>
         </div>
     </div>
-    <div class="row">
-        <div class="col">
-            <strong>Role:</strong> {rowData.role}
+    <div className="row">
+        <div className="col">
+            <strong>Role:</strong> {row.role}
         </div>
-        <div class="col">
-            <strong>Account Created:</strong> {rowData.createdAt}
+        <div className="col">
+            <strong>Account Created:</strong> {row.createdAt}
         </div>
-        <div class="col">
-            <strong>Account Updated:</strong> {rowData.updatedAt}
+        <div className="col">
+            <strong>Account Updated:</strong> {row.updatedAt}
         </div>
     </div>
 </div>
                               
                         )
-                      }}
+                      }}]}
 
                       onSelectionChange={rows => {
                         alert("Selected id is:  " + rows[0].id);
@@ -139,7 +152,6 @@ class AdminUsers extends React.Component {
                             var page = query.page + 1;
                             var queryStr = 'perPage='+query.pageSize+'&page='+page;
                             userService.getUsers(queryStr).then(function(result){
-                                console.log(result);
                                 var ret = {
                                     data: result.users.rows,
                                     page: result.page-1,
@@ -147,7 +159,6 @@ class AdminUsers extends React.Component {
                                 };
                                 resolve(ret);
                             }).catch(function(err){
-                                console.log(err);
                                 reject(err);
                             });
                         })

@@ -5,13 +5,18 @@ import {
 } from 'react-bootstrap';
 import './Unsubscribe.css';
 import userService from '../services/users';
+import withRouter from '../helpers/withRouter';
 
 export class Unsubscribe extends Component {
     constructor(props){
         super(props);
 
-        const params = new URLSearchParams(props.location.search);
-        var email = params.get('email');
+        var params = null;
+        var email = null;
+        if (props.router && props.router.location){
+            params = new URLSearchParams(props.router.location.search);
+            email = params.get('email');
+        }
 
         this.state = {
             progress: false,
@@ -30,12 +35,11 @@ export class Unsubscribe extends Component {
         that.setState({
             progress: true
         });
-        userService.optInUser(body).then(function(result){
+        userService.optOutUser(body).then(function(result){
             that.setState({
                 progress: false,
                 unsubscribed: true
             });
-            console.log(result);
         }).catch(function(err){
             that.setState({
                 progress: false,
@@ -72,4 +76,4 @@ export class Unsubscribe extends Component {
     }
 }
 
-export default Unsubscribe;
+export default withRouter(Unsubscribe);

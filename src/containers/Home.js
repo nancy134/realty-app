@@ -17,6 +17,7 @@ import { getDomain } from '../helpers/utilities';
 import Features from '../components/Features';
 import ListingCards from '../components/ListingCards';
 import EmailRegistration from '../components/EmailRegistration';
+import withRouter from '../helpers/withRouter';
 
 export class Home extends Component { 
   constructor(props, context) {
@@ -36,16 +37,16 @@ export class Home extends Component {
       listing.owner = authenticationService.getUserEmail();
       listingService.create(listing).then(function(data){
           that.props.onAddListingCancel();
-          that.props.history.push({
-              pathname: '/listing',
-              data: {
+          that.props.router.navigate(
+              '/listing',
+              {state:{
                   listingId: data.listing.id,
                   showDetail: true,
                   listingMode: "myListings",
                   createListing: true,
                   editMode: "edit"
-              }
-          });
+              }}
+          );
       }).catch(function(err){
           console.log(err);
       });
@@ -193,4 +194,4 @@ export class Home extends Component {
   }
 }
 
-export default Home;
+export default withRouter(Home);

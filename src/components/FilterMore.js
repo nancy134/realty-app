@@ -70,9 +70,7 @@ class FilterMore extends React.Component {
                             value={this.props.moreFilters.minSize}
                             onChange={this.handleMinSizeChange}
                         />
-                        <InputGroup.Append>
-                            <InputGroup.Text>sf</InputGroup.Text>
-                        </InputGroup.Append>
+                        <InputGroup.Text>sf</InputGroup.Text>
                     </InputGroup>
                 </Col>
                 <Col sm="4">
@@ -84,9 +82,7 @@ class FilterMore extends React.Component {
                             value={this.props.moreFilters.maxSize}
                             onChange={this.handleMaxSizeChange}
                         />
-                        <InputGroup.Append>
-                            <InputGroup.Text>sf</InputGroup.Text>
-                        </InputGroup.Append>
+                        <InputGroup.Text>sf</InputGroup.Text>
                     </InputGroup>
                 </Col>
             </Form.Group>
@@ -101,9 +97,7 @@ class FilterMore extends React.Component {
                             value={this.props.moreFilters.minRate}
                             onChange={this.handleMinRateChange}
                         />
-                        <InputGroup.Append>
-                            <InputGroup.Text>sf/yr</InputGroup.Text>
-                        </InputGroup.Append>
+                        <InputGroup.Text>sf/yr</InputGroup.Text>
                     </InputGroup>
                 </Col>
                 <Col sm="4">
@@ -115,9 +109,7 @@ class FilterMore extends React.Component {
                             value={this.props.moreFilters.maxRate}
                             onChange={this.handleMaxRateChange}
                         />
-                        <InputGroup.Append>
-                            <InputGroup.Text>sf/yr</InputGroup.Text>
-                        </InputGroup.Append>
+                        <InputGroup.Text>sf/yr</InputGroup.Text>
                     </InputGroup>
                 </Col>
             </Form.Group>

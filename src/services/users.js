@@ -14,6 +14,8 @@ function getUsers(query){
     });
 }
 
+// This API is used to register users to receive emails
+// It will create a new user account if one does not exist
 function optInUser(body){
     var url = process.env.REACT_APP_API + "users";
     return new Promise(function(resolve, reject){
@@ -25,7 +27,8 @@ function optInUser(body){
     });
 }
 
-
+// This API is used to opt users out of receiving emails
+// It will create a new user account if one does not exist
 function optOutUser(body){
     var url = process.env.REACT_APP_API + "users";
     return new Promise(function(resolve, reject){

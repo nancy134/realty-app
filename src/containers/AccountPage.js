@@ -4,6 +4,7 @@ import {
     Container,
     Alert,
 } from 'react-bootstrap';
+import withRouter from '../helpers/withRouter';
 import AccountToolbar from '../components/AccountToolbar';
 import AccountProfile from '../components/AccountProfile';
 import AccountPaymentMethodStripe from '../components/AccountPaymentMethodStripe';
@@ -29,8 +30,15 @@ export class AccountPage extends Component {
         this.handleAddListingFinish = this.handleAddListingFinish.bind(this);
         this.handleAddListingCancel = this.handleAddListingCancel.bind(this);
 
-        const params = new URLSearchParams(props.location.search);
-        var token  = params.get('token');
+        var params = null;
+        var token = null;
+        if (props.router && props.router.location){
+            params = new URLSearchParams(props.router.location.search);
+            if (params){
+                token = params.get('token');
+            }
+        }
+
         this.state = {
             tab: "profile",
             token: token,
@@ -82,16 +90,16 @@ export class AccountPage extends Component {
       listing.owner = authenticationService.getUserEmail();
       listingService.create(listing).then(function(data){
           that.props.onAddListingCancel();
-          that.props.history.push({
-              pathname: '/listing',
-              data: {
+          that.props.navigate(
+              '/listing',
+              { state: {
                   listingId: data.listing.id,
                   showDetail: true,
                   listingMode: "myListings",
                   createListing: true,
                   editMode: "edit"
-              }
-          });
+              }}
+          );
       }).catch(function(err){
           console.log(err);
       });
@@ -273,4 +281,4 @@ export class AccountPage extends Component {
         }
     }
 }
-export default AccountPage;
+export default withRouter(AccountPage);

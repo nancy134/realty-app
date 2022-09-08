@@ -5,6 +5,7 @@ import {
     Modal,
     Button
 } from 'react-bootstrap';
+import withRouter from '../helpers/withRouter';
 import './ListingPage.css';
 import ListingMapNew from '../components/ListingMapNew';
 import Listings from '../components/Listings';
@@ -43,32 +44,41 @@ export class ListingPage extends Component {
         var showDetail = false;
         var editMode = "view";
 
-        if (this.props.location && this.props.location.data){
-            index = this.props.location.data.listingId;
-            listingMode = this.props.location.data.listingMode;
-            showDetail = this.props.location.data.showDetail;
-            createListing = this.props.location.data.createListing;
-            editMode = this.props.location.data.editMode; 
+        console.log(props);
+        if (props.router && props.router.location && props.router.location.state){
+            index = props.router.location.state.listingId;
+            listingMode = props.router.location.state.listingMode;
+            showDetail = props.router.location.state.showDetail;
+            createListing = props.router.location.state.createListing;
+            editMode = props.router.location.state.editMode; 
         }
 
-        if (props.match.params.id){
+        if (props.router && props.router.params && props.router.params.id){
            //fullscreen = true;
            showDetail = true;
-           index = props.match.params.id;
+           index = props.router.params.id;
         }
 
         // Listing Type
-        const params = new URLSearchParams(props.location.search);
-        var listingModeParam = params.get('listingMode');
-        if (listingModeParam){
-           listingMode = listingModeParam;
+        var params = null;
+        if (props.router && props.router.location){
+            params = new URLSearchParams(props.router.location.search);
+            if (params){
+                var listingModeParam = params.get('listingMode');
+                if (listingModeParam){
+                    listingMode = listingModeParam;
+                }
+            }
         }
 
         // Embed
         if (this.props.embed){
             listingMode = "embedListings";
         }
-        var cognitoId  = params.get('user');
+        var cognitoId = null;
+        if (params){
+            cognitoId  = params.get('user');
+        }
 
         // Location
         var defaultLocation = geolocationService.getSavedLocation();
@@ -83,10 +93,15 @@ export class ListingPage extends Component {
         var lng1 = defaultLocation.lng1;
 
         // Listing Type
-        var filterParam = params.get('filter');
+
+        var filterParam = null;
         var listingType = listingTypes.BOTH;
-        if (filterParam === "home"){
-            listingType = defaultLocation.listingType;
+
+        if (params){
+            filterParam = params.get('filter');
+            if (filterParam === "home"){
+                listingType = defaultLocation.listingType;
+            }
         }
 
         // Toolbar
@@ -1619,7 +1634,7 @@ export class ListingPage extends Component {
             : null }
             <div className="listing-container">
 	    <Row className="ml-1 mr-1">
-	        <Col lg={leftColumnSize} className={leftColumnClassName}>
+	        <Col lg={leftColumnSize} id="leftcol-listing-detail" className={leftColumnClassName}>
                     { listingDetail ?
                     <CSSTransition
 		        in={showDetail}
@@ -1749,4 +1764,4 @@ export class ListingPage extends Component {
         );
     }
 }
-export default ListingPage;
+export default withRouter(ListingPage);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { forwardRef } from 'react';
-import MaterialTable from 'material-table';
+import MaterialTable from '@material-table/core';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -60,48 +60,50 @@ class AdminListings extends React.Component {
 
 
                     detailPanel={rowData => {
+                        var row = rowData.rowData;
                         return (
-                        <div class="container">
-                            <div class="row">
-                                <div class="col">
-                                    <strong>Listing ID:</strong> {rowData.ListingId}
+                        <div className="container">
+                            <div className="row">
+                                <div className="col">
+                                    <strong>Listing ID:</strong> {row.ListingId}
                                 </div>
-                                <div class="col">
-                                    <strong>Status:</strong> {rowData.publishStatus}
+                                <div className="col">
+                                    <strong>Status:</strong> {row.publishStatus}
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col">
-                                    <table class="table table-striped">
+                            <div className="row">
+                                <div className="col">
+                                    <table className="table table-striped">
+                                        <tbody>
                                         <tr>
-                                            <th colspan="3">Address</th>
+                                            <th colSpan="3">Address</th>
                                         </tr>
                                         <tr>
-                                            <td colspan="3">{rowData.address}<br />{rowData.city}, {rowData.state} {rowData.zip}</td>
+                                            <td colSpan="3">{row.address}<br />{row.city}, {row.state} {row.zip}</td>
                                         </tr>
                                         <tr>
-                                            <th colspan="3">Landlord Expenses</th>
+                                            <th colSpan="3">Landlord Expenses</th>
                                         </tr>
                                         <tr>
-                                            <td colspan="3">{rowData.landlordExpenses}</td>
+                                            <td colSpan="3">{row.landlordExpenses}</td>
                                         </tr>
                                         <tr>
-                                            <th colspan="3">Tenant Expenses</th>
+                                            <th colSpan="3">Tenant Expenses</th>
                                         </tr>
                                         <tr>
-                                            <td colspan="3">{rowData.tenantExpenses}</td>
+                                            <td colSpan="3">{row.tenantExpenses}</td>
                                         </tr>       
                                         <tr>
-                                            <th colspan="3">Short Description</th>
+                                            <th colSpan="3">Short Description</th>
                                         </tr>
                                         <tr>
-                                            <td colspan="3">{rowData.shortDescription}</td>
+                                            <td colSpan="3">{row.shortDescription}</td>
                                         </tr>
                                         <tr>
-                                            <th colspan="3">Long Description</th>
+                                            <th colSpan="3">Long Description</th>
                                         </tr>
                                         <tr>
-                                            <td colspan="3">{rowData.longDescription}</td>
+                                            <td colSpan="3">{row.longDescription}</td>
                                         </tr>
                                         <tr>
                                             <th>Listing Type</th>
@@ -109,9 +111,9 @@ class AdminListings extends React.Component {
                                             <th>Property Type/s</th>
                                         </tr>
                                         <tr>
-                                            <td>{rowData.listingType}</td>
-                                            <td>{rowData.listingPrice}</td>
-                                            <td>{rowData.propertyType}/{rowData.propertyTypes}</td>
+                                            <td>{row.listingType}</td>
+                                            <td>{row.listingPrice}</td>
+                                            <td>{row.propertyType}/{row.propertyTypes}</td>
                                         </tr>
                                         <tr>
                                             <th>Total Building Size/Total Available Space</th>
@@ -119,9 +121,9 @@ class AdminListings extends React.Component {
                                             <th>Taxes</th>
                                         </tr>
                                         <tr>
-                                            <td>{rowData.totalBuildingSize}/{rowData.totalAvailableSpace}</td>
-                                            <td>{rowData.lotSize}</td>
-                                            <td>{rowData.taxes}</td>
+                                            <td>{row.totalBuildingSize}/{row.totalAvailableSpace}</td>
+                                            <td>{row.lotSize}</td>
+                                            <td>{row.taxes}</td>
                                         </tr>
                                         <tr>
                                             <th>Parking</th>
@@ -129,9 +131,9 @@ class AdminListings extends React.Component {
                                             <th># Of Units</th>
                                         </tr>
                                         <tr>
-                                            <td>{rowData.parking}</td>
-                                            <td>{rowData.floors}</td>
-                                            <td>{rowData.totalNumberOfUnits}</td>
+                                            <td>{row.parking}</td>
+                                            <td>{row.floors}</td>
+                                            <td>{row.totalNumberOfUnits}</td>
                                         </tr>
                                         <tr>
                                             <th>Building Class</th>
@@ -139,9 +141,9 @@ class AdminListings extends React.Component {
                                             <th>Year Build</th>
                                         </tr>
                                         <tr>
-                                            <td>{rowData.buildingClass}</td>
-                                            <td>{rowData.zone}</td>
-                                            <td>{rowData.yearBuilt}</td>
+                                            <td>{row.buildingClass}</td>
+                                            <td>{row.zone}</td>
+                                            <td>{row.yearBuilt}</td>
                                         </tr>     
                                         <tr>
                                             <th>Ceiling Height</th>
@@ -149,9 +151,9 @@ class AdminListings extends React.Component {
                                             <th>Loading Docks</th>
                                         </tr>
                                         <tr>
-                                            <td>{rowData.ceilingHeight}</td>
-                                            <td>{rowData.driveInDoors}</td>
-                                            <td>{rowData.loadingDocks}</td>
+                                            <td>{row.ceilingHeight}</td>
+                                            <td>{row.driveInDoors}</td>
+                                            <td>{row.loadingDocks}</td>
                                         </tr>
                                         <tr>
                                             <th>Nets</th>
@@ -159,9 +161,9 @@ class AdminListings extends React.Component {
                                             <th>Net Income</th>
                                         </tr>
                                         <tr>
-                                            <td>{rowData.nets}</td>
-                                            <td>{rowData.grossIncome}</td>
-                                            <td>{rowData.netIncome}</td>
+                                            <td>{row.nets}</td>
+                                            <td>{row.grossIncome}</td>
+                                            <td>{row.netIncome}</td>
                                         </tr>
                                         <tr>
                                             <th>Cap Rate</th>
@@ -169,9 +171,9 @@ class AdminListings extends React.Component {
                                             <th>Maintenance</th>
                                         </tr>
                                         <tr>
-                                            <td>{rowData.capRate}</td>
-                                            <td>{rowData.pricePerFoot}</td>
-                                            <td>{rowData.maintenance}</td>
+                                            <td>{row.capRate}</td>
+                                            <td>{row.pricePerFoot}</td>
+                                            <td>{row.maintenance}</td>
                                         </tr>
                                         <tr>
                                             <th>HVAC</th>
@@ -179,34 +181,35 @@ class AdminListings extends React.Component {
                                             <th>HOA Feets</th>
                                         </tr>
                                         <tr>
-                                            <td>{rowData.hvac}</td>
-                                            <td>{rowData.seciroty}</td>
-                                            <td>{rowData.hoaFees}</td>
+                                            <td>{row.hvac}</td>
+                                            <td>{row.seciroty}</td>
+                                            <td>{row.hoaFees}</td>
                                         </tr>
                                         <tr>
-                                            <th colspan="3">Utilities</th>
+                                            <th colSpan="3">Utilities</th>
                                         </tr>
                                         <tr>
-                                            <td colspan="3">{rowData.utilities}</td>
+                                            <td colSpan="3">{row.utilities}</td>
                                         </tr>
                                         <tr>
-                                            <th colspan="3">Amenities</th>
+                                            <th colSpan="3">Amenities</th>
                                         </tr>
                                         <tr>
-                                            <td colspan="3">{rowData.amenities}</td>
+                                            <td colSpan="3">{row.amenities}</td>
                                         </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col">
-                                    <strong>Owner:</strong> {rowData.owner}
+                            <div className="row">
+                                <div className="col">
+                                    <strong>Owner:</strong> {row.owner}
                                 </div>       
-                                <div class="col">
-                                    <strong>Created:</strong> {rowData.createdAt}
+                                <div className="col">
+                                    <strong>Created:</strong> {row.createdAt}
                                 </div>
-                                <div class="col">
-                                    <strong>Updated:</strong> {rowData.updatedAt}
+                                <div className="col">
+                                    <strong>Updated:</strong> {row.updatedAt}
                                 </div>
                             </div>
                         </div>

@@ -80,15 +80,12 @@ class AccountSettings extends React.Component{
         <div className="profile-view">
                     <Form className="p-5 profile">
                     <Row><Col>
-                        <Form>
                         <Row>
                             <Col xs={6}>
                             <h3>Contact permission</h3>
                             <p>We'd love to send you exclusive offers and the latest info from FindingCRE by email and SMS.  We'll always treat your personal details with utmost care and will never sell them to other companies for marketing purposes.</p>
                             </Col>
                          </Row>
-                         </Form>
-                         <Form>
                          <Row>
                             <Form.Group >
 <Form.Check
@@ -121,7 +118,6 @@ class AccountSettings extends React.Component{
                     </Form.Check>
                             </Form.Group>
                         </Row>
-                        </Form>
                     </Col></Row>
                     <Row>
                             <Button

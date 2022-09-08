@@ -150,12 +150,10 @@ class AccountLoginModal extends React.Component {
                         onChange={this.handlePasswordChange}
                         onKeyPress={this.handleKeyPress}
                     />
-                    <InputGroup.Append>
-                        <Button
-                            variant="secondary"
-                            onClick={this.toggleShow}
-                        >{this.state.hidden ? 'Show' : 'Hide'}</Button>
-                    </InputGroup.Append>
+                    <Button
+                        variant="secondary"
+                        onClick={this.toggleShow}
+                    >{this.state.hidden ? 'Show' : 'Hide'}</Button>
                 </InputGroup>
                 <Button
                     onClick={this.props.onForgotPassword}

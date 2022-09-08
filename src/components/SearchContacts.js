@@ -6,7 +6,7 @@ import {
     Button
 } from 'react-bootstrap';
 import { forwardRef } from 'react';
-import MaterialTable from 'material-table';
+import MaterialTable from '@material-table/core';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -313,11 +313,12 @@ class SearchContacts extends React.Component {
                 <Form>
                     <Form.Group as={Row}>
                         <Col sm="auto">
-                            <Form.File
+                            <Form.Control
+                                type="file"
                                 label="Select CSV file to import"
                                 onChange={this.handleFileSelect}
                             >
-                            </Form.File>
+                            </Form.Control>
                         </Col>
                         <Col sm="auto">
                             <Button

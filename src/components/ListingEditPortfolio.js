@@ -154,9 +154,7 @@ class ListingEditPortfolio extends React.Component {
                                 isValid={touched.buildingSize && !errors.buildingSize && values.lotSize !== ""}
                                 disabled={isSubmitting}
                             />
-                            <InputGroup.Append>
-                                <InputGroup.Text id="basic-addon2">sf</InputGroup.Text>
-                            </InputGroup.Append>
+                            <InputGroup.Text id="basic-addon2">sf</InputGroup.Text>
                             <Form.Control.Feedback type="invalid">{errors.buildingSize}</Form.Control.Feedback>
                         </InputGroup>
                     </Form.Group>
@@ -178,9 +176,7 @@ class ListingEditPortfolio extends React.Component {
                                 isValid={touched.lotSize && !errors.lotSize && values.lotSize !== ""}
                                 disabled={isSubmitting}
                             />
-                            <InputGroup.Append>
-                                <InputGroup.Text id="basic-addon2">acres</InputGroup.Text>
-                            </InputGroup.Append>
+                            <InputGroup.Text id="basic-addon2">acres</InputGroup.Text>
                             <Form.Control.Feedback type="invalid">{errors.lotSize}</Form.Control.Feedback>
                         </InputGroup>
                     </Form.Group>

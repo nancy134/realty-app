@@ -207,6 +207,7 @@ class PublishWizardPaymentMethod extends React.Component{
                         Cancel
                     </Button>
                     <Button
+                        id="wizard-publish-payment-method-next"
                         onClick={() => this.handleNext(stripe, elements)}
                     >
                         <span>{buttonText}&nbsp;
